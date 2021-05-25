@@ -19,4 +19,6 @@ FDM6 supports loading of custom interfaces by the use of the special command lin
 
 We'll publish some documentation regarding FDM API the UI code is using in case there will be enough interest from our users.
 
+We use [QML](https://doc.qt.io/qt-5/qtqml-index.html). Not familiar with QML? Please read this [nice book](https://qmlbook.github.io/).
+
 If there are any issues, please [contact us](http://www.freedownloadmanager.org/support.htm).
