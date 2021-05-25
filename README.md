@@ -21,3 +21,5 @@ We'll publish some documentation regarding FDM's API used in the UI code if it's
 We use [QML](https://doc.qt.io/qt-5/qtqml-index.html). Not familiar with QML? Please read [this book](https://qmlbook.github.io/).
 
 If there are any issues, please [visit our forum's topic](https://www.freedownloadmanager.org/board/viewtopic.php?f=1&t=18517).
+
+Known issue: currently there is no way to launch FDM6 with custom interface under Android. Please let us know if you're interested in this.
