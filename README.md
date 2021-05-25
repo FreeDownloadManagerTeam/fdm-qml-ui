@@ -18,3 +18,5 @@ FDM6 supports loading of custom interfaces by the use of the special command lin
 
 
 We'll publish some documentation regarding FDM API the UI code is using in case there will be enough interest from our users.
+
+If there are any issues, please [contact us](http://www.freedownloadmanager.org/support.htm).
