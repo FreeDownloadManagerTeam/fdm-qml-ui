@@ -1,7 +1,7 @@
 # fdm-qml-ui
 Create your own custom user interfaces for Free Download Manager 6, or make improvements for existing ones and share your work with all FDM6 users.
 
-FDM6 supports loading of custom interfaces using the special command line argument.
+FDM6 supports loading of custom interfaces by the use of the special command line argument.
 
 1. Clone this repository.
 
@@ -9,7 +9,7 @@ FDM6 supports loading of custom interfaces using the special command line argume
 
 3. Test your changes by launching FDM6 with the following parameters:
 
-    fdm -qurl file:///PATH_TO_MAIL_QML_INSIDE_OF_LOCAL_REPOSITORY
+    fdm -qurl file:///PATH_TO_MAIN_QML_INSIDE_OF_LOCAL_REPOSITORY
 
     E.g. under Windows OS this can be something like:
     fdm.exe -qurl file:///C:/fdm-qml-ui/qml_ui/desktop/main.qml
