@@ -14,7 +14,7 @@ FDM6 supports loading of custom interfaces by the use of the special command lin
     E.g. under Windows OS this can be something like:
     fdm.exe -qurl file:///C:/fdm-qml-ui/qml_ui/desktop/main.qml
 
-4. Share you changes with all FDM6 users using our forum or by creating pull requests to our main repository. 
+4. Share your changes with all FDM6 users using our forum or by creating pull requests to our main repository. 
 
 
 We'll publish some documentation regarding FDM API the UI code is using in case there will be enough interest from our users.
