@@ -1,0 +1,78 @@
+import QtQuick 2.10
+import QtQuick.Controls 2.3
+import QtQuick.Layouts 1.3
+import org.freedownloadmanager.fdm 1.0
+import QtQuick.Controls.Material 2.4
+import "../../common"
+import "../BaseElements"
+
+CenteredDialog
+{
+    id: root
+    width: 320
+    height: 200
+    modal: true
+
+    property int failedId
+
+    contentItem: ColumnLayout {
+        width: parent.width
+        spacing: 10
+        anchors.leftMargin: 20
+        anchors.rightMargin: 20
+
+        Label
+        {
+            text: qsTr("A bug report will be sent to the server and used to improve %1 performance. We do not collect your personal data and do not share data with third parties.").arg(App.shortDisplayName) + App.loc.emptyString
+            Layout.fillWidth: parent
+            wrapMode: Label.WordWrap
+        }
+
+        BaseCheckBox {
+            id: agree
+            text: qsTr("I agree (do not show it again)") + App.loc.emptyString
+        }
+
+        RowLayout {
+            Layout.topMargin: 10
+            Layout.bottomMargin: 10
+            Layout.alignment: Qt.AlignRight
+
+            spacing: 5
+
+            DialogButton {
+                text: qsTr("Send report") + App.loc.emptyString
+                onClicked: root.accept()
+                Layout.alignment: Qt.AlignHCenter
+                enabled: agree.checked
+            }
+
+            DialogButton {
+                text: qsTr("Cancel") + App.loc.emptyString
+                onClicked: root.reject()
+                Layout.alignment: Qt.AlignHCenter
+            }
+        }
+    }
+
+    onOpened: forceActiveFocus()
+    onClosed: {
+        failedId = -1;
+    }
+
+    function showDialog(id) {
+        failedId = id;
+        open();
+    }
+
+    function accept() {
+        uiSettingsTools.settings.reportProblemAccept = true;
+        App.downloads.errorsReportsMgr.reportError(failedId);
+        appWindow.reportError(failedId);
+        close();
+    }
+
+    function reject() {
+        close();
+    }
+}

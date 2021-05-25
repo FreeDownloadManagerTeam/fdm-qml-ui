@@ -1,0 +1,122 @@
+import QtQuick 2.10
+import QtQuick.Controls 2.3
+import QtQuick.Layouts 1.3
+import "../../common/Tools"
+import org.freedownloadmanager.fdm 1.0
+import "../BaseElements"
+
+Item
+{
+    height: contentItem.height
+
+    property bool showingCompletedState: downloadsItemTools.finished && !downloadsItemTools.performingLo
+
+    ColumnLayout {
+        id: contentItem
+        width: parent.width
+
+        GridLayout
+        {
+            property bool smallWidth: parent.width < 400
+
+            width: parent.width
+            visible: downloadsItemTools.showProgressIndicator
+            columns: !smallWidth ? 2 : 1
+            rows: smallWidth ? 1 : 2
+
+            DownloadsItemProgressIndicator {
+                Layout.preferredWidth: 230
+                small: false
+                percent: downloadsItemTools.performingLo ? downloadsItemTools.loProgress :
+                        (downloadsItemTools.inCheckingFiles ? downloadsItemTools.checkingFilesProgress :
+                        (downloadsItemTools.inMergingFiles ? downloadsItemTools.mergingFilesProgress :
+                         progress(downloadsItemTools.selectedBytesDownloaded, downloadsItemTools.selectedSize)))
+                infinityIndicator: downloadsItemTools.infinityIndicator
+                inProgress: downloadsItemTools.indicatorInProgress
+                Layout.alignment: Qt.AlignLeft
+            }
+
+            RowLayout {
+                Layout.fillWidth: true
+
+                BaseLabel {
+                    visible: downloadsItemTools.performingLo
+                             || downloadsItemTools.inCheckingFiles
+                             || downloadsItemTools.inMergingFiles
+                             || downloadsItemTools.progress > 0 && !downloadsItemTools.unknownFileSize && !downloadsItemTools.inQueue && !downloadsItemTools.inCheckingFiles && !downloadsItemTools.inMergingFiles && !downloadsItemTools.performingLo
+                    text: (downloadsItemTools.performingLo ? (downloadsItemTools.loProgress !== -1 ? downloadsItemTools.loProgress : 0) :
+                          (downloadsItemTools.inCheckingFiles ? (downloadsItemTools.checkingFilesProgress > 0 ? downloadsItemTools.checkingFilesProgress : 0) :
+                          (downloadsItemTools.inMergingFiles ? (downloadsItemTools.mergingFilesProgress > 0 ? downloadsItemTools.mergingFilesProgress : 0) :
+                           progress(downloadsItemTools.selectedBytesDownloaded, downloadsItemTools.selectedSize)))) + "%"
+                    Layout.alignment: Qt.AlignLeft
+                }
+
+                BaseLabel {
+                    visible: downloadsItemTools.indicatorInProgress && !downloadsItemTools.unknownFileSize && !downloadsItemTools.inCheckingFiles && !downloadsItemTools.inMergingFiles && !downloadsItemTools.performingLo
+                    property string remainingTime: JsTools.timeUtils.remainingTime(downloadsItemTools.estimatedTimeSec)
+                    text: remainingTime.length ? "(" + remainingTime + ")" : ""
+                    Layout.fillWidth: true
+                }
+
+                BaseLabel {
+                    text: downloadsItemTools.performingLo ? downloadsItemTools.loUiText :
+                         (downloadsItemTools.inCheckingFiles ? qsTr('Checking files') :
+                         (downloadsItemTools.inMergingFiles ? qsTr('Merging media streams') :
+                         (downloadsItemTools.inQueue ? qsTr("Queued") :
+                         (downloadsItemTools.inWaitingForMetadata ? qsTr("Requesting info") :
+                         (downloadsItemTools.inUnknownFileSize ? qsTr("Unknown file size") :
+                         (downloadsItemTools.inPause ? qsTr("Paused") : '')))))) + App.loc.emptyString
+
+                    visible: text.length > 0
+                    wrapMode: Label.Wrap
+                    Layout.fillWidth: true
+                }
+            }
+        }
+
+        RowLayout {
+            Layout.alignment: Qt.AlignVCenter
+            spacing: 3
+            width: parent.width
+
+            RowLayout {
+                visible: showingCompletedState
+                Layout.fillWidth: true
+                BaseLabel {
+                    text: qsTr("Completed") + App.loc.emptyString
+                }
+            }
+
+            RowLayout {
+                visible: downloadsItemTools.inError
+                width: parent.width
+                spacing: 3
+                Rectangle {
+                    clip: true
+                    width: 17
+                    height: 15
+                    color: "transparent"
+                    Image {
+                        x: -41
+                        y: -269
+                        source: appWindow.theme.elementsIcons
+                        sourceSize.width: 93
+                        sourceSize.height: 456
+                    }
+                }
+                BaseLabel {
+                    Layout.fillWidth: true
+                    elide: Text.ElideRight
+                    text: downloadsItemTools.errorMessage
+                    color: appWindow.theme.errorMessage
+                    verticalAlignment: Text.AlignVCenter
+                }
+            }
+        }
+    }
+
+    function progress(done, total)
+    {
+        return total !== -1 ? parseInt(done/total*100) : 0;
+    }
+}
