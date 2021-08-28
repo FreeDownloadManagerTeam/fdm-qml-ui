@@ -64,6 +64,15 @@ Rectangle {
                     Layout.fillWidth: true
                     Layout.preferredHeight: contentColumn.height
                     color: appWindow.theme.background
+                    radius: 26
+
+                    Rectangle {
+                        width: parent.width
+                        anchors.top: parent.top
+                        anchors.bottomMargin: 20
+                        anchors.bottom: parent.bottom
+                        color: parent.color
+                    }
 
                     Column {
                         id: contentColumn
@@ -111,19 +120,52 @@ Rectangle {
                             onClicked: stackView.waPush(Qt.resolvedUrl("AdvancedSettings.qml"))
                             textWeight: Font.Bold
                         }
+                    }
+                }
 
-                        SettingsSeparator{}
+                Rectangle {
+                    color: appWindow.theme.background
+                    height: 20
+                    width: parent.width
+                }
+
+                BaseLabel
+                {
+                    Layout.leftMargin: 20
+                    font.pixelSize: 14
+                    font.bold: true
+                    text: qsTr("Go back to default settings") + App.loc.emptyString
+                }
+
+                DialogButton
+                {
+                    Layout.leftMargin: 30
+                    enabled: App.settings.hasNonDefaultValues || uiSettingsTools.hasNonDefaultValues
+                    text: qsTr("Reset")
+                    onClicked: okToResetMsg.open()
+                    MessageDialog
+                    {
+                        id: okToResetMsg
+                        title: qsTr("Default settings") + App.loc.emptyString
+                        text: qsTr("Restore default settings?") + App.loc.emptyString
+                        standardButtons: StandardButton.Ok | StandardButton.Cancel
+                        onAccepted: {
+                            App.settings.resetToDefaults();
+                            uiSettingsTools.resetToDefaults();
+                            stackView.pop();
+                            stackView.waPush(Qt.resolvedUrl("SettingsPage.qml"));
+                        }
                     }
                 }
             }
 
-            Rectangle {
+            /*Rectangle {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.top: all.bottom
                 height: parent.height - contentHeight
                 color: appWindow.theme.background
-            }
+            }*/
         }
 
 

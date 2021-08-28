@@ -1,16 +1,24 @@
 import QtQuick 2.10
 import QtQuick.Controls 2.3
 import org.freedownloadmanager.fdm 1.0
+import "../../common"
 
 Rectangle {
     id: root
     property string text
-    property string sortOptionName
+    property url imageSource
+    property int sortBy
 
     property bool showSortIndicator: false
     property bool sortAscendingOrder: false
 
-    property int headerMinimumWidth: lbl.contentWidth + lbl.leftPadding + lbl.rightPadding + 16
+    property bool textMode: text.length !== 0
+
+    property var indicatorElemRealWidth: root.textMode ?
+                                             lbl.contentWidth + lbl.leftPadding + lbl.rightPadding :
+                                             img.width + 6*2
+
+    property int headerMinimumWidth: indicatorElemRealWidth + 16
 
     signal clicked
 
@@ -19,6 +27,7 @@ Rectangle {
 
     BaseLabel {
         id: lbl
+        visible: root.textMode
         text: root.text
         font.bold: false
         font.pixelSize: 13
@@ -29,10 +38,20 @@ Rectangle {
         width: parent.width - 11
     }
 
+    WaSvgImage
+    {
+        id: img
+        visible: !root.textMode
+        source: imageSource
+        anchors.left: parent.left
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.leftMargin: 6
+    }
+
     Rectangle {
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
-        anchors.leftMargin: lbl.contentWidth + lbl.leftPadding + lbl.rightPadding
+        anchors.leftMargin: root.indicatorElemRealWidth
         visible: showSortIndicator
         width: 10
         height: 10
@@ -67,7 +86,7 @@ Rectangle {
 
         BaseToolTip {
             text: root.text
-            visible: lbl.truncated && parent.containsMouse
+            visible: root.textMode && lbl.truncated && parent.containsMouse
         }
     }
 }

@@ -146,7 +146,7 @@ Item
                     + (statusItem.isEmpty && speedColumnBlock.isEmpty ? root.downloadsViewHeader.itemAt(3).width : 0)
             leftPadding: 6
             rightPadding: itemTags.width ? itemTags.width + 10 + 5 : 5
-            font.pixelSize: appWindow.compactView ? 13 : 14
+            font.pixelSize: appWindow.fonts.defaultSize
             opacity: downloadsItemTools.itemOpacity
 
             MyFontMetrics {

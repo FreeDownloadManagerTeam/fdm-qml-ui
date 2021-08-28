@@ -50,7 +50,7 @@ ComboBox {
         BaseLabel {
             leftPadding: 6 + 18 + 6
             anchors.verticalCenter: parent.verticalCenter
-            font.pixelSize: 12
+            font.pixelSize: appWindow.fonts.defaultSize
             color: appWindow.theme.settingsItem
             text: App.loc.translationLanguageString(modelData) + " (" + App.loc.translationCountryString(modelData) + ")"
             font.capitalization: Font.Capitalize
@@ -98,7 +98,7 @@ ComboBox {
         BaseLabel {
             leftPadding: 6 + 18 + 2
             anchors.verticalCenter: parent.verticalCenter
-            font.pixelSize: 12
+            font.pixelSize: appWindow.fonts.defaultSize
             color: appWindow.theme.settingsItem
             text: App.loc.translationLanguageString(App.loc.currentTranslation) + " (" + App.loc.translationCountryString(App.loc.currentTranslation) + ")"
             font.capitalization: Font.Capitalize

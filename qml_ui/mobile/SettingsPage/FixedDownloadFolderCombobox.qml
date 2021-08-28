@@ -102,7 +102,6 @@ Rectangle {
 
     RoundButton {
         id: folderBtn
-        visible: App.cfg.cdShowOpenFileBtn
         enabled: root.enabled
         anchors.verticalCenter: parent.verticalCenter
         radius: 40

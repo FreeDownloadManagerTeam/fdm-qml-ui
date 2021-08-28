@@ -48,14 +48,14 @@ Item {
             text: qsTr("Name") + App.loc.emptyString
             Layout.fillWidth: true
             Layout.minimumWidth: 200
-            sortOptionName: AbstractDownloadsUi.SortByName
+            sortBy: AbstractDownloadsUi.SortByName
         }
 
         FilesTabTablesHeaderItem {
             id: sizeItem
             text: qsTr("Size") + App.loc.emptyString
             Layout.preferredWidth: 80
-            sortOptionName: AbstractDownloadsUi.SortBySize
+            sortBy: AbstractDownloadsUi.SortBySize
         }
 
         FilesTabTablesHeaderItem {
@@ -63,14 +63,14 @@ Item {
             text: qsTr("Progress") + App.loc.emptyString
             Layout.preferredWidth: 150
             visible: !root.createDownloadDialog
-            sortOptionName: AbstractDownloadsUi.SortByProgress
+            sortBy: AbstractDownloadsUi.SortByProgress
         }
 
         FilesTabTablesHeaderItem {
             id: priorityItem
             text: qsTr("Priority") + App.loc.emptyString
             Layout.preferredWidth: priorityColWidth
-            sortOptionName: AbstractDownloadsUi.SortByPriority
+            sortBy: AbstractDownloadsUi.SortByPriority
 
             Rectangle {
                 height: parent.height

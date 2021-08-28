@@ -19,81 +19,70 @@ Column {
         id: grid
 
         property int labelMaxWidth: 165
-        property int rowPreferredHeight: 38
+        property int rowMinimumHeight: 38
 
         SettingsGridLabel {text: " "}
         SettingsGridLabel {text: qsTr("Low") + App.loc.emptyString}
         SettingsGridLabel {text: qsTr("Medium") + App.loc.emptyString}
         SettingsGridLabel {text: qsTr("High") + App.loc.emptyString}
 
-        Rectangle {
-            Layout.alignment: Qt.AlignTop
-            Layout.preferredHeight: grid.rowPreferredHeight
+        SettingsGridLabel {
+            Layout.minimumHeight: grid.rowMinimumHeight
             Layout.preferredWidth: grid.labelMaxWidth
-            color: "transparent"
-            SettingsGridLabel {
-                width: parent.width
-                anchors.verticalCenter: parent.verticalCenter
-                text: qsTr("Download speed") + App.loc.emptyString
-                wrapMode: Label.Wrap
-            }
+            Layout.alignment: Qt.AlignVCenter
+            text: qsTr("Download speed") + App.loc.emptyString
+            wrapMode: Label.Wrap
+            verticalAlignment: Text.AlignVCenter
         }
 
         TumNetworkSpeedLimitComboBox {
-            Layout.alignment: Qt.AlignTop
+            Layout.alignment: Qt.AlignVCenter
             mode: TrafficUsageMode.Low
             setting: DmCoreSettings.MaxDownloadSpeed
         }
         TumNetworkSpeedLimitComboBox {
-            Layout.alignment: Qt.AlignTop
+            Layout.alignment: Qt.AlignVCenter
             mode: TrafficUsageMode.Medium
             setting: DmCoreSettings.MaxDownloadSpeed
         }
         TumNetworkSpeedLimitComboBox {
-            Layout.alignment: Qt.AlignTop
+            Layout.alignment: Qt.AlignVCenter
             mode: TrafficUsageMode.High
             setting: DmCoreSettings.MaxDownloadSpeed
         }
 
-        Rectangle {
-            Layout.alignment: Qt.AlignTop
-            Layout.preferredHeight: grid.rowPreferredHeight
+        SettingsGridLabel {
+            Layout.minimumHeight: grid.rowMinimumHeight
             Layout.preferredWidth: grid.labelMaxWidth
-            color: "transparent"
-            SettingsGridLabel {
-                width: parent.width
-                anchors.verticalCenter: parent.verticalCenter
-                text: qsTr("Upload speed") + App.loc.emptyString
-                wrapMode: Label.Wrap
-            }
+            Layout.alignment: Qt.AlignVCenter
+            text: qsTr("Upload speed") + App.loc.emptyString
+            wrapMode: Label.Wrap
+            verticalAlignment: Text.AlignVCenter
         }
 
         TumNetworkSpeedLimitComboBox {
-            Layout.alignment: Qt.AlignTop
+            Layout.alignment: Qt.AlignVCenter
             mode: TrafficUsageMode.Low
             setting: DmCoreSettings.MaxUploadSpeed
         }
         TumNetworkSpeedLimitComboBox {
-            Layout.alignment: Qt.AlignTop
+            Layout.alignment: Qt.AlignVCenter
             mode: TrafficUsageMode.Medium
             setting: DmCoreSettings.MaxUploadSpeed
         }
         TumNetworkSpeedLimitComboBox {
-            Layout.alignment: Qt.AlignTop
+            Layout.alignment: Qt.AlignVCenter
             mode: TrafficUsageMode.High
             setting: DmCoreSettings.MaxUploadSpeed
         }
 
-        Rectangle {
-            Layout.preferredHeight: grid.rowPreferredHeight
+        SettingsGridLabel {
+            Layout.minimumHeight: grid.rowMinimumHeight
             Layout.preferredWidth: grid.labelMaxWidth
-            color: "transparent"
-            SettingsGridLabel {
-                width: parent.width
-                anchors.verticalCenter: parent.verticalCenter
-                text: qsTr("Maximum number of connections") + App.loc.emptyString
-                wrapMode: Label.Wrap
-            }
+            Layout.alignment: Qt.AlignVCenter
+            text: qsTr("Maximum number of connections") + App.loc.emptyString
+            wrapMode: Label.Wrap
+            verticalAlignment: Text.AlignVCenter
         }
 
         TumSettingTextField {
@@ -112,44 +101,41 @@ Column {
             setting: DmCoreSettings.MaxConnections
         }
 
-        Rectangle {
-            Layout.preferredHeight: grid.rowPreferredHeight
+        SettingsGridLabel {
+            Layout.minimumHeight: grid.rowMinimumHeight
             Layout.preferredWidth: grid.labelMaxWidth
-            color: "transparent"
-            SettingsGridLabel {
-                width: parent.width
-                anchors.verticalCenter: parent.verticalCenter
-                text: qsTr("Maximum number of connections per server") + App.loc.emptyString
-                wrapMode: Label.Wrap
-            }
+            Layout.alignment: Qt.AlignVCenter
+            text: qsTr("Maximum number of connections per server") + App.loc.emptyString
+            wrapMode: Label.Wrap
+            verticalAlignment: Text.AlignVCenter
         }
 
         TumSettingTextField {
             id: tumStg7
             mode: TrafficUsageMode.Low
             setting: DmCoreSettings.MaxConnectionsPerServer
+            maxValue: App.MaxConnectionsPerServerLimit
         }
         TumSettingTextField {
             id: tumStg8
             mode: TrafficUsageMode.Medium
             setting: DmCoreSettings.MaxConnectionsPerServer
+            maxValue: App.MaxConnectionsPerServerLimit
         }
         TumSettingTextField {
             id: tumStg9
             mode: TrafficUsageMode.High
             setting: DmCoreSettings.MaxConnectionsPerServer
+            maxValue: App.MaxConnectionsPerServerLimit
         }
 
-        Rectangle {
-            Layout.preferredHeight: grid.rowPreferredHeight
+        SettingsGridLabel {
+            Layout.minimumHeight: grid.rowMinimumHeight
             Layout.preferredWidth: grid.labelMaxWidth
-            color: "transparent"
-            SettingsGridLabel {
-                width: parent.width
-                anchors.verticalCenter: parent.verticalCenter
-                text: qsTr("Maximum number of simultaneous downloads") + App.loc.emptyString
-                wrapMode: Label.Wrap
-            }
+            Layout.alignment: Qt.AlignVCenter
+            text: qsTr("Maximum number of simultaneous downloads") + App.loc.emptyString
+            wrapMode: Label.Wrap
+            verticalAlignment: Text.AlignVCenter
         }
 
         TumSettingTextField {
@@ -169,29 +155,29 @@ Column {
         }
 
         Loader {
+            Layout.minimumHeight: grid.rowMinimumHeight
+            Layout.preferredWidth: grid.labelMaxWidth
+            Layout.alignment: Qt.AlignVCenter
             id : maxURatioGroup
             active: appWindow.btSupported
             source: "../../bt/desktop/MaxURatioLabel.qml"
-            Layout.alignment: Qt.AlignTop
-            Layout.preferredHeight: active ? grid.rowPreferredHeight : 0
-            Layout.preferredWidth: grid.labelMaxWidth
         }
 
         TumMaxURatioComboBox {
             visible: maxURatioGroup.active
-            Layout.alignment: Qt.AlignTop
+            Layout.alignment: Qt.AlignVCenter
             mode: TrafficUsageMode.Low
             setting: visible ? DmCoreSettings.MaxURatio : -1
         }
         TumMaxURatioComboBox {
             visible: maxURatioGroup.active
-            Layout.alignment: Qt.AlignTop
+            Layout.alignment: Qt.AlignVCenter
             mode: TrafficUsageMode.Medium
             setting: visible ? DmCoreSettings.MaxURatio : -1
         }
         TumMaxURatioComboBox {
             visible: maxURatioGroup.active
-            Layout.alignment: Qt.AlignTop
+            Layout.alignment: Qt.AlignVCenter
             mode: TrafficUsageMode.High
             setting: visible ? DmCoreSettings.MaxURatio : -1
         }
@@ -211,6 +197,7 @@ Column {
         {
             return qsTr("Invalid traffic limits settings") + App.loc.emptyString;
         }
+
         return "";
     }
 }

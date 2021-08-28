@@ -11,6 +11,7 @@ import org.freedownloadmanager.vmsqt 1.0
 import org.freedownloadmanager.fdm.appfeatures 1.0
 import org.freedownloadmanager.fdm.qtsystemtheme 1.0
 import org.freedownloadmanager.fdm.dmcoresettings 1.0
+import org.freedownloadmanager.fdm.abstractdownloadsui 1.0
 import "./Themes"
 
 ApplicationWindow {
@@ -22,7 +23,7 @@ ApplicationWindow {
 
     property int lastOkVisibility: ApplicationWindow.Windowed
 
-    property int mainToolbarHeight: macVersion ? 80 : 60
+    property int mainToolbarHeight: macVersion ? 75 : 50
     property bool modalDialogOpened: buildDownloadDlg.opened || tuneAddDownloadDlg.opened || aboutDlg.opened
                                     || deleteDownloadsDlg.opened || deleteDownloadsDlgSimple.opened
                                     || shutdownDlg.opened || mergeDownloadsDlg.opened || authenticationDlg.opened
@@ -45,7 +46,8 @@ ApplicationWindow {
     property bool smallWindow: width < 910 || height < 610
     property bool compactView: uiSettingsTools.settings.compactView || smallWindow
 
-    property bool makeWindowHiddenAgain: false
+    property bool forceWindowVisibility: false
+    property int forceWindowVisibilityTo: Window.Windowed
 
     signal uiReadyStateChanged
     signal newDownloadAdded
@@ -86,6 +88,12 @@ ApplicationWindow {
     }
     onActiveChanged: {
         systemTheme = App.systemTheme
+    }
+
+    readonly property var fonts: fonts_
+    QtObject {
+        id: fonts_
+        readonly property int defaultSize: appWindow.compactView ? 13 : 14
     }
 
     KeyboardItemsFocusTools {
@@ -151,17 +159,46 @@ ApplicationWindow {
 
     onClosing:
     {
-        appWindow.visibility = ApplicationWindow.Hidden;
+        waSetVisibility(Window.Hidden);
         close.accepted = false;
     }
 
     onVisibilityChanged:
     {
+        if (waHideWindowActive)
+            return;
+
         if (visibility == ApplicationWindow.Windowed ||
                 visibility == ApplicationWindow.FullScreen ||
                 visibility == ApplicationWindow.Maximized)
         {
             lastOkVisibility = visibility;
+        }
+    }
+
+    property bool waHideWindowActive: false
+
+    function waSetVisibility(v)
+    {
+        if (macVersion && v == Window.Hidden && visibility == Window.FullScreen)
+        {
+            // WORKAROUND: https://bugreports.qt.io/browse/QTBUG-95947
+            waHideWindowActive = true;
+            visibility = Window.Windowed;
+        }
+        else
+        {
+            visibility = v;
+        }
+    }
+
+    onWindowStateChanged: {
+        if (waHideWindowActive &&
+                windowState != Qt.WindowFullScreen &&
+                visibility == Window.Windowed)
+        {
+            visibility = Window.Hidden;
+            waHideWindowActive = false;
         }
     }
 
@@ -568,7 +605,10 @@ ApplicationWindow {
 
     function checkNewDownloadRequests(force)
     {
-        if (buildDownloadDlg.opened && !buildDownloadDlg.urlFieldText.length) {
+        if (!App.ready)
+            return;
+
+        if (buildDownloadDlg.opened && !buildDownloadDlg.isBusy()) {
             buildDownloadDlg.close();
             return;
         }
@@ -591,22 +631,29 @@ ApplicationWindow {
 
         if (isShowingDlg)
         {
-            if (!appWindow.visible)
-                appWindow.makeWindowHiddenAgain = true;
+            if (uiSettingsTools.settings.autoHideWhenFinishedAddingDownloads &&
+                    !appWindow.active)
+            {
+                appWindow.forceWindowVisibility = true;
+                appWindow.forceWindowVisibilityTo = visibility == Window.Minimized ? Window.Minimized :
+                            appWindow.visible && !appWindow.macVersion ? Window.Minimized :
+                            Window.Hidden;
+            }
 
             appWindow.showWindow(true);
         }
         else
         {
-            if (appWindow.makeWindowHiddenAgain)
+            if (appWindow.forceWindowVisibility)
             {
-                appWindow.makeWindowHiddenAgain = false;
-                appWindow.visible = false;
+                appWindow.forceWindowVisibility = false;
+                waSetVisibility(appWindow.forceWindowVisibilityTo);
             }
         }
     }
 
-    onAppWindowStateChanged: checkNewDownloadRequests(false)
+    onAppWindowStateChanged: checkNewDownloadRequests()
+    onUiReadyStateChanged: checkNewDownloadRequests()
 
     function onMergeRequest(force)
     {
@@ -659,6 +706,8 @@ ApplicationWindow {
     }
 
     Component.onCompleted: {
+        if (Qt.platform.os === "osx")
+            flags |= Qt.WindowFullscreenButtonHint;
         uiReadyTools.onReady(updateMacVersionWorkaround);
     }
 
@@ -733,5 +782,70 @@ ApplicationWindow {
         running: true
         triggeredOnStart: true
         onTriggered: currentTime = Date.now()
+    }
+
+    Connections {
+        target: appWindow
+        onNewDownloadAdded: downloadsViewTools.resetAllFilters()
+    }
+
+    Connections {
+        target: uiSettingsTools.settings
+        onEnableUserDefinedOrderOfDownloadsChanged: {
+            if (uiSettingsTools.settings.enableUserDefinedOrderOfDownloads)
+            {
+                if (sortTools.sortBy != AbstractDownloadsUi.DownloadsSortByOrder)
+                    sortTools.setSortByAndAsc(AbstractDownloadsUi.DownloadsSortByOrder, false);
+            }
+            else
+            {
+                if (sortTools.sortBy == AbstractDownloadsUi.DownloadsSortByOrder)
+                    sortTools.setSortByAndAsc(AbstractDownloadsUi.DownloadsSortByCreationTime, false);
+            }
+        }
+    }
+
+    signal doDownloadUpdate()
+    WhatsNewDialog {
+        id: whatsnew
+        width: Math.min(500, appWindow.width - 100)
+        height: Math.min(250, appWindow.height - 100)
+        onUpdateClicked: doDownloadUpdate()
+    }
+    function openWhatsNewDialog(version, changelog)
+    {
+        whatsnew.version = version;
+        whatsnew.changelog = changelog;
+        whatsnew.open();
+    }
+
+    DownloadExpiredDialog {
+        id: downloadExpiredDlg
+        width: Math.min(500, appWindow.width - 100)
+        onClosed: {
+            App.downloads.expiredDownloads.onExpiredDownloadNotificationFinished(downloadId);
+            openDownloadExpiredDialogForNextDownload();
+        }
+    }
+    function openDownloadExpiredDialog(downloadId)
+    {
+        downloadExpiredDlg.downloadId = downloadId;
+        downloadExpiredDlg.open();
+    }
+    function openDownloadExpiredDialogForNextDownload()
+    {
+        if (!downloadExpiredDlg.opened &&
+                App.downloads.expiredDownloads.hasNewExpiredDownloads)
+        {
+            openDownloadExpiredDialog(App.downloads.expiredDownloads.nextNewExpiredDownloadId());
+        }
+    }
+    Connections {
+        target: App.downloads.expiredDownloads
+        onHasNewExpiredDownloadsChanged: openDownloadExpiredDialogForNextDownload()
+        onNotExpiredAnymore: {
+            if (downloadExpiredDlg.opened && downloadExpiredDlg.downloadId == id)
+                downloadExpiredDlg.close();
+        }
     }
 }

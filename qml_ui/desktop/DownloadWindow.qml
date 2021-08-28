@@ -88,7 +88,7 @@ ApplicationWindow
                 elide: Text.ElideMiddle
                 Layout.fillWidth: true
                 color: linkColor
-                onLinkActivated: Qt.openUrlExternally(downloadsItemTools.webPageUrl)
+                onLinkActivated: App.openDownloadUrl(downloadsItemTools.webPageUrl)
                 MouseArea {
                     anchors.fill: parent
                     hoverEnabled: true
@@ -114,7 +114,7 @@ ApplicationWindow
                 elide: Text.ElideMiddle
                 Layout.fillWidth: true
                 color: linkColor
-                onLinkActivated: Qt.openUrlExternally(downloadsItemTools.resourceUrl)
+                onLinkActivated: App.openDownloadUrl(downloadsItemTools.resourceUrl)
                 MouseArea {
                     anchors.fill: parent
                     hoverEnabled: true

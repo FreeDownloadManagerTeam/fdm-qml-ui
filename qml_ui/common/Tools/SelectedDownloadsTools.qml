@@ -14,8 +14,8 @@ Item {
     property bool checkedDownloadsToStartExist: false;
     property bool checkedDownloadsToStopExist: false;
 
-    property bool downloadsToStartExist: false;
-    property bool downloadsToStopExist: false;
+    property bool downloadsToStartExist: App.downloads.tracker.hasDownloadsToStart
+    property bool downloadsToStopExist: App.downloads.tracker.hasDownloadsToStop
 
     signal modelCheckedChanged(double model_id)
     signal modelRunningChanged(double model_id)
@@ -32,6 +32,7 @@ Item {
     property int shiftSelectStartIndex: -1
 
     Component.onCompleted: {
+        App.downloads.model.currentDownloadId = Qt.binding(function() {return currentDownloadId;});
         uiReadyTools.onReady(onComponentReady);
     }
 
@@ -65,7 +66,7 @@ Item {
 
     function setCurrentIdToFirstItemInList() {
         resetShiftSelectStartIndex();
-        if (App.downloads.model.rowCount() > 0) {
+        if (App.downloads.model.rowCount > 0) {
             currentDownloadId = App.downloads.model.idByIndex(0);
         } else {
             currentDownloadId = -1;
@@ -83,14 +84,12 @@ Item {
             checkedDownloadsCount = checked_ids.length;
             checkedDownloadsToStartExist = App.downloads.model.hasCheckedDownloadsToStart();
             checkedDownloadsToStopExist = App.downloads.model.hasCheckedDownloadsToStop();
-            downloadsToStartExist = App.downloads.model.hasDownloadsToStart();
-            downloadsToStopExist = App.downloads.model.hasDownloadsToStop();
         }
     }
 
     function onComponentReady()
     {
-        if (App.downloads.model.rowCount() > 0) {
+        if (App.downloads.model.rowCount > 0) {
             currentDownloadId = App.downloads.model.idByIndex(0);
         }
     }

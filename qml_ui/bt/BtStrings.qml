@@ -3,6 +3,8 @@ import org.freedownloadmanager.fdm 1.0
 import org.freedownloadmanager.fdm.appconstants 1.0
 
 Item {
+    readonly property string protocolName: "BitTorrent"
+
     property string startAllSeedingDownloadsUiText: App.my_BT_qsTranslate("DownloadContextMenu", "Start all seeding downloads") + App.loc.emptyString
     property string stopAllSeedingDownloadsUiText: App.my_BT_qsTranslate("DownloadContextMenu", "Stop all seeding downloads") + App.loc.emptyString
 

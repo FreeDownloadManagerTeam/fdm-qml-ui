@@ -6,11 +6,10 @@ import "../BaseElements"
 TablesHeaderItem {
     id: root
     Layout.alignment: Qt.AlignTop
-//    property string sortOptionName
 
-    onClicked: sortClick(sortOptionName)
+    onClicked: sortClick(sortBy)
 
-    showSortIndicator: myModel && myModel.sortBy == sortOptionName
+    showSortIndicator: myModel && myModel.sortBy == sortBy
     sortAscendingOrder: myModel && myModel.sortOrder == Qt.AscendingOrder
 
     function sortClick(sortBy)

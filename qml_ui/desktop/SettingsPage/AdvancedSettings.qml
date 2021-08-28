@@ -2,6 +2,7 @@ import QtQuick 2.10
 import QtQuick.Controls 2.3
 import QtGraphicalEffects 1.0
 import Qt.labs.settings 1.0
+import QtQuick.Dialogs 1.3
 import org.freedownloadmanager.fdm 1.0
 import org.freedownloadmanager.fdm.dmcoresettings 1.0
 import org.freedownloadmanager.fdm.appsettings 1.0
@@ -12,15 +13,21 @@ import "../Dialogs"
 
 Column
 {
-    spacing: 10
+    id: root
+
+    spacing: 0
     width: parent.width
 
+    property alias hidden: header.hidden
+
     SettingsGroupHeader {
+        id: header
         text: qsTr("Advanced") + App.loc.emptyString
+        enableHideButton: true
     }
 
     SettingsGroupColumn {
-        visible: App.features.hasFeature(AppFeatures.SystemNotifications)
+        visible: !root.hidden && App.features.hasFeature(AppFeatures.SystemNotifications)
         width: parent.width
 
         SettingsSubgroupHeader {
@@ -114,7 +121,7 @@ Column
     }
 
     SettingsGroupColumn {
-        visible: App.features.hasFeature(AppFeatures.PreventOsAutoSleep)
+        visible: !root.hidden && App.features.hasFeature(AppFeatures.PreventOsAutoSleep)
 
         SettingsSubgroupHeader {
             text: qsTr("Power management") + App.loc.emptyString
@@ -144,6 +151,8 @@ Column
 
     SettingsGroupColumn {
 
+        visible: !root.hidden
+
         SettingsSubgroupHeader{
             text: qsTr("Options") + App.loc.emptyString
         }
@@ -153,24 +162,6 @@ Column
             checked: App.autorunEnabled()
             onClicked: App.enableAutorun(checked)
             visible: App.features.hasFeature(AppFeatures.Autorun)
-        }
-
-        Loader {
-            width: parent.width
-            active: appWindow.btSupported
-            source: "../../bt/desktop/IntegrationSettings.qml"
-        }
-
-        SettingsCheckBox {
-            text: qsTr("Open/hide the bottom panel by clicking on the download") + App.loc.emptyString
-            checked: uiSettingsTools.settings.toggleBottomPanelByClickingOnDownload
-            onClicked: { uiSettingsTools.settings.toggleBottomPanelByClickingOnDownload = !uiSettingsTools.settings.toggleBottomPanelByClickingOnDownload }
-        }
-
-        Loader {
-            width: parent.width
-            active: appWindow.macVersion
-            source: "DockUploadSpeedSetting.qml"
         }
 
         Rectangle {
@@ -241,6 +232,47 @@ Column
 
     SettingsGroupColumn {
 
+        visible: !root.hidden
+
+        SettingsSubgroupHeader{
+            text: qsTr("Interface") + App.loc.emptyString
+        }
+
+        SettingsCheckBox {
+            text: qsTr("Open/hide the bottom panel by clicking on the download") + App.loc.emptyString
+            checked: uiSettingsTools.settings.toggleBottomPanelByClickingOnDownload
+            onClicked: { uiSettingsTools.settings.toggleBottomPanelByClickingOnDownload = !uiSettingsTools.settings.toggleBottomPanelByClickingOnDownload }
+        }
+
+        Loader {
+            width: parent.width
+            active: appWindow.macVersion
+            source: "DockUploadSpeedSetting.qml"
+        }
+
+        SettingsCheckBox {
+            text: qsTr("Enable user defined order of downloads") + App.loc.emptyString
+            checked: uiSettingsTools.settings.enableUserDefinedOrderOfDownloads
+            onClicked: uiSettingsTools.settings.enableUserDefinedOrderOfDownloads = checked
+        }
+
+        SettingsCheckBox {
+            text: qsTr("Show \"Save As...\" button") + App.loc.emptyString
+            checked: uiSettingsTools.settings.showSaveAsButton
+            onClicked: uiSettingsTools.settings.showSaveAsButton = checked
+        }
+
+        SettingsCheckBox {
+            text: qsTr("Restore hidden state when finished adding new downloads") + App.loc.emptyString
+            checked: uiSettingsTools.settings.autoHideWhenFinishedAddingDownloads
+            onClicked: uiSettingsTools.settings.autoHideWhenFinishedAddingDownloads = checked
+        }
+    }
+
+    SettingsGroupColumn {
+
+        visible: !root.hidden
+
         SettingsSubgroupHeader{
             text: qsTr("Delete button action") + App.loc.emptyString
         }
@@ -267,6 +299,8 @@ Column
 
         property int existingFileReaction: App.settings.dmcore.value(DmCoreSettings.ExistingFileReaction)
 
+        visible: !root.hidden
+
         SettingsSubgroupHeader{
             text: qsTr("File exists reaction") + App.loc.emptyString
         }
@@ -289,6 +323,36 @@ Column
 
         function setFileExistsReaction(value) {
             App.settings.dmcore.setValue(DmCoreSettings.ExistingFileReaction, value);
+        }
+    }
+
+    SettingsGroupColumn {
+        id: resetToDefaults
+
+        SettingsSubgroupHeader{
+            text: qsTr("Go back to default settings") + App.loc.emptyString
+        }
+
+        CustomButton {
+            text: qsTr("Reset") + App.loc.emptyString
+            enabled: App.settings.hasNonDefaultValues || uiSettingsTools.hasNonDefaultValues
+            onClicked: okToResetMsg.open()
+            blueBtn: true
+            anchors.left: parent.left
+            anchors.leftMargin: 20
+            MessageDialog
+            {
+                id: okToResetMsg
+                title: qsTr("Default settings") + App.loc.emptyString
+                text: qsTr("Restore default settings?") + App.loc.emptyString
+                standardButtons: StandardButton.Ok | StandardButton.Cancel
+                onAccepted: {
+                    App.settings.resetToDefaults();
+                    uiSettingsTools.resetToDefaults();
+                    stackView.pop();
+                    appWindow.openSettings();
+                }
+            }
         }
     }
 }

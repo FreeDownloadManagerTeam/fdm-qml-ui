@@ -12,6 +12,8 @@ Item {
     height: 100
     width: 300
 
+    property int arrowCenterX: width/2
+
     MouseArea {
         anchors.fill: parent
     }
@@ -21,8 +23,7 @@ Item {
         color: "transparent"
         width: 10
         height: 5
-//        anchors.left: appWindow.macVersion ? parent.left : undefined
-        anchors.horizontalCenter: parent.horizontalCenter//!appWindow.macVersion ? parent.horizontalCenter : undefined
+        x: arrowCenterX - width/2
         anchors.leftMargin: 25
         z: 10
 
@@ -48,10 +49,6 @@ Item {
 
     Rectangle {
         id: dlg
-//        anchors.left: parent.left
-//        anchors.horizontalCenter: parent.horizontalCenter
-//        anchors.fill: parent
-//        anchors.topMargin: 5
         width: parent.width
         height: parent.height
         x: -20
@@ -67,15 +64,6 @@ Item {
             anchors.fill: parent
             spacing: 5
 
-//            CustomButton {
-//                visible: updateTools.state == QtUpdate.Ready
-//                Layout.alignment: Qt.AlignHCenter | Qt.AlignCenter
-//                text: qsTr("Check for updates") + App.loc.emptyString
-//                blueBtn: true
-//                onClicked: {
-//                    appWindow.updateDlgClosed()
-//                }
-//            }
             BaseLabel {
                 visible: updateTools.state == QtUpdate.Ready || updateTools.state == QtUpdate.InProgress
                 Layout.alignment: Qt.AlignLeft | Qt.AlignTop
@@ -123,6 +111,13 @@ Item {
                 visible: updateTools.state == QtUpdate.Finished && updateTools.updatesAvailable
                 Layout.alignment: Qt.AlignLeft
                 text: qsTr("New version is available") + App.loc.emptyString
+            }
+            BaseHandCursorLabel {
+                visible: updateTools.state == QtUpdate.Finished && updateTools.updatesAvailable &&
+                         updateTools.version && updateTools.changelog
+                Layout.alignment: Qt.AlignLeft
+                text: "<a href='#'>" + qsTr("What's new in %1").arg(updateTools.version) + App.loc.emptyString + "</a>"
+                onLinkActivated: updateTools.openWhatsNewDialog()
             }
             CustomButton {
                 visible: updateTools.state == QtUpdate.Finished && updateTools.updatesAvailable
@@ -426,5 +421,4 @@ Item {
         color: appWindow.theme.shadow
         source: dlg
     }
-
 }

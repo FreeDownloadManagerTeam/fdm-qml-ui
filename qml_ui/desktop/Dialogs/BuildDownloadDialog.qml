@@ -12,8 +12,6 @@ BaseDialog {
 
     width: 542
 
-    property string urlFieldText: urlField.text
-
     contentItem: BaseDialogItem {
         titleText: qsTr("Add download") + App.loc.emptyString
         onCloseClick: downloadTools.doReject()
@@ -184,5 +182,11 @@ BaseDialog {
                 downloadTools.doReject();
             }
         }
+    }
+
+    function isBusy()
+    {
+        return urlField.text.length !== 0 ||
+                downloadTools.isBusy();
     }
 }

@@ -3,6 +3,7 @@ import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.4
 import org.freedownloadmanager.fdm 1.0
+import org.freedownloadmanager.fdm.abstractdownloadsui 1.0
 import "../BaseElements"
 
 Drawer {
@@ -13,8 +14,6 @@ Drawer {
     interactive: stackView.depth == 1
     Material.background: appWindow.theme.background
     Material.foreground: appWindow.theme.foreground
-
-    property int selectedMode: 0
 
     ListView {
         id: sort
@@ -37,17 +36,32 @@ Drawer {
             }
         }
 
-        model: sortTools.sortByValues
+        model: [
+            {
+                sortBy: AbstractDownloadsUi.DownloadsSortByCreationTime,
+                name: qsTr("By date") + App.loc.emptyString
+            },
+            {
+                sortBy: AbstractDownloadsUi.DownloadsSortByTitle,
+                name: qsTr("By name") + App.loc.emptyString
+            },
+            {
+                sortBy: AbstractDownloadsUi.DownloadsSortBySize,
+                name: qsTr("By size") + App.loc.emptyString
+            },
+        ]
 
         delegate: RadioDelegate {
             id: control
-            text: sortTools.getSortTitle(modelData)
-            checked: sortTools.sortBy === modelData
+            text: modelData.name
+            checked: sortTools.sortBy === modelData.sortBy
             width: parent.width
             height: 30
             font.pixelSize: 14
-            onClicked: {selectedMode = modelData}
+            onClicked: sortTools.setSortBy(modelData.sortBy)
             padding: 0
+
+            property bool isLast: index+1 < sort.count ? false : true
 
             indicator: Rectangle {
 
@@ -77,7 +91,7 @@ Drawer {
                 width: parent.width
                 anchors.bottom: parent.bottom
                 height: 1
-                visible: modelData !== sortTools.sortByValues.length
+                visible: !control.isLast
             }
         }
 
@@ -99,7 +113,7 @@ Drawer {
                 Layout.fillWidth: true
                 Layout.alignment: Qt.AlignVCenter
                 onClicked: {
-                    sortTools.setSortBy(selectedMode > 0 ? selectedMode : sortTools.sortBy, true);
+                    sortTools.setSortAscendingOrder(true);
                     root.close();
                 }
             }
@@ -126,7 +140,7 @@ Drawer {
                 Layout.fillWidth: true
                 Layout.alignment: Qt.AlignVCenter
                 onClicked: {
-                    sortTools.setSortBy(selectedMode > 0 ? selectedMode : sortTools.sortBy, false);
+                    sortTools.setSortAscendingOrder(false);
                     root.close();
                 }
             }

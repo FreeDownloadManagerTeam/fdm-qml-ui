@@ -1,11 +1,11 @@
-import QtQuick 2.10
+import QtQuick 2.12
+import "../../common"
 
-
-Rectangle {
-
+Rectangle
+{
     id: root
-    property int backgroundPositionX
-    property int backgroundPositionY
+
+    property url source: null
     property bool indicator: false
     property bool rotate: false
     property string tooltipText
@@ -13,50 +13,35 @@ Rectangle {
     signal clicked()
 
     color: "transparent"
-    height: parent.height
-    width: 58
-    clip: true
 
-    Rectangle {
+    implicitHeight: icon.implicitHeight
+    implicitWidth: icon.implicitWidth
+
+    Rectangle
+    {
         id: icon
-        clip: true
+
+        implicitHeight: img.implicitHeight
+        implicitWidth: img.implicitWidth
+
         color: "transparent"
-        width: appWindow.macVersion ? 40 : parent.width
-        height: appWindow.macVersion ? 40 : parent.height
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.horizontalCenter: parent.horizontalCenter
 
-        Image {
+        anchors.fill: parent
+
+        WaSvgImage {
+            id: img
+            anchors.centerIn: parent
             opacity: root.enabled ? 1 : 0.3
-            x: backgroundPositionX
-            y: backgroundPositionY
-            source: appWindow.macVersion ?
-                appWindow.theme.headerIconsMac :
-                appWindow.theme.headerIcons
+            source: root.source
 
-            sourceSize.width: appWindow.macVersion ? 280 : 75
-            sourceSize.height: appWindow.macVersion ? 80 : 559
-        }
-
-        MouseArea {
-            visible: appWindow.macVersion
-            anchors.fill: parent
-            cursorShape: Qt.PointingHandCursor
-            hoverEnabled: true
-            onClicked: root.clicked()
-            BaseToolTip {
-                text: root.tooltipText
-                visible: root.enabled && parent.containsMouse && text.length > 0
-                fontSize: 11
+            RotationAnimator on rotation {
+                from: 0;
+                to: 360;
+                loops: Animation.Infinite
+                duration: 2000
+                running: root.rotate
+                onStopped: img.rotation = 0
             }
-        }
-
-        RotationAnimator on rotation {
-            from: 0;
-            to: 360;
-            loops: Animation.Infinite
-            duration: 2000
-            running: root.rotate
         }
     }
 
@@ -73,7 +58,6 @@ Rectangle {
     }
 
     MouseArea {
-        visible: !appWindow.macVersion
         anchors.fill: parent
         cursorShape: Qt.PointingHandCursor
         hoverEnabled: true

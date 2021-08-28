@@ -177,8 +177,8 @@ BaseContextMenu {
         if (appWindow.btSupported) {
             if (App.downloads.tracker.hasPostFinishedTasksDownloadsCount) {
                 var i = 3;
-                root.insertItem(i++, Qt.createQmlObject('import "../bt/desktop"; StartSeedingDownloadsMenuItem {}', root));
-                root.insertItem(i++, Qt.createQmlObject('import "../bt/desktop"; StopSeedingDownloadsMenuItem {}', root));
+                root.insertItem(i++, Qt.createQmlObject('import "../bt/desktop"; StartPostFinishedDownloadsMenuItem {}', root));
+                root.insertItem(i++, Qt.createQmlObject('import "../bt/desktop"; StopPostFinishedDownloadsMenuItem {}', root));
                 root.insertItem(i++, Qt.createQmlObject('import "./BaseElements"; BaseContextMenuSeparator {}', root));
             }
         }

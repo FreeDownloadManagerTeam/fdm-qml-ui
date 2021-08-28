@@ -3,6 +3,7 @@ import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.3
 import org.freedownloadmanager.fdm 1.0
 import org.freedownloadmanager.fdm.abstractdownloadsui 1.0
+import org.freedownloadmanager.fdm.abstractdownloadoption 1.0
 import "../../BaseElements"
 
 ColumnLayout {
@@ -223,9 +224,10 @@ ColumnLayout {
 
     function loadRows() {
         var request;
-        var preferredVideoHeight = false;
+        var preferredVideoHeightEnabled = false;
+        var preferredFileTypeEnabled = false;
         var originFilesTypes = [];
-        var addDateToFileName = false;
+        var addDateToFileNameEnabled = false;
         var subtitlesEnabled = false;
         var allDownloadsExcluded = true;
         var excluded;
@@ -243,11 +245,12 @@ ColumnLayout {
                     showAgeCol = true;
                 }
 
-                preferredVideoHeight = preferredVideoHeight || request.supportedOptions & AbstractDownloadsUi.PreferredVideoHeight;
-                addDateToFileName = addDateToFileName || request.supportedOptions & AbstractDownloadsUi.AddDateToFileName;
-                subtitlesEnabled = subtitlesEnabled || request.supportedOptions & AbstractDownloadsUi.PreferredSubtitlesLanguagesCodes;
+                preferredVideoHeightEnabled = preferredVideoHeightEnabled || (request.supportedOptions & AbstractDownloadOption.PreferredVideoHeight) != 0;
+                preferredFileTypeEnabled = preferredFileTypeEnabled || (request.supportedOptions & AbstractDownloadOption.PreferredFileType) != 0;
+                addDateToFileNameEnabled = addDateToFileNameEnabled || (request.supportedOptions & AbstractDownloadOption.AddDateToFileName) != 0;
+                subtitlesEnabled = subtitlesEnabled || (request.supportedOptions & AbstractDownloadOption.DownloadSubtitles) != 0;
 
-                if (request.supportedOptions & AbstractDownloadsUi.PreferredFileType) {
+                if (request.supportedOptions & AbstractDownloadOption.PreferredFileType) {
                     for (var j = 0; j < request.originFilesTypes.length; j++) {
                         if (request.originFilesTypes[j] != AbstractDownloadsUi.UnknownFile && originFilesTypes.indexOf(request.originFilesTypes[j]) === -1) {
                             originFilesTypes.push(request.originFilesTypes[j]);
@@ -265,9 +268,13 @@ ColumnLayout {
         }
 
         if (!firstIndex) {
-            downloadTools.setPreferredVideoHeight(preferredVideoHeight > 0 ? downloadTools.defaultPreferredVideoHeight : 0);
+            downloadTools.setPreferredVideoHeight(preferredVideoHeightEnabled ?
+                                                      (App.settings.downloadOptions.value(AbstractDownloadOption.PreferredVideoHeight) || downloadTools.defaultPreferredVideoHeight) :
+                                                      0);
+            if (preferredFileTypeEnabled)
+                downloadTools.setPreferredFileType(App.settings.downloadOptions.value(AbstractDownloadOption.PreferredFileType) || AbstractDownloadsUi.VideoFile);
             downloadTools.setOriginFilesTypes(originFilesTypes);
-            downloadTools.setAddDateToFileName(addDateToFileName);
+            downloadTools.setAddDateToFileNameEnabled(addDateToFileNameEnabled);
             downloadTools.setSubtitlesEnabled(subtitlesEnabled);
             downloadTools.setEmptyDownloadsListWarning(allDownloadsExcluded);
         }

@@ -3,7 +3,7 @@ import org.freedownloadmanager.fdm 1.0
 import org.freedownloadmanager.fdm.abstractdownloadsui 1.0
 
 Item {
-    property int downloadsRowsCount: 0
+    property int downloadsRowsCount: App.downloads.model.rowCount
     property string downloadsTitleFilter
     property string lastTmpDownloadsTitleFilter
     property int downloadsTagFilter: App.downloads.model.tagIdFilter
@@ -14,17 +14,13 @@ Item {
     property bool emptyTagResults: downloadsRowsCount === 0 && downloadsTagFilter != 0
     property bool emptyActiveDownloadsList: downloadsRowsCount === 0 && downloadsStatesFilter == AbstractDownloadsUi.FilterRunning
     property bool emptyCompleteDownloadsList: downloadsRowsCount === 0 && downloadsStatesFilter == AbstractDownloadsUi.FilterFinished
+    readonly property bool showingDownloadsWithMissingFilesOnly: App.downloads.model.missingFilesFilter == AbstractDownloadsUi.MffAcceptMissingFiles
 
     onDownloadsTagFilterChanged: filterChanged()
     onDownloadsStatesFilterChanged: filterChanged()
     onDownloadsTitleFilterChanged: filterChanged()
 
     signal filterChanged()
-
-    function updateRowsCount()
-    {
-        downloadsRowsCount = App.downloads.model.rowCount();
-    }
 
     function setDownloadsTitleFilter(search_str)
     {
@@ -42,6 +38,7 @@ Item {
     {
         resetParentDownloadIdFilter();
         resetDownloadsTagFilter();
+        downloadsWithMissingFilesTools.resetFilter();
         App.downloads.model.downloadsStatesFilter = value;
     }
 
@@ -57,6 +54,7 @@ Item {
 
         App.downloads.model.parentDownloadIdFilter = -2;
         resetDownloadsStatesFilter();
+        downloadsWithMissingFilesTools.resetFilter();
         App.downloads.model.tagIdFilter = value;
     }
 
@@ -87,6 +85,15 @@ Item {
         }
     }
 
+    function resetAllFilters()
+    {
+        resetDownloadsTitleFilter();
+        resetDownloadsStatesFilter();
+        resetParentDownloadIdFilter();
+        resetDownloadsTagFilter();
+        downloadsWithMissingFilesTools.resetFilter();
+    }
+
     Timer {
         id: changedTimer
         interval: 100;
@@ -95,17 +102,10 @@ Item {
         onTriggered: {
             App.downloads.model.downloadsTitleFilter = lastTmpDownloadsTitleFilter;
             downloadsTitleFilter = lastTmpDownloadsTitleFilter;
-            updateRowsCount()
         }
     }
 
     Component.onCompleted: {
         downloadsTitleFilter = App.downloads.model.downloadsTitleFilter;
-        updateRowsCount()
-    }
-
-    Connections {
-        target: App.downloads.model
-        onModelReset: updateRowsCount()
     }
 }

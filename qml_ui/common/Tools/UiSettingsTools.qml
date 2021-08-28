@@ -34,12 +34,44 @@ Item {
         property int bottomPanelHeigthUserValue: 210
         property string bottomPanelCurrentTabUserValue: "general"
         property bool browserIntroShown: false
-        property var preferredSubtitlesLanguagesCodes: []
         property bool menuMarkerShown: false
         property bool dontAskMobileDataUsage: false
         property int batchDownloadMaxUrlsCount: 100
         property bool enableStandaloneDownloadsWindows: false
         property bool reportProblemAccept: false
+        property bool enableUserDefinedOrderOfDownloads: false
+        property bool showSaveAsButton: false
+        property bool autoHideWhenFinishedAddingDownloads: false
+    }
+
+    property bool hasNonDefaultValues:
+        settings.deleteButtonAction !== 0 ||
+        settings.theme !== 'system' ||
+        settings.compactView !== false ||
+        settings.filePickerSortField != FolderListModel.Name ||
+        settings.filePickerSortReversed !== false ||
+        settings.toggleBottomPanelByClickingOnDownload !== true ||
+        settings.hideIntegrationBanner !== false ||
+        settings.batchDownloadMaxUrlsCount !== 100 ||
+        settings.enableStandaloneDownloadsWindows !== false ||
+        settings.enableUserDefinedOrderOfDownloads !== false ||
+        settings.showSaveAsButton !== false ||
+        settings.autoHideWhenFinishedAddingDownloads !== false
+
+    function resetToDefaults()
+    {
+        settings.deleteButtonAction = 0;
+        settings.theme = 'system';
+        settings.compactView = false;
+        settings.filePickerSortField = FolderListModel.Name;
+        settings.filePickerSortReversed = false;
+        settings.toggleBottomPanelByClickingOnDownload = true;
+        settings.hideIntegrationBanner = false;
+        settings.batchDownloadMaxUrlsCount = 100;
+        settings.enableStandaloneDownloadsWindows = false;
+        settings.enableUserDefinedOrderOfDownloads = false;
+        settings.showSaveAsButton = false;
+        settings.autoHideWhenFinishedAddingDownloads = false;
     }
 
     Connections {
@@ -78,12 +110,14 @@ Item {
         uiSettingsTools.settings.bottomPanelHeigthUserValue = s.settings.bottomPanelHeigthUserValue;
         uiSettingsTools.settings.bottomPanelCurrentTabUserValue = s.settings.bottomPanelCurrentTabUserValue;
         uiSettingsTools.settings.browserIntroShown = s.settings.browserIntroShown;
-        uiSettingsTools.settings.preferredSubtitlesLanguagesCodes = s.settings.preferredSubtitlesLanguagesCodes;
         uiSettingsTools.settings.menuMarkerShown = s.settings.menuMarkerShown;
         uiSettingsTools.settings.dontAskMobileDataUsage = s.settings.dontAskMobileDataUsage;
         uiSettingsTools.settings.batchDownloadMaxUrlsCount = s.settings.batchDownloadMaxUrlsCount;
         uiSettingsTools.settings.enableStandaloneDownloadsWindows = s.settings.enableStandaloneDownloadsWindows;
         uiSettingsTools.settings.reportProblemAccept = s.settings.reportProblemAccept;
+        uiSettingsTools.settings.enableUserDefinedOrderOfDownloads = s.settings.enableUserDefinedOrderOfDownloads;
+        uiSettingsTools.settings.showSaveAsButton = s.settings.showSaveAsButton;
+        uiSettingsTools.settings.autoHideWhenFinishedAddingDownloads = s.settings.autoHideWhenFinishedAddingDownloads;
         s.destroy();
     }
 }

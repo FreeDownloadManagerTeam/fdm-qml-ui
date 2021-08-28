@@ -6,17 +6,16 @@ import org.freedownloadmanager.fdm.abstractdownloadsui 1.0
 
 Item
 {
-    property bool autoRemoveDownloads: App.settings.toBool(
-                                           App.settings.dmcore.value(
-                                               DmCoreSettings.AutoRemoveDownloadsWithMissingFiles))
+    property bool autoRemoveDownloads: false
 
-
-    property var missingFilesFilter: autoRemoveDownloads ? AbstractDownloadsUi.MffAcceptNormal :
-                                                           AbstractDownloadsUi.MffOff
+    property var missingFilesFilter: AbstractDownloadsUi.MffOff
 
 
     Component.onCompleted:
     {
+        if (App.ready)
+            onAppReady();
+
         App.downloads.model.missingFilesFilter = Qt.binding(function() {
             return missingFilesFilter;
         });
@@ -29,5 +28,32 @@ Item
                     App.settings.fromBool(autoRemoveDownloads));
 
         App.downloads.tracker.ignoreDownloadsWithMissingFiles = autoRemoveDownloads;
+
+        resetFilter();
+    }
+
+    Connections {
+        target: App
+        onReadyChanged: {
+            if (App.ready)
+                onAppReady();
+        }
+    }
+
+    function onAppReady()
+    {
+        autoRemoveDownloads = App.settings.toBool(
+                    App.settings.dmcore.value(
+                        DmCoreSettings.AutoRemoveDownloadsWithMissingFiles));
+
+        resetFilter();
+    }
+
+    function resetFilter()
+    {
+        missingFilesFilter = Qt.binding(function() {
+            return autoRemoveDownloads ? AbstractDownloadsUi.MffAcceptNormal :
+                                         AbstractDownloadsUi.MffOff;
+        });
     }
 }

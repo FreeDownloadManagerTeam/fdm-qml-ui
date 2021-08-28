@@ -1,8 +1,10 @@
 import QtQuick 2.11
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
+import QtQuick.Dialogs 1.3
 import org.freedownloadmanager.fdm 1.0
 import org.freedownloadmanager.vmsqt 1.0
+import org.freedownloadmanager.fdm.abstractdownloadsui 1.0
 import "../common"
 import "./BaseElements"
 
@@ -64,133 +66,184 @@ ToolBar {
                 visible: forSettingsPage
 
                 ToolBarButton {
-                    backgroundPositionX: appWindow.macVersion ? -240 : 22
-                    backgroundPositionY: appWindow.macVersion ? -40 : -519
+                    source: appWindow.theme.mainTbImg.arrow_left
+                    anchors.verticalCenter: parent.verticalCenter
                     onClicked: stackView.pop()
                 }
-
-                ToolBarSeparator {}
             }
 
             Row {
-                height: parent.height
                 visible: !forSettingsPage
+                anchors.verticalCenter: parent.verticalCenter
+                leftPadding: appWindow.macVersion ? 6 : -2
 
                 ToolBarButton {
-                    width: 59
-                    backgroundPositionX: appWindow.macVersion ? 1 : 19
-                    backgroundPositionY: appWindow.macVersion ? 1 : 19
+                    width: 50
+                    height: 50
+                    source: appWindow.theme.mainTbImg.plus
                     onClicked: buildDownloadDlg.newDownload();
-                    color: appWindow.macVersion ? "transparent" : "#16a4fa"
                     tooltipText: qsTr("Add new download...") + App.loc.emptyString
+                    anchors.verticalCenter: parent.verticalCenter
 
                     Rectangle {
-                        visible: appWindow.macVersion
                         z: -1
                         color: "#16a4fa"
+                        radius: 4
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.horizontalCenter: parent.horizontalCenter
-                        width: 39
-                        height: 39
-                        radius: 20
+                        width: 36
+                        height: 36
                     }
                 }
 
                 // start download btn +
                 ToolBarButton {
+                    width: 50
+                    height: 50
+                    source: appWindow.theme.mainTbImg.play_all
                     visible: selectedDownloadsTools.checkedDownloadsCount === 0
                     enabled: selectedDownloadsTools.downloadsToStartExist
                              && !downloadsViewTools.emptySearchResults
-                    backgroundPositionX: appWindow.macVersion ? -40 : 22
-                    backgroundPositionY: appWindow.macVersion ? 0 : -42
                     onClicked: App.downloads.mgr.startAllDownloads()
                     tooltipText: qsTr("Start all") + App.loc.emptyString
+                    anchors.verticalCenter: parent.verticalCenter
                 }
 
                 ToolBarButton {
+                    width: 50
+                    height: 50
+                    source: appWindow.theme.mainTbImg.play_check
                     visible: selectedDownloadsTools.checkedDownloadsCount > 0
                     enabled: selectedDownloadsTools.checkedDownloadsToStartExist
                              && !downloadsViewTools.emptySearchResults
-                    backgroundPositionX: appWindow.macVersion ? -40 : -28
-                    backgroundPositionY: appWindow.macVersion ? -40 : -43
                     onClicked: selectedDownloadsTools.startCheckedDownloads()
                     tooltipText: qsTr("Start selected") + App.loc.emptyString
+                    anchors.verticalCenter: parent.verticalCenter
                 }
                 // start download btn -
 
-                ToolBarSeparator {}
-
                 // pause download btn +
                 ToolBarButton {
+                    width: 50
+                    height: 50
+                    source: appWindow.theme.mainTbImg.pause_all
                     visible: selectedDownloadsTools.checkedDownloadsCount === 0
                     enabled: selectedDownloadsTools.downloadsToStopExist
                              && !downloadsViewTools.emptySearchResults
-                    backgroundPositionX: appWindow.macVersion ? -80 : 23
-                    backgroundPositionY: appWindow.macVersion ? 0 : -100
-                    onClicked: App.downloads.mgr.stopAllDownloads()
+                    onClicked: {
+                        App.downloads.mgr.stopAllDownloads(true);
+                        var ids = App.downloads.tracker.runningIdsWithNoResumeSupport();
+                        if (ids.length)
+                            appWindow.stopDownload(ids);
+                    }
                     tooltipText: qsTr("Pause all") + App.loc.emptyString
+                    anchors.verticalCenter: parent.verticalCenter
                 }
 
                 ToolBarButton {
+                    width: 50
+                    height: 50
+                    source: appWindow.theme.mainTbImg.pause_check
                     visible: selectedDownloadsTools.checkedDownloadsCount > 0
                     enabled: selectedDownloadsTools.checkedDownloadsToStopExist
                              && !downloadsViewTools.emptySearchResults
-                    backgroundPositionX: appWindow.macVersion ? -80 : -27
-                    backgroundPositionY: appWindow.macVersion ? -40 : -100
                     onClicked: selectedDownloadsTools.stopCheckedDownloads()
                     tooltipText: qsTr("Pause selected") + App.loc.emptyString
+                    anchors.verticalCenter: parent.verticalCenter
                 }
                 // pause download btn -
 
-                ToolBarSeparator {}
-
                 //delete btn +
                 ToolBarButton {
+                    width: 50
+                    height: 50
+                    source: appWindow.theme.mainTbImg.bin
                     visible: selectedDownloadsTools.checkedDownloadsCount === 0
                     enabled: selectedDownloadsTools.currentDownloadId > 0
                              && !downloadsViewTools.emptySearchResults
                              && !selectedDownloadsTools.selectedDownloadsIsLocked()
-                    backgroundPositionX: appWindow.macVersion ? -120 : 21
-                    backgroundPositionY: appWindow.macVersion ? 0 : -160
                     onClicked: selectedDownloadsTools.removeCurrentDownloads()
                     tooltipText: qsTr("Delete selected") + App.loc.emptyString
+                    anchors.verticalCenter: parent.verticalCenter
                 }
 
                 ToolBarButton {
+                    width: 50
+                    height: 50
+                    source: appWindow.theme.mainTbImg.bin_check
                     visible: selectedDownloadsTools.checkedDownloadsCount > 0
                     enabled: !downloadsViewTools.emptySearchResults
                              && !selectedDownloadsTools.selectedDownloadsIsLocked()
-                    backgroundPositionX: appWindow.macVersion ? -120 : -26
-                    backgroundPositionY: appWindow.macVersion ? -40 : -160
                     onClicked: selectedDownloadsTools.removeCurrentDownloads()
                     tooltipText: qsTr("Delete selected") + App.loc.emptyString
+                    anchors.verticalCenter: parent.verticalCenter
                 }
                 //delete btn -
 
-                ToolBarSeparator {}
-
                 //move btn +
                 ToolBarButton {
+                    width: 50
+                    height: 50
+                    source: appWindow.theme.mainTbImg.folder
                     visible: selectedDownloadsTools.checkedDownloadsCount === 0
                     enabled: selectedDownloadsTools.currentDownloadId > 0
                              && !downloadsViewTools.emptySearchResults
                              && !selectedDownloadsTools.selectedDownloadsIsLocked()
-                    backgroundPositionX: appWindow.macVersion ? -160 : 19
-                    backgroundPositionY: appWindow.macVersion ? 0 : -221
                     onClicked: movingFolderDlg.open()
                     tooltipText: qsTr("Move to...") + App.loc.emptyString
+                    anchors.verticalCenter: parent.verticalCenter
                 }
 
                 ToolBarButton {
+                    width: 50
+                    height: 50
+                    source: appWindow.theme.mainTbImg.folder_check
                     visible: selectedDownloadsTools.checkedDownloadsCount > 0
                     enabled: !downloadsViewTools.emptySearchResults
                              && !selectedDownloadsTools.selectedDownloadsIsLocked()
-                    backgroundPositionX: appWindow.macVersion ? -160 : -23
-                    backgroundPositionY: appWindow.macVersion ? -40 : -221
                     onClicked: movingFolderDlg.open()
                     tooltipText: qsTr("Move to...") + App.loc.emptyString
+                    anchors.verticalCenter: parent.verticalCenter
                 }
                 //move btn -
+
+                ToolBarButton {
+                    width: 50
+                    height: 50
+                    visible: uiSettingsTools.settings.enableUserDefinedOrderOfDownloads
+                    enabled: App.downloads.model.canMoveSelectedDownloadsUp ||
+                             (App.downloads.model.rowCount > 1 && sortTools.sortBy != AbstractDownloadsUi.DownloadsSortByOrder)
+                    source: selectedDownloadsTools.checkedDownloadsCount > 0 ?
+                                appWindow.theme.mainTbImg.up/*_check*/ :
+                                appWindow.theme.mainTbImg.up
+                    tooltipText: qsTr("Move downloads up") + App.loc.emptyString
+                    onClicked: {
+                        if (sortTools.sortBy != AbstractDownloadsUi.DownloadsSortByOrder)
+                            sortByOrderRequired.open();
+                        else
+                            App.downloads.model.moveSelectedDownloadsUp();
+                    }
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+
+                ToolBarButton {
+                    width: 50
+                    height: 50
+                    visible: uiSettingsTools.settings.enableUserDefinedOrderOfDownloads
+                    enabled: App.downloads.model.canMoveSelectedDownloadsDown ||
+                             (App.downloads.model.rowCount > 1 && sortTools.sortBy != AbstractDownloadsUi.DownloadsSortByOrder)
+                    source: selectedDownloadsTools.checkedDownloadsCount > 0 ?
+                                appWindow.theme.mainTbImg.down/*_check*/ :
+                                appWindow.theme.mainTbImg.down
+                    tooltipText: qsTr("Move downloads down") + App.loc.emptyString
+                    onClicked: {
+                        if (sortTools.sortBy != AbstractDownloadsUi.DownloadsSortByOrder)
+                            sortByOrderRequired.open();
+                        else
+                            App.downloads.model.moveSelectedDownloadsDown();
+                    }
+                    anchors.verticalCenter: parent.verticalCenter
+                }
             }
 
             Loader {
@@ -198,7 +251,12 @@ ToolBar {
                 height: parent.height
                 anchors.right: searchField.left
                 visible: !forSettingsPage
-                Component.onCompleted: { if (appWindow.updateSupported) { source = "CheckUpdates.qml" } }
+                Component.onCompleted: {
+                    if (appWindow.updateSupported) {
+                        var a = parent.mapToGlobal(parent.width, 0);
+                        setSource("CheckUpdates.qml", {globalMaxX: a.x})
+                    }
+                }
             }
 
             MouseArea {
@@ -221,9 +279,8 @@ ToolBar {
             ToolBarButton {
                 id: menuBtn
                 anchors.right: parent.right
-                backgroundPositionX: appWindow.macVersion ? -200 : 19
-                backgroundPositionY: appWindow.macVersion ? -40 : -340
-                opacity: enabled ? 1 : 0.3
+                anchors.verticalCenter: parent.verticalCenter
+                source: appWindow.theme.mainTbImg.menu
                 onClicked: menu.opened ? menu.close() : menu.openMenu()
                 indicator: !uiSettingsTools.settings.menuMarkerShown
                 tooltipText: menu.opened ? "" : qsTr("Main menu") + App.loc.emptyString
@@ -252,5 +309,13 @@ ToolBar {
         anchors.bottomMargin: 1
         visible: appWindow.macVersion && !appWindow.active && !appWindow.modalDialogOpened
         color: appWindow.theme.macToolbarOverlay
+    }
+
+    MessageDialog {
+        id: sortByOrderRequired
+        title: App.displayName
+        text: qsTr("Switch to user-defined sorting of the download list?") + App.loc.emptyString
+        standardButtons: StandardButton.Ok | StandardButton.Cancel
+        onAccepted: sortTools.setSortByAndAsc(AbstractDownloadsUi.DownloadsSortByOrder, false)
     }
 }

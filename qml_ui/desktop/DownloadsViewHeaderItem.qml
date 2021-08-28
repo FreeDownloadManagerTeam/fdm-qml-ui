@@ -6,14 +6,21 @@ import "./BaseElements"
 TablesHeaderItem {
     id: root
     Layout.alignment: Qt.AlignTop
-    property string sortOptionName
+    property int sortBy: -1
+    property bool disableOrderTypeChange: false
 
     color: downloadsViewTools.downloadsParentIdFilter > -1 ? appWindow.theme.batchDownloadBackground : "transparent"
 
-    showSortIndicator: sortOptionName === sortTools.sortByTitle
-    sortAscendingOrder: sortTools.sortAscendingOrder !== 0
+    showSortIndicator: sortBy === sortTools.sortBy
+    sortAscendingOrder: sortTools.sortAscendingOrder
 
-    onClicked: sortTools.sortTitleClick(sortOptionName)
+    onClicked: {
+        if (sortBy != -1)
+        {
+            if (!disableOrderTypeChange || sortTools.sortBy != sortBy)
+                sortTools.sortByClick(sortBy);
+        }
+    }
 
     Rectangle {
         width: parent.width

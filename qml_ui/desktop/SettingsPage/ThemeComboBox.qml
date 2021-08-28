@@ -31,7 +31,6 @@ ComboBox {
         BaseLabel {
             leftPadding: 6
             anchors.verticalCenter: parent.verticalCenter
-            font.pixelSize: 12
             color: appWindow.theme.settingsItem
             text: modelData.text
         }
@@ -61,7 +60,6 @@ ComboBox {
         BaseLabel {
             leftPadding: 2
             anchors.verticalCenter: parent.verticalCenter
-            font.pixelSize: 12
             color: appWindow.theme.settingsItem
             text: root.model.length ? root.model[currentIndex].text : ""
         }
@@ -148,9 +146,10 @@ ComboBox {
         return textMetrics.width;
     }
 
+    BaseLabel {id: hiddenLabel; visible: false}
+
     TextMetrics {
         id: textMetrics
-        font.pixelSize: 12
-        font.family: Qt.platform.os === "osx" ? font.family : "Arial"
+        font: hiddenLabel.font
     }
 }

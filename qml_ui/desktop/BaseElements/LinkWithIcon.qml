@@ -52,7 +52,7 @@ Item
             visible: root.title.length > 0
             text: root.title + ":"
             Layout.alignment: Qt.AlignVCenter
-            font.pixelSize: 13
+            font.pixelSize: appWindow.fonts.defaultSize
             Layout.fillHeight: true
         }
 
@@ -62,10 +62,10 @@ Item
             Layout.fillWidth: true
             Layout.fillHeight: true
             Layout.alignment: Qt.AlignVCenter
-            font.pixelSize: 13
+            font.pixelSize: appWindow.fonts.defaultSize
             property string elidedText: fm.myElidedText(url, width).replace(/&/g, "&amp;")
             text: "<a href='" + url + "'>" + elidedText + "</a>"
-            onLinkActivated: Qt.openUrlExternally(link)
+            onLinkActivated: App.openDownloadUrl(link)
             MyFontMetrics {
                 id: fm
                 font: label.font
@@ -78,7 +78,7 @@ Item
                 acceptedButtons: Qt.LeftButton | Qt.RightButton
                 onClicked: {
                     if (mouse.button == Qt.LeftButton)
-                        Qt.openUrlExternally(root.url);
+                        App.openDownloadUrl(root.url);
                     else
                         showMenu(parent, mouse, root.url)
                 }

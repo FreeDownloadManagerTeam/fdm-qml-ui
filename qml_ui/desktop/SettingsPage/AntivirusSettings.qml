@@ -11,7 +11,7 @@ import "../BaseElements"
 
 Column
 {
-    spacing: 20
+    spacing: 10
     width: parent.width
     property bool customSettingsEnabled: antivirusCombo.model.length > 0 && antivirusCombo.model[antivirusCombo.currentIndex].id === ""
     property bool autoCheckEnabled: !customSettingsEnabled || !urlField.inError && !args.inError
@@ -95,7 +95,6 @@ Column
 
             CustomButton {
                 id: folderBtn
-                visible: App.cfg.cdShowOpenFileBtn
                 implicitWidth: 38
                 implicitHeight: 25
                 Layout.alignment: Qt.AlignRight

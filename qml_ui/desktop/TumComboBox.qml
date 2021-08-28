@@ -92,7 +92,6 @@ ComboBox {
                 onExited: parent.hover = false
                 onClicked: {
                     App.settings.tum.currentMode = modelData.mode;
-                    root.currentTumMode = modelData.mode
                     root.popup.close()
                 }
                 BaseToolTip {

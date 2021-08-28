@@ -40,6 +40,19 @@ Rectangle {
                     value: 0
                 }
 
+                BaseFilterButton {
+                    readonly property int cnt: App.downloads.tracker.missingFilesDownloadsCount
+                    visible: cnt > 0 && downloadsWithMissingFilesTools.autoRemoveDownloads
+                    text: qsTr("Missing Files") + App.loc.emptyString + (cnt > 0 ? " (%1)".arg(cnt) : "")
+                    value: AbstractDownloadsUi.MffAcceptMissingFiles
+                    selected: downloadsWithMissingFilesTools.missingFilesFilter == value
+                    onClicked: downloadsWithMissingFilesTools.missingFilesFilter = value
+                    onCntChanged: {
+                        if (!cnt && downloadsWithMissingFilesTools.missingFilesFilter == value)
+                            downloadsViewTools.resetAllFilters();
+                    }
+                }
+
                 MainFilterButton {
                     cnt: App.downloads.tracker.runningDownloadsCount
                     text: qsTr("Active") + App.loc.emptyString + (cnt > 0 ? " (%1)".arg(cnt) : "")

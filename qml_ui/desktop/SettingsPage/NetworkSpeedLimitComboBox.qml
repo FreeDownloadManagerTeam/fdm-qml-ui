@@ -14,7 +14,7 @@ Item {
     property string sCustom: qsTr("Custom...") + App.loc.emptyString
     property string kbps: qsTr("KB/s") + App.loc.emptyString
 
-    implicitHeight: custom.visible ? 60 : 38
+    implicitHeight: custom.visible ? custom.implicitHeight : combo.height
     implicitWidth: 123
 
     ComboBox {

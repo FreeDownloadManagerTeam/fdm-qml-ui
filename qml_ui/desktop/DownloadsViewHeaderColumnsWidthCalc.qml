@@ -34,8 +34,8 @@ Item
     }
 
     FontMetrics {
-        id: fm13_14
-        font.pixelSize: appWindow.compactView ? 13 : 14
+        id: fmDefSize
+        font.pixelSize: appWindow.fonts.defaultSize
         font.family: Qt.platform.os === "osx" ? font.family : "Arial"
     }
 
@@ -77,8 +77,8 @@ Item
         const dateColumnMaxWidth = 85;
 
         header.nameColumnWidth = Qt.binding(function() {
-            return Math.min(fm13_14.advanceWidth(
-                                App.downloads.modelTracker.longestTitle) + p + fm13_14.font.pixelSize*0,
+            return Math.min(fmDefSize.advanceWidth(
+                                App.downloads.modelTracker.longestTitle) + p + fmDefSize.font.pixelSize*0,
                             nameColumnMaxWidth);
         });
 
@@ -114,7 +114,7 @@ Item
                         err = missingStorageStr;
                 }
                 if (err.length > 0)
-                    minw = Math.max(minw, fm13_14.advanceWidth(err) + 17 + 3 + fm13_14.font.pixelSize*0); // 17 - error icon width
+                    minw = Math.max(minw, fmDefSize.advanceWidth(err) + 17 + 3 + fmDefSize.font.pixelSize*0); // 17 - error icon width
                 return Math.min(minw + p, statusColumnMaxWidth);
             }
         });

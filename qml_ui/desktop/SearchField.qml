@@ -197,10 +197,10 @@ Item {
 
         ToolBarButton {
             visible: !appWindow.macVersion && !searchText.visible && !forSettingsPage
-            backgroundPositionX: 20
-            backgroundPositionY: -280
+            source: appWindow.theme.mainTbImg.search
             tooltipText: qsTr("Search") + App.loc.emptyString
             onClicked: startSearch()
+            anchors.verticalCenter: parent.verticalCenter
         }
 
         ToolBarSeparator {

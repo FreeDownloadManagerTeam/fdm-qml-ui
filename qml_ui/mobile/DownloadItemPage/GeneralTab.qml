@@ -278,7 +278,7 @@ Flickable {
                 width: parent.width
                 text: "<a href='" + downloadsItemTools.webPageUrl + "'>" + downloadsItemTools.webPageUrl + "</a>"
                 color: linkColor
-                onLinkActivated: Qt.openUrlExternally(downloadsItemTools.webPageUrl)
+                onLinkActivated: App.openDownloadUrl(downloadsItemTools.webPageUrl)
             }
 
             BaseLabel {
@@ -287,7 +287,7 @@ Flickable {
                 width: parent.width
                 text: "<a href='" + downloadsItemTools.resourceUrl + "'>" + downloadsItemTools.resourceUrl + "</a>"
                 color: linkColor
-                onLinkActivated: Qt.openUrlExternally(downloadsItemTools.resourceUrl)
+                onLinkActivated: App.openDownloadUrl(downloadsItemTools.resourceUrl)
             }
 
             /*

@@ -2,6 +2,7 @@ import QtQuick 2.10
 import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.3
 import org.freedownloadmanager.fdm 1.0
+import org.freedownloadmanager.fdm.abstractdownloadsui 1.0
 import "./BaseElements"
 
 RowLayout
@@ -47,7 +48,7 @@ RowLayout
     }
 
     DownloadsViewHeaderItem {
-        sortOptionName: "name"
+        sortBy: AbstractDownloadsUi.DownloadsSortByTitle
         id: nameItem
         text: qsTr("Name") + App.loc.emptyString
         Layout.fillWidth: true
@@ -70,7 +71,7 @@ RowLayout
     }
 
     DownloadsViewHeaderItem {
-        sortOptionName: "size"
+        sortBy: AbstractDownloadsUi.DownloadsSortBySize
         id: sizeItem
         text: qsTr("Size") + App.loc.emptyString
         Layout.preferredWidth: Math.max(sizeColumnWidth, headerMinimumWidth)
@@ -78,10 +79,20 @@ RowLayout
     }
 
     DownloadsViewHeaderItem {
-        sortOptionName: "creation_date"
+        sortBy: AbstractDownloadsUi.DownloadsSortByCreationTime
         id: addedItem
         text: qsTr("Added") + App.loc.emptyString
-        Layout.preferredWidth: Math.max(dateColumnWidth, headerMinimumWidth)
+        Layout.preferredWidth: Math.max(dateColumnWidth - (orderItem.visible ? orderItem.width : 0), headerMinimumWidth)
+        Layout.fillHeight: true
+    }
+
+    DownloadsViewHeaderItem {
+        visible: uiSettingsTools.settings.enableUserDefinedOrderOfDownloads
+        sortBy: AbstractDownloadsUi.DownloadsSortByOrder
+        disableOrderTypeChange: true
+        id: orderItem
+        imageSource: appWindow.theme.userSortImg
+        Layout.preferredWidth: headerMinimumWidth
         Layout.fillHeight: true
 
         Rectangle {
@@ -102,6 +113,7 @@ RowLayout
         case 3: return speedItem;
         case 4: return sizeItem;
         case 5: return addedItem;
+        case 6: return orderItem;
         }
     }
 }

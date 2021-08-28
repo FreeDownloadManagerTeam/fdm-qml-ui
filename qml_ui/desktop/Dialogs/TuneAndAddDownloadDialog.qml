@@ -63,7 +63,10 @@ BaseDialog {
                         id: saveTo
                     }
 
-                    FileName {}
+                    FileName {
+                        id: fileName
+                        saveToControl: saveTo
+                    }
 
                     Url {}
 
@@ -132,6 +135,7 @@ BaseDialog {
             tuneDialog.close();
         }
         onFilePathChanged: saveTo.initialization()
+        onFileNameChanged: fileName.init()
     }
 
     SchedulerTools {

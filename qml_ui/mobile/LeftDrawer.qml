@@ -46,14 +46,18 @@ Drawer {
         }
 
         delegate: ItemDelegate {
-            enabled: model.enabled
+            opacity: model.enabled ? 1 : 0.3
+
             width: parent.width
             highlighted: ListView.isCurrentItem
             leftPadding: 20
 
             onClicked: {
-                root.close()
-                listModel.actions[model.actionLabel]();
+                if (model.enabled)
+                {
+                    root.close()
+                    listModel.actions[model.actionLabel]();
+                }
             }
 
             contentItem: Row {

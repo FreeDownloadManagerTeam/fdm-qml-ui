@@ -114,7 +114,9 @@ MouseArea {
         var id = current_ids[0];
         var item = App.downloads.infos.info(id);
 
-        var component = Qt.createComponent("DownloadsViewItemContextMenu.qml");
+        var component = Qt.createComponent(downloadsViewTools.showingDownloadsWithMissingFilesOnly ?
+                                               "DownloadsViewItemContextMenu2.qml" :
+                                               "DownloadsViewItemContextMenu.qml");
         var menu = component.createObject(root, {
                                               "modelIds": current_ids,
                                               "finished": downloadModel.finished,

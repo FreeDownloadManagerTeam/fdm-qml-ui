@@ -6,7 +6,9 @@ import "../BaseElements"
 Rectangle {
     id: root
 
-    property string text
+    property alias text: textArea.text
+    property alias textFormat: textArea.textFormat
+    property alias readOnly: textArea.readOnly
     signal selectAll
 
     border.width: 1
@@ -15,24 +17,28 @@ Rectangle {
     onSelectAll: textArea.selectAll()
 
     Flickable {
+        id: flickable
+
+        property bool hasVerticalScrollbar: contentHeight > height
+
         anchors.fill: parent
         anchors.margins: 1
         clip: true
         flickableDirection: Flickable.VerticalFlick
 
-        ScrollBar.vertical: ScrollBar {}
+        ScrollBar.vertical: ScrollBar {
+            policy: flickable.hasVerticalScrollbar ? ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
+        }
         ScrollBar.horizontal: null
 
         TextArea.flickable: TextArea {
             id: textArea
 
-            text: root.text
             focus: true
             wrapMode: TextArea.WordWrap
             font.pixelSize: 14
             color: appWindow.theme.foreground
             selectByMouse: true
-            onTextChanged: { root.text = text }
             Keys.onEscapePressed: root.close()
 
             background: Rectangle {

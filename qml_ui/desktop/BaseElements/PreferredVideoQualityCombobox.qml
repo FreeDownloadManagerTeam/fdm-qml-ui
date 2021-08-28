@@ -39,11 +39,29 @@ ComboBox {
     }
 
     function updateState() {
+        var ph = downloadTools.preferredVideoHeight || downloadTools.defaultPreferredVideoHeight;
+        var needIndex = -1;
+        var nearestIndex = -1;
+        var nearestDistance = -1;
         for (var i = 0; i < root.count; i ++) {
-            if (downloadTools.defaultPreferredVideoHeight == model[i].value) {
-                currentIndex = i;
+            if (ph == model[i].value) {
+                needIndex = i;
+                break;
+            }
+            else
+            {
+                var distance = Math.abs(ph - model[i].value);
+                if (nearestIndex == -1 ||
+                        nearestDistance > distance)
+                {
+                    nearestIndex = i;
+                    nearestDistance = distance;
+                }
             }
         }
+        if (needIndex == -1)
+            needIndex = nearestIndex != -1 ? nearestIndex : 0;
+        currentIndex = needIndex;
     }
 
     delegate: Rectangle {

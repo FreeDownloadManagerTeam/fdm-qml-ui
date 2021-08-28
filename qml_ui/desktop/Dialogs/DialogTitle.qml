@@ -1,11 +1,16 @@
 import QtQuick 2.0
+import QtQuick.Layouts 1.12
 import '../BaseElements'
+import "../../common"
 
 Rectangle {
 
     id: root
 
     property string text
+    property bool showTitleIcon: false
+    property url titleIconUrl: Qt.resolvedUrl("../../images/mobile/fdmlogo.svg")
+    property int titleIconSize: 32
 
     signal closeClick
 
@@ -21,23 +26,30 @@ Rectangle {
         }
     }
 
-    Rectangle {
+    RowLayout {
         anchors.fill: parent
         anchors.leftMargin: 10
         anchors.rightMargin: 10
-        color: "transparent"
+
+        WaSvgImage {
+            source: root.titleIconUrl
+            Layout.preferredHeight: Math.min(root.titleIconSize, parent.height - 6)
+            Layout.preferredWidth: Layout.preferredHeight
+            Layout.alignment: Qt.AlignVCenter
+            visible: root.showTitleIcon
+        }
 
         BaseLabel {
-            anchors.verticalCenter: parent.verticalCenter
+            Layout.alignment: Qt.AlignVCenter
+            Layout.fillWidth: true
             text: root.text
             color: appWindow.macVersion ? appWindow.theme.dialogTitleMac : appWindow.theme.dialogTitle
         }
 
         Rectangle {
-            anchors.right: parent.right
-            anchors.verticalCenter: parent.verticalCenter
-            height: 24
-            width: 24
+            Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+            Layout.preferredHeight: 24
+            Layout.preferredWidth: 24
             clip: true
             color: "transparent"
 

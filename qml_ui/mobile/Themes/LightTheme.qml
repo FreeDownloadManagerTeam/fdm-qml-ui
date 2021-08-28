@@ -70,4 +70,6 @@ QtObject {
     readonly property color timePickerText: "#999"
     readonly property color schedulerLabelText: "#4B98F9"
     readonly property color schedulerLabelSelectedText: "#646464"
+
+    readonly property url attentionImg: Qt.resolvedUrl("../../images/common/light/attention.svg")
 }

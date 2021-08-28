@@ -15,6 +15,8 @@ Item {
     property bool restartRequired: updater.restartRequired ? updater.restartRequired : false
     property bool updatesAvailable: updater.updatesAvailable ? updater.updatesAvailable : false
     property bool arrowsRotate: (updater.state == QtUpdate.InProgress)
+    property string version: updater.version
+    property string changelog: updater.changelog
 
     property bool showDialog: false
     property bool showArrows: false
@@ -55,6 +57,12 @@ Item {
         updater.performRestart();
     }
 
+    function openWhatsNewDialog()
+    {
+        appWindow.updateDlgClosed();
+        appWindow.openWhatsNewDialog(root.version, root.changelog);
+    }
+
     Connections {
         target: updater
         onStateChanged: {
@@ -69,11 +77,32 @@ Item {
                     }
                 }
             } else {
+                if (updateTools.stage == QtUpdate.CheckUpdates &&
+                        updateTools.state == QtUpdate.Finished &&
+                        updateTools.updatesAvailable &&
+                        root.changelog.length > 0) {
+                    openWhatsNewDialog();
+                }
                 //install updates automatically after download, if InitiatorUser
-                if (updateTools.stage == QtUpdate.PostDownloadCheck && updateTools.state == QtUpdate.Finished) {
+                else if (updateTools.stage == QtUpdate.PostDownloadCheck && updateTools.state == QtUpdate.Finished) {
                     updateTools.updater.installUpdates();
                 }
+                else if (updateTools.stage == QtUpdate.InstallUpdates &&
+                        updateTools.state == QtUpdate.Finished &&
+                        !App.quitRequiresConfirmation &&
+                        updateTools.restartRequired)
+                {
+                    relaunch();
+                }
             }
+        }
+    }
+
+    Connections {
+        target: appWindow
+        onDoDownloadUpdate: {
+            updateTools.updater.downloadUpdates();
+            appWindow.updateDlgOpened();
         }
     }
 }

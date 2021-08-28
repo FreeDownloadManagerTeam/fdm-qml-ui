@@ -469,4 +469,38 @@ ApplicationWindow
         target: App
         onShowQuitConfirmation: {quitConfDlg.open(message);}
     }
+
+    Connections {
+        target: appWindow
+        onNewDownloadAdded: downloadsViewTools.resetAllFilters()
+    }
+
+    DownloadExpiredDialog {
+        id: downloadExpiredDlg
+        onClosed: {
+            App.downloads.expiredDownloads.onExpiredDownloadNotificationFinished(downloadId);
+            openDownloadExpiredDialogForNextDownload();
+        }
+    }
+    function openDownloadExpiredDialog(downloadId)
+    {
+        downloadExpiredDlg.downloadId = downloadId;
+        downloadExpiredDlg.open();
+    }
+    function openDownloadExpiredDialogForNextDownload()
+    {
+        if (!downloadExpiredDlg.opened &&
+                App.downloads.expiredDownloads.hasNewExpiredDownloads)
+        {
+            openDownloadExpiredDialog(App.downloads.expiredDownloads.nextNewExpiredDownloadId());
+        }
+    }
+    Connections {
+        target: App.downloads.expiredDownloads
+        onHasNewExpiredDownloadsChanged: openDownloadExpiredDialogForNextDownload()
+        onNotExpiredAnymore: {
+            if (downloadExpiredDlg.opened && downloadExpiredDlg.downloadId == id)
+                downloadExpiredDlg.close();
+        }
+    }
 }

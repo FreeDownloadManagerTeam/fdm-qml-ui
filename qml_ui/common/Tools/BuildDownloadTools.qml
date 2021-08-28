@@ -1,6 +1,7 @@
 import QtQuick 2.0
 import org.freedownloadmanager.fdm 1.0
 import org.freedownloadmanager.fdm.abstractdownloadsui 1.0
+import org.freedownloadmanager.fdm.abstractdownloadoption 1.0
 
 Item {
 
@@ -17,6 +18,7 @@ Item {
 
     property double requestId: -1
 
+    property bool checkingIfAcceptableUrl: false
     property bool buildingDownload: false
     property bool buildingDownloadFinished: false
     property string statusText: ""
@@ -28,6 +30,7 @@ Item {
 
     property string filePath
     property string fileName
+    property bool forceOverwriteFile: false
     property int filesCount
     property var fileSize
     property var freeDiskSpace
@@ -37,11 +40,11 @@ Item {
     property string modulesUrl
     property string modulesSelectedUid
 
-    property int defaultPreferredVideoHeight: 1080
-    property int preferredVideoHeight
-    property int preferredFileType
+    readonly property int defaultPreferredVideoHeight: 1080
+    property int preferredVideoHeight: defaultPreferredVideoHeight
+    property int preferredFileType: AbstractDownloadsUi.VideoFile
     property var originFilesTypes
-    property bool addDateToFileName
+    property bool addDateToFileNameEnabled: false
     property bool emptyDownloadsListWarning
     property bool notEnoughSpaceWarning: freeDiskSpace != -1 && fileSize > 0 && fileSize > freeDiskSpace
     property bool wrongFilePathWarning: false
@@ -145,9 +148,9 @@ Item {
         originFilesTypes = arr.length > 1 ? arr : [];
     }
 
-    function setAddDateToFileName(val)
+    function setAddDateToFileNameEnabled(val)
     {
-        addDateToFileName = val;
+        addDateToFileNameEnabled = val;
     }
 
     function setSubtitlesEnabled(val)
@@ -155,19 +158,42 @@ Item {
         subtitlesEnabled = val;
     }
 
-    function saveAddDateToFileName(val) {
-        //todo: save
-    }
+    function saveBatchDownloadOptions(addDateOptionVal)
+    {
+        if (batchDownload)
+        {
+            for (var i = 0; i < App.downloads.creator.downloadCount(requestId); i++)
+            {
+                App.downloads.creator.setDownloadOption(
+                            requestId,
+                            i,
+                            AbstractDownloadOption.PreferredVideoHeight,
+                            preferredVideoHeight);
 
-    function saveBatchDownloadOptions(addDateOptionVal) {
-        if (batchDownload) {
-//            checkPreferredSubtitlesLanguagesCodes();
-            for (var i = 1; i < App.downloads.creator.downloadCount(requestId); i++) {
-                App.downloads.creator.setDownloadOption(requestId, i, AbstractDownloadsUi.PreferredVideoHeight, preferredVideoHeight);
-                App.downloads.creator.setDownloadOption(requestId, i, AbstractDownloadsUi.PreferredFileType, preferredFileType);
-                App.downloads.creator.setDownloadOption(requestId, i, AbstractDownloadsUi.AddDateToFileName, addDateOptionVal);
-                if (needDownloadSubtitles) {
-                    App.downloads.creator.setDownloadOption(requestId, i, AbstractDownloadsUi.PreferredSubtitlesLanguagesCodes, preferredSubtitlesLanguagesCodes);
+                App.downloads.creator.setDownloadOption(
+                            requestId,
+                            i, AbstractDownloadOption.PreferredFileType,
+                            preferredFileType);
+
+                App.downloads.creator.setDownloadOption(
+                            requestId,
+                            i,
+                            AbstractDownloadOption.AddDateToFileName,
+                            addDateOptionVal);
+
+                App.downloads.creator.setDownloadOption(
+                            requestId,
+                            i,
+                            AbstractDownloadOption.DownloadSubtitles,
+                            needDownloadSubtitles);
+
+                if (needDownloadSubtitles)
+                {
+                    App.downloads.creator.setDownloadOption(
+                                requestId,
+                                i,
+                                AbstractDownloadOption.PreferredSubtitlesLanguagesCodes,
+                                preferredSubtitlesLanguagesCodes);
                 }
             }
         }
@@ -190,7 +216,12 @@ Item {
         if (typeof url === 'object')
             url = String(url);
 
-        if (checkIfAcceptableUrl(url, function(acceptable, modulesUids, urlDescriptions, downloadsTypes){
+        checkingIfAcceptableUrl = true;
+
+        checkIfAcceptableUrl(url, function(acceptable, modulesUids, urlDescriptions, downloadsTypes)
+        {
+            checkingIfAcceptableUrl = false;
+
             if (acceptable) {
                 urlText = url;
                 modulesSelectedUid = "";
@@ -207,12 +238,13 @@ Item {
                 buildingDownload = true;
                 updateState();
             }
-        }));
+        });
     }
 
     function reset()
     {
         requestId = -1;
+        checkingIfAcceptableUrl = false;
         buildingDownload = false;
         buildingDownloadFinished = false;
         lastError = "";
@@ -227,7 +259,7 @@ Item {
         previewUrl = "";
         preferredVideoHeight = 0;
         originFilesTypes = [];
-        addDateToFileName = false;
+        addDateToFileNameEnabled = false;
         preferredFileType = 0;
         emptyDownloadsListWarning = false;
         batchDownloadLimitWarning = false;
@@ -405,8 +437,6 @@ Item {
         {
             if (id === requestId)
             {
-//                if (requestId !== -1)
-//                    App.downloads.creator.abort(requestId, AbstractDownloadsUi.AbortedByUser);
                 buildingDownload = false;
                 buildingDownloadFinished = false;
                 lastError = error;
@@ -423,19 +453,25 @@ Item {
     {
         var info = App.downloads.creator.downloadInfo(requestId, 0);
 
-        preferredSubtitlesLanguagesCodes = uiSettingsTools.settings.preferredSubtitlesLanguagesCodes;
+        preferredSubtitlesLanguagesCodes = App.settings.downloadOptions.value(
+                    AbstractDownloadOption.PreferredSubtitlesLanguagesCodes) || [];
+
+        needDownloadSubtitles = App.settings.downloadOptions.value(
+                    AbstractDownloadOption.DownloadSubtitles) || false;
 
         var tagId = App.downloads.creator.tagId(requestId);
         relatedTag = tagId > 0 ? App.downloads.tags.tag(tagId) : null;
 
         if (batchDownload) {
             fileName = info.title;
+            forceOverwriteFile = false;
             filePath = info.destinationPath;
             filesCount = 0;
             fileSize = -1;
             subtitlesList = App.knownLanguagesModel;
         } else {
             fileName = info.fileInfo(0).path;
+            forceOverwriteFile = false;
             filePath = info.destinationPath;
             filesCount = info.filesCount;
             fileSize = info.selectedSize;
@@ -453,8 +489,6 @@ Item {
         } else {
             preferredSubtitlesLanguagesCodes = preferredSubtitlesLanguagesCodes.filter(function(value, index, arr){ return index !== i;});
         }
-
-        uiSettingsTools.settings.preferredSubtitlesLanguagesCodes = preferredSubtitlesLanguagesCodes;
     }
 
     function onFileNameTextChanged(new_text)
@@ -484,12 +518,29 @@ Item {
         var info = App.downloads.creator.downloadInfo(requestId, 0);
         if (info.filesCount === 1) {
             info.fileInfo(0).path = fileName;
+            if (forceOverwriteFile)
+                info.existingFileReaction = AbstractDownloadsUi.DefrOverwrite;
         }
-        if (batchDownload) {
+        if (batchDownload)
+        {
             info.title = fileName;
-        } else if (needDownloadSubtitles){
-//            checkPreferredSubtitlesLanguagesCodes();
-            App.downloads.creator.setDownloadOption(requestId, 0, AbstractDownloadsUi.PreferredSubtitlesLanguagesCodes, preferredSubtitlesLanguagesCodes);
+        }
+        else
+        {
+            App.downloads.creator.setDownloadOption(
+                        requestId,
+                        0,
+                        AbstractDownloadOption.DownloadSubtitles,
+                        needDownloadSubtitles);
+
+            if (needDownloadSubtitles)
+            {
+                App.downloads.creator.setDownloadOption(
+                            requestId,
+                            0,
+                            AbstractDownloadOption.PreferredSubtitlesLanguagesCodes,
+                            preferredSubtitlesLanguagesCodes);
+            }
         }
 
         info.destinationPath = filePath;
@@ -497,11 +548,6 @@ Item {
         App.downloads.creator.add(requestId);
         createDownloadFromDialog();
     }
-    // add download dialog
-
-//    function checkPreferredSubtitlesLanguagesCodes() {
-//        preferredSubtitlesLanguagesCodes = preferredSubtitlesLanguagesCodes.filter(function (element) { return subtitlesList.find(obj => { return obj.languageCode == element })});
-//    }
 
     AcceptableUrlTool {
         id: urlTools
@@ -531,13 +577,15 @@ Item {
     }
 
     function checkFileName() {
-        if (filesCount === 1 || batchDownload) {
+        //Commented: allow the user to enter invalid file name for whatever reason;
+        //the core will sanitize it.
+        /*if (filesCount === 1 || batchDownload) {
             var str = filePath + (filePath.slice(-1) == "/" ? "" : "/") + fileName;
-            if (str != App.tools.sanitizeFilePath(str, '')) {
+            if (filePath != App.tools.sanitizeFilePath(filePath, '')) {
                 wrongFileNameWarning = true;
                 return false;
             }
-        }
+        }*/
         return true;
     }
 
@@ -547,5 +595,11 @@ Item {
             return false;
         }
         return true;
+    }
+
+    function isBusy()
+    {
+        return requestId !== -1 &&
+                (checkingIfAcceptableUrl || buildingDownload);
     }
 }

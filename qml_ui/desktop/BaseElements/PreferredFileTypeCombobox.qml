@@ -115,11 +115,14 @@ ComboBox {
 
     function initialization() {
         combo.model.clear();
+        var needIndex = 0;
         if (downloadTools.originFilesTypes.length > 1) {
             for (var i = 0; i < downloadTools.originFilesTypes.length; i++) {
                 combo.model.insert(i, {'id': downloadTools.originFilesTypes[i], 'label': combo.labels[downloadTools.originFilesTypes[i]]});
+                if (downloadTools.preferredFileType == downloadTools.originFilesTypes[i])
+                    needIndex = i;
             }
-            combo.currentIndex = 0;
+            combo.currentIndex = needIndex;
         }
     }
 }

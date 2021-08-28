@@ -5,7 +5,7 @@ import QtGraphicalEffects 1.0
 Rectangle {
     id: root
     property string text
-    property string sortOptionName
+    property int sortBy
 
     property bool showSortIndicator: false
     property bool sortAscendingOrder: false

@@ -107,9 +107,9 @@ Item {
             onStopped: showingCompleteMessage(false);
         }
         Connections {
-            target: downloadsItemTools
-            onFinishedChanged: {
-                if (downloadsItemTools.finished && !downloadsItemTools.inError) {
+            target: App.downloads.tracker
+            onDownloadFinished: {
+                if (id == downloadsItemTools.itemId) {
                     completeMsg.opacity = 1;
                     completeAnimation.restart();
                 }

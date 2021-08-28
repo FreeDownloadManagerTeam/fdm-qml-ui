@@ -62,7 +62,7 @@ ColumnLayout {
                 folder: App.tools.urlFromLocalFile(downloadTools.filePath).url
                 acceptLabel: qsTr("Open") + App.loc.emptyString
                 rejectLabel: qsTr("Cancel") + App.loc.emptyString
-                onAccepted: combo.editText = App.tools.url(folder).toLocalFile()
+                onAccepted: setPath(App.tools.url(folder).toLocalFile())
             }
         }
     }
@@ -81,6 +81,10 @@ ColumnLayout {
         }
 
         combo.editText = downloadTools.filePath;
+    }
+
+    function setPath(folder) {
+        combo.editText = folder;
     }
 
     Connections {

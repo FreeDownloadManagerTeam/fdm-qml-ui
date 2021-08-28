@@ -9,6 +9,7 @@ import org.freedownloadmanager.fdm.tum 1.0
 SettingsTextField {
     property int mode: TrafficUsageMode.Low
     property int setting: DmCoreSettings.MaxDownloadSpeed
+    property int maxValue: 0
 
     implicitWidth: 123
 
@@ -20,7 +21,7 @@ SettingsTextField {
     validator: RegExpValidator { regExp: /\d+/ }
 
     onTextChanged: {
-        if (isValid())
+        if (isValid() && (!maxValue || parseInt(text) <= maxValue))
             App.settings.tum.setValue(mode, setting, text);
     }
 
@@ -29,5 +30,10 @@ SettingsTextField {
         return text !== "" &&
                 /^\d+$/.test(text) &&
                 parseInt(text) > 0;
+    }
+
+    SettingsInputError {
+        visible: maxValue && parseInt(parent.text) > maxValue
+        errorMessage: qsTr("Can't be greater than %1").arg(maxValue) + App.loc.emptyString
     }
 }

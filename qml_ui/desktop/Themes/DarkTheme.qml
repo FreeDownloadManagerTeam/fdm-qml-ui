@@ -2,6 +2,7 @@ import QtQuick 2.0
 
 QtObject {
     readonly property bool isLightTheme: false
+    readonly property bool macOS: Qt.platform.os === "osx"
 
     readonly property color foreground: "#d8d8d8"
     readonly property color background: "#28292A"//"#272d32"
@@ -22,7 +23,7 @@ QtObject {
     readonly property color insideMainMenuBackground: "#3A3939"
     readonly property color settingsGroupHeader: "#d8d8d8"
     readonly property color settingsSubgroupHeader: "#999"
-    readonly property color settingsItem: "#dedede"
+    readonly property color settingsItem: foreground //"#dedede"
     readonly property color settingsLine: "#1b2026"
     readonly property color settingsControlBorder: "#51565a"
     readonly property color dottedBorder: "#03596F"
@@ -112,4 +113,50 @@ QtObject {
     readonly property string alarm: Qt.resolvedUrl("../../images/desktop/dark/alarm.svg")
     readonly property string folder: Qt.resolvedUrl("../../images/desktop/dark/folder.svg")
     readonly property string batch: Qt.resolvedUrl("../../images/desktop/dark/batch.svg")
+
+    readonly property var mainTbImgNonMac: ({
+        arrow_left: Qt.resolvedUrl("../../images/desktop/dark/main_toolbar/arrow_left.svg"),
+        bin: Qt.resolvedUrl("../../images/desktop/dark/main_toolbar/delete.svg"),
+        bin_check: Qt.resolvedUrl("../../images/desktop/dark/main_toolbar/delete_check.svg"),
+        down: Qt.resolvedUrl("../../images/desktop/dark/main_toolbar/down.svg"),
+        down_check: Qt.resolvedUrl("../../images/desktop/dark/main_toolbar/down_check.svg"),
+        folder: Qt.resolvedUrl("../../images/desktop/dark/main_toolbar/folder.svg"),
+        folder_check: Qt.resolvedUrl("../../images/desktop/dark/main_toolbar/folder_check.svg"),
+        menu: Qt.resolvedUrl("../../images/desktop/dark/main_toolbar/menu.svg"),
+        pause_all: Qt.resolvedUrl("../../images/desktop/dark/main_toolbar/pause_all.svg"),
+        pause_check: Qt.resolvedUrl("../../images/desktop/dark/main_toolbar/pause_check.svg"),
+        play_all: Qt.resolvedUrl("../../images/desktop/dark/main_toolbar/play_all.svg"),
+        play_check: Qt.resolvedUrl("../../images/desktop/dark/main_toolbar/play_check.svg"),
+        plus: Qt.resolvedUrl("../../images/desktop/dark/main_toolbar/plus.svg"),
+        reverse: Qt.resolvedUrl("../../images/desktop/dark/main_toolbar/reverse.svg"),
+        search: Qt.resolvedUrl("../../images/desktop/dark/main_toolbar/search.svg"),
+        search_2: Qt.resolvedUrl("../../images/desktop/dark/main_toolbar/search_2.svg"),
+        up: Qt.resolvedUrl("../../images/desktop/dark/main_toolbar/up.svg"),
+        up_check: Qt.resolvedUrl("../../images/desktop/dark/main_toolbar/up_check.svg"),
+    })
+
+    readonly property var mainTbImgMac: ({
+        arrow_left: Qt.resolvedUrl("../../images/desktop/dark/main_toolbar_mac/arrow_left.svg"),
+        bin: Qt.resolvedUrl("../../images/desktop/dark/main_toolbar_mac/delete.svg"),
+        bin_check: Qt.resolvedUrl("../../images/desktop/dark/main_toolbar_mac/delete_check.svg"),
+        down: Qt.resolvedUrl("../../images/desktop/dark/main_toolbar_mac/down.svg"),
+        down_check: Qt.resolvedUrl("../../images/desktop/dark/main_toolbar_mac/down_check.svg"),
+        folder: Qt.resolvedUrl("../../images/desktop/dark/main_toolbar_mac/folder.svg"),
+        folder_check: Qt.resolvedUrl("../../images/desktop/dark/main_toolbar_mac/folder_check.svg"),
+        menu: Qt.resolvedUrl("../../images/desktop/dark/main_toolbar_mac/menu.svg"),
+        pause_all: Qt.resolvedUrl("../../images/desktop/dark/main_toolbar_mac/pause_all.svg"),
+        pause_check: Qt.resolvedUrl("../../images/desktop/dark/main_toolbar_mac/pause_check.svg"),
+        play_all: Qt.resolvedUrl("../../images/desktop/dark/main_toolbar_mac/play_all.svg"),
+        play_check: Qt.resolvedUrl("../../images/desktop/dark/main_toolbar_mac/play_check.svg"),
+        plus: Qt.resolvedUrl("../../images/desktop/dark/main_toolbar_mac/plus.svg"),
+        reverse: Qt.resolvedUrl("../../images/desktop/dark/main_toolbar_mac/reverse.svg"),
+        search: Qt.resolvedUrl("../../images/desktop/dark/main_toolbar_mac/search.svg"),
+        up: Qt.resolvedUrl("../../images/desktop/dark/main_toolbar_mac/up.svg"),
+        up_check: Qt.resolvedUrl("../../images/desktop/dark/main_toolbar_mac/up_check.svg"),
+    })
+
+    readonly property var mainTbImg: macOS ? mainTbImgMac : mainTbImgNonMac
+
+    readonly property string userSortImg: Qt.resolvedUrl("../../images/desktop/dark/user_sort.svg")
+    readonly property url attentionImg: Qt.resolvedUrl("../../images/common/light/attention.svg")
 }

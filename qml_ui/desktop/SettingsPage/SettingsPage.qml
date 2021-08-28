@@ -114,8 +114,20 @@ Page {
             }
 
             RightItemLabel {
+                visible: appWindow.btSupported
+                text: appWindow.btSupported ? appWindow.btS.protocolName : ""
+                onClicked: flick.contentY = bt.y
+                current: flick.currentTab === bt
+                Layout.preferredWidth: navigationColumnWidth
+            }
+
+            RightItemLabel {
                 text: qsTr("Advanced") + App.loc.emptyString
-                onClicked: flick.contentY = advanced.y
+                readonly property int adjust: Math.max(0, flick.height - advanced.height)
+                // we can't use just flick.contentY = advanced.y because of component bug:
+                // when the user opens Advanced settings, scroll position changes,
+                // showing Antivirus settings and other settings above the Advanced settings section
+                onClicked: flick.contentY = advanced.y - Math.max(0, flick.height - advanced.implicitHeight - 50)
                 current: flick.currentTab === advanced
                 Layout.preferredWidth: navigationColumnWidth
             }
@@ -145,7 +157,6 @@ Page {
             {
                 id: all
                 spacing: 20
-//                width: parent.width
                 anchors.top: parent.top
                 anchors.topMargin: smallSettingsPage ? 12 : 24
                 GeneralSettings {id: general; Layout.fillWidth: true}
@@ -153,9 +164,14 @@ Page {
                 NetworkSettings {id: network; Layout.fillWidth: true}
                 TrafficLimitsSettings {id: tum; Layout.fillWidth: true}
                 AntivirusSettings {id: antivirus; Layout.fillWidth: true}
+                Loader {
+                    id: bt
+                    visible: appWindow.btSupported
+                    active: appWindow.btSupported
+                    Layout.fillWidth: true
+                    source: "../../bt/desktop/BtSettings.qml"
+                }
                 AdvancedSettings {id: advanced; Layout.fillWidth: true}
-
-
             }
 
             onContentYChanged: updateCurrentTab()
@@ -173,6 +189,8 @@ Page {
                     flick.currentTab = tum;
                 } else if (antivirus.y - contentY >= 0) {
                     flick.currentTab = antivirus;
+                } else if (appWindow.btSupported && bt.y - contentY >= 0) {
+                    flick.currentTab = bt;
                 } else {
                     flick.currentTab = advanced;
                 }

@@ -17,7 +17,7 @@ CheckBox {
     padding: 0
     focusPolicy: Qt.NoFocus
 
-    implicitWidth: xOffset + indicator.width + (text.length > 0 ? contentItem.implicitWidth + 8 : 0)
+    implicitWidth: text.length > 0 ? contentItem.implicitWidth : (xOffset + indicator.width)
     implicitHeight: text.length > 0 ? Math.max(indicator.height, contentItem.implicitHeight) : indicator.height
 
     indicator: Rectangle {

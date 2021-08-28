@@ -35,7 +35,7 @@ Item {
 
     function openDownloadPageClick()
     {
-        Qt.openUrlExternally(App.downloads.infos.info(modelId).webPageUrl);
+        App.openDownloadUrl(App.downloads.infos.info(modelId).webPageUrl);
     }
 
     function openDownloadPageAllowed()

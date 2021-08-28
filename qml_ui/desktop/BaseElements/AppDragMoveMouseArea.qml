@@ -1,9 +1,11 @@
-import QtQuick 2.0
+import QtQuick 2.12
+import QtQuick.Window 2.12
 
 MouseArea {
     visible: appWindow.macVersion
     property int previousX
     property int previousY
+    property bool skipSome: false
 
     anchors.fill: parent
 
@@ -12,15 +14,29 @@ MouseArea {
         previousY = mouseY
     }
 
+    onPressedChanged: {
+        skipSome = false;
+    }
+
     onMouseXChanged: {
-        var dx = mouseX - previousX
-        appWindow.setX(appWindow.x + dx)
+        if (skipSome || appWindow.visibility == Window.FullScreen)
+            return;
+        var dx = mouseX - previousX;
+        appWindow.setX(appWindow.x + dx);
     }
 
     onMouseYChanged: {
-        var dy = mouseY - previousY
-        appWindow.setY(appWindow.y + dy)
+        if (skipSome || appWindow.visibility == Window.FullScreen)
+            return;
+        var dy = mouseY - previousY;
+        appWindow.setY(appWindow.y + dy);
     }
 
-    onDoubleClicked: appWindow.resizeWindow()
+    onDoubleClicked: {
+        if (appWindow.visibility != Window.FullScreen)
+        {
+            skipSome = true;
+            appWindow.resizeWindow();
+        }
+    }
 }

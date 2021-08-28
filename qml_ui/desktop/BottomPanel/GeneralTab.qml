@@ -101,28 +101,28 @@ Flickable {
 
                     BaseLabel {
                         visible: downloadsItemTools.finished
-                        font.pixelSize: 13
+                        font.pixelSize: appWindow.fonts.defaultSize
                         color: appWindow.theme.generalTabKey
                         text: qsTr("Status") + ":" + App.loc.emptyString
                         leftPadding: Math.abs(x - parent.x) < 5 ? 0 : parent.horizSpacing
                     }
                     BaseLabel {
                         visible: downloadsItemTools.finished
-                        font.pixelSize: 13
+                        font.pixelSize: appWindow.fonts.defaultSize
                         color: appWindow.theme.generalTabValue
                         text: qsTr("completed") + App.loc.emptyString
                     }
 
                     BaseLabel {
                         visible: downloadsItemTools.state.length > 0
-                        font.pixelSize: 13
+                        font.pixelSize: appWindow.fonts.defaultSize
                         color: appWindow.theme.generalTabKey
                         text: qsTr("State") + ":" + App.loc.emptyString
                         leftPadding: Math.abs(x - parent.x) < 5 ? 0 : parent.horizSpacing
                     }
                     BaseLabel {
                         visible: downloadsItemTools.state.length > 0
-                        font.pixelSize: 13
+                        font.pixelSize: appWindow.fonts.defaultSize
                         color: appWindow.theme.generalTabValue
                         text: downloadsItemTools.state
                     }
@@ -130,7 +130,7 @@ Flickable {
                     BaseLabel {
                         id: speed
                         visible: downloadsItemTools.showDownloadSpeed || downloadsItemTools.showUploadSpeed
-                        font.pixelSize: 13
+                        font.pixelSize: appWindow.fonts.defaultSize
                         color: appWindow.theme.generalTabKey
                         text: qsTr("Speed") + ":" + App.loc.emptyString
                         leftPadding: Math.abs(x - parent.x) < 5 ? 0 : parent.horizSpacing
@@ -141,13 +141,13 @@ Flickable {
                     }
 
                     BaseLabel {
-                        font.pixelSize: 13
+                        font.pixelSize: appWindow.fonts.defaultSize
                         color: appWindow.theme.generalTabKey
                         text: (downloadsItemTools.finished ? qsTr("Total size:") : qsTr("Downloaded:")) + App.loc.emptyString
                         leftPadding: Math.abs(x - parent.x) < 5 ? 0 : parent.horizSpacing
                     }
                     BaseLabel {
-                        font.pixelSize: 13
+                        font.pixelSize: appWindow.fonts.defaultSize
                         color: appWindow.theme.generalTabValue
                         text: downloadsItemTools.finished || downloadsItemTools.unknownFileSize ? JsTools.sizeUtils.bytesAsText(downloadsItemTools.selectedBytesDownloaded) :
                                                                                                   qsTr("%1 of %2").arg(JsTools.sizeUtils.bytesAsText(downloadsItemTools.selectedBytesDownloaded)).arg(JsTools.sizeUtils.bytesAsText(downloadsItemTools.selectedSize)) + App.loc.emptyString
@@ -155,14 +155,14 @@ Flickable {
 
                     BaseLabel {
                         visible: downloadsItemTools.canUpload
-                        font.pixelSize: 13
+                        font.pixelSize: appWindow.fonts.defaultSize
                         color: appWindow.theme.generalTabKey
                         text: qsTr("Uploaded") + ":" + App.loc.emptyString
                         leftPadding: Math.abs(x - parent.x) < 5 ? 0 : parent.horizSpacing
                     }
                     BaseLabel {
                         visible: downloadsItemTools.canUpload
-                        font.pixelSize: 13
+                        font.pixelSize: appWindow.fonts.defaultSize
                         color: appWindow.theme.generalTabValue
                         text: App.bytesAsText(downloadsItemTools.bytesUploaded) +
                               " (" + qsTr("ratio") + ": " + downloadsItemTools.ratioText + ")" +
@@ -171,14 +171,14 @@ Flickable {
 
                     BaseLabel {
                         visible: downloadsItemTools.added
-                        font.pixelSize: 13
+                        font.pixelSize: appWindow.fonts.defaultSize
                         color: appWindow.theme.generalTabKey
                         text: qsTr("Added at:") + App.loc.emptyString
                         leftPadding: Math.abs(x - parent.x) < 5 ? 0 : parent.horizSpacing
                     }
                     BaseLabel {
                         visible: downloadsItemTools.added
-                        font.pixelSize: 13
+                        font.pixelSize: appWindow.fonts.defaultSize
                         color: appWindow.theme.generalTabValue
                         text: App.loc.dateOrTimeToString(downloadsItemTools.added, false) + App.loc.emptyString
                         MouseArea {
@@ -220,7 +220,7 @@ Flickable {
                     }
 
                     BaseSelectableLabel {
-                        font.pixelSize: 13
+                        font.pixelSize: appWindow.fonts.defaultSize
                         color: appWindow.theme.generalTabValue
                         Layout.fillWidth: true
                         width: parent.width - 18

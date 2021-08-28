@@ -24,7 +24,7 @@ Item {
             App.settings.tum.setValue(mode, setting, currentValue)
     }
 
-    implicitHeight: custom.visible ? 60 : 38
+    implicitHeight: custom.visible ? custom.implicitHeight : combo.height
     implicitWidth: 123
 
     ComboBox {
