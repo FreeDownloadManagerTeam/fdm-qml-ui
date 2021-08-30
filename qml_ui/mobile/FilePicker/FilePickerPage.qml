@@ -79,7 +79,7 @@ Page {
                     spacing: 5
                     onPressed: {
                         currentStorageIndex = index;
-                        resetFolder(App.tools.qmlUrlFromLocalFile(model.unrestrictedPath).toString());
+                        resetFolder(absolutePath(model.unrestrictedPath));
                         storageList.positionViewAtIndex(index, ListView.Center);
                     }
 
