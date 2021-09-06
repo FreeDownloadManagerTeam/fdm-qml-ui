@@ -9,6 +9,7 @@ Rectangle {
     property alias text: textArea.text
     property alias textFormat: textArea.textFormat
     property alias readOnly: textArea.readOnly
+    property alias rightPadding: textArea.rightPadding
     signal selectAll
 
     border.width: 1

@@ -38,6 +38,8 @@ BaseDialog
 
                 textFormat: TextEdit.RichText
 
+                rightPadding: 10
+
                 text: "<b>" + qsTr("What's new in %1").arg(root.version) + "</b>" +
                       "<div style='margin-left:20px; margin-top:5px'>" +
                       root.changelog.replace(/\r\n/g, "\n").replace(/\n/g, "<br>") +

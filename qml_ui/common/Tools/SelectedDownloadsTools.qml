@@ -591,7 +591,10 @@ Item {
         var ids = getCurrentDownloadIds();
         ids = ids.filter(el => !downloadIsLocked(el));
         if (ids.length > 0) {
-            deleteDownloadsDlg.removeAction(ids);
+            if (downloadsViewTools.showingDownloadsWithMissingFilesOnly)
+                removeFromList(ids);
+            else
+                deleteDownloadsDlg.removeAction(ids);
         }
     }
 

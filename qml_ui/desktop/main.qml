@@ -73,11 +73,9 @@ ApplicationWindow {
     DarkTheme {id: darkTheme}
     LightTheme {id: lightTheme}
     property var systemTheme: App.systemTheme
-    readonly property bool followSystemTheme: uiSettingsTools.settings.theme === 'system'
-    readonly property bool systemThemeIsTheSame: followSystemTheme ||
-                                                 (systemTheme == QtSystemTheme.Dark && uiSettingsTools.settings.theme === 'dark') ||
-                                                 (systemTheme == QtSystemTheme.Light && uiSettingsTools.settings.theme === 'light')
-    property var theme: ((uiSettingsTools.settings.theme === 'dark') || (followSystemTheme && systemTheme == QtSystemTheme.Dark)) ? darkTheme : lightTheme
+    readonly property bool useDarkTheme: (uiSettingsTools.settings.theme === 'dark') ||
+                                         (uiSettingsTools.settings.theme === 'system' && systemTheme == QtSystemTheme.Dark)
+    property var theme: useDarkTheme ? darkTheme : lightTheme
 
     palette.highlight: theme.textHighlight
     palette.windowText: theme.foreground
@@ -714,7 +712,7 @@ ApplicationWindow {
             flags |= Qt.WindowFullscreenButtonHint;
         uiReadyTools.onReady(updateMacVersionWorkaround);
 
-        App.followSystemTheme = Qt.binding(function(){ return systemThemeIsTheSame;});
+        App.useDarkTheme = Qt.binding(function(){ return useDarkTheme;});
     }
 
     Connections {
@@ -772,6 +770,7 @@ ApplicationWindow {
         target: App.downloads.filesExistsActionsMgr
         onActionRequired: {
             filesExistsDlg.open(downloadId, fileIndex, files);
+            showWindow(true);
         }
     }
 

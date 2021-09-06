@@ -77,6 +77,14 @@ Item {
         return info.title + " (" + info.childDownloadsCount + ")";
     }
 
+    function setMissingFilesFilter(value)
+    {
+        resetDownloadsStatesFilter();
+        resetParentDownloadIdFilter();
+        resetDownloadsTagFilter();
+        downloadsWithMissingFilesTools.missingFilesFilter = value;
+    }
+
     function resetFilters(){
         if (emptySearchResults) {
             resetDownloadsTitleFilter();

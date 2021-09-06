@@ -46,7 +46,7 @@ Rectangle {
                     text: qsTr("Missing Files") + App.loc.emptyString + (cnt > 0 ? " (%1)".arg(cnt) : "")
                     value: AbstractDownloadsUi.MffAcceptMissingFiles
                     selected: downloadsWithMissingFilesTools.missingFilesFilter == value
-                    onClicked: downloadsWithMissingFilesTools.missingFilesFilter = value
+                    onClicked: downloadsViewTools.setMissingFilesFilter(value)
                     onCntChanged: {
                         if (!cnt && downloadsWithMissingFilesTools.missingFilesFilter == value)
                             downloadsViewTools.resetAllFilters();
