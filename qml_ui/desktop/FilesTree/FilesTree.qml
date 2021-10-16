@@ -116,11 +116,11 @@ Item {
 //                    signal deletedFile(var ids)
 //                    signal removedFromList(var ids)
 
-                    onPressed: {
+                    onPressed: function (mouse) {
                         //selectedDownloadsTools.downloadMousePressed(downloadModel.id, mouse)
                     }
 
-                    onClicked: {
+                    onClicked: function (mouse) {
                         selectedIndex = index
                         if (mouse.button === Qt.RightButton && !root.createDownloadDialog)
                             showMenu(mouse);
@@ -235,8 +235,8 @@ Item {
                                     propagateComposedEvents: true
                                     anchors.fill: parent
                                     hoverEnabled: true
-                                    onClicked : mouse.accepted = false
-                                    onPressed: mouse.accepted = false
+                                    onClicked : function (mouse) {mouse.accepted = false;}
+                                    onPressed: function (mouse) {mouse.accepted = false;}
 
                                     BaseToolTip {
                                         text: model.name
@@ -348,8 +348,8 @@ Item {
                                         propagateComposedEvents: true
                                         anchors.fill: parent
                                         hoverEnabled: true
-                                        onClicked : mouse.accepted = false
-                                        onPressed: mouse.accepted = false
+                                        onClicked : function (mouse) {mouse.accepted = false;}
+                                        onPressed: function (mouse) {mouse.accepted = false;}
 
                                         BaseToolTip {
                                             text: priorityLabel.text

@@ -1,8 +1,8 @@
 import QtQuick 2.10
 import QtQuick.Window 2.10
 import QtQuick.Controls 2.3
-import QtQuick.Dialogs 1.2
 import QtQuick.Controls.Material 2.4
+import "../qt5compat"
 import "../common"
 import "../common/Tools"
 import "./Tools"
@@ -167,7 +167,7 @@ ApplicationWindow
         id: reportSentDlg
         property string errorMessage
         text: (errorMessage.length > 0 ? qsTr("Sorry, the report hasn't been sent, an error occurred: %1").arg(errorMessage) : qsTr("The report has been sent. Thank you for your cooperation!")) + App.loc.emptyString
-        standardButtons: StandardButton.Ok
+        buttons: buttonOk
     }
 
     Connections

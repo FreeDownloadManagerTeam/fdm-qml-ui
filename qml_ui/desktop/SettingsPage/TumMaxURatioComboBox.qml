@@ -4,8 +4,7 @@ import org.freedownloadmanager.fdm.tum 1.0
 import QtQuick 2.10
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
-import QtQuick.Dialogs 1.1
-import QtGraphicalEffects 1.0
+import "../../qt5compat"
 import "../BaseElements"
 
 Item {
@@ -165,7 +164,7 @@ Item {
                 id: value
                 Layout.fillWidth: true
                 inputMethodHints: Qt.ImhDigitsOnly
-                validator: RegExpValidator { regExp: /^[\d\.,]+$/ }
+                validator: QtRegExpValidator { regExp: /^[\d\.,]+$/ }
                 onAccepted: custom.tryAcceptValue()
                 Keys.onEscapePressed: custom.reject()
                 onTextChanged: custom.inError = false;

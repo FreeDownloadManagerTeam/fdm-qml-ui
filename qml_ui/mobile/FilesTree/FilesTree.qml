@@ -2,7 +2,7 @@ import QtQuick 2.0
 import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.4
-import QtGraphicalEffects 1.0
+import "../../qt5compat"
 import org.freedownloadmanager.fdm 1.0
 import org.freedownloadmanager.fdm.abstractdownloadsui 1.0
 import "../../common/Tools"
@@ -97,7 +97,7 @@ Item {
                             App.downloads.mgr.openDownload(downloadItemId, model.fileIndex);
                         }
                     }
-                    onPressAndHold: showMenu(mouse)
+                    onPressAndHold: function (mouse) {showMenu(mouse);}
                 }
 
                 function showMenu(mouse)

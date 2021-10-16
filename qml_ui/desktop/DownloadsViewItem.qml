@@ -1,8 +1,8 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
-import QtGraphicalEffects 1.0
 import QtQuick.Window 2.12
+import "../qt5compat"
 import org.freedownloadmanager.fdm 1.0
 import org.freedownloadmanager.fdm.abstractdownloadsui 1.0
 import CppControls 1.0 as CppControls
@@ -72,7 +72,7 @@ Item
                     property int pressY
                     property int lastIndex: -1
                     onMouseYChanged: {
-                        if (mouse.buttons == Qt.LeftButton && Math.abs(pressY - mouse.y) > 5) {
+                        if (pressedButtons == Qt.LeftButton && Math.abs(pressY - mouseY) > 5) {
                             var newIndex = listView.indexAt(10, parentY + mouseY);
                             if (newIndex != -1 && newIndex != lastIndex) {
                                 lastIndex = newIndex;
@@ -87,7 +87,7 @@ Item
                         }
                     }
 
-                    onPressed: {
+                    onPressed: function (mouse) {
                         if (mouse.button == Qt.LeftButton)
                         {
                             listView.interactive = false;
@@ -96,7 +96,7 @@ Item
                         }
                     }
 
-                    onReleased: {
+                    onReleased: function (mouse) {
                         listView.interactive = true;
                         if (mouse.button == Qt.LeftButton) {
                             if (pressY != mouse.y) {
@@ -162,8 +162,8 @@ Item
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
                 hoverEnabled: true
-                onClicked : mouse.accepted = false
-                onPressed: mouse.accepted = false
+                onClicked : function (mouse) {mouse.accepted = false;}
+                onPressed: function (mouse) {mouse.accepted = false;}
 
                 BaseToolTip {
                     text: downloadsItemTools.tplTitle
@@ -433,8 +433,8 @@ Item
                 propagateComposedEvents: true
                 anchors.fill: parent
                 hoverEnabled: true
-                onClicked : mouse.accepted = false
-                onPressed: mouse.accepted = false
+                onClicked : function (mouse) {mouse.accepted = false;}
+                onPressed: function (mouse) {mouse.accepted = false;}
 
                 BaseToolTip {
                     text: App.loc.dateTimeToString(model.added, true) + App.loc.emptyString

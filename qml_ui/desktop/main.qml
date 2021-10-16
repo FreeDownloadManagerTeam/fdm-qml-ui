@@ -167,14 +167,14 @@ ApplicationWindow {
 
     onVisibilityChanged:
     {
-        if (waHideWindowActive)
+        if (appWindow.waHideWindowActive)
             return;
 
-        if (visibility == ApplicationWindow.Windowed ||
-                visibility == ApplicationWindow.FullScreen ||
-                visibility == ApplicationWindow.Maximized)
+        if (appWindow.visibility == ApplicationWindow.Windowed ||
+                appWindow.visibility == ApplicationWindow.FullScreen ||
+                appWindow.visibility == ApplicationWindow.Maximized)
         {
-            lastOkVisibility = visibility;
+            appWindow.lastOkVisibility = appWindow.visibility;
         }
     }
 

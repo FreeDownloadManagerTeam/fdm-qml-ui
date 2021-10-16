@@ -34,7 +34,7 @@ TextField {
         property int selectStart
         property int selectEnd
         property int curPos
-        onClicked: {
+        onClicked: function (mouse) {
             selectStart = textInput.selectionStart;
             selectEnd = textInput.selectionEnd;
             curPos = textInput.cursorPosition;
@@ -44,7 +44,7 @@ TextField {
             textInput.cursorPosition = curPos;
             textInput.select(selectStart,selectEnd);
         }
-        onPressAndHold: {
+        onPressAndHold: function (mouse) {
             if (mouse.source === Qt.MouseEventNotSynthesized) {
                 selectStart = textInput.selectionStart;
                 selectEnd = textInput.selectionEnd;

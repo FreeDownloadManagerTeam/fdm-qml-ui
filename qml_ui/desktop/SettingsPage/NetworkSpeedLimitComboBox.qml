@@ -1,15 +1,14 @@
 import QtQuick 2.10
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
-import QtQuick.Dialogs 1.1
-import QtGraphicalEffects 1.0
+import "../../qt5compat"
 import org.freedownloadmanager.fdm 1.0
 import org.freedownloadmanager.fdm.appconstants 1.0
 import "../BaseElements"
 
 Item {
     id: root
-    property var currentValue: 0 // unlimited
+    property int currentValue: 0 // unlimited
     property string sUnlimited: qsTr("Unlimited") + App.loc.emptyString
     property string sCustom: qsTr("Custom...") + App.loc.emptyString
     property string kbps: qsTr("KB/s") + App.loc.emptyString
@@ -157,7 +156,7 @@ Item {
                 id: value
                 Layout.fillWidth: true
                 inputMethodHints: Qt.ImhDigitsOnly
-                validator: RegExpValidator { regExp: /\d+/ }
+                validator: QtRegExpValidator { regExp: /\d+/ }
                 onAccepted: custom.tryAcceptValue()
                 Keys.onEscapePressed: custom.reject()
                 onTextChanged: custom.inError = false;

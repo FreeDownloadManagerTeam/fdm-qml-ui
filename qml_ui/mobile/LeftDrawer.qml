@@ -1,7 +1,7 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Controls.Material 2.4
-import QtGraphicalEffects 1.0
+import "../qt5compat"
 import org.freedownloadmanager.fdm 1.0
 
 Drawer {
@@ -106,26 +106,29 @@ Drawer {
         }
 
         function startListModel() {
+            // WARNING: QTBUG-96397. Qt.resolvedUrl must be called the last when defining item's properties
+
             clear();
+
             if (appWindow.btSupported &&
                     App.downloads.tracker.hasPostFinishedTasksDownloadsCount)
             {
                 append({"text": appWindow.btS.startAllSeedingDownloadsUiText,
-                           "icon": Qt.resolvedUrl("../images/mobile/play.svg"),
-                           'actionLabel': "startAllDownloadsWithPostFinishedTasks",
-                       "enabled": App.downloads.tracker.finishedHasDisabledPostFinishedTasks});
+                       "actionLabel": "startAllDownloadsWithPostFinishedTasks",
+                       "enabled": App.downloads.tracker.finishedHasDisabledPostFinishedTasks,
+                       "icon": Qt.resolvedUrl("../images/mobile/play.svg"),});
                 append({"text": appWindow.btS.stopAllSeedingDownloadsUiText,
-                           "icon": Qt.resolvedUrl("../images/mobile/pause.svg"),
-                           'actionLabel': "stopAllDownloadsWithPostFinishedTasks",
-                       "enabled": App.downloads.tracker.finishedHasEnabledPostFinishedTasks});
+                        "actionLabel": "stopAllDownloadsWithPostFinishedTasks",
+                        "enabled": App.downloads.tracker.finishedHasEnabledPostFinishedTasks,
+                        "icon": Qt.resolvedUrl("../images/mobile/pause.svg"),});
             }
-            append({"text": QT_TR_NOOP("Browser"), "icon": Qt.resolvedUrl("../images/mobile/browser.svg"), 'actionLabel': "browser", "enabled": true});
-            append({"text": QT_TR_NOOP("Settings"), "icon": Qt.resolvedUrl("../images/mobile/settings.svg"), 'actionLabel': "settings", "enabled": true});
-            append({"text": QT_TR_NOOP("Contact support"), "icon": Qt.resolvedUrl("../images/mobile/support.svg"), 'actionLabel': "support", "enabled": true});
-            append({"text": QT_TR_NOOP("About"), "icon": Qt.resolvedUrl("../images/mobile/about.svg"), 'actionLabel': "about", "enabled": true});
-            append({"text": QT_TR_NOOP("Quit"), "icon": Qt.resolvedUrl("../images/mobile/quit.svg"), 'actionLabel': "quit", "enabled": true});
+            append({"text": QT_TR_NOOP("Browser"), "actionLabel": "browser", "enabled": true, "icon": Qt.resolvedUrl("../images/mobile/browser.svg")});
+            append({"text": QT_TR_NOOP("Settings"), "actionLabel": "settings", "enabled": true, "icon": Qt.resolvedUrl("../images/mobile/settings.svg")});
+            append({"text": QT_TR_NOOP("Contact support"), 'actionLabel': "support", "enabled": true, "icon": Qt.resolvedUrl("../images/mobile/support.svg")});
+            append({"text": QT_TR_NOOP("About"), "actionLabel": "about", "enabled": true, "icon": Qt.resolvedUrl("../images/mobile/about.svg")});
+            append({"text": QT_TR_NOOP("Quit"), "actionLabel": "quit", "enabled": true, "icon": Qt.resolvedUrl("../images/mobile/quit.svg")});
             if (App.isSelfTestAvail)
-                append({"text": "Self Test", "icon": Qt.resolvedUrl("../images/mobile/self_test.svg"), 'actionLabel': "selfTest", "enabled": true});
+                append({"text": "Self Test", "actionLabel": "selfTest", "enabled": true, "icon": Qt.resolvedUrl("../images/mobile/self_test.svg")});
         }
     }
 

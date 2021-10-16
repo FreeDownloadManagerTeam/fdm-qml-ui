@@ -25,10 +25,10 @@ ToolButton {
         {
             anchors.fill: parent
             onClicked: {
-                root.clicked(mouse);
+                root.clicked();
                 circleAnimation.stop();
             }
-            onPressed: {
+            onPressed: function (mouse) {
                 colorRect.x = mouseX
                 colorRect.y = mouseY
                 circleAnimation.start()

@@ -3,7 +3,7 @@ import QtQuick.Controls 2.1
 import Qt.labs.folderlistmodel 2.11
 import QtQuick.Window 2.0
 import QtQuick.Layouts 1.3
-import QtGraphicalEffects 1.0
+import "../../qt5compat"
 import QtQuick.Controls.Material 2.4
 import org.freedownloadmanager.fdm 1.0
 import ".."

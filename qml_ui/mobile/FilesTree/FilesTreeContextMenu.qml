@@ -92,7 +92,9 @@ Menu {
     BaseMenuItem {
         id: mp4Convert
         text: qsTr("Convert to mp4") + App.loc.emptyString
-        visible: downloadItemId && App.downloads.infos.info(downloadItemId).fileInfo(model.fileIndex).fileType == AbstractDownloadsUi.VideoFile
+        visible: downloadItemId &&
+                 App.downloads.infos.info(downloadItemId).fileInfo(model.fileIndex).fileType == AbstractDownloadsUi.VideoFile &&
+                 App.downloads.infos.info(downloadItemId).fileInfo(model.fileIndex).suffix.toUpperCase() !== "MP4"
         enabled: downloadItemId && finished && !locked && visible
         onTriggered: {
             stackView.waPush(Qt.resolvedUrl("../Mp4ConverterPage.qml"), {downloadsIds: [downloadItemId], filesIndices: [model.fileIndex]})

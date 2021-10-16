@@ -94,7 +94,7 @@ ApplicationWindow
                     hoverEnabled: true
                     cursorShape: Qt.PointingHandCursor
                     acceptedButtons: Qt.RightButton
-                    onClicked: showMenu(parent, mouse, downloadsItemTools.webPageUrl)
+                    onClicked: function (mouse) {showMenu(parent, mouse, downloadsItemTools.webPageUrl);}
                     BaseToolTip {
                         text: downloadsItemTools.webPageUrl
                         visible: parent.containsMouse && webPageUrl.truncated
@@ -120,7 +120,7 @@ ApplicationWindow
                     hoverEnabled: true
                     cursorShape: Qt.PointingHandCursor
                     acceptedButtons: Qt.RightButton
-                    onClicked: showMenu(parent, mouse, downloadsItemTools.resourceUrl)
+                    onClicked: function (mouse) {showMenu(parent, mouse, downloadsItemTools.resourceUrl);}
                     BaseToolTip {
                         text: downloadsItemTools.resourceUrl
                         visible: parent.containsMouse && resourceUrl.truncated

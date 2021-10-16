@@ -22,12 +22,12 @@ Rectangle {
             movingStarted = false;
             posTimer.restart();
         }
-        onPressed: {
+        onPressed: function (mouse) {
             movingStarted = true;
             startedY = mouse.y;
             startedPanelHeigth = bottomPanelTools.panelHeigth;
         }
-        onPositionChanged: {
+        onPositionChanged: function (mouse) {
             if (movingStarted) {
                 bottomPanelTools.setPanelHeigth(startedPanelHeigth - mouse.y + startedY);
             }

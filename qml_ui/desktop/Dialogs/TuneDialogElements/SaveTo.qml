@@ -1,13 +1,13 @@
 import QtQuick 2.0
 import QtQuick.Layouts 1.3
-import QtGraphicalEffects 1.0
 import org.freedownloadmanager.fdm 1.0
 import "../../BaseElements"
+import "../../../qt5compat"
 
 import Qt.labs.platform 1.0 as QtLabs
 
 ColumnLayout {
-    property string path: combo.editText
+    property alias path: combo.editText
 
     RowLayout {
         width: parent.width

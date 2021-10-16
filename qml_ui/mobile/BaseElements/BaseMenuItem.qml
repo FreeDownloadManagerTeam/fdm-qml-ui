@@ -1,11 +1,11 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.3
-import QtGraphicalEffects 1.0
+import "../../qt5compat"
 
 MenuItem {
     id: menuItem
 
-    width: parent.width
+    width: parent ? parent.width : undefined
     height: visible ? contentItem.lineCount * 20 + 10 : 0
 
     indicator: Item {

@@ -118,7 +118,7 @@ Page {
 
         RoundButton {
             text: qsTr("Report problem") + App.loc.emptyString
-            visible: downloadTools.lastFailedRequestId !== -1 && downloadTools.statusWarning
+            visible: downloadTools.lastFailedRequestId !== -1 && downloadTools.statusWarning && downloadTools.allowedToReportLastError
             icon.source: Qt.resolvedUrl("../images/mobile/bug_report.svg")
             icon.color: appWindow.theme.toolbarTextColor
             icon.width: 14

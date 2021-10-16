@@ -217,6 +217,8 @@ ComboBox {
     }
 
     popup: Popup {
+        id: someUnusedId // https://bugreports.qt.io/browse/QTBUG-96351
+
         y: 1 - height
         width: root.width
         height: 102

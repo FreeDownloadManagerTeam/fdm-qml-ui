@@ -1,5 +1,5 @@
 import QtQuick 2.0
-import QtQuick.Dialogs 1.1
+import "../../qt5compat"
 import org.freedownloadmanager.fdm 1.0
 
 MessageDialog
@@ -10,7 +10,6 @@ MessageDialog
 
     title: "Invalid settings"
     text: root.lastInvalidSettingsMessage + qsTr(". Close anyway?") + App.loc.emptyString
-    standardButtons: StandardButton.Ok | StandardButton.Cancel
-    //onAccepted: root.StackView.view.pop()
+    buttons: buttonOk | buttonCancel
     onAccepted: popPage()
 }

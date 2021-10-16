@@ -1,9 +1,8 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.11
-import QtQuick.Dialogs 1.3
+import "../../qt5compat"
 import org.freedownloadmanager.fdm 1.0
-import QtGraphicalEffects 1.0
 import "../BaseElements"
 import "../../common/Tools"
 
@@ -107,7 +106,7 @@ BaseDialog {
                 CustomButton {
                     Layout.preferredHeight: height
                     Layout.alignment: Qt.AlignRight
-                    visible: downloadTools.statusWarning
+                    visible: downloadTools.statusWarning && downloadTools.allowedToReportLastError
                     text: qsTr("Report problem") + App.loc.emptyString
                     onClicked: privacyDlg.open(downloadTools.lastFailedRequestId)
                 }

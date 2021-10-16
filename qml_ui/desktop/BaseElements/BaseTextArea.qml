@@ -61,7 +61,7 @@ Rectangle {
         property int selectStart
         property int selectEnd
         property int curPos
-        onClicked: {
+        onClicked: function (mouse) {
             selectStart = textArea.selectionStart;
             selectEnd = textArea.selectionEnd;
             curPos = textArea.cursorPosition;
@@ -71,7 +71,7 @@ Rectangle {
             textArea.cursorPosition = curPos;
             textArea.select(selectStart,selectEnd);
         }
-        onPressAndHold: {
+        onPressAndHold: function (mouse) {
             if (mouse.source === Qt.MouseEventNotSynthesized) {
                 selectStart = textArea.selectionStart;
                 selectEnd = textArea.selectionEnd;

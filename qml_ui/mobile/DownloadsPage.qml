@@ -374,7 +374,7 @@ Page
         Material.background: appWindow.theme.selectModeBarAndPlusBtn
         display: AbstractButton.IconOnly
 
-        icon.source: "../images/mobile/plus.svg"
+        icon.source: Qt.resolvedUrl("../images/mobile/plus.svg")
         icon.width: 24
         icon.height: 24
         icon.color: "#fff"

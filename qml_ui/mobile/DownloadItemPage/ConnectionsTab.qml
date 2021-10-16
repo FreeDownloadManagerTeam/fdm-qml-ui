@@ -85,7 +85,7 @@ Rectangle {
 
             delegate: RowLayout {
                 property int rowHeigth: 22
-                width: parent.width
+                width: connectionsList.width
                 height: rowHeigth
                 Layout.preferredHeight: rowHeigth
                 spacing: 0

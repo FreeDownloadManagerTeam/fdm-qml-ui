@@ -1,7 +1,7 @@
 import QtQuick 2.10
 import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.3
-import QtQuick.Dialogs 1.3
+import "../../qt5compat"
 import "../BaseElements"
 import org.freedownloadmanager.fdm 1.0
 import org.freedownloadmanager.fdm.appnotificationevent 1.0
@@ -100,8 +100,8 @@ BaseDialog {
                                     propagateComposedEvents: true
                                     anchors.fill: parent
                                     hoverEnabled: true
-                                    onClicked: mouse.accepted = false
-                                    onPressed: mouse.accepted = false
+                                    onClicked: function (mouse) {mouse.accepted = false;}
+                                    onPressed: function (mouse) {mouse.accepted = false;}
 
                                     BaseToolTip {
                                         text: label.text

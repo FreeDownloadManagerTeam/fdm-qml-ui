@@ -1,8 +1,8 @@
 import QtQuick 2.10
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
-import QtQuick.Dialogs 1.1
 import QtQuick.Controls.Material 2.4
+import "../../qt5compat"
 import org.freedownloadmanager.fdm 1.0
 import org.freedownloadmanager.fdm.dmcoresettings 1.0
 import org.freedownloadmanager.fdm.appsettings 1.0
@@ -148,7 +148,7 @@ Rectangle {
                         id: okToResetMsg
                         title: qsTr("Default settings") + App.loc.emptyString
                         text: qsTr("Restore default settings?") + App.loc.emptyString
-                        standardButtons: StandardButton.Ok | StandardButton.Cancel
+                        buttons: buttonOk | buttonCancel
                         onAccepted: {
                             App.settings.resetToDefaults();
                             uiSettingsTools.resetToDefaults();

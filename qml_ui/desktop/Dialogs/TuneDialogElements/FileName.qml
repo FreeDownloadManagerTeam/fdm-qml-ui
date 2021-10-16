@@ -1,7 +1,6 @@
 import QtQuick 2.12
 import QtQuick.Layouts 1.3
-import QtQuick.Dialogs 1.3
-import QtGraphicalEffects 1.0
+import "../../../qt5compat"
 import org.freedownloadmanager.fdm 1.0
 import "../../BaseElements"
 
@@ -51,8 +50,7 @@ ColumnLayout {
             FileDialog {
                 readonly property string currentFileSuffix: fileName.text.lastIndexOf('.') !== -1 ? fileName.text.substring(fileName.text.lastIndexOf('.')+1) : ""
                 id: browseDlg
-                selectExisting: false
-                folder: App.tools.urlFromLocalFile(saveToControl.path).url
+                fileMode: modeSaveFile
                 defaultSuffix: currentFileSuffix
                 nameFilters: currentFileSuffix ? [qsTr("%1 files (*.%2)").arg(currentFileSuffix.toUpperCase()).arg(currentFileSuffix) + App.loc.emptyString] :
                                                  [qsTr("All files") + " (*)" + App.loc.emptyString]
@@ -69,5 +67,6 @@ ColumnLayout {
     function init()
     {
         fileName.text = downloadTools.fileName;
+        browseDlg.folder = Qt.binding(function() {return App.tools.urlFromLocalFile(saveToControl.path).url;});
     }
 }

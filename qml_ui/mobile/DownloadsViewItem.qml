@@ -102,7 +102,7 @@ ItemDelegate
             MouseArea
             {
                 anchors.fill: parent
-                onClicked: {
+                onClicked: function (mouse) {
                     if (appWindow.showDownloadCheckbox) {
                         model.checked = !model.checked;
 
@@ -116,11 +116,13 @@ ItemDelegate
                     }
                 }
 
-                onPressed: {
+                onPressed: function (mouse) {
                     downloadsViewItemFileInfo.circleAnimationStart(mouse.x, mouse.y);
                 }
 
-                onPressAndHold: downloadsViewItemFileInfo.pressAndHoldMouseArea(mouse)
+                onPressAndHold: function (mouse) {
+                    downloadsViewItemFileInfo.pressAndHoldMouseArea(mouse);
+                }
             }
 
             DownloadIcon {
@@ -194,7 +196,7 @@ ItemDelegate
                 var menu = component.createObject(downloadItemMenuBtn, {
                                                       "modelIds": [model.id],
                                                       "finished": model.finished,
-                                                      "hasPostFinishedTasks": model.hasPostFinishedTasks,
+                                                      "hasPostFinishedTasks": downloadsItemTools.hasPostFinishedTasks,
                                                       "priority": model.priority,
                                                       "downloadModel": downloadsItemTools.item
                                                   });

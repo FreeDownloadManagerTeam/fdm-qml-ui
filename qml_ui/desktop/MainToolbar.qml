@@ -1,12 +1,12 @@
 import QtQuick 2.11
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
-import QtQuick.Dialogs 1.3
 import org.freedownloadmanager.fdm 1.0
 import org.freedownloadmanager.vmsqt 1.0
 import org.freedownloadmanager.fdm.abstractdownloadsui 1.0
 import "../common"
 import "./BaseElements"
+import "../qt5compat"
 
 ToolBar {
     id: toolbar
@@ -265,7 +265,7 @@ ToolBar {
                 width: visible ? appWindow.width : 0
                 propagateComposedEvents: true
                 acceptedButtons: Qt.LeftButton | Qt.RightButton
-                onPressed: {
+                onPressed: function (mouse) {
                     mouse.accepted = false;
                     searchField.searchFieldFocusLost();
                 }
@@ -315,7 +315,7 @@ ToolBar {
         id: sortByOrderRequired
         title: App.displayName
         text: qsTr("Switch to user-defined sorting of the download list?") + App.loc.emptyString
-        standardButtons: StandardButton.Ok | StandardButton.Cancel
+        buttons: buttonOk | buttonCancel
         onAccepted: sortTools.setSortByAndAsc(AbstractDownloadsUi.DownloadsSortByOrder, false)
     }
 }

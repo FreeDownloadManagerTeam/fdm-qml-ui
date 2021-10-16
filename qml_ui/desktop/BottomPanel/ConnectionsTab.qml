@@ -72,7 +72,7 @@ Item {
         }
 
         delegate: RowLayout {
-            width: parent.width
+            width: connectionsList.width
             height: 22
             spacing: 0
 

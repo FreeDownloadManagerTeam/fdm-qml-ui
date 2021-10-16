@@ -2,7 +2,7 @@ import QtQuick 2.10
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.4
-import QtGraphicalEffects 1.0
+import "../qt5compat"
 import org.freedownloadmanager.fdm 1.0
 import org.freedownloadmanager.fdm.appfeatures 1.0
 import "../common/Tools"
@@ -51,13 +51,13 @@ Rectangle {
             }
         }
 
-        onPressAndHold: {
+        onPressAndHold: function (mouse) {
             //circleAnimationStart(mouse.x, mouse.y);
             model.checked = true;
             root.downloadSelected(downloadsItemTools.itemId);
         }
 
-        onPressed: {
+        onPressed: function (mouse) {
             circleAnimationStart(mouse.x, mouse.y);
         }
 

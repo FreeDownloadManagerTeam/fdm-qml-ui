@@ -1,8 +1,7 @@
 import QtQuick 2.10
 import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.3
-import QtGraphicalEffects 1.0
-import QtQuick.Dialogs 1.1
+import "../../qt5compat"
 import org.freedownloadmanager.fdm 1.0
 import org.freedownloadmanager.fdm.appconstants 1.0
 import "../BaseElements"
@@ -168,7 +167,7 @@ Item
         id: invalidValueDlg
         title: qsTr("Invalid value") + App.loc.emptyString
         text: qsTr("Must be a number greater than 0.") + App.loc.emptyString
-        standardButtons: StandardButton.Ok
+        buttons: buttonOk
     }
 
     function applyCurrentValueToCombo()

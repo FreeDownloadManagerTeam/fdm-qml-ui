@@ -3,7 +3,7 @@ import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
 import org.freedownloadmanager.fdm 1.0
 import QtQuick.Controls.Material 2.4
-import QtGraphicalEffects 1.0
+import "../../qt5compat"
 import "../../common"
 import "../BaseElements"
 

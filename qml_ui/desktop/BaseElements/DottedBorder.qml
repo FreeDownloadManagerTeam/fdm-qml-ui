@@ -10,7 +10,7 @@ Item {
 
     PathView {
         anchors.fill: component
-        model: component.width/component.borderItem
+        model: component.width > 0 ? component.width/component.borderItem : 0
         path: Path {
 
             startX: component.borderLine/2
@@ -30,7 +30,7 @@ Item {
 
     PathView {
         anchors.fill: component
-        model: component.height/component.borderItem
+        model: component.height > 0 ? component.height/component.borderItem : 0
         path: Path {
 
             startX: 1
@@ -50,7 +50,7 @@ Item {
 
     PathView {
         anchors.fill: component
-        model: component.width/component.borderItem
+        model: component.width > 0 ? component.width/component.borderItem : 0
         path: Path {
 
             startX: component.borderLine/2
@@ -70,7 +70,7 @@ Item {
 
     PathView {
         anchors.fill: component
-        model: component.height/component.borderItem
+        model: component.height > 0 ? component.height/component.borderItem : 0
         path: Path {
 
             startX: component.width

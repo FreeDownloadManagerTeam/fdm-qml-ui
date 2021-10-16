@@ -25,8 +25,10 @@ Item {
     property bool statusWarning: false
 
     property string lastError: ""
+    property bool allowedToReportLastError: false
     property int lastFailedRequestId: -1
     property string urlText
+    property bool disableAcceptableUrlCheck: false
 
     property string filePath
     property string fileName
@@ -222,9 +224,10 @@ Item {
         {
             checkingIfAcceptableUrl = false;
 
+            setAcceptableUrl(url);
+            modulesSelectedUid = "";
+
             if (acceptable) {
-                urlText = url;
-                modulesSelectedUid = "";
 
                 for (var i = 0; i < downloadsTypes.length; i++) {
                     if (request.preferredDownloadType & downloadsTypes[i]) {
@@ -233,11 +236,12 @@ Item {
                 }
 
                 updateModules(url, modulesUids, urlDescriptions);
-                request.setDownloadModuleUid(0, modulesSelectedUid);
-                App.downloads.creator.create(request);
-                buildingDownload = true;
-                updateState();
             }
+
+            request.setDownloadModuleUid(0, modulesSelectedUid);
+            App.downloads.creator.create(request);
+            buildingDownload = true;
+            updateState();
         });
     }
 
@@ -275,7 +279,7 @@ Item {
 
         if (checkIfAcceptableUrl(text, function(acceptable, modulesUids, urlDescriptions, downloadsTypes){
             if (acceptable) {
-                urlText = text;
+                setAcceptableUrl(text);
                 updateModules(text, modulesUids, urlDescriptions);
             }
         }));
@@ -300,7 +304,9 @@ Item {
 
     function setAcceptableUrl(text)
     {
+        disableAcceptableUrlCheck = true;
         urlText = text;
+        disableAcceptableUrlCheck = false;
     }
 
     //not needed for modulesUids
@@ -356,11 +362,16 @@ Item {
         cleanUpLastError();
         updateState();
 
-        if (checkIfAcceptableUrl(new_text, function(acceptable, modulesUids, urlDescriptions, downloadsTypes){
-            if (acceptable) {
-                updateModules(new_text, modulesUids, urlDescriptions);
-            }
-        }));
+        if (!disableAcceptableUrlCheck &&
+                urlText.length > 0)
+        {
+            checkIfAcceptableUrl(new_text, function(acceptable, modulesUids, urlDescriptions, downloadsTypes)
+            {
+                if (acceptable) {
+                    updateModules(new_text, modulesUids, urlDescriptions);
+                }
+            });
+        }
     }
 
     function updateModules(text, modulesUids, urlDescriptions) {
@@ -440,6 +451,7 @@ Item {
                 buildingDownload = false;
                 buildingDownloadFinished = false;
                 lastError = error;
+                allowedToReportLastError = allowedToReport;
                 lastFailedRequestId = requestId;
                 requestId = -1;
                 updateState();

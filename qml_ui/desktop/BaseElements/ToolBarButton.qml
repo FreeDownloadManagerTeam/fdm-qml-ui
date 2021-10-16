@@ -5,7 +5,7 @@ Rectangle
 {
     id: root
 
-    property url source: null
+    property url source
     property bool indicator: false
     property bool rotate: false
     property string tooltipText

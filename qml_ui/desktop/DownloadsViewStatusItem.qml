@@ -60,8 +60,8 @@ Item {
                     propagateComposedEvents: true
                     anchors.fill: parent
                     hoverEnabled: true
-                    onClicked : mouse.accepted = false
-                    onPressed: mouse.accepted = false
+                    onClicked : function (mouse) {mouse.accepted = false;}
+                    onPressed: function (mouse) {mouse.accepted = false;}
 
                     BaseToolTip {
                         text: statusMessage.text
@@ -171,8 +171,8 @@ Item {
                 propagateComposedEvents: true
                 anchors.fill: parent
                 hoverEnabled: true
-                onClicked : mouse.accepted = false
-                onPressed: mouse.accepted = false
+                onClicked : function (mouse) {mouse.accepted = false;}
+                onPressed: function (mouse) {mouse.accepted = false;}
 
                 BaseToolTip {
                     text: downloadsItemTools.errorMessage

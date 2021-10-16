@@ -38,7 +38,7 @@ Rectangle {
         enabled: downloadId
         anchors.fill: parent
         acceptedButtons: Qt.RightButton
-        onClicked: showMenu(mouse);
+        onClicked: function (mouse) {showMenu(mouse);}
     }
 
     function showMenu(mouse)

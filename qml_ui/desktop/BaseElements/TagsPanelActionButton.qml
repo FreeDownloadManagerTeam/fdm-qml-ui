@@ -22,7 +22,7 @@ Rectangle {
 
     MouseArea {
         anchors.fill: parent
-        onClicked: {
+        onClicked: function (mouse) {
             if (Date.now() - root.timeMenuClosed > 300)
                 root.showMenu(mouse);
         }

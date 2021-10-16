@@ -3,7 +3,7 @@ import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
 import "../BaseElements"
 import org.freedownloadmanager.fdm 1.0
-import QtGraphicalEffects 1.0
+import "../../qt5compat"
 
 import Qt.labs.platform 1.0 as QtLabs
 

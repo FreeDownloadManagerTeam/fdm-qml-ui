@@ -9,7 +9,7 @@ Item {
     property int currentAlg: -1
     property int nextAlg: -1
     property string title: !downloadModel ? "" : (fileIndex > 0 ? downloadModel.fileInfo(fileIndex).path : downloadModel.title)
-    property int size: !downloadModel ? "" : (fileIndex > 0 ? downloadModel.fileInfo(fileIndex).size : downloadModel.selectedSize)
+    property int size: !downloadModel ? 0 : (fileIndex > 0 ? downloadModel.fileInfo(fileIndex).size : downloadModel.selectedSize)
     property bool calculatingInProgress: !downloadModel ? false : downloadModel.lockReason == 'calculateHash'
     property int calculatingProgress: !downloadModel ? 0 : (downloadModel.loProgress > 0 ? downloadModel.loProgress : 0)
 

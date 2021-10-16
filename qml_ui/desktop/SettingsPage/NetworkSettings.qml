@@ -3,6 +3,7 @@ import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
 import org.freedownloadmanager.fdm 1.0
 import org.freedownloadmanager.fdm.dmcoresettings 1.0
+import "../../qt5compat"
 import "../BaseElements"
 
 Column {
@@ -67,7 +68,7 @@ Column {
                 text: App.settings.dmcore.value(DmCoreSettings.Http_ProxyPort)
                 implicitWidth: 55
                 inputMethodHints: Qt.ImhDigitsOnly
-                validator: RegExpValidator { regExp: /\d+/ }
+                validator: QtRegExpValidator { regExp: /\d+/ }
                 onTextChanged: tryApplyProxySettingsTimer.restart()
             }
 
@@ -84,7 +85,7 @@ Column {
                 text: App.settings.dmcore.value(DmCoreSettings.Https_ProxyPort)
                 implicitWidth: 55
                 inputMethodHints: Qt.ImhDigitsOnly
-                validator: RegExpValidator { regExp: /\d+/ }
+                validator: QtRegExpValidator { regExp: /\d+/ }
                 onTextChanged: tryApplyProxySettingsTimer.restart()
             }
 
@@ -101,7 +102,7 @@ Column {
                 text: App.settings.dmcore.value(DmCoreSettings.Ftp_ProxyPort)
                 implicitWidth: 55
                 inputMethodHints: Qt.ImhDigitsOnly
-                validator: RegExpValidator { regExp: /\d+/ }
+                validator: QtRegExpValidator { regExp: /\d+/ }
                 onTextChanged: tryApplyProxySettingsTimer.restart()
             }
 
@@ -118,7 +119,7 @@ Column {
                 text: App.settings.dmcore.value(DmCoreSettings.Socks5_ProxyPort)
                 implicitWidth: 55
                 inputMethodHints: Qt.ImhDigitsOnly
-                validator: RegExpValidator { regExp: /\d+/ }
+                validator: QtRegExpValidator { regExp: /\d+/ }
                 onTextChanged: tryApplyProxySettingsTimer.restart()
             }
         }

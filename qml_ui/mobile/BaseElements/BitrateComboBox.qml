@@ -1,8 +1,7 @@
 import QtQuick 2.10
 import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.3
-import QtGraphicalEffects 1.0
-import QtQuick.Dialogs 1.1
+import "../../qt5compat"
 import org.freedownloadmanager.fdm 1.0
 import "../BaseElements"
 
@@ -40,7 +39,6 @@ ComboBox
             font.pixelSize: 14
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
             width: parent.width
-//            Component.onCompleted: console.log("constantBitrate", constantBitrate, "width", width)
         }
         MouseArea {
             anchors.fill: parent
@@ -77,16 +75,9 @@ ComboBox
         verticalAlignment: Text.AlignVCenter
     }
     popup: Popup {
-        //y: root.height
         width: constantBitrate ? popupWidth : root.width
         height: 18 * root.model.length + 2
         padding: 1
-
-//        background: Rectangle {
-//            color: appWindow.theme.background
-////            border.color: appWindow.theme.settingsControlBorder
-////            border.width: 1
-//        }
 
         contentItem: Item {
             ListView {
@@ -106,8 +97,6 @@ ComboBox
         var result = value.toString() + ' ' + kbps;
         if (desc)
             result += " (" + desc + ")";
-
-//        console.log("kbpsText", result);
 
         return result;
     }
@@ -191,8 +180,6 @@ ComboBox
                 maxVal = maxVal < currentVal ? currentVal : maxVal;
             }
 
-//            console.log("popupWidth", popupWidth, "maxComboWidth", maxComboWidth);
-
             popupWidth = maxComboWidth < maxVal + 20 ? maxComboWidth : maxVal + 20;
         } else {
             popupWidth = 300;
@@ -208,7 +195,6 @@ ComboBox
     TextMetrics {
         id: textMetrics
         font.pixelSize: 14
-//        font.family: Qt.platform.os === "osx" ? font.family : "Arial"
     }
 
     Connections {

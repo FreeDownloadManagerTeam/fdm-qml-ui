@@ -1,7 +1,7 @@
 import QtQuick 2.0
 import QtQuick.Layouts 1.3
 import org.freedownloadmanager.fdm 1.0
-import QtGraphicalEffects 1.0
+import "../../../qt5compat"
 import "../../BaseElements"
 
 RowLayout {
@@ -36,7 +36,7 @@ RowLayout {
                 anchors.fill: parent
                 cursorShape: Qt.PointingHandCursor
                 hoverEnabled: true
-                onClicked: showMenu(mouse)
+                onClicked: function (mouse) {showMenu(mouse);}
                 onEntered: toolTipHosts.visible = true
                 onExited: toolTipHosts.visible = false
 

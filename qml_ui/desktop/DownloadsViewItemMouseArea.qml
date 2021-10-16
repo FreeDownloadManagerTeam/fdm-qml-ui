@@ -6,7 +6,7 @@ import "../common/Tools"
 
 MouseArea {
     id: root
-//    property var downloadsView
+
     property var downloadModel
 
     z: -1 // for the checkboxes to work
@@ -18,9 +18,6 @@ MouseArea {
     property bool justMenuClosed: false
     property int lastIndex: -1
 
-//    signal deletedFile(var ids)
-//    signal removedFromList(var ids)
-
     Timer{
         id:timer
         interval: App.doubleClickInterval
@@ -29,7 +26,7 @@ MouseArea {
     }
 
     onMouseYChanged: {
-        if (mouse.buttons == Qt.LeftButton && Math.abs(pressY - mouse.y) > 1) {
+        if (pressedButtons == Qt.LeftButton && Math.abs(pressY - mouseY) > 1) {
             var newIndex = listView.indexAt(10, parent.y + mouseY);
             if (newIndex != -1 && newIndex != lastIndex) {
                 lastIndex = newIndex;
@@ -44,7 +41,7 @@ MouseArea {
         }
     }
 
-    onPressed: {
+    onPressed: function(mouse) {
         if (mouse.button == Qt.LeftButton)
         {
             listView.interactive = false;
@@ -53,7 +50,7 @@ MouseArea {
         }
     }
 
-    onReleased: {
+    onReleased: function (mouse) {
         listView.interactive = true;
         if (mouse.button == Qt.LeftButton) {
             if (pressY != mouse.y) {
@@ -72,7 +69,7 @@ MouseArea {
         selectedDownloadsTools.downloadMousePressed(downloadModel.id, mouse)
     }
 
-    onClicked: {
+    onClicked: function (mouse) {
         if (mouse.button == Qt.LeftButton) {
             if (timer.running)
             {

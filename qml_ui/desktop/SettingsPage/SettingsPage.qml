@@ -1,7 +1,7 @@
 import QtQuick 2.10
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
-import QtQuick.Dialogs 1.1
+import "../../qt5compat"
 import org.freedownloadmanager.fdm 1.0
 import ".."
 import "../BaseElements"
@@ -51,7 +51,7 @@ Page {
         id: invalidSettingsDlg
         title: qsTr("Invalid settings") + App.loc.emptyString
         text: lastInvalidSettingsMessage + qsTr(". Close anyway?") + App.loc.emptyString
-        standardButtons: StandardButton.Ok | StandardButton.Cancel
+        buttons: buttonOk | buttonCancel
         onAccepted: root.StackView.view.pop()
     }
 

@@ -1,10 +1,10 @@
 import QtQuick 2.10
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
-import QtGraphicalEffects 1.0
 import Qt.labs.platform 1.0 as QtLabs
 import org.freedownloadmanager.fdm 1.0
 import QtQuick.Controls.Material 2.4
+import "../qt5compat"
 import "../common"
 import "../common/Tools"
 import "./BaseElements"

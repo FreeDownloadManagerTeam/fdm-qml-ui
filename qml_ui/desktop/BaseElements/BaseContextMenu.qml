@@ -1,6 +1,6 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.4
-import QtGraphicalEffects 1.0
+import "../../qt5compat"
 
 Menu {
     id: root

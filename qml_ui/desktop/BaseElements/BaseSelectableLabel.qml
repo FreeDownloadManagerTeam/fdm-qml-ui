@@ -16,7 +16,7 @@ TextEdit {
         width: parent.contentWidth
         cursorShape: Qt.IBeamCursor
         acceptedButtons: Qt.RightButton
-        onClicked: showMenu(mouse)
+        onClicked: function (mouse) {showMenu(mouse);}
     }
 
     onFocusChanged: { if (!focus) { deselect() }}

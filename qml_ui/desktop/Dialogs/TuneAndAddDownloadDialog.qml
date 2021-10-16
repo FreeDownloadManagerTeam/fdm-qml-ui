@@ -134,8 +134,13 @@ BaseDialog {
         onReject: {
             tuneDialog.close();
         }
-        onFilePathChanged: saveTo.initialization()
-        onFileNameChanged: fileName.init()
+        onFilePathChanged: {
+            saveTo.initialization();
+            fileName.init();
+        }
+        onFileNameChanged: {
+            fileName.init();
+        }
     }
 
     SchedulerTools {

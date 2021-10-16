@@ -1,6 +1,7 @@
 import QtQuick 2.10
 import QtQuick.Controls 2.3
 import QtQuick.Controls.Material 2.4
+import "../../qt5compat"
 import org.freedownloadmanager.fdm 1.0
 import org.freedownloadmanager.fdm.dmcoresettings 1.0
 import org.freedownloadmanager.fdm.appsettings 1.0
@@ -18,7 +19,7 @@ SettingsTextField {
     text: App.settings.tum.value(mode, setting)
 
     inputMethodHints: Qt.ImhDigitsOnly
-    validator: RegExpValidator { regExp: /\d+/ }
+    validator: QtRegExpValidator { regExp: /\d+/ }
 
     onTextChanged: {
         if (isValid() && (!maxValue || parseInt(text) <= maxValue))

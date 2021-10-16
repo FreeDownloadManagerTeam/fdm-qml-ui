@@ -1,6 +1,5 @@
 import QtQuick 2.10
 import QtQuick.Controls 2.3
-import QtGraphicalEffects 1.0
 import org.freedownloadmanager.fdm 1.0
 import "../BaseElements"
 import "../Dialogs"
@@ -115,7 +114,7 @@ Rectangle {
         z: -1
         anchors.fill: parent
         acceptedButtons: Qt.LeftButton | Qt.RightButton
-        onClicked: {
+        onClicked: function (mouse) {
             if (tagsTools.tagFormOpened) {
                 return;
             }
