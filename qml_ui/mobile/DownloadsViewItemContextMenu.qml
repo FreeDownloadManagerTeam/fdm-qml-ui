@@ -25,6 +25,11 @@ Menu
     property bool supportsDisablePostFinishedTasks: false
     property bool supportsAddT: false
     property bool locked: selectedDownloadsTools.selectedDownloadsIsLocked()
+    readonly property var info: modelIds.length === 1 ? App.downloads.infos.info(modelIds[0]) : null
+    readonly property var error: info ? info.error : null
+    readonly property bool showReportError: error && error.hasError
+    readonly property bool showAllowAutoRetry: info && (showReportError || App.downloads.autoRetryMgr.isDownloadSetToAutoRetry(modelIds[0]))
+    readonly property bool showErrorBlock: showReportError || showAllowAutoRetry
 
     modal: true
     dim: false
@@ -103,12 +108,29 @@ Menu
         text: qsTr("Show in folder") + App.loc.emptyString
         onTriggered: contextMenuTools.showInFolderClick()
     }
+
+    BaseMenuSeparator {
+        visible: showErrorBlock
+    }
     BaseMenuItem {
+        visible: showReportError
         text: qsTr("Report problem") + App.loc.emptyString
-        visible: modelIds.length === 1 && contextMenuTools.canReportProblem()
         enabled: !locked
         onTriggered: contextMenuTools.reportProblem()
     }
+    BaseMenuItem {
+        visible: showAllowAutoRetry
+        text: qsTr("Enable auto retry for this kind of errors") + App.loc.emptyString
+        checkable: true
+        enabled: !App.downloads.autoRetryMgr.isErrorAutoRetryAllowedByCore(error)
+        checked: App.downloads.autoRetryMgr.isErrorAutoRetryAllowedByUser(error)
+        onTriggered: {
+            App.downloads.autoRetryMgr.setErrorAllowAutoRetryByUser(error, checked);
+            if (checked && !info.running)
+                App.downloads.mgr.startDownload(modelIds[0], false);
+        }
+    }
+
     BaseMenuSeparator {
         visible: restart.visible || open.visible || showInFolder.visible
     }

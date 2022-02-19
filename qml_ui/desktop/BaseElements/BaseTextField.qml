@@ -21,12 +21,6 @@ TextField {
 //        radius: appWindow.macVersion ? appWindow.theme.textFieldBorderRadiusMac : 0
     }
 
-    onFocusChanged: {
-        if (!focus) {
-            appWindow.globalFocusLost()
-        }
-    }
-
     MouseArea {
         anchors.fill: parent
         acceptedButtons: Qt.RightButton

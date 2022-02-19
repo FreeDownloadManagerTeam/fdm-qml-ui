@@ -53,11 +53,22 @@ BaseContextMenu {
         }
     }
 
+    BaseContextMenuSeparator {
+        visible: App.features.hasFeature(AppFeatures.Plugins)
+    }
+
+    BaseContextMenuItem {
+        visible: App.features.hasFeature(AppFeatures.Plugins)
+        text: qsTr("Add-ons...") + App.loc.emptyString
+        enabled: !pageId
+        onTriggered: appWindow.openPlugins()
+    }
+
     BaseContextMenuSeparator {}
 
     BaseContextMenuItem {
         text: qsTr("Preferences...") + App.loc.emptyString
-        enabled: !forSettingsPage
+        enabled: !pageId
         onTriggered: appWindow.openSettings()
     }
 
@@ -135,7 +146,7 @@ BaseContextMenu {
         visible: appWindow.updateSupported
         text: qsTr("Check for Updates...") + App.loc.emptyString
         onTriggered: {
-            if (forSettingsPage) {
+            if (pageId) {
                 stackView.pop();
             }
             appWindow.checkUpdates()

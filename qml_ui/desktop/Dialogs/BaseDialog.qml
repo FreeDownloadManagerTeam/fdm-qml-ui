@@ -9,7 +9,7 @@ Dialog {
     closePolicy: Popup.NoAutoClose
 
     x: Math.round((parent.width - width) / 2)
-    y: Math.round((parent.height - baseDialog.height) / 2)
+    y: Math.round((parent.height - height) / 2)
 
     background: Rectangle {
         anchors.fill: baseDialog.contentItem

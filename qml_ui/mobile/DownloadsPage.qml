@@ -438,4 +438,65 @@ Page
             root.state = "mainViewSelectMode";
         }
     }
+
+    ConvertFilesFailedDialog
+    {
+        id: convertFilesFailedDialog
+    }
+
+    ConvertDestinationFilesExistsDialog
+    {
+        id: convertDestinationFilesExistsDialog
+
+        onClosed: {
+            if (requests.length)
+                onGotRequest();
+        }
+
+        property var requests: []
+
+        function onGotRequest()
+        {
+            if (opened || !requests.length)
+                return;
+
+            var r = requests.shift();
+
+            taskId = r.taskId;
+            files = r.files;
+
+            open();
+        }
+    }
+
+    Connections
+    {
+        target: App.downloads.mgr
+
+        onConvertDestinationFilesExists: function(taskId, files)
+        {
+            convertDestinationFilesExistsDialog.requests.push(
+                        {
+                            taskId: taskId,
+                            files: files
+                        });
+
+            convertDestinationFilesExistsDialog.onGotRequest();
+        }
+
+        onFailedConvertFiles: function(files)
+        {
+            if (convertFilesFailedDialog.opened)
+            {
+                var arr = convertFilesFailedDialog.files;
+                arr.push(...files);
+                convertFilesFailedDialog.files = arr;
+            }
+            else
+            {
+                convertFilesFailedDialog.files = files;
+                convertFilesFailedDialog.open();
+            }
+        }
+    }
 }

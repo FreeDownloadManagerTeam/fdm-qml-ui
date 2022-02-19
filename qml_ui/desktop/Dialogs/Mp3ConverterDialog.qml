@@ -84,8 +84,8 @@ BaseDialog {
                         folder: QtLabs.StandardPaths.writableLocation(QtLabs.StandardPaths.DownloadLocation)
                         acceptLabel: qsTr("Open") + App.loc.emptyString
                         rejectLabel: qsTr("Cancel") + App.loc.emptyString
-                        onAccepted: destinationDir.text = App.tools.url(folder).toLocalFile()
-                        Component.onCompleted: { destinationDir.text = App.tools.url(folder).toLocalFile() }
+                        onAccepted: destinationDir.text = App.toNativeSeparators(App.tools.url(folder).toLocalFile())
+                        Component.onCompleted: { destinationDir.text = App.toNativeSeparators(App.tools.url(folder).toLocalFile()) }
                     }
                 }
             }
@@ -196,7 +196,7 @@ BaseDialog {
 
     function isUserChangedPath()
     {
-        return destinationDir.text !== initialPath();
+        return App.fromNativeSeparators(destinationDir.text) !== initialPath();
     }
 
     function showDialog(downloadsIds, filesIndices)
@@ -209,7 +209,7 @@ BaseDialog {
         variableRadioBtn.checked = !uiSettingsTools.settings.mp3ConverterConstantBitrateEnabled;
         variableBitrate.minBitrate = uiSettingsTools.settings.mp3ConverterVariableMinBitrate;
         variableBitrate.maxBitrate = uiSettingsTools.settings.mp3ConverterVariableMaxBitrate;
-        destinationDir.text = initialPath();
+        destinationDir.text = App.toNativeSeparators(initialPath());
         constantBitrate.reloadCombo();
         variableBitrate.reloadCombo();
         wrongFilePathWarning = false;
@@ -220,20 +220,20 @@ BaseDialog {
         if (checkFilePath()) {
             var minBitrate = constantBitrate.enabled ? constantBitrate.minBitrate : variableBitrate.minBitrate;
             var maxBitrate = constantBitrate.enabled ? constantBitrate.maxBitrate : variableBitrate.maxBitrate;
-            App.downloads.mgr.convertFilesToMp3(downloadsIds, filesIndices, destinationDir.text, minBitrate, maxBitrate);
+            App.downloads.mgr.convertFilesToMp3(downloadsIds, filesIndices, App.fromNativeSeparators(destinationDir.text), minBitrate, maxBitrate);
 
             uiSettingsTools.settings.mp3ConverterConstantBitrateEnabled = constantBitrate.enabled;
             uiSettingsTools.settings.mp3ConverterConstantBitrate = constantBitrate.minBitrate;
             uiSettingsTools.settings.mp3ConverterVariableMinBitrate = variableBitrate.minBitrate;
             uiSettingsTools.settings.mp3ConverterVariableMaxBitrate = variableBitrate.maxBitrate;
             if (isUserChangedPath())
-                uiSettingsTools.settings.mp3ConverterDestinationDir = destinationDir.text;
+                uiSettingsTools.settings.mp3ConverterDestinationDir = App.fromNativeSeparators(destinationDir.text);
             root.close();
         }
     }
 
     function checkFilePath() {
-        if (!App.tools.isValidAbsoluteFilePath(destinationDir.text)) {
+        if (!App.tools.isValidAbsoluteFilePath(App.fromNativeSeparators(destinationDir.text))) {
             wrongFilePathWarning = true;
             return false;
         }

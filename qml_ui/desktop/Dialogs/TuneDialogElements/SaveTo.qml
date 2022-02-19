@@ -80,11 +80,11 @@ ColumnLayout {
             combo.model.insert(i, {'folder': folderList[i]});
         }
 
-        combo.editText = downloadTools.filePath;
+        combo.editText = App.toNativeSeparators(downloadTools.filePath);
     }
 
     function setPath(folder) {
-        combo.editText = folder;
+        combo.editText = App.toNativeSeparators(folder);
     }
 
     Connections {

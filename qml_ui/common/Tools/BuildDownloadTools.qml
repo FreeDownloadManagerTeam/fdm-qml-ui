@@ -43,8 +43,10 @@ Item {
     property string modulesSelectedUid
 
     readonly property int defaultPreferredVideoHeight: 1080
-    property int preferredVideoHeight: defaultPreferredVideoHeight
-    property int preferredFileType: AbstractDownloadsUi.VideoFile
+    property int preferredVideoHeight: 0
+    property bool preferredVideoHeightChangedByUser: false
+    property int preferredFileType: 0
+    property bool preferredFileTypeChangedByUser: false
     property var originFilesTypes
     property bool addDateToFileNameEnabled: false
     property bool emptyDownloadsListWarning
@@ -73,7 +75,9 @@ Item {
     property int subtitlesCount: 0
     property var subtitlesList
     property var preferredSubtitlesLanguagesCodes: []
+    property bool preferredSubtitlesLanguagesCodesChangedByUser: false
     property bool needDownloadSubtitles
+    property bool needDownloadSubtitlesChangedByUser: false
 
     property var relatedTag: null
 
@@ -135,14 +139,18 @@ Item {
         previewUrl = request.remotePreviewImgUrl ? request.remotePreviewImgUrl.toString() : '';
     }
 
-    function setPreferredVideoHeight(val)
+    function setPreferredVideoHeight(val, byUser)
     {
         preferredVideoHeight = val;
+        if (byUser)
+            preferredVideoHeightChangedByUser = true;
     }
 
-    function setPreferredFileType(val)
+    function setPreferredFileType(val, byUser)
     {
         preferredFileType = val;
+        if (byUser)
+            preferredFileTypeChangedByUser = true;
     }
 
     function setOriginFilesTypes(arr)
@@ -160,36 +168,49 @@ Item {
         subtitlesEnabled = val;
     }
 
-    function saveBatchDownloadOptions(addDateOptionVal)
+    function saveBatchDownloadOptions(addDateOptionVal, addDateOptionValChangedByUser)
     {
         if (batchDownload)
         {
             for (var i = 0; i < App.downloads.creator.downloadCount(requestId); i++)
             {
-                App.downloads.creator.setDownloadOption(
-                            requestId,
-                            i,
-                            AbstractDownloadOption.PreferredVideoHeight,
-                            preferredVideoHeight);
+                if (preferredVideoHeightChangedByUser)
+                {
+                    App.downloads.creator.setDownloadOption(
+                                requestId,
+                                i,
+                                AbstractDownloadOption.PreferredVideoHeight,
+                                preferredVideoHeight);
+                }
 
-                App.downloads.creator.setDownloadOption(
+                if (preferredFileTypeChangedByUser)
+                {
+                    App.downloads.creator.setDownloadOption(
                             requestId,
                             i, AbstractDownloadOption.PreferredFileType,
                             preferredFileType);
+                }
 
-                App.downloads.creator.setDownloadOption(
-                            requestId,
-                            i,
-                            AbstractDownloadOption.AddDateToFileName,
-                            addDateOptionVal);
+                if (addDateOptionValChangedByUser)
+                {
+                    App.downloads.creator.setDownloadOption(
+                                requestId,
+                                i,
+                                AbstractDownloadOption.AddDateToFileName,
+                                addDateOptionVal);
+                }
 
-                App.downloads.creator.setDownloadOption(
+                if (needDownloadSubtitlesChangedByUser)
+                {
+                    App.downloads.creator.setDownloadOption(
                             requestId,
                             i,
                             AbstractDownloadOption.DownloadSubtitles,
                             needDownloadSubtitles);
+                }
 
-                if (needDownloadSubtitles)
+                if (preferredSubtitlesLanguagesCodesChangedByUser &&
+                        needDownloadSubtitles)
                 {
                     App.downloads.creator.setDownloadOption(
                                 requestId,
@@ -262,15 +283,19 @@ Item {
         hasWriteAccess = true;
         previewUrl = "";
         preferredVideoHeight = 0;
+        preferredVideoHeightChangedByUser = false;
         originFilesTypes = [];
         addDateToFileNameEnabled = false;
         preferredFileType = 0;
+        preferredFileTypeChangedByUser = false;
         emptyDownloadsListWarning = false;
         batchDownloadLimitWarning = false;
         wrongFileNameWarning = false;
         wrongFilePathWarning = false;
         setSubtitlesEnabled(false);
         needDownloadSubtitles = false;
+        needDownloadSubtitlesChangedByUser = false;
+        preferredSubtitlesLanguagesCodesChangedByUser = false;
     }
 
     function getUrlFromClipboard()
@@ -494,13 +519,15 @@ Item {
         return info.id;
     }
 
-    function setPreferredSubtitlesLanguagesCodes(languageCode) {
+    function setPreferredSubtitlesLanguagesCodes(languageCode, byUser) {
         var i = preferredSubtitlesLanguagesCodes.indexOf(languageCode);
         if (i === -1) {
             preferredSubtitlesLanguagesCodes.push(languageCode);
         } else {
             preferredSubtitlesLanguagesCodes = preferredSubtitlesLanguagesCodes.filter(function(value, index, arr){ return index !== i;});
         }
+        if (byUser)
+            preferredSubtitlesLanguagesCodesChangedByUser = true;
     }
 
     function onFileNameTextChanged(new_text)
@@ -539,13 +566,17 @@ Item {
         }
         else
         {
-            App.downloads.creator.setDownloadOption(
-                        requestId,
-                        0,
-                        AbstractDownloadOption.DownloadSubtitles,
-                        needDownloadSubtitles);
+            if (needDownloadSubtitlesChangedByUser)
+            {
+                App.downloads.creator.setDownloadOption(
+                            requestId,
+                            0,
+                            AbstractDownloadOption.DownloadSubtitles,
+                            needDownloadSubtitles);
+            }
 
-            if (needDownloadSubtitles)
+            if (preferredSubtitlesLanguagesCodesChangedByUser &&
+                    needDownloadSubtitles)
             {
                 App.downloads.creator.setDownloadOption(
                             requestId,

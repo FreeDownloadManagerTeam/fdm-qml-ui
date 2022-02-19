@@ -17,7 +17,7 @@ BaseDialog {
         titleText: qsTr("Pause download") + App.loc.emptyString
         focus: true
         Keys.onEscapePressed: root.close()
-        Keys.onReturnPressed: root.deleteFilesClick()
+        Keys.onReturnPressed: root.okClick()
         onCloseClick: root.close()
 
         ColumnLayout {

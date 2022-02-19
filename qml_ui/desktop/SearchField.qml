@@ -49,7 +49,7 @@ Item {
 
     Row {
         id: search_row
-        visible: !forSettingsPage
+        visible: !pageId
         height: parent.height
         anchors.right: parent.right
 
@@ -196,7 +196,7 @@ Item {
         }
 
         ToolBarButton {
-            visible: !appWindow.macVersion && !searchText.visible && !forSettingsPage
+            visible: !appWindow.macVersion && !searchText.visible && !pageId
             source: appWindow.theme.mainTbImg.search
             tooltipText: qsTr("Search") + App.loc.emptyString
             onClicked: startSearch()
@@ -209,7 +209,7 @@ Item {
     }
 
     function startSearch() {
-        if (!forSettingsPage) {
+        if (!pageId) {
             if (!appWindow.macVersion && !searchText.visible) {
                 searchTextShowAnimate.start();
             }

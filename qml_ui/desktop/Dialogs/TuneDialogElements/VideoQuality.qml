@@ -27,12 +27,14 @@ ColumnLayout {
             for (var i = 0; i < downloadTools.versionSelector.versionCount; i++) {
                 if (i == downloadTools.versionSelector.selectedVersion) {
                     index = i;
-
                 }
-                combo.model.insert(i, {'version': ( downloadTools.versionSelector.fileType(i) == AbstractDownloadsUi.AudioFile ? 'Audio ' : '' )
-                                       + downloadTools.versionSelector.format(i).toUpperCase() + ' '
-                                       + downloadTools.versionSelector.quality(i) + ' '
-                                       + JsTools.sizeUtils.bytesAsText(downloadTools.versionSelector.size(i))});
+                var v = ( downloadTools.versionSelector.fileType(i) == AbstractDownloadsUi.AudioFile ? 'Audio ' : '' )
+                        + downloadTools.versionSelector.format(i).toUpperCase() + ' '
+                        + downloadTools.versionSelector.quality(i);
+                var size = downloadTools.versionSelector.size(i);
+                if (size > 0)
+                    v += ' ' + JsTools.sizeUtils.bytesAsText(downloadTools.versionSelector.size(i));
+                combo.model.insert(i, {'version': v});
             }
             downloadTools.fileSizeValueChanged(downloadTools.versionSelector.size(index));
             combo.currentIndex = index;

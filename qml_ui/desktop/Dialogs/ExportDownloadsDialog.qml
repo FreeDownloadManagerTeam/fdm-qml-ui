@@ -75,7 +75,7 @@ BaseDialog {
                         nameFilters: [ typeCombo.filter, qsTr("All files (%1)").arg("*") + App.loc.emptyString ]
                         defaultSuffix: typeCombo.extension
                         onAccepted: {
-                            path.text = App.tools.url(file).toLocalFile();
+                            path.text = App.toNativeSeparators(App.tools.url(file).toLocalFile());
                         }
                     }
                 }
@@ -152,19 +152,20 @@ BaseDialog {
     function fixPath() {
         path.text = path.text.replace(/\/([^\/\.]+)(\.\w*)?$/, '/$1.' + typeCombo.extension);
         path.text = path.text.replace(/\/$/, '/' + App.shortDisplayName.toLowerCase() + '_downloads' + '.' + typeCombo.extension);
+        path.text = App.toNativeSeparators(path.text);
     }
 
     function doOK() {
         fixPath();
-        uiSettingsTools.settings.exportImportPath = path.text.replace(/\/([^\/]+)?$/, '');
+        uiSettingsTools.settings.exportImportPath = App.fromNativeSeparators(path.text.replace(/\/([^\/]+)?$/, ''));
         if (typeCombo.currentIndex === 0) {
-            App.exportImport.exportDownloads(selectedDownloads, finishedOnly.checked, path.text);
+            App.exportImport.exportDownloads(selectedDownloads, finishedOnly.checked, App.fromNativeSeparators(path.text));
         } else if (typeCombo.currentIndex === 1) {
-            App.exportImport.exportDownloadsAsListOfUrls(selectedDownloads, finishedOnly.checked, path.text);
+            App.exportImport.exportDownloadsAsListOfUrls(selectedDownloads, finishedOnly.checked, App.fromNativeSeparators(path.text));
         } else if (typeCombo.currentIndex === 2) {
             App.exportImport.exportDownloadsToCsv(selectedDownloads,
                 AbstractDownloadsUi.Url | AbstractDownloadsUi.File | AbstractDownloadsUi.Size | AbstractDownloadsUi.Date,
-                finishedOnly.checked, path.text);
+                finishedOnly.checked, App.fromNativeSeparators(path.text));
         }
         root.close();
     }

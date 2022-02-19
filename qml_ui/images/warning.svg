@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<svg xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://web.resource.org/cc/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:svg="http://www.w3.org/2000/svg" id="svg4247" viewBox="0 0 80 80" version="1.0" y="0" x="0">
+  <defs id="defs3">
+    <linearGradient id="linearGradient5511" y2="56.41" gradientUnits="userSpaceOnUse" y1="3.7607" x2="43.816" x1="43.816">
+      <stop id="stop6141" stop-color="#fff" offset="0"/>
+      <stop id="stop6142" stop-color="#fff" stop-opacity="0" offset="1"/>
+    </linearGradient>
+  </defs>
+  <g id="layer1">
+    <path id="path4257" opacity=".79535" d="m80.227 40.114a40.114 40.114 0 1 1 -80.227 0 40.114 40.114 0 1 1 80.227 0z" transform="matrix(.96601 0 0 .96601 1.25 1.25)" stroke="#000" stroke-width="1.294" fill="#ff0800"/>
+    <path id="path5517" d="m32.045 11.25h16.705l-4.141 43.75h-8.116l-4.448-43.75z" stroke-width="0" fill-rule="evenodd"/>
+    <path id="path4886" opacity=".82326" d="m80.227 40.114a40.114 40.114 0 1 1 -80.227 0 40.114 40.114 0 1 1 80.227 0z" transform="matrix(.92 0 0 .92 3.0952 3.0952)" stroke-width="0" fill="url(#linearGradient5511)"/>
+    <path id="path6768" d="m36.439 60.184h8.344l0.033 7.06h-8.41l0.033-7.06z" stroke="#000" stroke-width=".29431pt" fill-rule="evenodd"/>
+  </g>
+  <metadata>
+    <rdf:RDF>
+      <cc:Work>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+        <cc:license rdf:resource="http://creativecommons.org/licenses/publicdomain/"/>
+        <dc:publisher>
+          <cc:Agent rdf:about="http://openclipart.org/">
+            <dc:title>Openclipart</dc:title>
+          </cc:Agent>
+        </dc:publisher>
+        <dc:title>attention</dc:title>
+        <dc:date>2008-02-04T19:22:40</dc:date>
+        <dc:description>attention, attention, clip art, clipart, icon, icon, image, media, png, public domain, svg, warning, warning, </dc:description>
+        <dc:source>http://openclipart.org/detail/12607/attention-by-anonymous-12607</dc:source>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Anonymous</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>attention</rdf:li>
+            <rdf:li>clip art</rdf:li>
+            <rdf:li>clipart</rdf:li>
+            <rdf:li>icon</rdf:li>
+            <rdf:li>image</rdf:li>
+            <rdf:li>media</rdf:li>
+            <rdf:li>png</rdf:li>
+            <rdf:li>public domain</rdf:li>
+            <rdf:li>svg</rdf:li>
+            <rdf:li>warning</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+      </cc:Work>
+      <cc:License rdf:about="http://creativecommons.org/licenses/publicdomain/">
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction"/>
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution"/>
+        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks"/>
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+</svg>

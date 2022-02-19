@@ -12,6 +12,8 @@ Image
     width: 17
     height: 15
 
+    opacity: root.enabled ? 1 : 0.3
+
     sourceSize: Qt.size(width, height)
 
     source: buttonType === "showInFolder" && moduleUid === "downloadsbt" ? appWindow.theme.btDldOpenFolder :

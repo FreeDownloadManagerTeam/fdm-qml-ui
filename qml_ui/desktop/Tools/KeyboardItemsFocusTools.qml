@@ -6,9 +6,7 @@ Item {
 
     Connections {
         target: appWindow
-        // commented: this thing breaks setting focus by mouse;
-        // I don't know what it was for, but it works too bad anyway
-        //onGlobalFocusLost: setFocusIfNeed()
+        
         onModalDialogOpenedChanged: setFocusIfNeed()
         onAppWindowStateChanged: setFocusIfNeed()
     }

@@ -20,6 +20,7 @@ Item
         source: appWindow.theme.batch
         anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter
+        fillMode: Image.PreserveAspectFit
     }
 
     //preview
@@ -44,6 +45,7 @@ Item
         height: 25
         sourceSize: Qt.size(width, height)
         source: appWindow.theme.defaultFileIconSmall
+        fillMode: Image.PreserveAspectFit
     }
 }
 

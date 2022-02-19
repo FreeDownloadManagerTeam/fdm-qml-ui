@@ -83,7 +83,7 @@ ComboBox {
             onClicked: {
                 root.currentIndex = index
                 root.popup.close();
-                downloadTools.setPreferredVideoHeight(modelData.value);
+                downloadTools.setPreferredVideoHeight(modelData.value, true);
             }
         }
     }
@@ -142,8 +142,6 @@ ComboBox {
         contentItem: Item {
             ListView {
                 clip: true
-//                flickableDirection: Flickable.VerticalFlick
-//                ScrollBar.vertical: ScrollBar{ visible: downloadTools.versionCount > visibleRowsCount; policy: ScrollBar.AlwaysOn; }
                 boundsBehavior: Flickable.StopAtBounds
                 anchors.fill: parent
                 model: root.model

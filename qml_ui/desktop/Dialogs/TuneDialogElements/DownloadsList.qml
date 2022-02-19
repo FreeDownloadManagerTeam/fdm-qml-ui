@@ -268,9 +268,8 @@ ColumnLayout {
         }
 
         if (!firstIndex) {
-            downloadTools.setPreferredVideoHeight(preferredVideoHeightEnabled ?
-                                                      (App.settings.downloadOptions.value(AbstractDownloadOption.PreferredVideoHeight) || downloadTools.defaultPreferredVideoHeight) :
-                                                      0);
+            if (preferredVideoHeightEnabled)
+                downloadTools.setPreferredVideoHeight(App.settings.downloadOptions.value(AbstractDownloadOption.PreferredVideoHeight) || downloadTools.defaultPreferredVideoHeight);
             if (preferredFileTypeEnabled)
                 downloadTools.setPreferredFileType(App.settings.downloadOptions.value(AbstractDownloadOption.PreferredFileType) || AbstractDownloadsUi.VideoFile);
             downloadTools.setOriginFilesTypes(originFilesTypes);

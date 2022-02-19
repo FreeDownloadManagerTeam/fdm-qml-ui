@@ -12,7 +12,7 @@ ToolBar {
     id: toolbar
     height: appWindow.mainToolbarHeight
 
-    property bool forSettingsPage: false
+    property string pageId
 
     Rectangle {
         anchors.fill: parent
@@ -63,7 +63,7 @@ ToolBar {
 
             Row {
                 height: parent.height
-                visible: forSettingsPage
+                visible: pageId
 
                 ToolBarButton {
                     source: appWindow.theme.mainTbImg.arrow_left
@@ -73,7 +73,7 @@ ToolBar {
             }
 
             Row {
-                visible: !forSettingsPage
+                visible: !pageId
                 anchors.verticalCenter: parent.verticalCenter
                 leftPadding: appWindow.macVersion ? 6 : -2
 
@@ -250,7 +250,7 @@ ToolBar {
                 z: 1
                 height: parent.height
                 anchors.right: searchField.left
-                visible: !forSettingsPage
+                visible: !pageId
                 Component.onCompleted: {
                     if (appWindow.updateSupported) {
                         var a = parent.mapToGlobal(parent.width, 0);

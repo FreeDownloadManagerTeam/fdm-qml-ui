@@ -84,7 +84,7 @@ BaseDialog {
                         folder: QtLabs.StandardPaths.writableLocation(QtLabs.StandardPaths.HomeLocation)
                         acceptLabel: qsTr("Open") + App.loc.emptyString
                         rejectLabel: qsTr("Cancel") + App.loc.emptyString
-                        onAccepted: pathField.text = App.tools.url(folder).toLocalFile()
+                        onAccepted: pathField.text = App.toNativeSeparators(App.tools.url(folder).toLocalFile())
                     }
                 }
             }
@@ -189,7 +189,7 @@ BaseDialog {
 
     function create()
     {
-        var path = pathField.text;
+        var path = App.fromNativeSeparators(pathField.text);
         if (App.tools.isValidAbsoluteFilePath(path)) {
             App.portableVersionCreator.create(path);
         } else {

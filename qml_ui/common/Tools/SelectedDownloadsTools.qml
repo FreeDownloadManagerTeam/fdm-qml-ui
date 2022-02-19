@@ -138,7 +138,7 @@ Item {
             var download = null;
             for (var i = 0; i < ids.length; i++) {
                 download = App.downloads.infos.info(ids[i]);
-                if (!download.finished && (download.error != "" || download.missingFiles) && (download.flags & AbstractDownloadsUi.SupportsRestart) != 0) {
+                if (!download.finished && (download.error.hasError || download.missingFiles) && (download.flags & AbstractDownloadsUi.SupportsRestart) != 0) {
                     App.downloads.mgr.restartDownload(ids[i]);
                 }
             }
@@ -286,7 +286,7 @@ Item {
         if (ids.length > 0) {
             for (var i = 0; i < ids.length; i++) {
                 download = App.downloads.infos.info(ids[i]);
-                if (!(!download.finished && (download.error != "" || download.missingFiles)
+                if (!(!download.finished && (download.error.hasError || download.missingFiles)
                         && (download.flags & AbstractDownloadsUi.SupportsRestart) != 0
                         && download.lockReason == "" && !download.stopping)) {
                     allowed = false;
@@ -630,7 +630,7 @@ Item {
         if (ids.length > 0) {
             for (var i = 0; i < ids.length; i++) {
                 download = App.downloads.infos.info(ids[i]);
-                if (download.finished || download.error) {
+                if (download.finished || download.error.hasError) {
                     allowed = false;
                     break;
                 }
@@ -657,7 +657,7 @@ Item {
         if (ids.length > 0) {
             for (var i = 0; i < ids.length; i++) {
                 download = App.downloads.infos.info(ids[i]);
-                if (!download.finished || download.error || download.missingFiles || download.missingStorage
+                if (!download.finished || download.error.hasError || download.missingFiles || download.missingStorage
                     || !((download.allFilesTypes
                           & ((1 << AbstractDownloadsUi.VideoFile) | (1 << AbstractDownloadsUi.AudioFile))) != 0)) {
                     allowed = false;
@@ -675,7 +675,7 @@ Item {
         if (ids.length > 0) {
             for (var i = 0; i < ids.length; i++) {
                 download = App.downloads.infos.info(ids[i]);
-                if (!download.finished || download.error || download.missingFiles || download.missingStorage
+                if (!download.finished || download.error.hasError || download.missingFiles || download.missingStorage
                     || !((download.allFilesTypes
                           & (1 << AbstractDownloadsUi.VideoFile)) != 0)) {
                     allowed = false;

@@ -225,7 +225,7 @@ Flickable {
                         Layout.fillWidth: true
                         width: parent.width - 18
                         wrapMode: Text.WrapAnywhere
-                        text: downloadsItemTools.destinationPath
+                        text: App.toNativeSeparators(downloadsItemTools.destinationPath)
                     }
                 }
 

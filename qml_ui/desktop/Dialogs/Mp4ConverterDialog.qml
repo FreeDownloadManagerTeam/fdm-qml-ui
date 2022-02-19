@@ -84,8 +84,8 @@ BaseDialog {
                         folder: QtLabs.StandardPaths.writableLocation(QtLabs.StandardPaths.DownloadLocation)
                         acceptLabel: qsTr("Open") + App.loc.emptyString
                         rejectLabel: qsTr("Cancel") + App.loc.emptyString
-                        onAccepted: destinationDir.text = App.tools.url(folder).toLocalFile()
-                        Component.onCompleted: { destinationDir.text = App.tools.url(folder).toLocalFile() }
+                        onAccepted: destinationDir.text = App.toNativeSeparators(App.tools.url(folder).toLocalFile())
+                        Component.onCompleted: { destinationDir.text = App.toNativeSeparators(App.tools.url(folder).toLocalFile()) }
                     }
                 }
             }
@@ -154,29 +154,29 @@ BaseDialog {
 
     function isUserChangedPath()
     {
-        return destinationDir.text !== initialPath();
+        return App.fromNativeSeparators(destinationDir.text) !== initialPath();
     }
 
     function showDialog(downloadsIds, filesIndices)
     {
         root.downloadsIds = downloadsIds;
         root.filesIndices = filesIndices;
-        destinationDir.text = initialPath();
+        destinationDir.text = App.toNativeSeparators(initialPath());
         wrongFilePathWarning = false;
         root.open();
     }
 
     function doOK() {
         if (checkFilePath()) {
-            App.downloads.mgr.convertFilesToMp4(downloadsIds, filesIndices, destinationDir.text);
+            App.downloads.mgr.convertFilesToMp4(downloadsIds, filesIndices, App.fromNativeSeparators(destinationDir.text));
             if (isUserChangedPath())
-                uiSettingsTools.settings.mp4ConverterDestinationDir = destinationDir.text;
+                uiSettingsTools.settings.mp4ConverterDestinationDir = App.fromNativeSeparators(destinationDir.text);
             root.close();
         }
     }
 
     function checkFilePath() {
-        if (!App.tools.isValidAbsoluteFilePath(destinationDir.text)) {
+        if (!App.tools.isValidAbsoluteFilePath(App.fromNativeSeparators(destinationDir.text))) {
             wrongFilePathWarning = true;
             return false;
         }

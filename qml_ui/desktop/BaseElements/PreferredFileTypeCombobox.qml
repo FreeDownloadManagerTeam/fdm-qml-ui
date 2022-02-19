@@ -38,7 +38,7 @@ ComboBox {
             onClicked: {
                 combo.currentIndex = index
                 combo.popup.close();
-                downloadTools.setPreferredFileType(id)
+                downloadTools.setPreferredFileType(id, true)
             }
         }
     }

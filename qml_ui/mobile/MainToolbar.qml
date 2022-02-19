@@ -32,6 +32,8 @@ BaseToolBar {
 
         icon.source: Qt.resolvedUrl("../images/mobile/burger.svg")
         onClicked: hamburgerClicked()
+
+        z: 1 // to be over MainToolbarStatus control
     }
 
     Rectangle {
@@ -78,6 +80,8 @@ BaseToolBar {
         icon.source: Qt.resolvedUrl("../images/mobile/search.svg")
         onClicked: switchSearchView()
 
-        enabled: !App.downloads.infos.empty        
+        enabled: !App.downloads.infos.empty
+
+        z: 1 // to be over MainToolbarStatus control
     }
 }

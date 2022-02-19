@@ -8,7 +8,7 @@ BaseContextMenu {
             text: languageName
             checkable: true
             checked: downloadTools.preferredSubtitlesLanguagesCodes.indexOf(languageCode) !== -1
-            onTriggered: downloadTools.setPreferredSubtitlesLanguagesCodes(languageCode)
+            onTriggered: downloadTools.setPreferredSubtitlesLanguagesCodes(languageCode, true)
         }
     }
 }

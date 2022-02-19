@@ -26,6 +26,7 @@ ListView {
         height: lastChild ? itemHeight + 1 : itemHeight
         downloadsViewHeader: listView.downloadsViewHeader
         parentY: y
+        noActionsAllowed: downloadsViewTools.showingDownloadsWithMissingFilesOnly
         DownloadsViewItemMouseArea {
             downloadModel: model
             anchors.fill: parent

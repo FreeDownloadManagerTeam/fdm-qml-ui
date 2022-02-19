@@ -227,6 +227,15 @@ Column
                 anchors.verticalCenter: parent.verticalCenter
             }
         }
+
+        SettingsCheckBox {
+            text: qsTr("Show special offers") + App.loc.emptyString
+            checked: App.settings.toBool(App.settings.app.value(AppSettings.ShowSpecialOffers))
+            onClicked: { App.settings.app.setValue(
+                             AppSettings.ShowSpecialOffers,
+                             App.settings.fromBool(checked));
+            }
+        }
     }
 
     SettingsGroupColumn {
@@ -247,6 +256,13 @@ Column
             width: parent.width
             active: appWindow.macVersion
             source: "DockUploadSpeedSetting.qml"
+        }
+
+        SettingsCheckBox {
+            text: qsTr("Indicate active download and upload using tray icon") + App.loc.emptyString
+            checked: App.settings.toBool(App.settings.app.value(AppSettings.IndicateDownloadAndUploadUsingTrayIcon))
+            onClicked: App.settings.app.setValue(AppSettings.IndicateDownloadAndUploadUsingTrayIcon,
+                                                 App.settings.fromBool(checked))
         }
 
         SettingsCheckBox {

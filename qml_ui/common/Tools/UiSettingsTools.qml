@@ -20,6 +20,7 @@ Item {
         property bool hideIntegrationBanner: false
         property string lastMovePath: QtLabs.StandardPaths.writableLocation(QtLabs.StandardPaths.DownloadLocation)
         property string exportImportPath: App.tools.url(QtLabs.StandardPaths.writableLocation(QtLabs.StandardPaths.DownloadLocation)).toLocalFile()
+        property string pluginsDistribsPath: App.tools.url(QtLabs.StandardPaths.writableLocation(QtLabs.StandardPaths.DownloadLocation)).toLocalFile()
         property int schedulerDaysEnabled: (1 | 1 << 1 | 1 << 2 | 1 << 3 | 1 << 4 | 1 << 5 | 1 << 6)
         property int schedulerStartTime: 6*60
         property int schedulerEndTime: 10*60
@@ -42,6 +43,7 @@ Item {
         property bool enableUserDefinedOrderOfDownloads: false
         property bool showSaveAsButton: false
         property bool autoHideWhenFinishedAddingDownloads: false
+        property string lastRemoteBannerId
     }
 
     property bool hasNonDefaultValues:
@@ -96,6 +98,7 @@ Item {
         uiSettingsTools.settings.hideIntegrationBanner = s.settings.hideIntegrationBanner;
         uiSettingsTools.settings.lastMovePath = s.settings.lastMovePath;
         uiSettingsTools.settings.exportImportPath = s.settings.exportImportPath;
+        uiSettingsTools.settings.pluginsDistribsPath = s.settings.pluginsDistribsPath;
         uiSettingsTools.settings.schedulerDaysEnabled = s.settings.schedulerDaysEnabled;
         uiSettingsTools.settings.schedulerStartTime = s.settings.schedulerStartTime;
         uiSettingsTools.settings.schedulerEndTime = s.settings.schedulerEndTime;

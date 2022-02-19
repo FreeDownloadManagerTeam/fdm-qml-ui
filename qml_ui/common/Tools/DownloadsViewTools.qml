@@ -40,6 +40,8 @@ Item {
         resetDownloadsTagFilter();
         downloadsWithMissingFilesTools.resetFilter();
         App.downloads.model.downloadsStatesFilter = value;
+        // work around of bug losing the keyboard focus
+        stackView.currentItem.keyboardFocusItem.focus = true;
     }
 
     function resetDownloadsStatesFilter()

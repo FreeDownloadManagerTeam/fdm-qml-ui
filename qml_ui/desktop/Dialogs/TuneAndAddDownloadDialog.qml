@@ -104,7 +104,7 @@ BaseDialog {
                         color: "transparent"
 
                         DiskSpace {
-                            saveToPath: saveTo.path
+                            saveToPath: App.fromNativeSeparators(saveTo.path)
                         }
 
                         SchedulerCheckbox {
@@ -172,10 +172,10 @@ BaseDialog {
     }
 
     function accept() {
-        downloadTools.onFilePathTextChanged(saveTo.path);
+        downloadTools.onFilePathTextChanged(App.fromNativeSeparators(saveTo.path));
 
         if (downloadTools.checkFilePath() && downloadTools.checkFileName()) {
-            downloadTools.saveBatchDownloadOptions(addDate.checked);
+            downloadTools.saveBatchDownloadOptions(addDate.checked, addDate.changedByUser);
             downloadTools.addDownloadFromDialog();
             schedulerBlock.complete();
             schedulerTools.doOK();

@@ -403,7 +403,7 @@ ApplicationWindow
     }
 
     function getDownloadMovingError(downloadId) {
-        return App.downloads.infos.info(downloadId).loError;
+        return App.downloads.infos.info(downloadId).loError.errorString;
     }
 
     Connections {

@@ -6,6 +6,7 @@ import "../common/Tools"
 import "./Tools"
 import "./Dialogs"
 import "./BaseElements"
+import "./Banners"
 import org.freedownloadmanager.fdm 1.0
 import org.freedownloadmanager.vmsqt 1.0
 import org.freedownloadmanager.fdm.appfeatures 1.0
@@ -34,6 +35,7 @@ ApplicationWindow {
                                     || importDlg.opened || exportDownloadsDlg.opened || exportSettingsDlg.opened
                                     || deleteDownloadsFailedDlg.opened || customizeSoundsDlg.opened || editTagDlg.opened
                                     || mp4ConverterDlg.opened || privacyDlg.opened || reportSentDlg.opened
+                                    || remoteBannerMgr.bannerOpened
     property bool supportComputerShutdown: App.features.hasFeature(AppFeatures.ComputerShutdown)
     property bool updateSupported: App.features.hasFeature(AppFeatures.Updates)
     property bool btSupported: App.features.hasFeature(AppFeatures.BT)
@@ -51,7 +53,6 @@ ApplicationWindow {
 
     signal uiReadyStateChanged
     signal newDownloadAdded
-    signal globalFocusLost
     signal appWindowStateChanged
     signal checkUpdates
     signal tumSettingsChanged
@@ -237,13 +238,25 @@ ApplicationWindow {
 
     function canShowSettingsPage()
     {
+        return canShowPage('SettingsPage');
+    }
+
+    function openPlugins()
+    {
+        if (canShowPage("PluginsPage")) {
+            stackView.waPush(Qt.resolvedUrl("./PluginsPage/PluginsPage.qml"));
+        }
+    }
+
+    function canShowPage(name)
+    {
         if (stackView.depth === 0) {
             return false;
         }
 
         var current_page = stackView.currentItem;
 
-        if (['SettingsPage'].indexOf(current_page.pageName) >= 0) {
+        if ([name].indexOf(current_page.pageName) >= 0) {
             return false;
         }
 
@@ -699,7 +712,7 @@ ApplicationWindow {
     }
 
     function getDownloadMovingError(downloadId) {
-        return App.downloads.infos.info(downloadId).loError;
+        return App.downloads.infos.info(downloadId).loError.errorString;
     }
 
     function updateMacVersionWorkaround()
@@ -852,5 +865,83 @@ ApplicationWindow {
             if (downloadExpiredDlg.opened && downloadExpiredDlg.downloadId == id)
                 downloadExpiredDlg.close();
         }
+    }
+
+    Loader
+    {
+        source: Qt.resolvedUrl("PluginsPage/PluginsUpdateUiManager.qml")
+        active: App.features.hasFeature(AppFeatures.Plugins)
+    }
+
+    ConvertFilesFailedDialog
+    {
+        id: convertFilesFailedDialog
+        width: Math.min(appWindow.width - 50, recommendedWidth)
+        height: Math.min(appWindow.height - 100, recommendedHeight)
+    }
+
+    ConvertDestinationFilesExistsDialog
+    {
+        id: convertDestinationFilesExistsDialog
+
+        width: Math.min(appWindow.width - 50, recommendedWidth)
+        height: Math.min(appWindow.height - 100, recommendedHeight)
+
+        onClosed: {
+            if (requests.length)
+                onGotRequest();
+        }
+
+        property var requests: []
+
+        function onGotRequest()
+        {
+            if (opened || !requests.length)
+                return;
+
+            var r = requests.shift();
+
+            taskId = r.taskId;
+            files = r.files;
+
+            open();
+        }
+    }
+
+    Connections
+    {
+        target: App.downloads.mgr
+
+        onConvertDestinationFilesExists: function(taskId, files)
+        {
+            convertDestinationFilesExistsDialog.requests.push(
+                        {
+                            taskId: taskId,
+                            files: files
+                        });
+
+            convertDestinationFilesExistsDialog.onGotRequest();
+        }
+
+        onFailedConvertFiles: function(files)
+        {
+            if (convertFilesFailedDialog.opened)
+            {
+                var arr = convertFilesFailedDialog.files;
+                arr.push(...files);
+                convertFilesFailedDialog.files = arr;
+            }
+            else
+            {
+                convertFilesFailedDialog.files = files;
+                convertFilesFailedDialog.open();
+            }
+        }
+    }
+
+    RemoteBannerManager
+    {
+        id: remoteBannerMgr
+        settings: uiSettingsTools.settings
     }
 }

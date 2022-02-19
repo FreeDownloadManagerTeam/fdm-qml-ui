@@ -58,8 +58,8 @@ Item {
         App.downloads.mgr.restartDownload(modelId);
     }
 
-    function canReportProblem() {
-        return App.downloads.infos.info(modelId).error != '';
+    function hasError() {
+        return App.downloads.infos.info(modelId).error.hasError;
     }
 
     function reportProblem() {

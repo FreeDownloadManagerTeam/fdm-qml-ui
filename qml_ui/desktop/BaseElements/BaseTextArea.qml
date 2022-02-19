@@ -48,12 +48,6 @@ Rectangle {
         }
     }
 
-    onFocusChanged: {
-        if (!focus) {
-            appWindow.globalFocusLost()
-        }
-    }
-
     MouseArea {
         anchors.fill: parent
         acceptedButtons: Qt.RightButton

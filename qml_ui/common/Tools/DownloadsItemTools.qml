@@ -6,14 +6,14 @@ Item {
     property double itemId
     property var item
     property bool finished: !item ? false : item.finished
-    property bool running: !item ? false : !!item.running
+    property bool running: !item ? false : item.running || item.buildingFinalDownload
     property bool stopping: !item ? false : !!item.stopping
     property bool autoStartAllowed: !item ? false : item.autoStartAllowed
     property bool postFinishedTasksAllowed: !item ? false : (autoStartAllowed && !item.disablePostFinishedTasks)
-    property bool error: !item ? false : item.error
+    property bool error: !item ? false : item.error.hasError
     property bool missingFiles: !item ? false : item.missingFiles
     property bool missingStorage: !item ? false : item.missingStorage
-    property string downloadErrorMessage: !item ? "" : item.error
+    property string downloadErrorMessage: !item ? "" : item.error.errorString
     property bool finalDownload: !item ? false : item.finalDownload
     property bool hasPostFinishedTasks: !item ? false : item.hasPostFinishedTasks
     property int flags: !item ? 0 : item.flags
@@ -29,7 +29,7 @@ Item {
     property string lockReason: !item ? "" : item.lockReason
     property bool loRunning: !item ? false : item.loRunning
     property int loProgress: loRunning ? item.loProgress : -1
-    property bool loError: (!item || !item.lockReason) ? "" : item.loError
+    property bool loError: (!item || !item.lockReason) ? false : item.loError.hasError
     property bool loAbortable: lockReason === "convertFilesToMp3" || lockReason == "convertFilesToMp4"
 
     property bool performingLo: lockReason !== ""
@@ -201,14 +201,17 @@ Item {
             indicatorInProgress = true;
             new_in_progress_status = true;
 
-            if (checkingFiles) {
-                new_in_checking_files_status = true;
-                indicatorInProgress = true;
-            } else if (mergingFiles) {
-                new_in_merging_files_status = true;
-                indicatorInProgress = true;
-            } else if (!finalDownload) {
-                new_waiting_for_metadata_status = true;
+            if (!hasChildDownloads || !downloadSpeed)
+            {
+                if (checkingFiles) {
+                    new_in_checking_files_status = true;
+                    indicatorInProgress = true;
+                } else if (mergingFiles) {
+                    new_in_merging_files_status = true;
+                    indicatorInProgress = true;
+                } else if (!finalDownload) {
+                    new_waiting_for_metadata_status = true;
+                }
             }
         }
         else {

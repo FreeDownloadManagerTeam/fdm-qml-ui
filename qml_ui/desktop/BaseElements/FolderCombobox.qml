@@ -1,6 +1,7 @@
 import QtQuick 2.10
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
+import org.freedownloadmanager.fdm 1.0
 
 ComboBox {
     id: root
@@ -24,7 +25,7 @@ ComboBox {
         BaseLabel {
             leftPadding: 6
             anchors.verticalCenter: parent.verticalCenter
-            text: folder
+            text: App.toNativeSeparators(folder)
         }
 
         MouseArea {
@@ -34,7 +35,7 @@ ComboBox {
             onExited: parent.hover = false
             onClicked: {
                 root.currentIndex = index;
-                root.editText = folder;
+                root.editText = App.toNativeSeparators(folder);
                 root.popup.close();
             }
         }

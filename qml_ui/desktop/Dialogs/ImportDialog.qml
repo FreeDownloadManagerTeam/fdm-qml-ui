@@ -9,7 +9,7 @@ QtLabs.FileDialog {
     acceptLabel: qsTr("Import") + App.loc.emptyString
     rejectLabel: qsTr("Cancel") + App.loc.emptyString
 
-    folder: "file://" + uiSettingsTools.settings.exportImportPath
+    folder: App.tools.urlFromLocalFile(uiSettingsTools.settings.exportImportPath).url
 
     property string filter
 

@@ -135,6 +135,25 @@ Column {
                 }
             }
 
+            SwitchSetting {
+                id: switchSetting6
+                description: qsTr("Allow data roaming") + App.loc.emptyString
+                visible: App.features.hasFeature(AppFeatures.AllowedNetworkTypesList)
+                switchChecked: App.settings.toBool(App.settings.dmcore.value(DmCoreSettings.AllowToUseRoamingNetworks))
+                onClicked: {
+                    switchChecked = !switchChecked;
+                    App.settings.dmcore.setValue(
+                                DmCoreSettings.AllowToUseRoamingNetworks,
+                                App.settings.fromBool(switchChecked));
+                }
+            }
+
+            BaseLabel {
+                text: qsTr("Using mobile data while roaming may result in additional charges.")
+                leftPadding: switchSetting6.textMargins + 5
+                bottomPadding: switchSetting6.padding + 3
+            }
+
             SettingsSeparator{
                 visible: switchSetting5.visible
             }

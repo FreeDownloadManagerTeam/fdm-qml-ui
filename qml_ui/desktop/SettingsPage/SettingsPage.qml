@@ -1,4 +1,4 @@
-import QtQuick 2.10
+import QtQuick 2.12
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
 import "../../qt5compat"
@@ -41,7 +41,7 @@ Page {
     }
 
     header: MainToolbar {
-        forSettingsPage: true
+        pageId: "settings"
         leftPadding: 0
         rightPadding: 0
         bottomPadding: 0
@@ -124,12 +124,24 @@ Page {
             RightItemLabel {
                 text: qsTr("Advanced") + App.loc.emptyString
                 readonly property int adjust: Math.max(0, flick.height - advanced.height)
-                // we can't use just flick.contentY = advanced.y because of component bug:
-                // when the user opens Advanced settings, scroll position changes,
-                // showing Antivirus settings and other settings above the Advanced settings section
-                onClicked: flick.contentY = advanced.y - Math.max(0, flick.height - advanced.implicitHeight - 50)
+                onClicked: {
+                    if (advanced.hidden)
+                    {
+                        advanced.hidden = false;
+                        advancedTabTimer.start();
+                    }
+                    else
+                    {
+                        flick.contentY = advanced.y;
+                    }
+                }
                 current: flick.currentTab === advanced
                 Layout.preferredWidth: navigationColumnWidth
+                Timer {
+                    id: advancedTabTimer
+                    interval: 100
+                    onTriggered: flick.contentY = advanced.y
+                }
             }
         }
 

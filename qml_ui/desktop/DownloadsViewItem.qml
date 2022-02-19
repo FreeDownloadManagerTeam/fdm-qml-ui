@@ -32,6 +32,8 @@ Item
     property string modelError: model.error
     property int parentY
 
+    property bool noActionsAllowed: false
+
     signal showingCompleteMessage(bool isShowing)
 
     onModelCheckedChanged: selectedDownloadsTools.modelCheckedChanged(model.id)
@@ -117,7 +119,8 @@ Item
             ItemActionBtn {
                 moduleUid: downloadsItemTools.moduleUid
                 buttonType: downloadsItemTools.buttonType
-                enabled: !downloadsItemTools.locked && (downloadsItemTools.finished || !downloadsItemTools.stopping)
+                enabled: !noActionsAllowed && !downloadsItemTools.locked &&
+                         (downloadsItemTools.finished || !downloadsItemTools.stopping)
                 onClicked: downloadsItemTools.doAction()
                 Layout.alignment: Qt.AlignVCenter
             }
@@ -237,10 +240,10 @@ Item
                                    loAbortBlock.hovered || hhTitleSpeedColumn.hovered
             property bool canChangePriority: !downloadsItemTools.finished || downloadsItemTools.hasPostFinishedTasks
 
-            property var visibleItem: (downloadsItemTools.performingLo && downloadsItemTools.loAbortable) ? loAbortBlock :
-                                      (appWindow.btSupported && hovered && downloadsItemTools.finished && downloadsItemTools.hasPostFinishedTasks) ? btBlock :
-                                      (appWindow.btSupported && downloadsItemTools.finished && downloadsItemTools.hasPostFinishedTasks && !downloadsItemTools.postFinishedTasksAllowed) ? btPausedBlock :
-                                      (canChangePriority && hovered && model.priority != AbstractDownloadsUi.DownloadPriorityDontDownload && model.priority != AbstractDownloadsUi.DownloadPriorityUnknown) ? priorityBlock :
+            property var visibleItem: (!noActionsAllowed && downloadsItemTools.performingLo && downloadsItemTools.loAbortable) ? loAbortBlock :
+                                      (!noActionsAllowed && appWindow.btSupported && hovered && downloadsItemTools.finished && downloadsItemTools.hasPostFinishedTasks) ? btBlock :
+                                      (!noActionsAllowed && appWindow.btSupported && downloadsItemTools.finished && downloadsItemTools.hasPostFinishedTasks && !downloadsItemTools.postFinishedTasksAllowed) ? btPausedBlock :
+                                      (!noActionsAllowed && canChangePriority && hovered && model.priority != AbstractDownloadsUi.DownloadPriorityDontDownload && model.priority != AbstractDownloadsUi.DownloadPriorityUnknown) ? priorityBlock :
                                       (downloadsItemTools.running) ? speedBlock : null
 
             property bool isEmpty: !visibleItem &&

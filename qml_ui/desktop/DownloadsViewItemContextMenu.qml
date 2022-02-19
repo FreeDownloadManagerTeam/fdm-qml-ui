@@ -19,6 +19,11 @@ BaseContextMenu {
     property int filesCount: 0
     property bool fileIntegrityVisible: root.finished === true && root.filesCount == 1
     property bool locked: selectedDownloadsTools.selectedDownloadsIsLocked()
+    readonly property var info: modelIds.length === 1 ? App.downloads.infos.info(modelIds[0]) : null
+    readonly property var error: info ? info.error : null
+    readonly property bool showReportError: error && error.hasError
+    readonly property bool showAllowAutoRetry: info && (showReportError || App.downloads.autoRetryMgr.isDownloadSetToAutoRetry(modelIds[0]))
+    readonly property bool showErrorBlock: showReportError || showAllowAutoRetry
 
     DownloadsItemContextMenuTools {
         id: contextMenuTools
@@ -44,12 +49,29 @@ BaseContextMenu {
         text: qsTr("Show In Folder") + App.loc.emptyString
         onTriggered: contextMenuTools.showInFolderClick()
     }
+
+    BaseContextMenuSeparator {
+        visible: showErrorBlock
+    }
     BaseContextMenuItem {
+        visible: showReportError
         text: qsTr("Report problem") + App.loc.emptyString
-        visible: modelIds.length === 1 && contextMenuTools.canReportProblem()
         enabled: !locked
         onTriggered: contextMenuTools.reportProblem()
     }
+    BaseContextMenuItem {
+        visible: showAllowAutoRetry
+        text: qsTr("Enable auto retry for this kind of errors") + App.loc.emptyString
+        checkable: true
+        enabled: !App.downloads.autoRetryMgr.isErrorAutoRetryAllowedByCore(error)
+        checked: App.downloads.autoRetryMgr.isErrorAutoRetryAllowedByUser(error)
+        onTriggered: {
+            App.downloads.autoRetryMgr.setErrorAllowAutoRetryByUser(error, checked);
+            if (checked && !info.running)
+                App.downloads.mgr.startDownload(modelIds[0], false);
+        }
+    }
+
     BaseContextMenuSeparator {
         visible: modelIds.length === 1 && batchDownload
     }
@@ -113,11 +135,13 @@ BaseContextMenu {
         enabled: !locked
         onTriggered: selectedDownloadsTools.removeFromList(modelIds)
     }
+    readonly property bool showSequentialDownload: supportsSequentialDownload
+    readonly property bool showAddMirror: modelIds.length === 1 && supportsMirror
     BaseContextMenuSeparator {
-        visible: supportsSequentialDownload || supportsDisablePostFinishedTasks || supportsAddT
+        visible: showSequentialDownload || showAddMirror
     }
     BaseContextMenuItem {
-        visible: supportsSequentialDownload
+        visible: showSequentialDownload
         enabled: !locked
         text: qsTr("Sequential Download") + App.loc.emptyString
         checkable: true
@@ -125,7 +149,7 @@ BaseContextMenu {
         onTriggered: selectedDownloadsTools.setSequentialDownload(checked)
     }
     BaseContextMenuItem {
-        visible: modelIds.length === 1 && supportsMirror
+        visible: showAddMirror
         enabled: !locked
         text: qsTr("Add mirror") + App.loc.emptyString
         onTriggered: addMirrorDlg.showDialog(contextMenuTools.modelId)
