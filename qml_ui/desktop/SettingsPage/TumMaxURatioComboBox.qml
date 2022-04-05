@@ -12,14 +12,19 @@ Item {
 
     enabled: appWindow.btSupported
 
-    property var currentValue: (root.enabled && setting !== -1) ? App.settings.tum.value(mode, setting) : 0 //0 == unlimited
+    property var currentValue: "0" // unlimited
     property string sUnlimited: qsTr("Unlimited") + App.loc.emptyString
     property string sCustom: qsTr("Custom...") + App.loc.emptyString
     property int mode: TrafficUsageMode.Low
-    property int setting: -1
+    property int setting: DmCoreSettings.MaxURatio
+
+    QtObject {
+        id: d
+        property bool initialized: false
+    }
 
     onCurrentValueChanged: {
-        if (setting !== -1)
+        if (d.initialized)
             App.settings.tum.setValue(mode, setting, currentValue)
     }
 
@@ -269,7 +274,11 @@ Item {
         combo.model = m;
     }
 
-    Component.onCompleted: root.reloadCombo()
+    Component.onCompleted: {
+        currentValue = App.settings.tum.value(mode, setting);
+        root.reloadCombo();
+        d.initialized = true;
+    }
 
     Connections {
         target: App.loc

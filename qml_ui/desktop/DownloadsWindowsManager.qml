@@ -4,7 +4,10 @@ import org.freedownloadmanager.fdm 1.0
 import "../common"
 
 Item
-{   
+{
+    // optional todo: let the user choose?
+    readonly property bool parentLessDownloadsOnly: true
+
     property bool isInitialized: false
 
     property var managerEnabled: uiSettingsTools.settings.enableStandaloneDownloadsWindows
@@ -89,10 +92,35 @@ Item
         downloadsWindows.push(window);
     }
 
+    function isIgnoredDownload(downloadId)
+    {
+        var info = App.downloads.infos.info(downloadId);
+        if (!info)
+            return true;
+
+        if (parentLessDownloadsOnly)
+        {
+            if (info.parentId !== -1)
+                return true;
+        }
+        else
+        {
+            if (info.hasChildDownloads)
+                return true;
+        }
+
+        return false;
+    }
+
     function checkAndCreateWindow(downloadId)
     {
-        if (App.downloads.tracker.isNonFinishedDownload(downloadId))
-            createWindow(downloadId);
+        if (isIgnoredDownload(downloadId) ||
+                !App.downloads.tracker.isNonFinishedDownload(downloadId))
+        {
+            return;
+        }
+
+        createWindow(downloadId);
     }
 
     function checkAndDestroyWindow(downloadId)

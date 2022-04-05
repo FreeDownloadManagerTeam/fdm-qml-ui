@@ -105,7 +105,6 @@ Menu {
         MouseArea {
             anchors.fill: parent
             hoverEnabled: true
-            onContainsMouseChanged: parent.highlighted = containsMouse
             cursorShape: parent.enabled ? Qt.PointingHandCursor: Qt.ArrowCursor
             acceptedButtons: Qt.NoButton
         }

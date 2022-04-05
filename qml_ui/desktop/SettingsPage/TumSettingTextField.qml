@@ -16,12 +16,10 @@ SettingsTextField {
 
     Material.accent: Material.Blue
 
-    text: App.settings.tum.value(mode, setting)
-
     inputMethodHints: Qt.ImhDigitsOnly
     validator: QtRegExpValidator { regExp: /\d+/ }
 
-    onTextChanged: {
+    onEditingFinished: {
         if (isValid() && (!maxValue || parseInt(text) <= maxValue))
             App.settings.tum.setValue(mode, setting, text);
     }
@@ -36,5 +34,9 @@ SettingsTextField {
     SettingsInputError {
         visible: maxValue && parseInt(parent.text) > maxValue
         errorMessage: qsTr("Can't be greater than %1").arg(maxValue) + App.loc.emptyString
+    }
+
+    Component.onCompleted: {
+        text = App.settings.tum.value(mode, setting);
     }
 }

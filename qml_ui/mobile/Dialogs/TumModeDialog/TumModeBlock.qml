@@ -45,7 +45,7 @@ Column {
         }
 
         BaseLabel {
-            text: maxDownloadSpeed === 0 ? qsTr("Unlimited") + App.loc.emptyString : App.speedAsText(maxDownloadSpeed)
+            text: (maxDownloadSpeed === 0 ? qsTr("Unlimited") : App.speedAsText(maxDownloadSpeed)) + App.loc.emptyString
             horizontalAlignment: Text.AlignHCenter
             font.weight: Font.DemiBold
             font.pixelSize: 12

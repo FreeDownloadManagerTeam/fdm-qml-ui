@@ -22,7 +22,8 @@ Column
     SettingsGroupHeader {
         id: header
         text: qsTr("Advanced") + App.loc.emptyString
-        enableHideButton: true
+        /*enableHideButton: true
+        hidden: true*/
     }
 
     SettingsGroupColumn {
@@ -32,6 +33,17 @@ Column
         SettingsSubgroupHeader {
             text: qsTr("Notifications") + App.loc.emptyString
             visible: App.features.hasFeature(AppFeatures.SystemNotifications)
+        }
+
+        SettingsCheckBox {
+            text: qsTr("Notify me of added downloads via Notification Center") + App.loc.emptyString
+            checked: App.settings.toBool(App.settings.app.value(AppSettings.NotifyOfAddedDownloads))
+            width: parent.width
+            onClicked: {
+                App.settings.app.setValue(
+                            AppSettings.NotifyOfAddedDownloads,
+                            App.settings.fromBool(checked));
+            }
         }
 
         SettingsCheckBox {

@@ -36,11 +36,13 @@ RowLayout
 
             GearButton
             {
-                onClicked: menu.open()
+                onClicked: menu.opened ? menu.close() : menu.open()
 
                 BaseContextMenu
                 {
                     id: menu
+
+                    closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
 
                     x: parent.width + 10
 

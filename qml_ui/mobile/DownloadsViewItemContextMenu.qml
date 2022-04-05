@@ -24,6 +24,7 @@ Menu
     property bool supportsSequentialDownload: selectedDownloadsTools.sequentialDownloadAllowed()
     property bool supportsDisablePostFinishedTasks: false
     property bool supportsAddT: false
+    property bool supportsIgnoreURatioLimit: false
     property bool locked: selectedDownloadsTools.selectedDownloadsIsLocked()
     readonly property var info: modelIds.length === 1 ? App.downloads.infos.info(modelIds[0]) : null
     readonly property var error: info ? info.error : null
@@ -166,7 +167,7 @@ Menu
         onTriggered: selectedDownloadsTools.removeFromList(modelIds)
     }
     BaseMenuSeparator {
-        visible: supportsSequentialDownload || supportsDisablePostFinishedTasks || supportsAddT
+        visible: supportsSequentialDownload || supportsDisablePostFinishedTasks || supportsAddT || supportsIgnoreURatioLimit
     }
     BaseMenuItem {
         visible: supportsSequentialDownload
@@ -254,13 +255,18 @@ Menu
 
     Component.onCompleted: {
         if (appWindow.btSupported) {
+            var index = 20;
             if (btTools.item.addTAllowed()) {
                 supportsAddT = true;
-                root.insertItem(18, Qt.createQmlObject('import "../bt/mobile"; AddTMenuItem {}', root));
+                root.insertItem(index++, Qt.createQmlObject('import "../bt/mobile"; AddTMenuItem {}', root));
             }
             if (btTools.item.disablePostFinishedTasksAllowed()) {
                 supportsDisablePostFinishedTasks = true;
-                root.insertItem(17, Qt.createQmlObject('import "../bt/mobile"; DisableSMenuItem {}', root));
+                root.insertItem(index++, Qt.createQmlObject('import "../bt/mobile"; DisableSMenuItem {}', root));
+            }
+            if (btTools.item.ignoreURatioLimitAllowed()) {
+                supportsIgnoreURatioLimit = true;
+                root.insertItem(index++, Qt.createQmlObject('import "../bt/mobile"; IgnoreURatioMenuItem {}', root));
             }
         }
     }

@@ -63,4 +63,45 @@ Item {
             }
         }
     }
+
+    function ignoreURatioLimitAllowed()
+    {
+        var allowed = false;
+        var ids = selectedDownloadsTools.getCurrentDownloadIds();
+        if (ids.length > 0) {
+            for (var i = 0; i < ids.length; i++) {
+                if (App.downloads.infos.info(ids[i]).hasPostFinishedTasks) {
+                    allowed = true;
+                    break;
+                }
+            }
+        }
+        return allowed;
+    }
+
+    function ignoreURatioLimitChecked()
+    {
+        var checked = true;
+        var ids = selectedDownloadsTools.getCurrentDownloadIds();
+        if (ids.length > 0) {
+            for (var i = 0; i < ids.length; i++) {
+                if (!App.downloads.infos.info(ids[i]).ignoreURatioLimit) {
+                    checked = false;
+                    break;
+                }
+            }
+        }
+        return checked;
+    }
+
+    function ignoreURatioLimit(value)
+    {
+        var ids = selectedDownloadsTools.getCurrentDownloadIds();
+        if (ids.length > 0) {
+            for (var i = 0; i < ids.length; i++) {
+                if (App.downloads.infos.info(ids[i]).hasPostFinishedTasks)
+                    App.downloads.infos.info(ids[i]).ignoreURatioLimit = value;
+            }
+        }
+    }
 }

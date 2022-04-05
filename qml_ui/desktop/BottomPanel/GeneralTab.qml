@@ -51,7 +51,9 @@ Flickable {
 
             Image {
                 id: img
-                source: downloadsItemTools.largePreview.url ? downloadsItemTools.largePreview.url : (downloadsItemTools.hasChildDownloads ? appWindow.theme.batchDownloadIcon : appWindow.theme.defaultFileIcon)
+                readonly property var preview: App.downloads.previews.preview(selectedDownloadsTools.currentDownloadId)
+                readonly property var previewUrl: preview ? preview.large : null
+                source: previewUrl.toString() ? previewUrl : (downloadsItemTools.hasChildDownloads ? appWindow.theme.batchDownloadIcon : appWindow.theme.defaultFileIcon)
                 fillMode: Image.PreserveAspectFit
                 height: Math.min(sourceSize.height, bottomPanelHeight, Math.floor(sourceSize.height * Math.min(sourceSize.width, parent.width * 0.3) / sourceSize.width))
             }

@@ -32,6 +32,11 @@ Rectangle {
         font.weight: Font.DemiBold
     }
 
+    FontMetrics {
+        id: fmBatchDownloadTitle
+        font: batchDownloadTitle.font
+    }
+
     Rectangle {
         anchors.right: parent.right
         anchors.verticalCenter: parent.verticalCenter
@@ -59,7 +64,10 @@ Rectangle {
 
     function updateBatchDownloadTitle() {
         batchDownloadTitle.text = downloadsViewTools.getParentDownloadTitle();
-        batchDownloadTitle.width = undefined;
-        batchDownloadTitle.width = Math.min(batchDownloadTitle.width, maxWidth);
+        batchDownloadTitle.width = Qt.binding(function() {
+            return Math.min(
+                        fmBatchDownloadTitle.advanceWidth(batchDownloadTitle.text) + batchDownloadTitle.leftPadding + 5,
+                        maxWidth);
+        });
     }
 }

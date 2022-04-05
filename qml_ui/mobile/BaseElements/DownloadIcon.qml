@@ -10,17 +10,19 @@ Rectangle {
     property bool locked: false
     property double itemOpacity: 1
 
-    property var preview: App.downloads.previews.largePreview(downloadsItemTools.itemId)
+    readonly property var preview: App.downloads.previews.preview(downloadsItemTools.itemId)
+    readonly property url previewUrl: preview ? preview.large : null
+    readonly property bool hasPreview : previewUrl && previewUrl.toString()
 
     Image {
         id: fileIcon
         width: parent.width
         height: parent.height
-        source: preview.url
+        source: previewUrl
         opacity: itemOpacity
         fillMode: Image.PreserveAspectCrop//Image.PreserveAspectFit
         anchors.margins: 0
-        visible: preview && preview.url
+        visible: hasPreview
         layer {
             effect: ColorOverlay {
                 color: appWindow.theme.previewOverlay

@@ -124,7 +124,6 @@ MouseArea {
                                           });
         menu.x = Math.round(mouse.x);
         menu.y = Math.round(mouse.y);
-        menu.currentIndex = -1; // bug under Android workaround
         menu.open();
         menu.aboutToHide.connect(function(){
             justMenuClosed = true

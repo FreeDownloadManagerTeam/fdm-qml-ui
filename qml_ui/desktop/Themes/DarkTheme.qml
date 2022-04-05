@@ -21,6 +21,7 @@ QtObject {
     readonly property color tableHeaderItem: "#8f9295"
     readonly property color menuHighlight: "#3A3939"
     readonly property color insideMainMenuBackground: "#3A3939"
+    readonly property color settingsSidebarHeader: "#999"
     readonly property color settingsGroupHeader: "#d8d8d8"
     readonly property color settingsSubgroupHeader: "#999"
     readonly property color settingsItem: foreground //"#dedede"

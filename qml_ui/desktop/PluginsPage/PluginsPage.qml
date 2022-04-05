@@ -75,15 +75,18 @@ Page {
                 Layout.preferredHeight: 26
                 Layout.preferredWidth: Layout.preferredHeight
 
-                onClicked: menu.open()
+                onClicked: menu.opened ? menu.close() : menu.open()
 
                 BaseContextMenu
                 {
                     id: menu
 
+                    closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+
                     x: parent.width + 10
 
                     BaseContextMenuItem {
+                        enabled: !App.plugins.model.empty
                         text: qsTr("Check for Updates") + App.loc.emptyString
                         onTriggered: App.plugins.updateMgr.updateAll()
                     }

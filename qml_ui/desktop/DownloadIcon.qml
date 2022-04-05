@@ -4,7 +4,9 @@ import org.freedownloadmanager.fdm 1.0
 
 Item
 {
-    property var preview: App.downloads.previews.smallPreview(model.id)
+    readonly property var preview: App.downloads.previews.preview(model.id)
+    readonly property url previewUrl: preview ? preview.small : null
+    readonly property bool hasPreview : previewUrl && previewUrl.toString()
 
     implicitWidth: 25
     implicitHeight: 25
@@ -12,7 +14,7 @@ Item
     //batch download icon
     Image
     {
-        visible: !(preview && preview.url) && model.hasChildDownloads
+        visible: !hasPreview && model.hasChildDownloads
         opacity: downloadsItemTools.itemOpacity
         width: 19
         height: 19
@@ -25,7 +27,7 @@ Item
 
     //preview
     Image {
-        visible: preview && preview.url
+        visible: hasPreview
         opacity: downloadsItemTools.itemOpacity
         width: 25
         height: 25
@@ -34,12 +36,12 @@ Item
         fillMode: Image.PreserveAspectFit
         horizontalAlignment: Image.AlignHCenter
         verticalAlignment: Image.AlignVCenter
-        source: preview.url
+        source: previewUrl
     }
 
     //default icon
     Image {
-        visible: !(preview && preview.url) && !model.hasChildDownloads
+        visible: !hasPreview && !model.hasChildDownloads
         opacity: downloadsItemTools.itemOpacity
         width: 25
         height: 25

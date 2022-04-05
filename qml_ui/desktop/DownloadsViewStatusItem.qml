@@ -81,10 +81,7 @@ Item {
         DownloadsItemProgressIndicator {
             visible: !appWindow.compactView
             Layout.fillWidth: true
-            percent: downloadsItemTools.performingLo ? (downloadsItemTools.loProgress !== -1 ? downloadsItemTools.loProgress : 0) :
-                    (downloadsItemTools.inCheckingFiles ? downloadsItemTools.checkingFilesProgress :
-                    (downloadsItemTools.inMergingFiles ? downloadsItemTools.mergingFilesProgress :
-                                                          downloadsItemTools.progress))
+            percent: downloadsItemTools.progress
             infinityIndicator: downloadsItemTools.infinityIndicator
             inProgress: downloadsItemTools.indicatorInProgress
         }

@@ -90,7 +90,7 @@ Flickable {
                             visible: downloadsItemTools.selectedSize !== -1 || downloadsItemTools.performingLo
                             anchors.verticalCenter: parent.verticalCenter
                             small: false
-                            progress: downloadStatus.getProgressValue()
+                            progress: downloadsItemTools.progress
                             infinityIndicator: downloadsItemTools.infinityIndicator
                             inProgress: downloadsItemTools.indicatorInProgress
                             progressColor: downloadsItemTools.indicatorInProgress ? appWindow.theme.progressRunning :
@@ -182,7 +182,7 @@ Flickable {
                     }
                     BaseLabel {
                         property string speed: downloadsItemTools.showDownloadSpeed ?
-                            App.speedAsText(downloadsItemTools.downloadSpeed) : "-"
+                            App.speedAsText(downloadsItemTools.downloadSpeed) + App.loc.emptyString : "-"
                         text: speed
                     }
                 }
@@ -195,7 +195,7 @@ Flickable {
                     }
                     BaseLabel {
                         property string speed: downloadsItemTools.showUploadSpeed ?
-                            App.speedAsText(downloadsItemTools.uploadSpeed) : "-"
+                            App.speedAsText(downloadsItemTools.uploadSpeed) + App.loc.emptyString : "-"
                         text: speed
                     }
                 }

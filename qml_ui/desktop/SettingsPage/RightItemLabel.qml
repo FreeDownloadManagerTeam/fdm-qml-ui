@@ -6,7 +6,7 @@ BaseLabel {
     property bool current: false
     signal clicked
 
-    color: "#999"
+    color: appWindow.theme.settingsSidebarHeader
     leftPadding: smallSettingsPage ? 18 : 22
     topPadding: smallSettingsPage ? 3 : 7
     bottomPadding: smallSettingsPage ? 3 : 7

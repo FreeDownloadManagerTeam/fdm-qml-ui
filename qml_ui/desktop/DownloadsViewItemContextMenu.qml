@@ -16,6 +16,7 @@ BaseContextMenu {
     property bool supportsSequentialDownload: selectedDownloadsTools.sequentialDownloadAllowed()
     property bool supportsDisablePostFinishedTasks: false
     property bool supportsAddT: false
+    property bool supportsIgnoreURatioLimit: false
     property int filesCount: 0
     property bool fileIntegrityVisible: root.finished === true && root.filesCount == 1
     property bool locked: selectedDownloadsTools.selectedDownloadsIsLocked()
@@ -138,7 +139,7 @@ BaseContextMenu {
     readonly property bool showSequentialDownload: supportsSequentialDownload
     readonly property bool showAddMirror: modelIds.length === 1 && supportsMirror
     BaseContextMenuSeparator {
-        visible: showSequentialDownload || showAddMirror
+        visible: showSequentialDownload || showAddMirror || supportsAddT || supportsIgnoreURatioLimit
     }
     BaseContextMenuItem {
         visible: showSequentialDownload
@@ -246,14 +247,19 @@ BaseContextMenu {
 
     Component.onCompleted: {
         if (appWindow.btSupported) {
+            var index = 20;
             if (btTools.item.addTAllowed()) {
                 supportsAddT = true;
-                root.insertItem(16, Qt.createQmlObject('import "../bt/desktop"; AddTMenuItem {}', root));
+                root.insertItem(index++, Qt.createQmlObject('import "../bt/desktop"; AddTMenuItem {}', root));
             }
             if (btTools.item.disablePostFinishedTasksAllowed()) {
-                supportsDisablePostFinishedTasks = true;
                 //Don't show menu - use pause/start button in speed column instead
-                //root.insertItem(15, Qt.createQmlObject('import "../bt/desktop"; DisableSMenuItem {}', root));
+                /*supportsDisablePostFinishedTasks = true;
+                root.insertItem(index++, Qt.createQmlObject('import "../bt/desktop"; DisableSMenuItem {}', root));*/
+            }
+            if (btTools.item.ignoreURatioLimitAllowed()) {
+                supportsIgnoreURatioLimit = true;
+                root.insertItem(index++, Qt.createQmlObject('import "../bt/desktop"; IgnoreURatioMenuItem {}', root));
             }
         }
     }

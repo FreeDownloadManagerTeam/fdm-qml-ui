@@ -30,7 +30,7 @@ Row
         id: labelDown
         visible: myDownloadsItemTools.showDownloadSpeed
         anchors.verticalCenter: parent.verticalCenter
-        text: App.speedAsText(myDownloadsItemTools.downloadSpeed)
+        text: App.speedAsText(myDownloadsItemTools.downloadSpeed) + App.loc.emptyString
         font.pixelSize: appWindow.compactView ? 12 : 13
         leftPadding: 2
         bottomPadding: d.textBottomPadding
@@ -56,7 +56,7 @@ Row
     BaseLabel {
         visible: d.showUploadSpeed
         anchors.verticalCenter: parent.verticalCenter
-        text: App.speedAsText(myDownloadsItemTools.uploadSpeed)
+        text: App.speedAsText(myDownloadsItemTools.uploadSpeed) + App.loc.emptyString
         font.pixelSize: appWindow.compactView ? 12 : 13
         leftPadding: 2
         bottomPadding: d.textBottomPadding

@@ -16,7 +16,7 @@ ComboBox {
     property double totalDownloadSpeed: App.downloads.stats.totalDownloadSpeed
     property double totalUploadSpeed: App.downloads.stats.totalUploadSpeed
 
-    property var currentTumMode: App.ready ? App.settings.tum.currentMode : false
+    property var currentTumMode: App.ready ? App.settings.tum.currentMode : TrafficUsageMode.High
 
     property string sUnlimited: qsTr("Unlimited") + App.loc.emptyString
     property string kbps: qsTr("KB/s") + App.loc.emptyString
@@ -189,7 +189,7 @@ ComboBox {
                 BaseLabel {
                     leftPadding: 20
                     anchors.verticalCenter: parent.verticalCenter
-                    text: App.speedAsText(root.totalDownloadSpeed)
+                    text: App.speedAsText(root.totalDownloadSpeed) + App.loc.emptyString
                 }
             }
             Rectangle {
@@ -210,7 +210,7 @@ ComboBox {
                 BaseLabel {
                     leftPadding: 20
                     anchors.verticalCenter: parent.verticalCenter
-                    text: App.speedAsText(root.totalUploadSpeed)
+                    text: App.speedAsText(root.totalUploadSpeed) + App.loc.emptyString
                 }
             }
         }

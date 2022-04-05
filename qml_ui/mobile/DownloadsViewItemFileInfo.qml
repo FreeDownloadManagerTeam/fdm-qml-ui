@@ -164,7 +164,7 @@ Rectangle {
                     anchors.left: downArrow.right
                     anchors.verticalCenter: parent.verticalCenter
                     horizontalAlignment: Text.AlignRight
-                    text: App.speedAsText(downloadsItemTools.downloadSpeed)
+                    text: App.speedAsText(downloadsItemTools.downloadSpeed) + App.loc.emptyString
                     font.pixelSize: 12
                     font.weight: Font.Light
                 }
@@ -204,7 +204,7 @@ Rectangle {
                     anchors.left: parent.left
                     anchors.verticalCenter: parent.verticalCenter
                     horizontalAlignment: Text.AlignRight
-                    text: App.speedAsText(downloadsItemTools.uploadSpeed)
+                    text: App.speedAsText(downloadsItemTools.uploadSpeed) + App.loc.emptyString
                     font.pixelSize: 12
                     font.weight: Font.Light
                 }
@@ -319,26 +319,12 @@ Rectangle {
             anchors.rightMargin: 5
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 5
-            progress: getProgressValue()
+            progress: downloadsItemTools.progress
             infinityIndicator: downloadsItemTools.infinityIndicator
             inProgress: downloadsItemTools.indicatorInProgress
             progressColor: downloadsItemTools.indicatorInProgress ? appWindow.theme.progressRunning :
                            (downloadsItemTools.inError ? appWindow.theme.progressError :
                            (model.finished ? appWindow.theme.progressDone : appWindow.theme.progressPaused))
-
-            function getProgressValue() {
-                var value = 0;
-                if (downloadsItemTools.performingLo) {
-                    value = downloadsItemTools.loProgress !== -1 ? downloadsItemTools.loProgress : 0;
-                } else if (downloadsItemTools.inCheckingFiles) {
-                    value = downloadsItemTools.checkingFilesProgress > 0 ? downloadsItemTools.checkingFilesProgress : 0;
-                } else if (downloadsItemTools.inMergingFiles) {
-                    value = downloadsItemTools.mergingFilesProgress > 0 ? downloadsItemTools.mergingFilesProgress : 0;
-                } else if (model.selectedSize !== -1) {
-                    value = JsTools.progress(model.selectedBytesDownloaded, model.selectedSize);
-                }
-                return value;
-            }
         }
     }
 

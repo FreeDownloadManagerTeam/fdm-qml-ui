@@ -75,8 +75,14 @@ Item {
         App.downloads.model.parentDownloadIdFilter = -1;
     }
     function getParentDownloadTitle() {
-        var info = App.downloads.infos.info(App.downloads.model.parentDownloadIdFilter);
-        return info.title + " (" + info.childDownloadsCount + ")";
+        return Qt.binding(function(){
+            if (App.downloads.model.parentDownloadIdFilter < 0)
+                return "";
+            var info = App.downloads.infos.info(App.downloads.model.parentDownloadIdFilter);
+            if (!info)
+                return "";
+            return info.title + " (" + App.downloads.model.rowCount + ")";
+        });
     }
 
     function setMissingFilesFilter(value)

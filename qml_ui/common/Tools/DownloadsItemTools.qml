@@ -71,7 +71,9 @@ Item {
     property bool hasChildDownloads: item ? item.hasChildDownloads : false
 
     property string tplTitle: !item ? "" : item.title
-    property string tplPathAndTitle: destinationPath + '/' + tplTitle
+    property string tplPathAndTitle: hasChildDownloads ? destinationPath :
+                                     destinationPath + '/' + tplTitle
+    property string tplPathAndTitle2: filesCount !== 1 ? destinationPath : tplPathAndTitle
 
     property string added: !item ? "" : item.added
     property bool unknownFileSize: size === -1 || !finalDownload
@@ -107,8 +109,14 @@ Item {
     property bool inWaitingForMetadata: false
 
     property bool inUnknownFileSize: indicatorInProgress && unknownFileSize && !inWaitingForMetadata && !inQueue && !inCheckingFiles && !inMergingFiles && !performingLo
-    property bool infinityIndicator: inWaitingForMetadata || unknownFileSize
-    property int progress: -1
+
+    property int downloadProgress: -1
+    property int progress: performingLo ? loProgress :
+                           inCheckingFiles ? checkingFilesProgress :
+                           inMergingFiles ? mergingFilesProgress :
+                           downloadProgress
+
+    property bool infinityIndicator: progress < 0 //inWaitingForMetadata || unknownFileSize
 
     property string errorMessage: ((missingStorage ? (qsTr("Disk is missing") + App.loc.emptyString) : missingFiles ? (qsTr("File is missing") + App.loc.emptyString) : downloadErrorMessage))
 
@@ -145,22 +153,22 @@ Item {
 
     onSizeChanged: {
         estimatedSecTimer.start();
-        updateProgress();
+        updateDownloadProgress();
     }
 
     onSelectedBytesDownloadedChanged: {
         estimatedSecTimer.start();
-        updateProgress();
+        updateDownloadProgress();
     }
 
     onDownloadSpeedChanged: estimatedSecTimer.start()
 
-    function updateProgress()
+    function updateDownloadProgress()
     {
         if (selectedSize !== -1) {
-            progress = parseInt(selectedBytesDownloaded/selectedSize*100);
+            downloadProgress = parseInt(selectedBytesDownloaded/selectedSize*100);
         } else {
-            progress = -1;
+            downloadProgress = -1;
         }
     }
 
@@ -201,7 +209,7 @@ Item {
             indicatorInProgress = true;
             new_in_progress_status = true;
 
-            if (!hasChildDownloads || !downloadSpeed)
+            if (!hasChildDownloads || downloadSpeed <= 0)
             {
                 if (checkingFiles) {
                     new_in_checking_files_status = true;

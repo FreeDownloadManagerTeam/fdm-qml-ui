@@ -8,6 +8,7 @@ import "./BaseElements"
 import CppControls 1.0 as CppControls
 import org.freedownloadmanager.fdm 1.0
 import org.freedownloadmanager.fdm.abstractdownloadsui 1.0
+import org.freedownloadmanager.fdm.appfeatures 1.0
 
 ApplicationWindow
 {
@@ -156,7 +157,7 @@ ApplicationWindow
 
                 ElidedLabelWithTooltip {
                     id: savedIn
-                    sourceText: downloadsItemTools.finalDownload ? downloadsItemTools.tplPathAndTitle : ""
+                    sourceText: downloadsItemTools.tplPathAndTitle2
                     width: parent.width - 18 - parent.spacing
                 }
             }
@@ -185,7 +186,7 @@ ApplicationWindow
 
         CppControls.ProgressMap
         {
-            visible: !downloadsItemTools.unknownFileSize
+            visible: !downloadsItemTools.unknownFileSize && !downloadsItemTools.hasChildDownloads
             property var mapObj: App.downloads.infos.info(downloadId).progressMap(columnsCount*rowsCount)
             map: mapObj.map
             filledSquareBorderColor: theme.progressMapFillBorder
@@ -219,7 +220,7 @@ ApplicationWindow
                 visible: !downloadsItemTools.finished
             }
             BaseLabel {
-                text: downloadsItemTools.showDownloadSpeed ? App.speedAsText(downloadsItemTools.downloadSpeed) : ""
+                text: downloadsItemTools.showDownloadSpeed ? App.speedAsText(downloadsItemTools.downloadSpeed) + App.loc.emptyString : ""
                 visible: !downloadsItemTools.finished
             }
 

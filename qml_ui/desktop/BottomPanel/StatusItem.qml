@@ -27,10 +27,7 @@ Item
             DownloadsItemProgressIndicator {
                 Layout.preferredWidth: 230
                 small: false
-                percent: downloadsItemTools.performingLo ? downloadsItemTools.loProgress :
-                        (downloadsItemTools.inCheckingFiles ? downloadsItemTools.checkingFilesProgress :
-                        (downloadsItemTools.inMergingFiles ? downloadsItemTools.mergingFilesProgress :
-                         progress(downloadsItemTools.selectedBytesDownloaded, downloadsItemTools.selectedSize)))
+                percent: downloadsItemTools.progress
                 infinityIndicator: downloadsItemTools.infinityIndicator
                 inProgress: downloadsItemTools.indicatorInProgress
                 Layout.alignment: Qt.AlignLeft
@@ -44,10 +41,7 @@ Item
                              || downloadsItemTools.inCheckingFiles
                              || downloadsItemTools.inMergingFiles
                              || downloadsItemTools.progress > 0 && !downloadsItemTools.unknownFileSize && !downloadsItemTools.inQueue && !downloadsItemTools.inCheckingFiles && !downloadsItemTools.inMergingFiles && !downloadsItemTools.performingLo
-                    text: (downloadsItemTools.performingLo ? (downloadsItemTools.loProgress !== -1 ? downloadsItemTools.loProgress : 0) :
-                          (downloadsItemTools.inCheckingFiles ? (downloadsItemTools.checkingFilesProgress > 0 ? downloadsItemTools.checkingFilesProgress : 0) :
-                          (downloadsItemTools.inMergingFiles ? (downloadsItemTools.mergingFilesProgress > 0 ? downloadsItemTools.mergingFilesProgress : 0) :
-                           progress(downloadsItemTools.selectedBytesDownloaded, downloadsItemTools.selectedSize)))) + "%"
+                    text: (downloadsItemTools.progress > 0 ? downloadsItemTools.progress : 0) + "%"
                     Layout.alignment: Qt.AlignLeft
                 }
 
@@ -113,10 +107,5 @@ Item
                 }
             }
         }
-    }
-
-    function progress(done, total)
-    {
-        return total !== -1 ? parseInt(done/total*100) : 0;
     }
 }

@@ -116,8 +116,6 @@ QtObject {
 
     property var mathUtils: QtObject {
         function round(value, significant) {
-            //var f = value-Math.floor(value);
-            //var roundedValue = parseFloat((value.toFixed(/*(a>1e3) && */(f >= 0.1) && (f < 0.9) ? 2 : 0)));
             return value.toPrecision(significant) * 1;
         }
 
@@ -327,35 +325,30 @@ QtObject {
 
             if (d.units === a.units)
                 return __('%1 of %2', [d.size, a.size + " " + d.units]);
-                // return __('%1 of %2', [d.size, __('%1 ' + d.units, a.size)]);
 
             return __('%1 of %2', [ d.size + " " + d.units, a.size + " " + a.units ]);
-            // return __('%1 of %2', [ __('%1 ' + d.units, d.size) , __('%1 ' + a.units, a.size) ]);
         }
         function byteProgressAsText(done, all){
 
-            if (done === 0 && all < 0)
-                return "0 B / \u2014";
-
-            if (all < 0 || !all)
+            if (!all)
                 all = 0;
 
             if (done === 0 && all === 0)
                 return "0 B";
 
+            // If total size is unknown, then show downloaded bytes without total size.
+            if (all < 0 || (!all && done > 0))
+                return bytesAsText(done) + " / \u2014";// \u2014 long dash code symbol;
+
             var ln=Math.log, d = AppConstants.BytesInKB;
             var maxPow = ln(all)/ln(d)|0;
             var base = Math.pow(d, maxPow);
-            //var resultDone = fdm.Math.round(done / base, 3);
-            //var resultAll = fdm.Math.round(all / base, 3);
             var resultDone = parseFloat(sizeUtils.getSizeText(done, maxPow));
             var resultAll = parseFloat(sizeUtils.getSizeText(all, maxPow));
 
             if (resultAll >= d){
                 maxPow++;
                 base = Math.pow(d, maxPow);
-                //resultDone = fdm.Math.round(done / base, 3);
-                //resultAll = fdm.Math.round(all / base, 3);
                 resultDone = parseFloat(sizeUtils.getSizeText(done, maxPow));
                 resultAll = parseFloat(sizeUtils.getSizeText(all, maxPow));
             }
@@ -374,29 +367,12 @@ QtObject {
 
             var resultText = '';
 
-            // var resultText = ((resultDone < resultAll) ? resultDoneText + " / " : "") +
-            //     __('%1 ' + fdm.fileUtils.unitNameByPow(maxPow), resultAll.toFixed(decimalPlaces));
-            // If total size is unknown, then show downloaded bytes without total size.
-            if (resultDone >= 0 && resultAll === 0)
-            {
-                maxPow = ln(done)/ln(d)|0;
-                base = Math.pow(d, maxPow);
-                resultDone = mathUtils.round(done / base, 3);
-                decimalPlaces = mathUtils.decimalPlaces(resultDone, 3);
+            resultDoneText = sizeUtils.formatByLocale(resultDoneText);
+            var resultAllText = sizeUtils.formatByLocale(resultAll.toFixed(decimalPlaces));
 
-                resultDoneText = maxPow == 0 ? resultDone + "" : resultDone.toFixed(decimalPlaces);
-                resultDoneText = sizeUtils.formatByLocale(resultDoneText);
-                resultText = resultDoneText + " " +  fileUtils.unitNameByPow(maxPow) + " / \u2014";// \u2014 long dash code symbol
-                // resultText = __("%1 " +  fdm.fileUtils.unitNameByPow(maxPow), resultDoneText) + " / \u2014";// \u2014 long dash code symbol
-            }
-            else {
-                resultDoneText = sizeUtils.formatByLocale(resultDoneText);
-                var resultAllText = sizeUtils.formatByLocale(resultAll.toFixed(decimalPlaces));
-
-                resultText = ((resultDone < resultAll) ? resultDoneText + " / " : "") +
-                    resultAllText +
-                    " " + fileUtils.unitNameByPow(maxPow);
-            }
+            resultText = ((resultDone < resultAll) ? resultDoneText + " / " : "") +
+                resultAllText +
+                " " + fileUtils.unitNameByPow(maxPow);
 
             return resultText;
         }

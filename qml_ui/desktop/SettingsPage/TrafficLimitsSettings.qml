@@ -167,19 +167,16 @@ Column {
             visible: maxURatioGroup.active
             Layout.alignment: Qt.AlignVCenter
             mode: TrafficUsageMode.Low
-            setting: visible ? DmCoreSettings.MaxURatio : -1
         }
         TumMaxURatioComboBox {
             visible: maxURatioGroup.active
             Layout.alignment: Qt.AlignVCenter
             mode: TrafficUsageMode.Medium
-            setting: visible ? DmCoreSettings.MaxURatio : -1
         }
         TumMaxURatioComboBox {
             visible: maxURatioGroup.active
             Layout.alignment: Qt.AlignVCenter
             mode: TrafficUsageMode.High
-            setting: visible ? DmCoreSettings.MaxURatio : -1
         }
     }
 

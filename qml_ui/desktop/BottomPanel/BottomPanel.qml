@@ -19,7 +19,6 @@ Rectangle {
     DownloadsItemTools {
         id: downloadsItemTools
         itemId: selectedDownloadsTools.currentDownloadId
-        property var largePreview: App.downloads.previews.largePreview(selectedDownloadsTools.currentDownloadId)
         onFinishedChanged: bottomPanelTools.updateState()
         onFilesCountChanged: bottomPanelTools.updateState()
     }

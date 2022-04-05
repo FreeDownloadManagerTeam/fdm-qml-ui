@@ -9,7 +9,7 @@ Item
     property string text: ""
 
     property bool enableHideButton: false
-    property bool hidden: true
+    property bool hidden: false
 
     width: parent.width
     height: lbl.implicitHeight
