@@ -39,7 +39,7 @@ Flickable {
 
         spacing: 0
 
-        Rectangle {id: topSpacingRect; height: 20; width: height; color: "transparent"}
+        Rectangle {id: topSpacingRect; height: 20; width: 1; color: "transparent"}
 
         Row {
             id: myContent2
@@ -251,9 +251,9 @@ Flickable {
         }
 
         Rectangle {
-            visible: flickable.height < topSpacingRect.height + myContent2.height
+            visible: flickable.height < (topSpacingRect.height + myContent2.height)
             height: topSpacingRect.height
-            width: height
+            width: 1
             color: "transparent"
         }
     }

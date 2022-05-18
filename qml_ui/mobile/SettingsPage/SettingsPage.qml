@@ -149,7 +149,7 @@ Rectangle {
                         title: qsTr("Default settings") + App.loc.emptyString
                         text: qsTr("Restore default settings?") + App.loc.emptyString
                         buttons: buttonOk | buttonCancel
-                        onAccepted: {
+                        onOkClicked: {
                             App.settings.resetToDefaults();
                             uiSettingsTools.resetToDefaults();
                             stackView.pop();

@@ -8,7 +8,7 @@ Item {
     anchors.fill: parent
 
     Image {
-        visible: App.settings.tum.currentMode == TrafficUsageMode.Snail// || App.settings.tum.currentMode == TrafficUsageMode.High
+        visible: App.settings.tum.currentMode == TrafficUsageMode.Snail
         source: App.settings.tum.currentMode == TrafficUsageMode.Snail ? Qt.resolvedUrl("../images/desktop/mode_snail.svg") : Qt.resolvedUrl("../images/desktop/mode_high.svg")
         anchors.fill: parent
         anchors.margins: 50

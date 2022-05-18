@@ -190,7 +190,7 @@ Item {
                 blueBtn: true
                 alternateBtnPressed: cnclBtn.isPressed
                 radius: 5
-                implicitHeight: value.height
+                implicitHeight: value.implicitHeight
                 Layout.fillWidth: true
                 onClicked: custom.tryAcceptValue()
                 Image {
@@ -210,7 +210,7 @@ Item {
             CustomButton {
                 id: cnclBtn
                 radius: 5
-                implicitHeight: value.height
+                implicitHeight: value.implicitHeight
                 Layout.fillWidth: true
                 onClicked: custom.reject()
                 Image {

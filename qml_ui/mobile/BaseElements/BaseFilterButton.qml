@@ -19,8 +19,6 @@ ToolButton {
 
     background: Rectangle {
         anchors.fill: parent
-        implicitWidth: contentItem.contentWidth
-        implicitHeight: height
         color: "transparent"
 
         Rectangle {

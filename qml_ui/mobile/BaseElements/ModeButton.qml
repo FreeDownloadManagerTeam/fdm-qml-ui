@@ -14,15 +14,14 @@ RoundButton {
     text: notice ? notice : tumModeDialog.tumModeStr(currentTumMode)
     padding: 0
     opacity: enabled ? 1 : 0.3
+    implicitWidth: notice ? 190 : 116
     implicitHeight: 18
     topInset: 0
     rightInset: 0
     bottomInset: 0
     leftInset: 0
 
-    background: Rectangle {
-        implicitWidth: notice ? 190 : 116
-        implicitHeight: parent.height
+    background: Rectangle {        
         border.color: notice ? appWindow.theme.errorMode : currentColor
         border.width: 2
         radius: 9
