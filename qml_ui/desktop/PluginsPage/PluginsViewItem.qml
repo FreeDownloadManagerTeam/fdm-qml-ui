@@ -47,7 +47,6 @@ RowLayout
                     x: parent.width + 10
 
                     BaseContextMenuItem {
-                        enabled: model.supportsAutoUpdate
                         text: qsTr("Allow Automatic Updates") + App.loc.emptyString
                         checkable: true
                         checked: !model.autoUpdateDisabled
@@ -55,7 +54,6 @@ RowLayout
                     }
 
                     BaseContextMenuItem {
-                        enabled: model.supportsAutoUpdate
                         text: qsTr("Check for Updates") + App.loc.emptyString
                         onTriggered: App.plugins.updateMgr.update(model.uuid)
                     }

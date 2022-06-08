@@ -1,11 +1,12 @@
 import QtQuick 2.10
 import QtQuick.Controls 2.3
+import org.freedownloadmanager.fdm 1.0
 
 ToolButton {
     property int value
-    property bool selected
+    property bool selected: App.downloads.model.downloadsStatesFilter == value
+    property int underlineWidth: Math.round(parent.width / 3)
     height: parent.height
-    padding: 0
 
     contentItem: Text {
         text: parent.text
@@ -15,18 +16,23 @@ ToolButton {
         color: appWindow.theme.toolbarTextColor
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
+        elide: Text.ElideRight
+    }
+
+    onClicked: {
+        App.downloads.model.downloadsStatesFilter = value;
     }
 
     background: Rectangle {
         anchors.fill: parent
-        implicitWidth: contentItem.contentWidth
+        implicitWidth: underlineWidth
         implicitHeight: height
         color: "transparent"
 
         Rectangle {
             visible: selected
             color: appWindow.theme.toolbarTextColor
-            width: parent.width
+            width: Math.round(parent.width * 0.6)
             height: 2
             anchors.bottom: parent.bottom
             anchors.horizontalCenter: parent.horizontalCenter

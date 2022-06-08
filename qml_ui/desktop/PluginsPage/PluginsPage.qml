@@ -86,7 +86,7 @@ Page {
                     x: parent.width + 10
 
                     BaseContextMenuItem {
-                        enabled: App.plugins.model.atLeast1PluginSupportsAutoUpdate
+                        enabled: !App.plugins.model.empty
                         text: qsTr("Check for Updates") + App.loc.emptyString
                         onTriggered: App.plugins.updateMgr.updateAll()
                     }
@@ -175,7 +175,7 @@ Page {
         acceptLabel: qsTr("Install") + App.loc.emptyString
         rejectLabel: qsTr("Cancel") + App.loc.emptyString
 
-        nameFilters: [ qsTr("%1 add-ons files").arg(App.shortDisplayName) + " (" + "*.fda" + ")" + App.loc.emptyString ]
+        nameFilters: [ qsTr("%1 add-ons files (%2)").arg(App.shortDisplayName).arg("*.fda") + App.loc.emptyString ]
 
         folder: App.tools.urlFromLocalFile(uiSettingsTools.settings.pluginsDistribsPath).url
 

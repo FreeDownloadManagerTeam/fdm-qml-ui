@@ -24,7 +24,7 @@ ApplicationWindow {
 
     property int lastOkVisibility: ApplicationWindow.Windowed
 
-    property int mainToolbarHeight: macVersion ? 75 : 50
+    property int mainToolbarHeight: 50 //macVersion ? 75 : 50
     property bool modalDialogOpened: buildDownloadDlg.opened || tuneAddDownloadDlg.opened || aboutDlg.opened
                                     || deleteDownloadsDlg.opened || deleteDownloadsDlgSimple.opened
                                     || shutdownDlg.opened || mergeDownloadsDlg.opened || authenticationDlg.opened
@@ -292,11 +292,8 @@ ApplicationWindow {
         width: parent.width - 200
         height: parent.height - 200
         Component.onCompleted: {
-            if (App.isSelfTestMode) {
-                item.width = Qt.binding(()=>{return selfTestDlg.width;});
-                item.height = Qt.binding(()=>{return selfTestDlg.height;});
+            if (App.isSelfTestMode)
                 uiReadyTools.onReady(function(){selfTestDlg.item.open();});
-            }
         }
     }
 
@@ -484,8 +481,6 @@ ApplicationWindow {
 
     TuneAndAddDownloadDialog {
         id: tuneAddDownloadDlg
-        height: Math.min(implicitHeight, appWindow.height - 50)
-        width: Math.min(preferredWidth, appWindow.width - 50)
     }
 
     AuthenticationDialog {

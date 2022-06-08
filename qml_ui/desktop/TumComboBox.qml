@@ -123,6 +123,8 @@ ComboBox {
     }
 
     background: Rectangle {
+        implicitWidth: root.width
+        implicitHeight: root.height
         color: "transparent"
 
         Rectangle {

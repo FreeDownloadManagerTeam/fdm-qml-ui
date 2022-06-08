@@ -8,6 +8,9 @@ Dialog
 {   
     id: root
 
+    implicitWidth: parent.width
+    implicitHeight: parent.height
+
     title: "App Self Test"
 
     modal: true

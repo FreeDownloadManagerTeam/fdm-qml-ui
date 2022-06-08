@@ -19,8 +19,8 @@ BaseDialog
     {
         titleText: qsTr("Destination files already exists") + App.loc.emptyString
         focus: true
-        Keys.onEscapePressed: root.doAbort()
-        onCloseClick: root.doAbort()
+        Keys.onEscapePressed: root.close()
+        onCloseClick: root.close()
 
         ColumnLayout
         {
@@ -75,7 +75,10 @@ BaseDialog
                 CustomButton
                 {
                     text: qsTr("Abort")
-                    onClicked: root.doAbort()
+                    onClicked: {
+                        App.downloads.mgr.sumbitConvertFilesExistsReaction(taskId, [], true);
+                        root.close();
+                    }
                 }
             }
         }
@@ -106,12 +109,6 @@ BaseDialog
     function doRespond(of)
     {
         App.downloads.mgr.sumbitConvertFilesExistsReaction(taskId, of, false);
-        root.close();
-    }
-
-    function doAbort()
-    {
-        App.downloads.mgr.sumbitConvertFilesExistsReaction(taskId, [], true);
         root.close();
     }
 }

@@ -23,10 +23,6 @@ ToolBar {
     Rectangle {
         anchors.fill: parent
         visible: appWindow.macVersion && appWindow.theme === lightTheme
-        gradient: Gradient {
-            GradientStop { position: 0.0; color: "#e8e8e8" }
-            GradientStop { position: 1.0; color: "#d3d3d3" }
-        }
     }
 
     AppDragMoveMouseArea {
@@ -38,215 +34,265 @@ ToolBar {
         anchors.fill: parent
         opacity: appWindow.modalDialogOpened ? 0.3 : 1
 
-        Rectangle {
-            id: titleBar
-            visible: appWindow.macVersion
-            width: parent.width
-            height: visible ? 20 : 0
-            color: "transparent"
 
-            BaseLabel {
-                text: App.displayName
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.top: parent.top
-                anchors.topMargin: 5
-                font.pixelSize: 13
-                color: appWindow.theme.titleBar
-            }
-        }
 
         Rectangle {
             width: parent.width
-            anchors.top: titleBar.bottom
+            anchors.top: parent.top
             anchors.bottom: parent.bottom
             color: "transparent"
 
             Row {
                 height: parent.height
                 visible: pageId
+                leftPadding: appWindow.macVersion ? 60 : -2
 
                 ToolBarButton {
                     source: appWindow.theme.mainTbImg.arrow_left
                     anchors.verticalCenter: parent.verticalCenter
                     onClicked: stackView.pop()
                 }
+
             }
 
             Row {
-                visible: !pageId
-                anchors.verticalCenter: parent.verticalCenter
-                leftPadding: appWindow.macVersion ? 6 : -2
-
-                ToolBarButton {
-                    width: 50
-                    height: 50
-                    source: appWindow.theme.mainTbImg.plus
-                    onClicked: buildDownloadDlg.newDownload();
-                    tooltipText: qsTr("Add new download...") + App.loc.emptyString
-                    anchors.verticalCenter: parent.verticalCenter
-
-                    Rectangle {
-                        z: -1
-                        color: "#16a4fa"
-                        radius: 4
-                        anchors.verticalCenter: parent.verticalCenter
+                anchors.verticalCenter: parent.rightCenter
+                anchors.horizontalCenter: right
+                leftPadding: appWindow.macVersion ? 80 : -2
+                anchors.right: addBtn.left
+                anchors.left: parent.left
+                Rectangle {
+                    id: titleBar
+                    visible: appWindow.macVersion
+                    width: 200//parent.width
+                    height: visible ? 20 : 0
+                    color: "transparent"
+                    BaseLabel {
+                        text: "<b>"+App.displayName+"</b>"
                         anchors.horizontalCenter: parent.horizontalCenter
-                        width: 36
-                        height: 36
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.top: parent.top
+                        anchors.topMargin: 5
+                        font.pixelSize: 13
+                        color: appWindow.theme.titleBar
+                        elide: "ElideRight"
                     }
                 }
 
-                // start download btn +
-                ToolBarButton {
-                    width: 50
-                    height: 50
-                    source: appWindow.theme.mainTbImg.play_all
-                    visible: selectedDownloadsTools.checkedDownloadsCount === 0
-                    enabled: selectedDownloadsTools.downloadsToStartExist
-                             && !downloadsViewTools.emptySearchResults
-                    onClicked: App.downloads.mgr.startAllDownloads()
-                    tooltipText: qsTr("Start all") + App.loc.emptyString
-                    anchors.verticalCenter: parent.verticalCenter
-                }
 
-                ToolBarButton {
-                    width: 50
-                    height: 50
-                    source: appWindow.theme.mainTbImg.play_check
-                    visible: selectedDownloadsTools.checkedDownloadsCount > 0
-                    enabled: selectedDownloadsTools.checkedDownloadsToStartExist
-                             && !downloadsViewTools.emptySearchResults
-                    onClicked: selectedDownloadsTools.startCheckedDownloads()
-                    tooltipText: qsTr("Start selected") + App.loc.emptyString
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-                // start download btn -
+            }
 
-                // pause download btn +
-                ToolBarButton {
-                    width: 50
-                    height: 50
-                    source: appWindow.theme.mainTbImg.pause_all
-                    visible: selectedDownloadsTools.checkedDownloadsCount === 0
-                    enabled: selectedDownloadsTools.downloadsToStopExist
-                             && !downloadsViewTools.emptySearchResults
-                    onClicked: {
-                        App.downloads.mgr.stopAllDownloads(true);
-                        var ids = App.downloads.tracker.runningIdsWithNoResumeSupport();
-                        if (ids.length)
-                            appWindow.stopDownload(ids);
-                    }
-                    tooltipText: qsTr("Pause all") + App.loc.emptyString
-                    anchors.verticalCenter: parent.verticalCenter
-                }
 
-                ToolBarButton {
-                    width: 50
-                    height: 50
-                    source: appWindow.theme.mainTbImg.pause_check
-                    visible: selectedDownloadsTools.checkedDownloadsCount > 0
-                    enabled: selectedDownloadsTools.checkedDownloadsToStopExist
-                             && !downloadsViewTools.emptySearchResults
-                    onClicked: selectedDownloadsTools.stopCheckedDownloads()
-                    tooltipText: qsTr("Pause selected") + App.loc.emptyString
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-                // pause download btn -
 
-                //delete btn +
-                ToolBarButton {
-                    width: 50
-                    height: 50
-                    source: appWindow.theme.mainTbImg.bin
-                    visible: selectedDownloadsTools.checkedDownloadsCount === 0
-                    enabled: selectedDownloadsTools.currentDownloadId > 0
-                             && !downloadsViewTools.emptySearchResults
-                             && !selectedDownloadsTools.selectedDownloadsIsLocked()
-                    onClicked: selectedDownloadsTools.removeCurrentDownloads()
-                    tooltipText: qsTr("Delete selected") + App.loc.emptyString
-                    anchors.verticalCenter: parent.verticalCenter
-                }
+            ToolBarButton {
+                visible: !pageId
+                anchors.horizontalCenter: right
+                id:addBtn
+                width: 50
+                height: 40
+                anchors.right: selectedDownloadsTools.checkedDownloadsCount === 0 ? startBtn.left : startBtn1.left
+                source: appWindow.theme.mainTbImg.plus
+                onClicked: buildDownloadDlg.newDownload();
+                tooltipText: qsTr("Add new download...") + App.loc.emptyString
+                anchors.verticalCenter: parent.verticalCenter
 
-                ToolBarButton {
-                    width: 50
-                    height: 50
-                    source: appWindow.theme.mainTbImg.bin_check
-                    visible: selectedDownloadsTools.checkedDownloadsCount > 0
-                    enabled: !downloadsViewTools.emptySearchResults
-                             && !selectedDownloadsTools.selectedDownloadsIsLocked()
-                    onClicked: selectedDownloadsTools.removeCurrentDownloads()
-                    tooltipText: qsTr("Delete selected") + App.loc.emptyString
+                Rectangle {
+                    z: -1
+                    color: "#16a4fa"
+                    radius: 4
                     anchors.verticalCenter: parent.verticalCenter
-                }
-                //delete btn -
-
-                //move btn +
-                ToolBarButton {
-                    width: 50
-                    height: 50
-                    source: appWindow.theme.mainTbImg.folder
-                    visible: selectedDownloadsTools.checkedDownloadsCount === 0
-                    enabled: selectedDownloadsTools.currentDownloadId > 0
-                             && !downloadsViewTools.emptySearchResults
-                             && !selectedDownloadsTools.selectedDownloadsIsLocked()
-                    onClicked: movingFolderDlg.open()
-                    tooltipText: qsTr("Move to...") + App.loc.emptyString
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-
-                ToolBarButton {
-                    width: 50
-                    height: 50
-                    source: appWindow.theme.mainTbImg.folder_check
-                    visible: selectedDownloadsTools.checkedDownloadsCount > 0
-                    enabled: !downloadsViewTools.emptySearchResults
-                             && !selectedDownloadsTools.selectedDownloadsIsLocked()
-                    onClicked: movingFolderDlg.open()
-                    tooltipText: qsTr("Move to...") + App.loc.emptyString
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-                //move btn -
-
-                ToolBarButton {
-                    width: 50
-                    height: 50
-                    visible: uiSettingsTools.settings.enableUserDefinedOrderOfDownloads
-                    enabled: App.downloads.model.canMoveSelectedDownloadsUp ||
-                             (App.downloads.model.rowCount > 1 && sortTools.sortBy != AbstractDownloadsUi.DownloadsSortByOrder)
-                    source: selectedDownloadsTools.checkedDownloadsCount > 0 ?
-                                appWindow.theme.mainTbImg.up/*_check*/ :
-                                appWindow.theme.mainTbImg.up
-                    tooltipText: qsTr("Move downloads up") + App.loc.emptyString
-                    onClicked: {
-                        if (sortTools.sortBy != AbstractDownloadsUi.DownloadsSortByOrder)
-                            sortByOrderRequired.open();
-                        else
-                            App.downloads.model.moveSelectedDownloadsUp();
-                    }
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-
-                ToolBarButton {
-                    width: 50
-                    height: 50
-                    visible: uiSettingsTools.settings.enableUserDefinedOrderOfDownloads
-                    enabled: App.downloads.model.canMoveSelectedDownloadsDown ||
-                             (App.downloads.model.rowCount > 1 && sortTools.sortBy != AbstractDownloadsUi.DownloadsSortByOrder)
-                    source: selectedDownloadsTools.checkedDownloadsCount > 0 ?
-                                appWindow.theme.mainTbImg.down/*_check*/ :
-                                appWindow.theme.mainTbImg.down
-                    tooltipText: qsTr("Move downloads down") + App.loc.emptyString
-                    onClicked: {
-                        if (sortTools.sortBy != AbstractDownloadsUi.DownloadsSortByOrder)
-                            sortByOrderRequired.open();
-                        else
-                            App.downloads.model.moveSelectedDownloadsDown();
-                    }
-                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    width: 36
+                    height: 26
                 }
             }
 
+
+            // start download btn +
+            ToolBarButton {
+                anchors.horizontalCenter: right
+                id: startBtn
+                width: 50
+                height: 40
+                anchors.right: selectedDownloadsTools.checkedDownloadsCount === 0 ? pauseBtn.left : pauseBtn1.left
+                source: appWindow.theme.mainTbImg.play_all
+                visible: !pageId && selectedDownloadsTools.checkedDownloadsCount === 0
+                enabled: selectedDownloadsTools.downloadsToStartExist
+                         && !downloadsViewTools.emptySearchResults
+                onClicked: App.downloads.mgr.startAllDownloads()
+                tooltipText: qsTr("Start all") + App.loc.emptyString
+                anchors.verticalCenter: parent.verticalCenter
+            }
+
+            ToolBarButton {
+                anchors.horizontalCenter: right
+                id: startBtn1
+                width: 50
+                height: 40
+                anchors.right: selectedDownloadsTools.checkedDownloadsCount === 0 ? pauseBtn.left : pauseBtn1.left
+                source: appWindow.theme.mainTbImg.play_check
+                visible: !pageId && selectedDownloadsTools.checkedDownloadsCount > 0
+                enabled: selectedDownloadsTools.checkedDownloadsToStartExist
+                         && !downloadsViewTools.emptySearchResults
+                onClicked: selectedDownloadsTools.startCheckedDownloads()
+                tooltipText: qsTr("Start selected") + App.loc.emptyString
+                anchors.verticalCenter: parent.verticalCenter
+            }
+            // start download btn -
+
+            // pause download btn +
+            ToolBarButton {
+                anchors.horizontalCenter: right
+                id:pauseBtn
+                width: 50
+                height: 40
+                anchors.right: selectedDownloadsTools.checkedDownloadsCount === 0 ? deleteBtn.left : deleteBtn1.left
+                source: appWindow.theme.mainTbImg.pause_all
+                visible: !pageId && selectedDownloadsTools.checkedDownloadsCount === 0
+                enabled: selectedDownloadsTools.downloadsToStopExist
+                         && !downloadsViewTools.emptySearchResults
+                onClicked: {
+                    App.downloads.mgr.stopAllDownloads(true);
+                    var ids = App.downloads.tracker.runningIdsWithNoResumeSupport();
+                    if (ids.length)
+                        appWindow.stopDownload(ids);
+                }
+                tooltipText: qsTr("Pause all") + App.loc.emptyString
+                anchors.verticalCenter: parent.verticalCenter
+            }
+
+            ToolBarButton {
+                anchors.horizontalCenter: right
+                id:pauseBtn1
+                width: 50
+                height: 40
+                anchors.right: selectedDownloadsTools.checkedDownloadsCount === 0 ? deleteBtn.left : deleteBtn1.left
+                source: appWindow.theme.mainTbImg.pause_check
+                visible: !pageId && selectedDownloadsTools.checkedDownloadsCount > 0
+                enabled: selectedDownloadsTools.checkedDownloadsToStopExist
+                         && !downloadsViewTools.emptySearchResults
+                onClicked: selectedDownloadsTools.stopCheckedDownloads()
+                tooltipText: qsTr("Pause selected") + App.loc.emptyString
+                anchors.verticalCenter: parent.verticalCenter
+            }
+            // pause download btn -
+
+            //delete btn +
+            ToolBarButton {
+                anchors.horizontalCenter: right
+                id:deleteBtn
+                width: 50
+                height: 40
+                anchors.right: selectedDownloadsTools.checkedDownloadsCount > 0 ? moveBtn.left : moveBtn1.left
+                source: appWindow.theme.mainTbImg.bin
+                visible: !pageId && selectedDownloadsTools.checkedDownloadsCount === 0
+                enabled: selectedDownloadsTools.currentDownloadId > 0
+                         && !downloadsViewTools.emptySearchResults
+                         && !selectedDownloadsTools.selectedDownloadsIsLocked()
+                onClicked: selectedDownloadsTools.removeCurrentDownloads()
+                tooltipText: qsTr("Delete selected") + App.loc.emptyString
+                anchors.verticalCenter: parent.verticalCenter
+            }
+
+            ToolBarButton {
+                anchors.horizontalCenter: right
+                id:deleteBtn1
+                anchors.right: selectedDownloadsTools.checkedDownloadsCount > 0 ? moveBtn.left : moveBtn1.left
+                width: 50
+                height: 40
+                source: appWindow.theme.mainTbImg.bin_check
+                visible: !pageId && selectedDownloadsTools.checkedDownloadsCount > 0
+                enabled: !downloadsViewTools.emptySearchResults
+                         && !selectedDownloadsTools.selectedDownloadsIsLocked()
+                onClicked: selectedDownloadsTools.removeCurrentDownloads()
+                tooltipText: qsTr("Delete selected") + App.loc.emptyString
+                anchors.verticalCenter: parent.verticalCenter
+            }
+
+
+
+            ToolBarButton {
+                anchors.horizontalCenter: right
+                id:moveBtn
+                width: 50
+                height: 40
+                anchors.right: uiSettingsTools.settings.enableUserDefinedOrderOfDownloads ? moveUpBtn.left : !pageId ? loader.left : searchField.left
+                source: appWindow.theme.mainTbImg.folder_check
+                visible: !pageId && selectedDownloadsTools.checkedDownloadsCount > 0
+                enabled: !downloadsViewTools.emptySearchResults
+                         && !selectedDownloadsTools.selectedDownloadsIsLocked()
+                onClicked: movingFolderDlg.open()
+                tooltipText: qsTr("Move to...") + App.loc.emptyString
+                anchors.verticalCenter: parent.verticalCenter
+            }
+            //move btn -
+
+
+
+            ToolBarButton {
+                anchors.horizontalCenter: right
+                id:moveBtn1
+                anchors.right: uiSettingsTools.settings.enableUserDefinedOrderOfDownloads ? moveUpBtn.left : !pageId ? loader.left : searchField.left
+                width: 50
+                height: 40
+                source: appWindow.theme.mainTbImg.folder
+                visible: !pageId && selectedDownloadsTools.checkedDownloadsCount === 0
+                enabled: selectedDownloadsTools.currentDownloadId > 0
+                         && !downloadsViewTools.emptySearchResults
+                         && !selectedDownloadsTools.selectedDownloadsIsLocked()
+                onClicked: movingFolderDlg.open()
+                tooltipText: qsTr("Move to...") + App.loc.emptyString
+                anchors.verticalCenter: parent.verticalCenter
+            }
+
+            //move btn +
+            ToolBarButton {
+                anchors.horizontalCenter: right
+                id:moveUpBtn
+                width: 50
+                height: 40
+                anchors.right: uiSettingsTools.settings.enableUserDefinedOrderOfDownloads ? moveDownBtn.left : !pageId ? loader.left : searchField.left
+                visible: !pageId && uiSettingsTools.settings.enableUserDefinedOrderOfDownloads
+                enabled: App.downloads.model.canMoveSelectedDownloadsUp ||
+                         (App.downloads.model.rowCount > 1 && sortTools.sortBy != AbstractDownloadsUi.DownloadsSortByOrder)
+                source: selectedDownloadsTools.checkedDownloadsCount > 0 ?
+                            appWindow.theme.mainTbImg.up/*_check*/ :
+                            appWindow.theme.mainTbImg.up
+                tooltipText: qsTr("Move downloads up") + App.loc.emptyString
+                onClicked: {
+                    if (sortTools.sortBy != AbstractDownloadsUi.DownloadsSortByOrder)
+                        sortByOrderRequired.open();
+                    else
+                        App.downloads.model.moveSelectedDownloadsUp();
+                }
+                anchors.verticalCenter: parent.verticalCenter
+            }
+
+            //move btn -
+            ToolBarButton {
+                anchors.horizontalCenter: right
+                id: moveDownBtn
+                anchors.right: !pageId ? loader.left : searchField.left
+                width: 50
+                height: 40
+                visible: !pageId && uiSettingsTools.settings.enableUserDefinedOrderOfDownloads
+                enabled: App.downloads.model.canMoveSelectedDownloadsDown ||
+                         (App.downloads.model.rowCount > 1 && sortTools.sortBy != AbstractDownloadsUi.DownloadsSortByOrder)
+                source: selectedDownloadsTools.checkedDownloadsCount > 0 ?
+                            appWindow.theme.mainTbImg.down/*_check*/ :
+                            appWindow.theme.mainTbImg.down
+                tooltipText: qsTr("Move downloads down") + App.loc.emptyString
+                onClicked: {
+                    if (sortTools.sortBy != AbstractDownloadsUi.DownloadsSortByOrder)
+                        sortByOrderRequired.open();
+                    else
+                        App.downloads.model.moveSelectedDownloadsDown();
+                }
+                anchors.verticalCenter: parent.verticalCenter
+            }
+
             Loader {
+                id: loader
                 z: 1
                 height: parent.height
                 anchors.right: searchField.left
