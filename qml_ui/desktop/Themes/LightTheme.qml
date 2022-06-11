@@ -7,7 +7,7 @@ QtObject {
     readonly property color foreground: "#000"//"#646464"
     readonly property color background: "#FFFFFF"
     readonly property color toolbarBackground: "#333c4e"
-    readonly property color macToolbarBorder: "#a7a6a6"
+    readonly property color macToolbarBorder: "#cfcfcf"
     readonly property color macToolbarOverlay: "#b3e3e2e2"
     readonly property color titleBar: "#404040"
     readonly property color statusBar: "#fff"

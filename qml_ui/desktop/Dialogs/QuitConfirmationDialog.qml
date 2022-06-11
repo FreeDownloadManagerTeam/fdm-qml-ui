@@ -12,6 +12,8 @@ BaseDialog {
     contentItem: BaseDialogItem {
         titleText: qsTr("Are you sure you want to quit?") + App.loc.emptyString
 
+        width: col.width + 20
+
         focus: true
         Keys.onEscapePressed: root.close()
         Keys.onReturnPressed: root.close()
@@ -24,7 +26,7 @@ BaseDialog {
             Layout.bottomMargin: 10
             spacing: 5
 
-            BaseLabel
+            Label
             {
                 bottomPadding: 10
                 text: root.message

@@ -95,6 +95,7 @@ Item {
                 anchors.left: searchMagnifier.right
                 anchors.right: searchClear.left
                 anchors.leftMargin: searchMain.border.width
+                implicitHeight: parent.height - searchMain.border.width * 2
                 font.pixelSize: font_size
 
                 background: Rectangle {

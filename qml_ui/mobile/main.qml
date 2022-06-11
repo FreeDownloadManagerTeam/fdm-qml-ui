@@ -110,11 +110,8 @@ ApplicationWindow
         width: parent.width - 100
         height: parent.height - 200
         Component.onCompleted: {
-            if (App.isSelfTestMode) {
-                item.width = Qt.binding(()=>{return selfTestDlg.width;});
-                item.height = Qt.binding(()=>{return selfTestDlg.height;});
+            if (App.isSelfTestMode)
                 uiReadyTools.onReady(function(){selfTestDlg.item.open();});
-            }
         }
     }
 

@@ -14,7 +14,7 @@ BaseDialog {
     property int dialogTitleHeight: 36
 
     topMargin: 20
-
+    width: preferredWidth < appWindow.width - dialogMargins ? preferredWidth : appWindow.width - dialogMargins
     y: Math.round((parent.height - implicitHeight) / 2)
 
     property double requestId: -1
@@ -30,89 +30,96 @@ BaseDialog {
 
         height: dlgContent.implicitHeight + dialogTitleHeight
 
-        Flickable
-        {
+        Rectangle {
             id: dlgContent
             Layout.fillWidth: true
             Layout.fillHeight: true
-            flickableDirection: Flickable.VerticalFlick
-            implicitHeight: mainLayout.implicitHeight
-            contentHeight: implicitHeight
+            implicitHeight: Math.min(mainLayout.implicitHeight, appWindow.height - dialogMargins - tuneDialog.topMargin - dialogTitleHeight)
             clip: true
-            boundsBehavior: Flickable.StopAtBounds
-            ScrollBar.vertical: ScrollBar { visible: height < mainLayout.implicitHeight; policy: ScrollBar.AlwaysOn; }
+            color: "transparent"
 
-            ColumnLayout {
-                id: mainLayout
+            Flickable
+            {
+                width: parent.width
+                height: parent.implicitHeight
+                flickableDirection: Flickable.VerticalFlick
+                contentHeight: mainLayout.implicitHeight
+                clip: true
+                boundsBehavior: Flickable.StopAtBounds
+                ScrollBar.vertical: ScrollBar { visible: dlgContent.implicitHeight < mainLayout.implicitHeight; policy: ScrollBar.AlwaysOn; }
 
-                width: dlgContent.width - 20
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.top: parent.top
-                anchors.topMargin: 10
-                spacing: 2
+                ColumnLayout {
+                    id: mainLayout
 
-                Title {}
+                    width: dlgContent.width - 20
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.top: parent.top
+                    anchors.topMargin: 10
+                    spacing: 2
 
-                SaveTo {
-                    id: saveTo
-                }
+                    Title {}
 
-                FileName {
-                    id: fileName
-                    saveToControl: saveTo
-                }
-
-                Url {}
-
-                FilesTree {
-                    id: filesTree
-                }
-
-                DownloadsList {
-                    id: downloadsList
-                }
-
-                VideoQuality {
-                    id: videoQuality
-                }
-
-                Rectangle {
-                    Layout.fillWidth: true
-                    Layout.preferredHeight: fileType.visible || batchVideoQuality.visible ? 70 : 0
-                    color: "transparent"
-
-                    FileType { id: fileType}
-
-                    BatchVideoQuality {id: batchVideoQuality}
-                }
-
-                Subtitles {}
-
-                AddDateToFileName {
-                    id: addDate
-                }
-
-                Rectangle {//40
-                    Layout.fillWidth: true
-                    Layout.preferredHeight: 40
-                    color: "transparent"
-
-                    DiskSpace {
-                        saveToPath: App.fromNativeSeparators(saveTo.path)
+                    SaveTo {
+                        id: saveTo
                     }
 
-                    SchedulerCheckbox {
-                        id: schedulerCheckbox
+                    FileName {
+                        id: fileName
+                        saveToControl: saveTo
                     }
-                }
 
-                SchedulerBlock {
-                    id: schedulerBlock
-                    visible: schedulerCheckbox.checked
-                    Layout.preferredHeight: visible ? 84 : 0
-                }
+                    Url {}
 
-                ButtonsBlock {}
+                    FilesTree {
+                        id: filesTree
+                    }
+
+                    DownloadsList {
+                        id: downloadsList
+                    }
+
+                    VideoQuality {
+                        id: videoQuality
+                    }
+
+                    Rectangle {
+                        Layout.fillWidth: true
+                        Layout.preferredHeight: fileType.visible || batchVideoQuality.visible ? 70 : 0
+                        color: "transparent"
+
+                        FileType { id: fileType}
+
+                        BatchVideoQuality {id: batchVideoQuality}
+                    }
+
+                    Subtitles {}
+
+                    AddDateToFileName {
+                        id: addDate
+                    }
+
+                    Rectangle {//40
+                        Layout.fillWidth: true
+                        Layout.preferredHeight: 40
+                        color: "transparent"
+
+                        DiskSpace {
+                            saveToPath: App.fromNativeSeparators(saveTo.path)
+                        }
+
+                        SchedulerCheckbox {
+                            id: schedulerCheckbox
+                        }
+                    }
+
+                    SchedulerBlock {
+                        id: schedulerBlock
+                        visible: schedulerCheckbox.checked
+                        Layout.preferredHeight: visible ? 84 : 0
+                    }
+
+                    ButtonsBlock {}
+                }
             }
         }
     }
