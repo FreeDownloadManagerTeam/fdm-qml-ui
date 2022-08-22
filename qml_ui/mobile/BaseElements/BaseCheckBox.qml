@@ -3,12 +3,13 @@ import QtQuick.Controls 2.1
 import "../../qt5compat"
 
 CheckBox {
-    id: control
+    id: root
 
     property string checkBoxStyle: "blue"
     property bool vertical: false
     property string textColor
     property int size: 12
+    property int wrapMode: Text.NoWrap
 
     padding: 0
     spacing: vertical ? 20 : undefined
@@ -56,46 +57,9 @@ CheckBox {
         anchors.horizontalCenter: vertical ? parent.horizontalCenter : undefined
         anchors.top: vertical ? parent.top : undefined
         bottomPadding: vertical ? 10 : 0
-        opacity: control.enabled ? 1 : 0.5
+        opacity: root.enabled ? 1 : 0.5
         color: appWindow.theme.foreground
-        font.pixelSize: control.size == 16 ? 14 : 12
+        font.pixelSize: root.size == 16 ? 14 : 12
+        wrapMode: root.wrapMode
     }
 }
-
-/*
-CheckBox {
-    property string checkBoxStyle: "blue"
-    property string textColor
-
-    padding: 0
-    focusPolicy: Qt.NoFocus
-
-    indicator: Rectangle {
-        color: "transparent"
-        anchors.verticalCenter: parent.verticalCenter
-        x: 6
-        width: 12
-        height: 12
-        clip: true
-
-        Image {
-            x: checkBoxStyle === "black" ? (
-                    checkState === Qt.Checked ? -120 :
-                    checkState === Qt.Unchecked ? -100 : -140)
-                : (
-                    checkState === Qt.Checked ? -40 :
-                    checkState === Qt.Unchecked ? 0 : -20
-            )
-            y: -44
-            source: Qt.resolvedUrl("../../images/desktop/checkbox.svg")
-        }
-    }
-
-    contentItem: BaseLabel {
-        anchors.verticalCenter: parent.verticalCenter
-        leftPadding: 26
-        text: parent.text
-        color: parent.textColor ? parent.textColor : color
-    }
-}
-*/

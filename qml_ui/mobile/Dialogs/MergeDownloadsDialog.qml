@@ -72,6 +72,17 @@ Dialog {
         id: mergeTools
     }
 
+    Connections {
+        target: App.downloads.mergeOptionsChooser
+        onGotAbortMergeRequest: function(newDownloadId, existingDownloadId) {
+            if (mergeTools.newDownloadId == newDownloadId)
+            {
+                root.close();
+                mergeTools.abortRequest();
+            }
+        }
+    }
+
     function newMergeByRequest(newDownloadId, existingDownloadId)
     {
         if (mergeTools.newMergeRequest(newDownloadId, existingDownloadId)) {

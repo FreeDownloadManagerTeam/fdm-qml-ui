@@ -10,12 +10,14 @@ ComboBox {
     rightPadding: 5
     leftPadding: 5
 
-    property int visibleRowsCount: 3
+    property int visibleRowsCount: model.length
 
     model: [
         {text: qsTr("MD5"), algorithm: AbstractDownloadsUi.Md5, hash: ""},
         {text: qsTr("SHA-1"), algorithm: AbstractDownloadsUi.Sha1, hash: ""},
-        {text: qsTr("SHA-256"), algorithm: AbstractDownloadsUi.Sha256, hash: ""}]
+        {text: qsTr("SHA-256"), algorithm: AbstractDownloadsUi.Sha256, hash: ""},
+        {text: qsTr("SHA-512"), algorithm: AbstractDownloadsUi.Sha512, hash: ""}
+    ]
 
     textRole: "text"
 
@@ -99,9 +101,6 @@ ComboBox {
         contentItem: Item {
             ListView {
                 clip: true
-//                flickableDirection: Flickable.VerticalFlick
-//                ScrollBar.vertical: ScrollBar{ visible: downloadTools.versionCount > visibleRowsCount; policy: ScrollBar.AlwaysOn; }
-//                boundsBehavior: Flickable.StopAtBounds
                 anchors.fill: parent
                 model: root.model
                 currentIndex: root.highlightedIndex

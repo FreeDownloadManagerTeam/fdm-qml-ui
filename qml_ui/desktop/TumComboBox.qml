@@ -16,12 +16,12 @@ ComboBox {
     property double totalDownloadSpeed: App.downloads.stats.totalDownloadSpeed
     property double totalUploadSpeed: App.downloads.stats.totalUploadSpeed
 
-    property var currentTumMode: App.ready ? App.settings.tum.currentMode : TrafficUsageMode.High
+    property var currentTumMode: App.asyncLoadMgr.ready ? App.settings.tum.currentMode : TrafficUsageMode.High
 
     property string sUnlimited: qsTr("Unlimited") + App.loc.emptyString
     property string kbps: qsTr("KB/s") + App.loc.emptyString
 
-    visible: App.ready && root.currentTumMode != TrafficUsageMode.Snail
+    visible: App.asyncLoadMgr.ready && root.currentTumMode != TrafficUsageMode.Snail
 
     width: parent.width
     height: parent.height

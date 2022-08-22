@@ -89,7 +89,7 @@ Column {
         description: qsTr("Snail mode") + App.loc.emptyString
         switchChecked: App.settings.tum.currentMode == TrafficUsageMode.Snail
         onClicked: {
-            if (App.ready) {
+            if (App.asyncLoadMgr.ready) {
                 if (App.settings.tum.currentMode == TrafficUsageMode.Snail) {
                     App.settings.tum.currentMode = tumModeDialog.prevTum;
                 } else {

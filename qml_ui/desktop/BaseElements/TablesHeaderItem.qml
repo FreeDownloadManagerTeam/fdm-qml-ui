@@ -20,7 +20,9 @@ Rectangle {
 
     property int headerMinimumWidth: indicatorElemRealWidth + 16
 
-    signal clicked
+    property int mouseAcceptedButtons: Qt.LeftButton
+
+    signal clicked(var mouse)
 
     height: 24
     color: "transparent"
@@ -81,8 +83,9 @@ Rectangle {
 
     MouseArea {
         anchors.fill: parent
-        onClicked: root.clicked()
+        onClicked: (mouse) => root.clicked(mouse)
         hoverEnabled: true
+        acceptedButtons:root.mouseAcceptedButtons
 
         BaseToolTip {
             text: root.text

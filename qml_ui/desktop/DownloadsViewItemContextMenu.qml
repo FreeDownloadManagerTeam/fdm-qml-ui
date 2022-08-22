@@ -35,25 +35,31 @@ BaseContextMenu {
     transformOrigin: Menu.TopRight
 
     BaseContextMenuItem {
+        id: restartItem
         text: qsTr("Restart") + App.loc.emptyString
         visible: selectedDownloadsTools.canBeRestarted()
         enabled: !locked
         onTriggered: selectedDownloadsTools.restartDownloads()
     }
-    Action {
+    BaseContextMenuItem {
+        id: openItem
         text: qsTr("Open") + App.loc.emptyString
+        visible: !App.rc.client.active
         enabled: !locked && modelIds.length === 1 && contextMenuTools.canBeOpened
         onTriggered: contextMenuTools.openClick()
     }
-    Action {
+    BaseContextMenuItem {
+        id: showInFolderItem
         enabled: modelIds.length === 1 && contextMenuTools.canBeShownInFolder
         text: qsTr("Show In Folder") + App.loc.emptyString
+        visible: !App.rc.client.active
         onTriggered: contextMenuTools.showInFolderClick()
     }
 
     BaseContextMenuSeparator {
-        visible: showErrorBlock
+        visible: restartItem.visible || openItem.visible || showInFolderItem.visible
     }
+
     BaseContextMenuItem {
         visible: showReportError
         text: qsTr("Report problem") + App.loc.emptyString
@@ -72,24 +78,28 @@ BaseContextMenu {
                 App.downloads.mgr.startDownload(modelIds[0], false);
         }
     }
-
     BaseContextMenuSeparator {
-        visible: modelIds.length === 1 && batchDownload
+        visible: showErrorBlock
     }
+
     BaseContextMenuItem {
         text: qsTr("Show Downloads") + App.loc.emptyString
         visible: modelIds.length === 1 && batchDownload
         onTriggered: downloadsViewTools.setParentDownloadIdFilter(contextMenuTools.modelId)
     }
     BaseContextMenuSeparator {
-        visible: modelIds.length === 1 && filesCount > 1
+        visible: modelIds.length === 1 && batchDownload
     }
+
     BaseContextMenuItem {
         text: qsTr("Choose Files...") + App.loc.emptyString
         visible: modelIds.length === 1 && filesCount > 1
         onTriggered: bottomPanelTools.openFilesTab()
     }
-    BaseContextMenuSeparator {}
+    BaseContextMenuSeparator {
+        visible: modelIds.length === 1 && filesCount > 1
+    }
+
     BaseContextMenu {
         title: qsTr("Set Priority") + App.loc.emptyString
         enabled: selectedDownloadsTools.changePriorityAllowed()
@@ -121,8 +131,19 @@ BaseContextMenu {
         }
     }
     BaseContextMenuSeparator {}
-    Action {
+
+    BaseContextMenuItem {
+        text: qsTr("Rename file") + App.loc.emptyString
+        visible: root.finished === true && root.filesCount == 1
+        enabled: !locked && selectedDownloadsTools.checkRenameAllowed(true)
+        onTriggered: {
+            renameDownloadFileDlg.initialize(root.modelIds[0], 0);
+            renameDownloadFileDlg.open();
+        }
+    }
+    BaseContextMenuItem {
         text: qsTr("Move to...") + App.loc.emptyString
+        visible: !App.rc.client.active
         enabled: !locked && selectedDownloadsTools.checkMoveAllowed()
         onTriggered: movingFolderDlg.open()
     }
@@ -171,8 +192,9 @@ BaseContextMenu {
         visible: selectedDownloadsTools.canCheckForUpdate()
         onTriggered: selectedDownloadsTools.checkForUpdate()
     }
-    Action {
+    BaseContextMenuItem {
         text: qsTr("Export selected downloads") + App.loc.emptyString
+        visible: !App.rc.client.active
         onTriggered: exportDownloadsDlg.exportSelected()
     }
     BaseContextMenuSeparator {}

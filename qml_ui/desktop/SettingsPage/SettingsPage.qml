@@ -79,28 +79,28 @@ Page {
 
             RightItemLabel {
                 text: qsTr("General") + App.loc.emptyString
-                onClicked: flick.contentY = general.y
+                onClicked: flick.contentY = general.y + 5
                 current: flick.currentTab === general
                 Layout.preferredWidth: navigationColumnWidth
             }
 
             RightItemLabel {
                 text: qsTr("Browser Integration") + App.loc.emptyString
-                onClicked: flick.contentY = browserIntegration.y
+                onClicked: flick.contentY = browserIntegration.y + 5
                 current: flick.currentTab === browserIntegration
                 Layout.preferredWidth: navigationColumnWidth
             }
 
             RightItemLabel {
                 text: qsTr("Network") + App.loc.emptyString
-                onClicked: flick.contentY = network.y
+                onClicked: flick.contentY = network.y + 5
                 current: flick.currentTab === network
                 Layout.preferredWidth: navigationColumnWidth
             }
 
             RightItemLabel {
                 text: qsTr("Traffic Limits") + App.loc.emptyString
-                onClicked: flick.contentY = tum.y
+                onClicked: flick.contentY = tum.y + 5
                 current: flick.currentTab === tum
                 Layout.preferredWidth: navigationColumnWidth
             }
@@ -108,7 +108,7 @@ Page {
             RightItemLabel {
                 id: antivirusHeader
                 text: qsTr("Antivirus") + App.loc.emptyString
-                onClicked: flick.contentY = antivirus.y
+                onClicked: flick.contentY = antivirus.y + 5
                 current: flick.currentTab === antivirus
                 Layout.preferredWidth: navigationColumnWidth
             }
@@ -116,8 +116,16 @@ Page {
             RightItemLabel {
                 visible: appWindow.btSupported
                 text: appWindow.btSupported ? appWindow.btS.protocolName : ""
-                onClicked: flick.contentY = bt.y
+                onClicked: flick.contentY = bt.y + 5
                 current: flick.currentTab === bt
+                Layout.preferredWidth: navigationColumnWidth
+            }
+
+            RightItemLabel {
+                visible: rc.visible
+                text: qsTr("Remote Access") + App.loc.emptyString
+                onClicked: flick.contentY = rc.y + 5
+                current: flick.currentTab === rc
                 Layout.preferredWidth: navigationColumnWidth
             }
 
@@ -132,7 +140,7 @@ Page {
                     }
                     else
                     {
-                        flick.contentY = advanced.y;
+                        flick.contentY = advanced.y + 5;
                     }
                 }
                 current: flick.currentTab === advanced
@@ -140,7 +148,7 @@ Page {
                 Timer {
                     id: advancedTabTimer
                     interval: 100
-                    onTriggered: flick.contentY = advanced.y
+                    onTriggered: flick.contentY = advanced.y + 5
                 }
             }
         }
@@ -183,6 +191,7 @@ Page {
                     Layout.fillWidth: true
                     source: "../../bt/desktop/BtSettings.qml"
                 }
+                RemoteControlSettings {id: rc; Layout.fillWidth: true}
                 AdvancedSettings {id: advanced; Layout.fillWidth: true}
             }
 
@@ -191,19 +200,21 @@ Page {
 
             function updateCurrentTab()
             {
-                if (general.y - contentY >= 0) {
+                if (general.y - contentY + 5 >= 0) {
                     flick.currentTab = general;
-                } else if (browserIntegration.y - contentY >= 0) {
+                } else if (browserIntegration.y - contentY + 5 >= 0) {
                     flick.currentTab = browserIntegration;
-                } else if (network.y - contentY >= 0) {
+                } else if (network.y - contentY + 5 >= 0) {
                     flick.currentTab = network;
-                } else if (tum.y - contentY >= 0) {
+                } else if (tum.y - contentY + 5 >= 0) {
                     flick.currentTab = tum;
-                } else if (antivirus.y - contentY >= 0) {
+                } else if (antivirus.y - contentY + 5 >= 0) {
                     flick.currentTab = antivirus;
-                } else if (appWindow.btSupported && bt.y - contentY >= 0) {
+                } else if (appWindow.btSupported && bt.y - contentY + 5 >= 0) {
                     flick.currentTab = bt;
-                } else {
+                } else if (rc.visible && rc.y - contentY + 5 >= 0) {
+                    flick.currentTab = rc;
+                }else {
                     flick.currentTab = advanced;
                 }
             }

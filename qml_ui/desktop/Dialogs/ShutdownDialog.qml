@@ -25,7 +25,8 @@ BaseDialog {
             spacing: 3
 
             BaseLabel {
-                text: shutdownTools.powerManagement.shutdownType == VmsQt.SuspendComputer ? qsTr("Attention! Your computer will be put to Sleep mode.") :
+                text: !shutdownTools.powerManagement ? "" :
+                      shutdownTools.powerManagement.shutdownType == VmsQt.SuspendComputer ? qsTr("Attention! Your computer will be put to Sleep mode.") :
                       (shutdownTools.powerManagement.shutdownType == VmsQt.HibernateComputer ? qsTr("Attention! Your computer will be hibernated.") :
                       (shutdownTools.powerManagement.shutdownType == VmsQt.ShutdownComputer  ? qsTr("Attention! Your computer will be shut down.") : "")) + App.loc.emptyString
             }

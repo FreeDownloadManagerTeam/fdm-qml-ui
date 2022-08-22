@@ -185,7 +185,7 @@ ToolBar {
                     width: 50
                     height: 50
                     source: appWindow.theme.mainTbImg.folder
-                    visible: selectedDownloadsTools.checkedDownloadsCount === 0
+                    visible: !App.rc.client.active && selectedDownloadsTools.checkedDownloadsCount === 0
                     enabled: selectedDownloadsTools.currentDownloadId > 0
                              && !downloadsViewTools.emptySearchResults
                              && !selectedDownloadsTools.selectedDownloadsIsLocked()
@@ -198,7 +198,7 @@ ToolBar {
                     width: 50
                     height: 50
                     source: appWindow.theme.mainTbImg.folder_check
-                    visible: selectedDownloadsTools.checkedDownloadsCount > 0
+                    visible: !App.rc.client.active && selectedDownloadsTools.checkedDownloadsCount > 0
                     enabled: !downloadsViewTools.emptySearchResults
                              && !selectedDownloadsTools.selectedDownloadsIsLocked()
                     onClicked: movingFolderDlg.open()

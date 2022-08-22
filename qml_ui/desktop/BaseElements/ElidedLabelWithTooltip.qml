@@ -6,6 +6,7 @@ BaseLabel
     id: label
 
     property string sourceText: ""
+    readonly property int sourceTextWidth: Math.ceil(fm.advanceWidth(sourceText))
 
     MyFontMetrics {
         id: fm

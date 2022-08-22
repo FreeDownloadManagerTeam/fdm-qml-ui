@@ -13,12 +13,20 @@ Page {
     property bool wrongFilePathWarning: false
     property bool constantBitrateChecked
 
+    QtObject {
+        id: d
+        property bool accepting: false
+    }
+
     header: BaseToolBar {
         RowLayout {
             anchors.fill: parent
 
             ToolbarBackButton {
-                onClicked: stackView.pop()
+                onClicked: {
+                    d.accepting = false;
+                    stackView.pop();
+                }
             }
 
             ToolbarLabel {
@@ -28,7 +36,7 @@ Page {
 
             DialogButton {
                 text: qsTr("OK") + App.loc.emptyString
-                enabled: destinationDir.displayText.length > 0
+                enabled: !d.accepting && destinationDir.displayText.length > 0
                 Layout.rightMargin: 10
                 textColor: appWindow.theme.toolbarTextColor
                 onClicked: doOK()
@@ -54,6 +62,7 @@ Page {
             TextField
             {
                 id: destinationDir
+                enabled: !d.accepting
                 Layout.fillWidth: true
                 selectByMouse: true
                 inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText | Qt.ImhSensitiveData
@@ -62,6 +71,8 @@ Page {
             }
 
             RoundButton {
+                visible: !App.rc.client.active
+                enabled: !d.accepting
                 radius: 40
                 width: 40
                 height: 40
@@ -190,9 +201,9 @@ Page {
 
     function initialPath()
     {
-        return uiSettingsTools.settings.mp3ConverterDestinationDir !== "" ?
+        return App.toNativeSeparators(uiSettingsTools.settings.mp3ConverterDestinationDir !== "" ?
                     uiSettingsTools.settings.mp3ConverterDestinationDir :
-                    firstDownloadPath();
+                    firstDownloadPath());
     }
 
     function isUserChangedPath()
@@ -213,27 +224,35 @@ Page {
     }
 
     function doOK() {
-        if (checkFilePath()) {
-            var minBitrate = constantBitrateChecked ? constantBitrate.minBitrate : variableBitrate.minBitrate;
-            var maxBitrate = constantBitrateChecked ? constantBitrate.maxBitrate : variableBitrate.maxBitrate;
-
-            App.downloads.mgr.convertFilesToMp3(downloadsIds, filesIndices, destinationDir.text, minBitrate, maxBitrate);
-
-            uiSettingsTools.settings.mp3ConverterConstantBitrateEnabled = constantBitrateChecked;
-            uiSettingsTools.settings.mp3ConverterConstantBitrate = constantBitrate.minBitrate;
-            uiSettingsTools.settings.mp3ConverterVariableMinBitrate = variableBitrate.minBitrate;
-            uiSettingsTools.settings.mp3ConverterVariableMaxBitrate = variableBitrate.maxBitrate;
-            if (isUserChangedPath())
-                uiSettingsTools.settings.mp3ConverterDestinationDir = destinationDir.text;
-            stackView.pop();
-        }
+        d.accepting = true;
+        App.storages.isValidAbsoluteFilePath(App.fromNativeSeparators(destinationDir.text));
     }
 
-    function checkFilePath() {
-        if (!App.tools.isValidAbsoluteFilePath(destinationDir.text)) {
-            wrongFilePathWarning = true;
-            return false;
+    Connections
+    {
+        target: App.storages
+        onIsValidAbsoluteFilePathResult: function(path, result) {
+            if (d.accepting &&
+                    path === App.fromNativeSeparators(destinationDir.text))
+            {
+                d.accepting = false;
+                wrongFilePathWarning = !result;
+                if (result)
+                {
+                    var minBitrate = constantBitrateChecked ? constantBitrate.minBitrate : variableBitrate.minBitrate;
+                    var maxBitrate = constantBitrateChecked ? constantBitrate.maxBitrate : variableBitrate.maxBitrate;
+
+                    App.downloads.mgr.convertFilesToMp3(downloadsIds, filesIndices, destinationDir.text, minBitrate, maxBitrate);
+
+                    uiSettingsTools.settings.mp3ConverterConstantBitrateEnabled = constantBitrateChecked;
+                    uiSettingsTools.settings.mp3ConverterConstantBitrate = constantBitrate.minBitrate;
+                    uiSettingsTools.settings.mp3ConverterVariableMinBitrate = variableBitrate.minBitrate;
+                    uiSettingsTools.settings.mp3ConverterVariableMaxBitrate = variableBitrate.maxBitrate;
+                    if (isUserChangedPath())
+                        uiSettingsTools.settings.mp3ConverterDestinationDir = destinationDir.text;
+                    stackView.pop();
+                }
+            }
         }
-        return true;
     }
 }

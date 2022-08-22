@@ -161,6 +161,7 @@ BaseDialog {
 
                 CustomButton {
                     id: folderBtn
+                    visible: !App.rc.client.active
                     implicitWidth: 38
                     implicitHeight: 30
                     Layout.preferredHeight: height

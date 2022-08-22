@@ -475,6 +475,8 @@ Page
 
         onConvertDestinationFilesExists: function(taskId, files)
         {
+            files.forEach((e,i,a) => a[i] = App.toNativeSeparators(e));
+
             convertDestinationFilesExistsDialog.requests.push(
                         {
                             taskId: taskId,
@@ -484,18 +486,29 @@ Page
             convertDestinationFilesExistsDialog.onGotRequest();
         }
 
-        onFailedConvertFiles: function(files)
+        onConvertTaskFinished: function(taskId, failedFiles)
         {
-            if (convertFilesFailedDialog.opened)
+            if (convertDestinationFilesExistsDialog.opened &&
+                    convertDestinationFilesExistsDialog.taskId == taskId)
             {
-                var arr = convertFilesFailedDialog.files;
-                arr.push(...files);
-                convertFilesFailedDialog.files = arr;
+                convertDestinationFilesExistsDialog.close();
             }
-            else
+
+            if (failedFiles.length > 0)
             {
-                convertFilesFailedDialog.files = files;
-                convertFilesFailedDialog.open();
+                failedFiles.forEach((e,i,a) => a[i] = App.toNativeSeparators(e));
+
+                if (convertFilesFailedDialog.opened)
+                {
+                    var arr = convertFilesFailedDialog.failedFiles;
+                    arr.push(...files);
+                    convertFilesFailedDialog.files = arr;
+                }
+                else
+                {
+                    convertFilesFailedDialog.files = failedFiles;
+                    convertFilesFailedDialog.open();
+                }
             }
         }
     }

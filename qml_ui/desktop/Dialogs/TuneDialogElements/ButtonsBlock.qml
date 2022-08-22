@@ -4,6 +4,8 @@ import org.freedownloadmanager.fdm 1.0
 import "../../BaseElements"
 
 RowLayout {
+    property bool forceDisableOK: false
+
     Layout.topMargin: 10
     Layout.bottomMargin: 15
     Layout.alignment: Qt.AlignRight
@@ -49,7 +51,8 @@ RowLayout {
         text: qsTr("Download") + App.loc.emptyString
         blueBtn: true
         alternateBtnPressed: cnclBtn.isPressed
-        enabled: downloadTools.hasWriteAccess && !downloadTools.notEnoughSpaceWarning && !downloadTools.emptyDownloadsListWarning
+        enabled: !forceDisableOK &&
+                 (downloadTools.hasWriteAccess && !downloadTools.notEnoughSpaceWarning && !downloadTools.emptyDownloadsListWarning)
         onClicked: tuneDialog.doOK()
     }
 }

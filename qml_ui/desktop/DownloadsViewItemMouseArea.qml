@@ -95,10 +95,12 @@ MouseArea {
         if (downloadModel.hasChildDownloads) {
             downloadsViewTools.setParentDownloadIdFilter(downloadModel.id)
         } else if (downloadModel.finished) {
-            App.downloads.mgr.openDownload(downloadModel.id, -1)
+            if (!App.rc.client.active)
+                App.downloads.mgr.openDownload(downloadModel.id, -1)
         }
         else if (downloadModel.fileCount > 1) {
-            App.downloads.mgr.openDownloadFolder(downloadModel.id, -1)
+            if (!App.rc.client.active)
+                App.downloads.mgr.openDownloadFolder(downloadModel.id, -1)
         }
     }
 

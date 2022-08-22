@@ -13,12 +13,20 @@ Page {
     property bool wrongFilePathWarning: false
     property bool constantBitrateChecked
 
+    QtObject {
+        id: d
+        property bool accepting: false
+    }
+
     header: BaseToolBar {
         RowLayout {
             anchors.fill: parent
 
             ToolbarBackButton {
-                onClicked: stackView.pop()
+                onClicked: {
+                    d.accepting = false;
+                    stackView.pop();
+                }
             }
 
             ToolbarLabel {
@@ -28,7 +36,7 @@ Page {
 
             DialogButton {
                 text: qsTr("OK") + App.loc.emptyString
-                enabled: destinationDir.displayText.length > 0
+                enabled: !d.accepting && destinationDir.displayText.length > 0
                 Layout.rightMargin: 10
                 textColor: appWindow.theme.toolbarTextColor
                 onClicked: doOK()
@@ -54,6 +62,7 @@ Page {
             TextField
             {
                 id: destinationDir
+                enabled: !d.accepting
                 Layout.fillWidth: true
                 selectByMouse: true
                 inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText | Qt.ImhSensitiveData
@@ -62,6 +71,8 @@ Page {
             }
 
             RoundButton {
+                visible: !App.rc.client.active
+                enabled: !d.accepting
                 radius: 40
                 width: 40
                 height: 40
@@ -82,6 +93,15 @@ Page {
                 }
             }
         }
+
+        BaseLabel {
+            visible: wrongFilePathWarning
+            text: qsTr("The path contains invalid characters") + App.loc.emptyString
+            clip: true
+            elide: Text.ElideRight
+            font.pixelSize: 13
+            color: appWindow.theme.errorMessage
+        }
     }
 
     function firstDownloadPath()
@@ -93,9 +113,9 @@ Page {
 
     function initialPath()
     {
-        return uiSettingsTools.settings.mp4ConverterDestinationDir !== "" ?
+        return App.toNativeSeparators(uiSettingsTools.settings.mp4ConverterDestinationDir !== "" ?
                     uiSettingsTools.settings.mp4ConverterDestinationDir :
-                    firstDownloadPath();
+                    firstDownloadPath());
     }
 
     function isUserChangedPath()
@@ -109,19 +129,27 @@ Page {
     }
 
     function doOK() {
-        if (checkFilePath()) {
-            App.downloads.mgr.convertFilesToMp4(downloadsIds, filesIndices, destinationDir.text);
-            if (isUserChangedPath())
-                uiSettingsTools.settings.mp4ConverterDestinationDir = destinationDir.text;
-            stackView.pop();
-        }
+        d.accepting = true;
+        App.storages.isValidAbsoluteFilePath(App.fromNativeSeparators(destinationDir.text));
     }
 
-    function checkFilePath() {
-        if (!App.tools.isValidAbsoluteFilePath(destinationDir.text)) {
-            wrongFilePathWarning = true;
-            return false;
+    Connections
+    {
+        target: App.storages
+        onIsValidAbsoluteFilePathResult: function(path, result) {
+            if (d.accepting &&
+                    path === App.fromNativeSeparators(destinationDir.text))
+            {
+                d.accepting = false;
+                wrongFilePathWarning = !result;
+                if (result)
+                {
+                    App.downloads.mgr.convertFilesToMp4(downloadsIds, filesIndices, destinationDir.text);
+                    if (isUserChangedPath())
+                        uiSettingsTools.settings.mp4ConverterDestinationDir = destinationDir.text;
+                    stackView.pop();
+                }
+            }
         }
-        return true;
     }
 }

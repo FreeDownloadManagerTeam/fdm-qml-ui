@@ -35,7 +35,7 @@ Item
                 window.visibility = s.visibility;
             else
                 window.visible = false;
-            checkWindowPosTimer.restart();
+            scheduleCheckWindowPos();
         }
         else
         {
@@ -97,8 +97,17 @@ Item
         onTriggered: checkWindowPos()
     }
 
+    function scheduleCheckWindowPos()
+    {
+        checkWindowPosTimer.restart();
+    }
+
     function checkWindowPos()
     {
+        App.log("Checking window position.");
+        App.log("Window position: (" + window.x + "," + window.y + ")");
+        App.log("desktopAvailableWidth: " + window.screen.desktopAvailableWidth);
+        App.log("desktopAvailableHeight: " + window.screen.desktopAvailableHeight);
         // Math.max(0, ...) could not be used due to bug:
         //  https://bugreports.qt.io/browse/QTBUG-85454
         if (window.x < 0 || window.x >= window.screen.desktopAvailableWidth - 50)

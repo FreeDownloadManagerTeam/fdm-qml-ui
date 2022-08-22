@@ -64,6 +64,13 @@ Page {
             if (event.key === Qt.Key_Home) {
                 selectedDownloadsTools.navigateToHome((event.modifiers & Qt.ShiftModifier));
             }
+            if (event.key === Qt.Key_F2 && selectedDownloadsTools.checkRenameAllowed(true) &&
+                    selectedDownloadsTools.currentDownloadId)
+            {
+                renameDownloadFileDlg.initialize(selectedDownloadsTools.currentDownloadId, 0);
+                renameDownloadFileDlg.open();
+                return;
+            }
         }
 
         Keys.onReturnPressed: {
@@ -100,7 +107,7 @@ Page {
         spacing: 0
 
         Rectangle {
-            Layout.preferredHeight: integrationBanner.item.visible || shutdownBanner.visible ? 30 : 0
+            Layout.preferredHeight: (integrationBanner.item && integrationBanner.item.visible) || shutdownBanner.visible ? 30 : 0
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignTop
             color: "transparent"
@@ -108,7 +115,7 @@ Page {
 
             Loader {
                 id: integrationBanner
-                active: btSupported
+                active: btSupported && !App.rc.client.active
                 source: "../bt/desktop/IntegrationBanner.qml"
                 width: parent.width
                 height: parent.height

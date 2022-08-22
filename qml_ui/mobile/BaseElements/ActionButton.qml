@@ -5,6 +5,7 @@ import org.freedownloadmanager.fdm 1.0
 import org.freedownloadmanager.fdm.appfeatures 1.0
 
 RoundButton {
+    visible: !App.rc.client.active || downloadsItemTools.buttonType !== "showInFolder"
     property bool locked: false
     width: 38
     height: 38
@@ -17,7 +18,7 @@ RoundButton {
                          downloadsItemTools.buttonType === "start" ? appWindow.theme.actionBtnStart :
                          downloadsItemTools.buttonType === "pause" ? appWindow.theme.actionBtnPause :
                          downloadsItemTools.buttonType === "restart" ? appWindow.theme.actionBtnRestart :
-                         downloadsItemTools.buttonType === "scheduler" ? appWindow.theme.actionBtnStart : ""
+                         downloadsItemTools.buttonType === "scheduler" ? appWindow.theme.actionBtnStart : undefined
 
 
     icon.source: downloadsItemTools.buttonType === "showInFolder" ? Qt.resolvedUrl("../../images/mobile/open_folder.svg") :

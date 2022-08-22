@@ -7,7 +7,7 @@ import org.freedownloadmanager.fdm.appfeatures 1.0
 import "../common"
 import "./BaseElements"
 
-BaseContextMenu {
+BaseContextMenu {   
     id: root
     implicitWidth: 240
     y: 50
@@ -28,6 +28,8 @@ BaseContextMenu {
     BaseContextMenuSeparator {}
 
     BaseContextMenu {
+        id: exportImportMenu
+
         title: qsTr("Export/Import") + App.loc.emptyString
 
         BaseContextMenuItem {
@@ -51,42 +53,42 @@ BaseContextMenu {
             text: qsTr("Import settings") + App.loc.emptyString
             onTriggered: importDlg.openDialog('importSettings')
         }
-    }
-
-    BaseContextMenuSeparator {
-        visible: App.features.hasFeature(AppFeatures.Plugins)
-    }
-
-    BaseContextMenuItem {
-        visible: App.features.hasFeature(AppFeatures.Plugins)
-        text: qsTr("Add-ons...") + App.loc.emptyString
-        enabled: !pageId
-        onTriggered: appWindow.openPlugins()
-    }
-
+    }    
     BaseContextMenuSeparator {}
 
     BaseContextMenuItem {
+        visible: App.features.hasFeature(AppFeatures.Plugins) &&
+                 !App.rc.client.active
+        text: qsTr("Add-ons...") + App.loc.emptyString
+        enabled: !pageId
+        onTriggered: appWindow.openPlugins()
+    }    
+    BaseContextMenuSeparator {
+        visible: App.features.hasFeature(AppFeatures.Plugins) &&
+                 !App.rc.client.active
+    }
+
+    BaseContextMenuItem {
+        visible: !App.rc.client.active
         text: qsTr("Preferences...") + App.loc.emptyString
         enabled: !pageId
         onTriggered: appWindow.openSettings()
     }
-
-    BaseContextMenuSeparator {}
+    BaseContextMenuSeparator {
+        visible: !App.rc.client.active
+    }
 
     BaseContextMenuItem {
         text: qsTr("Contact Support") + App.loc.emptyString
         onTriggered: Qt.openUrlExternally('https://www.freedownloadmanager.org/support.htm?' + App.serverCommonGetParameters)
-    }
-
-    BaseContextMenuSeparator {
-        visible: appWindow.supportComputerShutdown
-    }
+    }    
+    BaseContextMenuSeparator {}
 
     BaseContextMenuItem {
         visible: appWindow.supportComputerShutdown
         text: qsTr("Auto Shutdown") + App.loc.emptyString
-        enabled: App.downloads.tracker.nonFinishedDownloadsRunning || shutdownTools.powerManagement.shutdownComputerWhenDownloadsFinished
+        enabled: shutdownTools.powerManagement &&
+                 (App.downloads.tracker.nonFinishedDownloadsRunning || shutdownTools.powerManagement.shutdownComputerWhenDownloadsFinished)
         arrow_down: enabled && !root.shutdownGroupOpened
         arrow_up: enabled && root.shutdownGroupOpened && !shutdownTools.powerManagement.shutdownComputerWhenDownloadsFinished
         MouseArea {
@@ -95,13 +97,12 @@ BaseContextMenu {
             onClicked: root.shutdownGroupToggle()
         }
     }
+    BaseContextMenuSeparator {
+        visible: appWindow.supportComputerShutdown
+    }
 
     ActionGroup {
         id: shutdownGroup
-    }
-
-    BaseContextMenuSeparator {
-        visible: root.shutdownGroupOpened
     }
 
     BaseContextMenuItem {
@@ -109,7 +110,7 @@ BaseContextMenu {
         text: qsTr("Sleep") + App.loc.emptyString
         checkable: true
         insideMainMenu: true
-        checked: shutdownTools.powerManagement.shutdownComputerWhenDownloadsFinished && shutdownTools.powerManagement.shutdownType == VmsQt.SuspendComputer
+        checked: shutdownTools.powerManagement && shutdownTools.powerManagement.shutdownComputerWhenDownloadsFinished && shutdownTools.powerManagement.shutdownType == VmsQt.SuspendComputer
         onTriggered: shutdownTools.setShutdownType(VmsQt.SuspendComputer, checked)
         ActionGroup.group: shutdownGroup
     }
@@ -119,7 +120,7 @@ BaseContextMenu {
         text: qsTr("Hibernate") + App.loc.emptyString
         checkable: true
         insideMainMenu: true
-        checked: shutdownTools.powerManagement.shutdownComputerWhenDownloadsFinished && shutdownTools.powerManagement.shutdownType == VmsQt.HibernateComputer
+        checked: shutdownTools.powerManagement && shutdownTools.powerManagement.shutdownComputerWhenDownloadsFinished && shutdownTools.powerManagement.shutdownType == VmsQt.HibernateComputer
         onTriggered: shutdownTools.setShutdownType(VmsQt.HibernateComputer, checked)
         ActionGroup.group: shutdownGroup
     }
@@ -129,12 +130,30 @@ BaseContextMenu {
         text: qsTr("Shutdown") + App.loc.emptyString
         checkable: true
         insideMainMenu: true
-        checked: shutdownTools.powerManagement.shutdownComputerWhenDownloadsFinished && shutdownTools.powerManagement.shutdownType == VmsQt.ShutdownComputer
+        checked: shutdownTools.powerManagement && shutdownTools.powerManagement.shutdownComputerWhenDownloadsFinished && shutdownTools.powerManagement.shutdownType == VmsQt.ShutdownComputer
         onTriggered: shutdownTools.setShutdownType(VmsQt.ShutdownComputer, checked)
         ActionGroup.group: shutdownGroup
     }
 
-    BaseContextMenuSeparator {}
+    BaseContextMenuSeparator {
+        visible: root.shutdownGroupOpened
+    }
+
+    BaseContextMenuItem {
+        visible: App.features.hasFeature(AppFeatures.RemoteControlClient)
+        text: App.rc.client.active ?
+                  qsTr("Disconnect from remote %1").arg(App.shortDisplayName) + App.loc.emptyString :
+                  qsTr("Connect to remote %1").arg(App.shortDisplayName) + App.loc.emptyString
+        onTriggered: {
+            if (App.rc.client.active)
+                App.rc.client.disconnectFromRemoteApp();
+            else
+                connectToRemoteAppDlg.open();
+        }
+    }
+    BaseContextMenuSeparator {
+        visible: App.features.hasFeature(AppFeatures.RemoteControlClient)
+    }
 
     BaseContextMenuItem {
         visible: appWindow.portableSupported
@@ -187,11 +206,36 @@ BaseContextMenu {
     Component.onCompleted: {
         if (appWindow.btSupported) {
             if (App.downloads.tracker.hasPostFinishedTasksDownloadsCount) {
-                var i = 3;
+                let i = 3;
                 root.insertItem(i++, Qt.createQmlObject('import "../bt/desktop"; StartPostFinishedDownloadsMenuItem {}', root));
                 root.insertItem(i++, Qt.createQmlObject('import "../bt/desktop"; StopPostFinishedDownloadsMenuItem {}', root));
                 root.insertItem(i++, Qt.createQmlObject('import "./BaseElements"; BaseContextMenuSeparator {}', root));
             }
+        }
+
+        if (App.rc.client.active)
+        {
+            deleteMenu(exportImportMenu);
+        }
+    }
+
+    function findMenuIndex(item)
+    {
+        for (let i = 0; i < count; ++i)
+        {
+            if (item == menuAt(i))
+                return i;
+        }
+        return -1;
+    }
+
+    function deleteMenu(item)
+    {
+        let index = findMenuIndex(item);
+        if (index !== -1)
+        {
+            removeItem(index+1); // separator
+            removeItem(index);
         }
     }
 
@@ -202,7 +246,8 @@ BaseContextMenu {
     }
 
     function openMenu() {
-        root.shutdownGroupOpened = shutdownTools.powerManagement.shutdownComputerWhenDownloadsFinished;
+        root.shutdownGroupOpened = shutdownTools.powerManagement &&
+                shutdownTools.powerManagement.shutdownComputerWhenDownloadsFinished;
         root.open();
     }
 

@@ -2,6 +2,7 @@ import QtQuick 2.0
 import QtQuick.Controls 2.3
 import org.freedownloadmanager.fdm 1.0
 import "./BaseElements"
+import "./Dialogs"
 
 Page {
 
@@ -16,9 +17,9 @@ Page {
             width: parent.width
             height: 60
 
-            color: "#ffffff"
+            color: appWindow.theme.background
 
-            Text {
+            BaseLabel {
                 width: parent.width
                 text: App.shortDisplayName
                 clip: true
@@ -29,17 +30,18 @@ Page {
                 font.family: "Roboto"
                 horizontalAlignment: Text.AlignHCenter
                 font.weight: Font.DemiBold
-                color: "#4a4a4a"
             }
         }
 
         Rectangle {
-            color: "#ededed"
+            color: appWindow.theme.bottomPanelBar
             height: 48
             width: parent.width
 
             BaseLabel {
-                text: "Loading"
+                text: qsTr("Loading") + (App.asyncLoadMgr.remoteName ?
+                          " (" + qsTr("Connection to %1").arg(App.asyncLoadMgr.remoteName) + ")" + App.loc.emptyString :
+                          "")
                 width: parent.width
                 anchors.verticalCenter: parent.verticalCenter
                 horizontalAlignment: Text.AlignHCenter
@@ -50,19 +52,68 @@ Page {
 
     Rectangle {
         anchors.fill: parent
-        color: "#FFFFFF"
+        color: appWindow.theme.background
     }
 
-    Rectangle {
-        anchors.fill: parent
-        anchors.margins: 20
-        Button {
-            text: qsTr("Refresh") + App.loc.emptyString
-            onClicked: uiReadyTools.checkUiState()
-            width: parent.width
+    Column
+    {
+        spacing: 10
+        anchors.centerIn: parent
+
+        BaseLabel
+        {
+            visible: App.asyncLoadMgr.status
+
+            text: App.asyncLoadMgr.status +
+                  (App.asyncLoadMgr.error ? " " + qsTr("Error: %1").arg(App.asyncLoadMgr.error) : "") +
+                  App.loc.emptyString
+        }
+
+        Row
+        {
+            visible: !App.asyncLoadMgr.loading
+            spacing: 10
+
+            CustomButton
+            {
+                visible: App.asyncLoadMgr.canUserRetryLoad
+                text: qsTr("Retry") + App.loc.emptyString
+                onClicked: App.asyncLoadMgr.retryLoad()
+            }
+
+            CustomButton
+            {
+                visible: App.asyncLoadMgr.canUserCancelLoad
+                text: qsTr("Cancel") + App.loc.emptyString
+                onClicked: App.asyncLoadMgr.cancelLoad()
+            }
+        }
+
+        CustomButton
+        {
+            visible: App.asyncLoadMgr.loading && App.asyncLoadMgr.canUserCancelLoad
+            text: qsTr("Abort") + App.loc.emptyString
+            onClicked: App.asyncLoadMgr.cancelLoad()
             anchors.horizontalCenter: parent.horizontalCenter
         }
     }
 
+    AuthDialog
+    {
+        id: authDlg
+        remoteName: App.asyncLoadMgr.remoteName
+        passwordOnly: true
+        onAccepted: App.asyncLoadMgr.authorize(password, save)
+        onRejected: App.asyncLoadMgr.cancelLoad()
+        anchors.centerIn: parent
+    }
 
+    Connections
+    {
+        target: App.asyncLoadMgr
+        onUnauthorized: {
+            authDlg.open();
+            authDlg.forceActiveFocus();
+        }
+    }
 }

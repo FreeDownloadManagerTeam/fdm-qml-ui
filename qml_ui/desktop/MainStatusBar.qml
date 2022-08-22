@@ -15,9 +15,9 @@ Rectangle {
     height: 31
     color: appWindow.theme.statusBar
 
-    visible: App.ready
+    visible: App.asyncLoadMgr.ready
 
-    property var currentTumMode: App.ready ? App.settings.tum.currentMode : false
+    property var currentTumMode: App.asyncLoadMgr.ready ? App.settings.tum.currentMode : false
 
     Rectangle {
         width: parent.width
@@ -67,7 +67,7 @@ Rectangle {
                 cursorShape: Qt.PointingHandCursor
                 hoverEnabled: true
                 onClicked: {
-                    if (App.ready) {
+                    if (App.asyncLoadMgr.ready) {
                         if (App.settings.tum.currentMode == TrafficUsageMode.Snail) {
                             App.settings.tum.currentMode = snailBtn.prevTum;
                         } else {

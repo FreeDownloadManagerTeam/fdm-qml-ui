@@ -8,6 +8,8 @@ Item {
     id: root
     property var settings: settings
 
+    signal wasReset()
+
     Settings {
         id: settings
         fileName: App.appqSettingsIniFilePath()
@@ -44,6 +46,8 @@ Item {
         property bool showSaveAsButton: false
         property bool autoHideWhenFinishedAddingDownloads: false
         property string lastRemoteBannerId
+        property string lastRemoteAppId
+        property string downloadsListColumns
     }
 
     property bool hasNonDefaultValues:
@@ -58,7 +62,8 @@ Item {
         settings.enableStandaloneDownloadsWindows !== false ||
         settings.enableUserDefinedOrderOfDownloads !== false ||
         settings.showSaveAsButton !== false ||
-        settings.autoHideWhenFinishedAddingDownloads !== false
+        settings.autoHideWhenFinishedAddingDownloads !== false ||
+        settings.downloadsListColumns
 
     function resetToDefaults()
     {
@@ -74,6 +79,8 @@ Item {
         settings.enableUserDefinedOrderOfDownloads = false;
         settings.showSaveAsButton = false;
         settings.autoHideWhenFinishedAddingDownloads = false;
+        settings.downloadsListColumns = "";
+        wasReset();
     }
 
     Connections {
@@ -121,6 +128,7 @@ Item {
         uiSettingsTools.settings.enableUserDefinedOrderOfDownloads = s.settings.enableUserDefinedOrderOfDownloads;
         uiSettingsTools.settings.showSaveAsButton = s.settings.showSaveAsButton;
         uiSettingsTools.settings.autoHideWhenFinishedAddingDownloads = s.settings.autoHideWhenFinishedAddingDownloads;
+        uiSettingsTools.settings.downloadsListColumns = s.settings.downloadsListColumns;
         s.destroy();
     }
 }

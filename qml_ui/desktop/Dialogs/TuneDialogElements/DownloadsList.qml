@@ -177,6 +177,7 @@ ColumnLayout {
 
             footer: BusyIndicator {
                 visible: false
+                running: visible
                 anchors.horizontalCenter: parent.horizontalCenter
                 height: visible ? undefined : 0
             }

@@ -19,6 +19,11 @@ BaseDialog {
     property var filesIndices: []
     property bool wrongFilePathWarning: false
 
+    QtObject {
+        id: d
+        property bool accepting: false
+    }
+
     contentItem: BaseDialogItem {
         titleText: qsTr("Convert to mp4") + App.loc.emptyString
         focus: true
@@ -52,6 +57,7 @@ BaseDialog {
 
                 BaseTextField {
                     id: destinationDir
+                    enabled: !d.accepting
                     focus: true
                     Layout.fillWidth: true
                     onAccepted: root.doOK()
@@ -60,6 +66,7 @@ BaseDialog {
 
                 CustomButton {
                     id: folderBtn
+                    enabled: !d.accepting
                     implicitWidth: 38
                     implicitHeight: 30
                     Layout.alignment: Qt.AlignRight
@@ -124,7 +131,7 @@ BaseDialog {
 
                 CustomButton {
                     text: qsTr("OK") + App.loc.emptyString
-                    enabled: destinationDir.text.length > 0
+                    enabled: !d.accepting && destinationDir.text.length > 0
                     blueBtn: true
                     alternateBtnPressed: cnclBtn.isPressed
                     onClicked: {
@@ -136,7 +143,10 @@ BaseDialog {
     }
 
     onOpened: forceActiveFocus()
-    onClosed: appWindow.appWindowStateChanged()
+    onClosed: {
+        d.accepting = false;
+        appWindow.appWindowStateChanged();
+    }
 
     function firstDownloadPath()
     {
@@ -167,19 +177,27 @@ BaseDialog {
     }
 
     function doOK() {
-        if (checkFilePath()) {
-            App.downloads.mgr.convertFilesToMp4(downloadsIds, filesIndices, App.fromNativeSeparators(destinationDir.text));
-            if (isUserChangedPath())
-                uiSettingsTools.settings.mp4ConverterDestinationDir = App.fromNativeSeparators(destinationDir.text);
-            root.close();
-        }
+        d.accepting = true;
+        App.storages.isValidAbsoluteFilePath(App.fromNativeSeparators(destinationDir.text));
     }
 
-    function checkFilePath() {
-        if (!App.tools.isValidAbsoluteFilePath(App.fromNativeSeparators(destinationDir.text))) {
-            wrongFilePathWarning = true;
-            return false;
+    Connections
+    {
+        target: App.storages
+        onIsValidAbsoluteFilePathResult: function(path, result) {
+            if (d.accepting &&
+                    path === App.fromNativeSeparators(destinationDir.text))
+            {
+                d.accepting = false;
+                wrongFilePathWarning = !result;
+                if (result)
+                {
+                    App.downloads.mgr.convertFilesToMp4(downloadsIds, filesIndices, App.fromNativeSeparators(destinationDir.text));
+                    if (isUserChangedPath())
+                        uiSettingsTools.settings.mp4ConverterDestinationDir = App.fromNativeSeparators(destinationDir.text);
+                    root.close();
+                }
+            }
         }
-        return true;
     }
 }

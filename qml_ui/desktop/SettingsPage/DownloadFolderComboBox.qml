@@ -21,7 +21,9 @@ ComboBox {
     property int popupWidth: 120
 
     property string validPath: ""
-    readonly property bool isCurrentPathValid: editText === validPath
+
+    property bool waitingPathCheck: false
+    readonly property bool isCurrentPathInvalid: !waitingPathCheck && editText !== validPath
 
     signal validPathChanged2() // is not issued on component initialization
 
@@ -31,10 +33,22 @@ ComboBox {
     }
 
     onEditTextChanged: {
-        if (App.tools.isValidAbsoluteFilePath(editText))
-        {
-            validPath = editText;
-            validPathChanged2();
+        waitingPathCheck = true;
+        App.storages.isValidAbsoluteFilePath(App.fromNativeSeparators(editText));
+    }
+
+    Connections {
+        target: App.storages
+        onIsValidAbsoluteFilePathResult: function(path, result) {
+            if (path === App.fromNativeSeparators(editText))
+            {
+                waitingPathCheck = false;
+                if (result)
+                {
+                    validPath = editText;
+                    validPathChanged2();
+                }
+            }
         }
     }
 
@@ -78,7 +92,7 @@ ComboBox {
         text: root.editText
         rightPadding: 30
         font.pixelSize: 12
-        color: root.isCurrentPathValid ? appWindow.theme.settingsItem : appWindow.theme.errorMessage
+        color: root.isCurrentPathInvalid ? appWindow.theme.errorMessage : appWindow.theme.settingsItem
         background: Rectangle {
             color: "transparent"
             border.color: "transparent"

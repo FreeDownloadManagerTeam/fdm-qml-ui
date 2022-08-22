@@ -15,20 +15,21 @@ BaseDialog {
 
     topMargin: 20
 
-    y: Math.round((parent.height - implicitHeight) / 2)
-
     property double requestId: -1
     signal doOK
     signal gotPreview(string url)
     onDoOK: accept()
+
+    QtObject {
+        id: d
+        property bool accepting: false
+    }
 
     contentItem: BaseDialogItem {
         titleText: qsTr("New download") + App.loc.emptyString
         Keys.onEscapePressed: downloadTools.doReject()
         onCloseClick: downloadTools.doReject()
         spacing: 0
-
-        height: dlgContent.implicitHeight + dialogTitleHeight
 
         Flickable
         {
@@ -40,7 +41,7 @@ BaseDialog {
             contentHeight: implicitHeight
             clip: true
             boundsBehavior: Flickable.StopAtBounds
-            ScrollBar.vertical: ScrollBar { visible: height < mainLayout.implicitHeight; policy: ScrollBar.AlwaysOn; }
+            ScrollBar.vertical: ScrollBar { visible: dlgContent.height < mainLayout.implicitHeight; policy: ScrollBar.AlwaysOn; }
 
             ColumnLayout {
                 id: mainLayout
@@ -55,6 +56,7 @@ BaseDialog {
 
                 SaveTo {
                     id: saveTo
+                    enabled: !d.accepting
                 }
 
                 FileName {
@@ -112,7 +114,7 @@ BaseDialog {
                     Layout.preferredHeight: visible ? 84 : 0
                 }
 
-                ButtonsBlock {}
+                ButtonsBlock {forceDisableOK: d.accepting}
             }
         }
     }
@@ -159,19 +161,37 @@ BaseDialog {
             downloadTools.setPreviewUrl();
             downloadsList.initialization();
         }
+        d.accepting = false;
 
         open();
         forceActiveFocus();
     }
 
     function accept() {
+        if (d.accepting)
+            return;
+        d.accepting = true;
         downloadTools.onFilePathTextChanged(App.fromNativeSeparators(saveTo.path));
+        downloadTools.checkFilePathAsync();
+    }
 
-        if (downloadTools.checkFilePath() && downloadTools.checkFileName()) {
-            downloadTools.saveBatchDownloadOptions(addDate.checked, addDate.changedByUser);
-            downloadTools.addDownloadFromDialog();
-            schedulerBlock.complete();
-            schedulerTools.doOK();
+    Connections
+    {
+        target: downloadTools
+        onCheckFilePathFinished: {
+            if (!d.accepting)
+                return;
+            d.accepting = false;
+            if (!downloadTools.wrongFilePathWarning)
+            {
+                downloadTools.saveBatchDownloadOptions(addDate.checked, addDate.changedByUser);
+                downloadTools.addDownloadFromDialog();
+                schedulerBlock.complete();
+                schedulerTools.doOK();
+            }
+        }
+        onReject: {
+            d.accepting = false;
         }
     }
 }

@@ -3,6 +3,7 @@ import QtQuick.Controls 2.12
 import QtQuick.Controls.Material 2.4
 import "../qt5compat"
 import org.freedownloadmanager.fdm 1.0
+import org.freedownloadmanager.fdm.appfeatures 1.0
 
 Drawer {
     id: root
@@ -78,7 +79,7 @@ Drawer {
                     }
                 }
                 Label {
-                    text: qsTr(model.text) + App.loc.emptyString
+                    text: model.text
                     font.pixelSize: 15
                     wrapMode: Text.WordWrap
                     horizontalAlignment: Text.AlignLeft
@@ -100,12 +101,14 @@ Drawer {
             "browser": function(){ root.browserBtnClicked()},
             "settings": function(){ stackView.waPush(Qt.resolvedUrl("SettingsPage/SettingsPage.qml")) },
             "support": function(){ Qt.openUrlExternally('https://www.freedownloadmanager.org/support.htm?origin=menu&' + App.serverCommonGetParameters); },
+            "connectToRemoteApp": function() {connectToRemoteAppDlg.open();},
+            "disconnectFromRemoteApp": function() {App.rc.client.disconnectFromRemoteApp();},
             "about": function(){ aboutDlg.open(); },
             "quit": function(){ App.quit(); },
             "selfTest": function(){ App.launchSelfTest(); }
         }
 
-        function startListModel() {
+        function build() {
             // WARNING: QTBUG-96397. Qt.resolvedUrl must be called the last when defining item's properties
 
             clear();
@@ -122,11 +125,19 @@ Drawer {
                         "enabled": App.downloads.tracker.finishedHasEnabledPostFinishedTasks,
                         "icon": Qt.resolvedUrl("../images/mobile/pause.svg"),});
             }
-            append({"text": QT_TR_NOOP("Browser"), "actionLabel": "browser", "enabled": true, "icon": Qt.resolvedUrl("../images/mobile/browser.svg")});
-            append({"text": QT_TR_NOOP("Settings"), "actionLabel": "settings", "enabled": true, "icon": Qt.resolvedUrl("../images/mobile/settings.svg")});
-            append({"text": QT_TR_NOOP("Contact support"), 'actionLabel': "support", "enabled": true, "icon": Qt.resolvedUrl("../images/mobile/support.svg")});
-            append({"text": QT_TR_NOOP("About"), "actionLabel": "about", "enabled": true, "icon": Qt.resolvedUrl("../images/mobile/about.svg")});
-            append({"text": QT_TR_NOOP("Quit"), "actionLabel": "quit", "enabled": true, "icon": Qt.resolvedUrl("../images/mobile/quit.svg")});
+            append({"text": qsTr("Browser"), "actionLabel": "browser", "enabled": true, "icon": Qt.resolvedUrl("../images/mobile/browser.svg")});
+            if (!App.rc.client.active)
+                append({"text": qsTr("Settings"), "actionLabel": "settings", "enabled": true, "icon": Qt.resolvedUrl("../images/mobile/settings.svg")});
+            append({"text": qsTr("Contact support"), 'actionLabel': "support", "enabled": true, "icon": Qt.resolvedUrl("../images/mobile/support.svg")});
+            if (App.features.hasFeature(AppFeatures.RemoteControlClient))
+            {
+                if (App.rc.client.active)
+                    append({"text": qsTr("Disconnect from remote %1").arg(App.shortDisplayName), "actionLabel": "disconnectFromRemoteApp", "enabled": true, "icon": Qt.resolvedUrl("../images/mobile/rc.svg")});
+                else
+                    append({"text": qsTr("Connect to remote %1").arg(App.shortDisplayName), "actionLabel": "connectToRemoteApp", "enabled": true, "icon": Qt.resolvedUrl("../images/mobile/rc.svg")});
+            }
+            append({"text": qsTr("About"), "actionLabel": "about", "enabled": true, "icon": Qt.resolvedUrl("../images/mobile/about.svg")});
+            append({"text": qsTr("Quit"), "actionLabel": "quit", "enabled": true, "icon": Qt.resolvedUrl("../images/mobile/quit.svg")});
             if (App.isSelfTestAvail)
                 append({"text": "Self Test", "actionLabel": "selfTest", "enabled": true, "icon": Qt.resolvedUrl("../images/mobile/self_test.svg")});
         }
@@ -176,20 +187,26 @@ Drawer {
     }
 
     Component.onCompleted: {
-        listModel.startListModel();
+        listModel.build();
     }
 
     Connections
     {
         target: App
-        onIsSelfTestAvailChanged: listModel.startListModel()
+        onIsSelfTestAvailChanged: listModel.build()
     }
 
     Connections
     {
         target: App.downloads.tracker
-        onHasPostFinishedTasksDownloadsCountChanged: listModel.startListModel()
-        onFinishedHasDisabledPostFinishedTasksChanged: listModel.startListModel()
-        onFinishedHasEnabledPostFinishedTasksChanged: listModel.startListModel()
+        onHasPostFinishedTasksDownloadsCountChanged: listModel.build()
+        onFinishedHasDisabledPostFinishedTasksChanged: listModel.build()
+        onFinishedHasEnabledPostFinishedTasksChanged: listModel.build()
+    }
+
+    Connections
+    {
+        target: App.loc
+        onCurrentTranslationChanged: listModel.build()
     }
 }

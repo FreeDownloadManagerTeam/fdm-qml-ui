@@ -12,6 +12,7 @@ Item {
     signal createDownloadFromDialog()
     signal createSilentDownload()
     signal modulesChanged(var modulesUids, var urlDescriptions)
+    signal checkFilePathFinished()
 
     signal finished(double id, bool added)
     signal reject()
@@ -619,30 +620,25 @@ Item {
         App.downloads.creator.resourceVersionSelector(requestId, 0).selectedVersion = index;
     }
 
-    function checkFileName() {
-        //Commented: allow the user to enter invalid file name for whatever reason;
-        //the core will sanitize it.
-        /*if (filesCount === 1 || batchDownload) {
-            var str = filePath + (filePath.slice(-1) == "/" ? "" : "/") + fileName;
-            if (filePath != App.tools.sanitizeFilePath(filePath, '')) {
-                wrongFileNameWarning = true;
-                return false;
-            }
-        }*/
-        return true;
-    }
-
-    function checkFilePath() {
-        if (!App.tools.isValidAbsoluteFilePath(filePath)) {
-            wrongFilePathWarning = true;
-            return false;
-        }
-        return true;
+    function checkFilePathAsync() {
+        App.storages.isValidAbsoluteFilePath(filePath);
     }
 
     function isBusy()
     {
         return requestId !== -1 &&
                 (checkingIfAcceptableUrl || buildingDownload);
+    }
+
+    Connections
+    {
+        target: App.storages
+        onIsValidAbsoluteFilePathResult: function(path, result) {
+            if (path === filePath)
+            {
+                wrongFilePathWarning = !result;
+                checkFilePathFinished();
+            }
+        }
     }
 }

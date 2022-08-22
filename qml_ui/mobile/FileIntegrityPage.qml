@@ -84,7 +84,8 @@ Page {
                         model: [
                             {text: qsTr("MD5") + App.loc.emptyString, algorithm: AbstractDownloadsUi.Md5, hash: ""},
                             {text: qsTr("SHA-1") + App.loc.emptyString, algorithm: AbstractDownloadsUi.Sha1, hash: ""},
-                            {text: qsTr("SHA-256") + App.loc.emptyString, algorithm: AbstractDownloadsUi.Sha256, hash: ""}]
+                            {text: qsTr("SHA-256") + App.loc.emptyString, algorithm: AbstractDownloadsUi.Sha256, hash: ""},
+                            {text: qsTr("SHA-512") + App.loc.emptyString, algorithm: AbstractDownloadsUi.Sha512, hash: ""}]
                         textRole: "text"
 
                         contentItem: Text {

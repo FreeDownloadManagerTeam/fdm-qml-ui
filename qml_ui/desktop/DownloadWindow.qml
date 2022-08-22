@@ -149,7 +149,7 @@ ApplicationWindow
                     }
                     MouseArea {
                         anchors.fill: parent
-                        enabled: App.features.hasFeature(AppFeatures.OpenFolder)
+                        visible: App.features.hasFeature(AppFeatures.OpenFolder) && !App.rc.client.active
                         cursorShape: Qt.PointingHandCursor
                         onClicked: App.downloads.mgr.openDownloadFolder(downloadsItemTools.itemId, -1)
                     }
@@ -262,12 +262,14 @@ ApplicationWindow
 
             CustomButton
             {
+                visible: !App.rc.client.active
                 text: qsTr("Show In Folder") + App.loc.emptyString
                 onClicked: App.downloads.mgr.openDownloadFolder(downloadId, -1)
             }
 
             CustomButton
             {
+                visible: !App.rc.client.active
                 text: qsTr("Open") + App.loc.emptyString
                 onClicked: launch()
                 enabled: downloadsItemTools.finished

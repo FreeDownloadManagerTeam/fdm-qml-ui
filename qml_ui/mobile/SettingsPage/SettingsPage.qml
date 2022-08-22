@@ -116,6 +116,17 @@ Rectangle {
                         SettingsSeparator{}
 
                         SettingsItem {
+                            visible: appWindow.btSupported
+                            description: appWindow.btSupported ? appWindow.btS.settingsTitle : ""
+                            onClicked: stackView.waPush(Qt.resolvedUrl("../../bt/mobile/BtSettings.qml"))
+                            textWeight: Font.Bold
+                        }
+
+                        SettingsSeparator {
+                            visible: appWindow.btSupported
+                        }
+
+                        SettingsItem {
                             description: qsTr("Advanced settings") + App.loc.emptyString
                             onClicked: stackView.waPush(Qt.resolvedUrl("AdvancedSettings.qml"))
                             textWeight: Font.Bold

@@ -12,7 +12,7 @@ Menu {
     property var downloadItemId: null
     property bool finished: false
     property bool locked: false
-    property bool canBeShownInFolder: App.features.hasFeature(AppFeatures.OpenFolder)
+    property bool canBeShownInFolder: App.features.hasFeature(AppFeatures.OpenFolder) && !App.rc.client.active
 
     modal: true
     dim: false
@@ -54,7 +54,7 @@ Menu {
     BaseMenuItem {
         id: openFile
         text: qsTr("Open") + App.loc.emptyString
-        visible: downloadItemId && !model.folder && (model.priority != AbstractDownloadsUi.DownloadPriorityDontDownload || finished)
+        visible: downloadItemId && !model.folder && (model.priority != AbstractDownloadsUi.DownloadPriorityDontDownload || finished) && !App.rc.client.active
         enabled: !locked && finished
         onTriggered: App.downloads.mgr.openDownload(downloadItemId, model.fileIndex)
     }

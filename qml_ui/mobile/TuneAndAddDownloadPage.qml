@@ -117,6 +117,7 @@ Page {
                 }
 
                 RoundButton {
+                    visible: !App.rc.client.active
                     radius: 40
                     width: 40
                     height: 40
@@ -262,7 +263,7 @@ Page {
         var storage = storages.filter(function (s) { return path.startsWith(s.unrestrictedPath) });
         path = storage.length > 0 ? path.replace(storage[0].unrestrictedPath, storage[0].label) : path;
         path = path.replace(/\/$/, '');//remove last slash
-        return path;
+        return App.toNativeSeparators(path);
     }
 
     function defineFolderList() {

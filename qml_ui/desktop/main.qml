@@ -35,8 +35,9 @@ ApplicationWindow {
                                     || importDlg.opened || exportDownloadsDlg.opened || exportSettingsDlg.opened
                                     || deleteDownloadsFailedDlg.opened || customizeSoundsDlg.opened || editTagDlg.opened
                                     || mp4ConverterDlg.opened || privacyDlg.opened || reportSentDlg.opened
-                                    || remoteBannerMgr.bannerOpened
-    property bool supportComputerShutdown: App.features.hasFeature(AppFeatures.ComputerShutdown)
+                                    || remoteBannerMgr.bannerOpened || renameDownloadFileDlg.opened
+    property bool supportComputerShutdown: App.features.hasFeature(AppFeatures.ComputerShutdown) &&
+                                           !App.rc.client.active
     property bool updateSupported: App.features.hasFeature(AppFeatures.Updates)
     property bool btSupported: App.features.hasFeature(AppFeatures.BT)
     property alias btS: btStrings.item
@@ -69,7 +70,9 @@ ApplicationWindow {
     height: 610
     minimumWidth: 550//Math.min(910, screen.desktopAvailableWidth - 50)
     minimumHeight: 340//Math.min(610, screen.desktopAvailableHeight - 50)
-    title: App.isSelfTestMode ? App.displayName + " [Self Test Mode]" : App.displayName
+    title: App.isSelfTestMode ? App.displayName + " [Self Test Mode]" :
+           (App.rc.client.active && App.asyncLoadMgr.remoteName) ? App.displayName + " [" + qsTr("Remote connection to %1").arg(App.asyncLoadMgr.remoteName) + "]" + App.loc.emptyString :
+           App.displayName
 
     DarkTheme {id: darkTheme}
     LightTheme {id: lightTheme}
@@ -91,6 +94,8 @@ ApplicationWindow {
     }
     onActiveChanged: {
         systemTheme = App.systemTheme
+        if (active)
+            appWindowStateSaver.scheduleCheckWindowPos();
     }
 
     readonly property var fonts: fonts_
@@ -104,6 +109,7 @@ ApplicationWindow {
     }
 
     WindowStateSaver {
+        id: appWindowStateSaver
         window: appWindow
         windowName: "appWindow"
         setVisibleWhenCompleted: true
@@ -250,15 +256,15 @@ ApplicationWindow {
 
     function canShowPage(name)
     {
-        if (stackView.depth === 0) {
+        if (stackView.empty)
             return false;
-        }
 
         var current_page = stackView.currentItem;
-
-        if ([name].indexOf(current_page.pageName) >= 0) {
+        if (!current_page)
             return false;
-        }
+
+        if ([name].indexOf(current_page.pageName) >= 0)
+            return false;
 
         return true;
     }
@@ -328,6 +334,18 @@ ApplicationWindow {
         id: createPortableDlg
         active: portableSupported
         source: "Dialogs/CreatePortableDialog.qml"
+        anchors.centerIn: parent
+        property bool opened: active && item.opened
+        function open() {
+            active = true;
+            item.open();
+        }
+    }
+
+    Loader {
+        id: connectToRemoteAppDlg
+        active: App.features.hasFeature(AppFeatures.RemoteControlClient)
+        source: "Dialogs/ConnectToRemoteAppDialog.qml"
         anchors.centerIn: parent
         property bool opened: active && item.opened
         function open() {
@@ -440,6 +458,11 @@ ApplicationWindow {
 
     ShutdownDialog {
         id: shutdownDlg
+    }
+
+    RenameDownloadFileDialog {
+        id: renameDownloadFileDlg
+        onClosed: appWindowStateChanged()
     }
 
     Loader {
@@ -625,7 +648,7 @@ ApplicationWindow {
 
     function checkNewDownloadRequests(force)
     {
-        if (!App.ready)
+        if (!App.asyncLoadMgr.ready)
             return;
 
         if (buildDownloadDlg.opened && !buildDownloadDlg.isBusy()) {
@@ -740,7 +763,8 @@ ApplicationWindow {
             var request_data = JSON.parse(json);
             if (request_data && request_data.type === 'optionsClick') {
                 appWindow.showWindow(true);
-                uiReadyTools.onReady(appWindow.openSettings);
+                if (!App.rc.client.active)
+                   uiReadyTools.onReady(appWindow.openSettings);
             }
         }
     }
@@ -755,7 +779,7 @@ ApplicationWindow {
     {
         id: mainUiMgr
         source: Qt.resolvedUrl("MainUiManager.qml")
-        active: App.ready
+        active: App.asyncLoadMgr.ready
     }
 
     Connections {
@@ -928,18 +952,27 @@ ApplicationWindow {
             convertDestinationFilesExistsDialog.onGotRequest();
         }
 
-        onFailedConvertFiles: function(files)
+        onConvertTaskFinished: function(taskId, failedFiles)
         {
-            if (convertFilesFailedDialog.opened)
+            if (convertDestinationFilesExistsDialog.opened &&
+                    convertDestinationFilesExistsDialog.taskId == taskId)
             {
-                var arr = convertFilesFailedDialog.files;
-                arr.push(...files);
-                convertFilesFailedDialog.files = arr;
+                convertDestinationFilesExistsDialog.close();
             }
-            else
+
+            if (failedFiles.length > 0)
             {
-                convertFilesFailedDialog.files = files;
-                convertFilesFailedDialog.open();
+                if (convertFilesFailedDialog.opened)
+                {
+                    var arr = convertFilesFailedDialog.files;
+                    arr.push(...failedFiles);
+                    convertFilesFailedDialog.files = arr;
+                }
+                else
+                {
+                    convertFilesFailedDialog.files = failedFiles;
+                    convertFilesFailedDialog.open();
+                }
             }
         }
     }
@@ -948,5 +981,17 @@ ApplicationWindow {
     {
         id: remoteBannerMgr
         settings: uiSettingsTools.settings
+    }
+
+    Connections
+    {
+        target: App.commands
+        onShowConnectToRemoteAppUi: function(remoteId)
+        {
+            connectToRemoteAppDlg.item.setRemoteId(remoteId);
+            if (!connectToRemoteAppDlg.opened)
+                connectToRemoteAppDlg.open();
+            showWindow(true);
+        }
     }
 }

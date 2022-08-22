@@ -49,7 +49,7 @@ BaseContextMenu {
     BaseContextMenuItem {
         id: openFile
         text: qsTr("Open") + App.loc.emptyString
-        visible: downloadItemId && !model.folder && (model.priority != AbstractDownloadsUi.DownloadPriorityDontDownload || finished)
+        visible: !App.rc.client.active && downloadItemId && !model.folder && (model.priority != AbstractDownloadsUi.DownloadPriorityDontDownload || finished)
         enabled: !locked && finished
         onTriggered: App.downloads.mgr.openDownload(downloadItemId, model.fileIndex);
     }
@@ -57,7 +57,7 @@ BaseContextMenu {
     BaseContextMenuItem {
         id: showFolder
         text: qsTr("Show in Folder") + App.loc.emptyString
-        visible: downloadItemId && !model.folder
+        visible: !App.rc.client.active && downloadItemId && !model.folder
         onTriggered: App.downloads.mgr.openDownloadFolder(downloadItemId, model.fileIndex);
     }
 

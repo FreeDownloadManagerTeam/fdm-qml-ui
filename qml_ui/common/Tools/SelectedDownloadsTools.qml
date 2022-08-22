@@ -223,7 +223,7 @@ Item {
         return allowed;
     }
 
-    function checkMoveAllowed()
+    function checkFilesLoAllowed()
     {
         var allowed = true;
         if (checkedDownloadsCount > 0) {
@@ -232,6 +232,27 @@ Item {
             allowed = App.downloads.logics.isFilesLoAllowed(currentDownloadId);
         }
         return allowed;
+    }
+
+    function checkMoveAllowed()
+    {
+        return checkFilesLoAllowed();
+    }
+
+    function checkRenameAllowed(wholeDownload)
+    {
+        if (checkedDownloadsCount > 0)
+        {
+            if (checkedDownloadsCount > 1 ||
+                    !App.downloads.model.isChecked(currentDownloadId))
+            {
+                return false;
+            }
+        }
+        let info = App.downloads.infos.info(currentDownloadId);
+        if (wholeDownload && info.filesCount > 1)
+            return false;
+        return info.finished && checkFilesLoAllowed();
     }
 
     function sequentialDownloadAllowed()
@@ -720,7 +741,18 @@ Item {
         }
     }
 
+    function isAntivirusSettingsOk()
+    {
+        return App.settings.dmcore.value(DmCoreSettings.AntivirusUid) != "" ||
+                (App.settings.dmcore.value(DmCoreSettings.AntivirusPath).length > 0
+                   && App.settings.isValidCustomAntivirusArgs(App.settings.dmcore.value(DmCoreSettings.AntivirusArgs)) == '');
+    }
+
     function allowedVirusCheck() {
+        // we have no UI to setup antivirus settings on a remote machine
+        if (App.rc.client.active && !isAntivirusSettingsOk())
+            return false;
+
         var allowed = true;
         var ids = getCurrentDownloadIds();
         var download = null;
@@ -735,9 +767,7 @@ Item {
     }
 
     function performVirusCheck() {
-        if (App.settings.dmcore.value(DmCoreSettings.AntivirusUid) != ""
-            || App.settings.dmcore.value(DmCoreSettings.AntivirusPath).length > 0
-               && App.settings.isValidCustomAntivirusArgs(App.settings.dmcore.value(DmCoreSettings.AntivirusArgs)) == '') {
+        if (isAntivirusSettingsOk()) {
             var ids = getCurrentDownloadIds();
             App.downloads.mgr.performVirusCheck(ids);
         } else {

@@ -12,7 +12,7 @@ Item {
     property variant allOptions
     property variant choosenOptions
 
-    property bool dialogEnabled: false
+    property bool dialogEnabled: false // lazy workaround: in some cases, dialog could show invalid data for about a second
     property bool mergeBtnEnabled: false
 
     signal wasResetted
@@ -59,7 +59,7 @@ Item {
     {
         choosenOptions = chooserObj.choosenOptions(newDownloadId);
         choosenOptions.dontMergeJustAddNew = true;
-        mergeTools.dialogEnabled = false;
+        dialogEnabled = false;
         chooserObj.commit(newDownloadId, false);
         mergeDownloadsDlg.close();
         reset();
@@ -67,7 +67,7 @@ Item {
 
     function reject()
     {
-        mergeTools.dialogEnabled = false;
+        dialogEnabled = false;
         chooserObj.commit(newDownloadId, true);
         closeBuildDownloadMobile();
         mergeDownloadsDlg.close();
@@ -76,7 +76,7 @@ Item {
 
     function accept()
     {
-        mergeTools.dialogEnabled = false;
+        dialogEnabled = false;
         skipDownload(newDownloadId);
         mergeDownloadsDlg.close();
         closeBuildDownloadMobile();
@@ -86,7 +86,7 @@ Item {
 
     function acceptAll()
     {
-        mergeTools.dialogEnabled = false;
+        dialogEnabled = false;
 
         var id;
         while (id = interceptionTools.getMergeRequestId()) {
@@ -107,6 +107,13 @@ Item {
             choosenOptions.enableTextOption(allOptions.textOptions[i], true);
         }
         chooserObj.commit(newDownloadId, false);
+    }
+
+    function abortRequest()
+    {
+        dialogEnabled = false;
+        chooserObj.requestAborted(newDownloadId);
+        reset();
     }
 
     function reset()

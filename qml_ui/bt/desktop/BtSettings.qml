@@ -135,4 +135,62 @@ Column
                         App.settings.fromBool(torrentFolderSilent.checked));
         }
     }
+
+    SettingsGroupColumn
+    {
+        SettingsSubgroupHeader
+        {
+            text: qsTr("Advanced") + App.loc.emptyString
+        }
+
+        SettingsCheckBox
+        {
+            id: useSystemDefinedPort
+            text: App.my_BT_qsTranslate("Settings", "Use system defined port for incoming connections") + App.loc.emptyString
+            checked: (parseInt(App.settings.dmcore.value(DmCoreSettings.BtSessionPort)) || 0) <= 0
+            onClicked: {
+                applyAdvancedBtSettings();
+                if (!checked)
+                {
+                    customPortText.forceActiveFocus();
+                    customPortText.selectAll();
+                }
+            }
+        }
+
+        Row {
+            visible: !useSystemDefinedPort.checked
+            leftPadding: 40
+            spacing: 5
+
+            SettingsSubgroupHeader {
+                text: qsTr("Custom port:") + App.loc.emptyString
+                anchors.verticalCenter: parent.verticalCenter
+            }
+
+            SettingsTextField {
+                id: customPortText
+                implicitWidth: 60
+                inputMethodHints: Qt.ImhDigitsOnly
+                validator: QtRegExpValidator { regExp: /\d+/ }
+                text: App.settings.dmcore.value(DmCoreSettings.BtSessionPort)
+                onTextChanged: applyAdvancedBtSettings()
+            }
+        }
+    }
+
+    function applyAdvancedBtSettings()
+    {
+        var port = 0;
+
+        if (!useSystemDefinedPort.checked && customPortText.text)
+            port = parseInt(customPortText.text) || 0;
+
+        if (port >= 0 && port <= 65535)
+        {
+            App.settings.dmcore.setValue(
+                        DmCoreSettings.BtSessionPort,
+                        port);
+        }
+    }
 }

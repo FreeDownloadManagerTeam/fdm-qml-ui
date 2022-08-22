@@ -39,6 +39,7 @@ ColumnLayout {
         }
 
         CustomButton {
+            visible: !App.rc.client.active
             id: folderBtn
             implicitWidth: 38
             implicitHeight: 30

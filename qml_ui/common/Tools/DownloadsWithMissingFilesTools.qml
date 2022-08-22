@@ -13,7 +13,7 @@ Item
 
     Component.onCompleted:
     {
-        if (App.ready)
+        if (App.asyncLoadMgr.ready)
             onAppReady();
 
         App.downloads.model.missingFilesFilter = Qt.binding(function() {
@@ -33,9 +33,9 @@ Item
     }
 
     Connections {
-        target: App
+        target: App.asyncLoadMgr
         onReadyChanged: {
-            if (App.ready)
+            if (App.asyncLoadMgr.ready)
                 onAppReady();
         }
     }

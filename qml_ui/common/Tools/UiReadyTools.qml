@@ -10,7 +10,7 @@ Item {
     property var onAppReadyCallbacks: []
 
     function checkUiState() {
-        if (App.ready) {
+        if (App.asyncLoadMgr.ready) {
             stackView.clear();
             stackView.waPush(firstPageComponent);
             if (root.onAppReadyCallbacks.length) {
@@ -31,7 +31,7 @@ Item {
     }
 
     Connections {
-        target: App
+        target: App.asyncLoadMgr
         onReadyChanged: {
             checkUiState();
         }
@@ -39,7 +39,7 @@ Item {
 
     function onReady(callback)
     {
-        if (App.ready) {
+        if (App.asyncLoadMgr.ready) {
             callback();
         } else {
             root.onAppReadyCallbacks.push(callback);

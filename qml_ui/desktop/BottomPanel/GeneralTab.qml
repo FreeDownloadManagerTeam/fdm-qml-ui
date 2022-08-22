@@ -215,7 +215,7 @@ Flickable {
                         }
                         MouseArea {
                             anchors.fill: parent
-                            enabled: App.features.hasFeature(AppFeatures.OpenFolder)
+                            visible: App.features.hasFeature(AppFeatures.OpenFolder) && !App.rc.client.active
                             cursorShape: Qt.PointingHandCursor
                             onClicked: App.downloads.mgr.openDownloadFolder(downloadsItemTools.itemId, -1)
                         }

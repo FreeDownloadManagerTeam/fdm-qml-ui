@@ -50,7 +50,7 @@ Dialog {
     }
 
     function accept() {
-        App.tools.createFolder(path + '/' + folderName.displayText);
+        App.tools.createLocalFolder(path + '/' + folderName.displayText);
         root.close();
     }
 

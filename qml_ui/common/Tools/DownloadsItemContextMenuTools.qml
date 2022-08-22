@@ -20,12 +20,14 @@ Item {
 
     function openClick()
     {
-        App.downloads.mgr.openDownload(modelId, -1)
+        if (!App.rc.client.active)
+            App.downloads.mgr.openDownload(modelId, -1)
     }
 
     function showInFolderClick()
     {
-        App.downloads.mgr.openDownloadFolder(modelId, -1)
+        if (!App.rc.client.active)
+            App.downloads.mgr.openDownloadFolder(modelId, -1)
     }
 
     function copyLinkClick()

@@ -76,7 +76,7 @@ Column
                 }
 
                 function updatState() {
-                    urlField.inError = text && !App.tools.fileExists(text);
+                    urlField.inError = text && !App.tools.localFileExists(text);
 
                     if (!text && customSettingsEnabled)
                         autoCheck.checked = false;

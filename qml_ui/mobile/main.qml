@@ -506,4 +506,27 @@ ApplicationWindow
                 downloadExpiredDlg.close();
         }
     }
+
+    Loader {
+        id: connectToRemoteAppDlg
+        active: App.features.hasFeature(AppFeatures.RemoteControlClient)
+        source: "Dialogs/ConnectToRemoteAppDialog.qml"
+        anchors.centerIn: parent
+        property bool opened: active && item.opened
+        function open() {
+            active = true;
+            item.open();
+        }
+    }
+
+    Connections
+    {
+        target: App.commands
+        onShowConnectToRemoteAppUi: function(remoteId)
+        {
+            connectToRemoteAppDlg.item.setRemoteId(remoteId);
+            if (!connectToRemoteAppDlg.opened)
+                connectToRemoteAppDlg.open();
+        }
+    }
 }

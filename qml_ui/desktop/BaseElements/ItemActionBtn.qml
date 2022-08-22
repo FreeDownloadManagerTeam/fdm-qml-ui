@@ -1,4 +1,5 @@
 import QtQuick 2.12
+import org.freedownloadmanager.fdm 1.0
 
 Image
 {
@@ -24,6 +25,7 @@ Image
             buttonType === "scheduler" ? appWindow.theme.alarm : ""
 
     MouseArea {
+        visible: buttonType !== "showInFolder" || !App.rc.client.active
         anchors.fill: parent
         cursorShape: Qt.PointingHandCursor
         onClicked: root.clicked()

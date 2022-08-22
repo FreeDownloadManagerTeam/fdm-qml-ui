@@ -190,7 +190,7 @@ BaseDialog {
     function create()
     {
         var path = App.fromNativeSeparators(pathField.text);
-        if (App.tools.isValidAbsoluteFilePath(path)) {
+        if (App.tools.isLocalAbsoluteFilePathValid(path)) {
             App.portableVersionCreator.create(path);
         } else {
             showWarning = true;

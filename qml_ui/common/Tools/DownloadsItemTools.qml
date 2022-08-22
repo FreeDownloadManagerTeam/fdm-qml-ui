@@ -299,7 +299,8 @@ Item {
     {
         switch (buttonType) {
         case buttonTypes.showInFolder:
-            App.downloads.mgr.openDownloadFolder(itemId, -1);
+            if (!App.rc.client.active)
+                App.downloads.mgr.openDownloadFolder(itemId, -1);
             break;
         case buttonTypes.restart:
             if (!finished && (error || missingFiles) && (flags & AbstractDownloadsUi.SupportsRestart) != 0) {

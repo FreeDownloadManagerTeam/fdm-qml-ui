@@ -33,9 +33,9 @@ Rectangle {
         anchors.fill: parent
         onClicked: {
             if (!appWindow.selectMode) {
-                if (model.finished && !downloadsItemTools.isFolder) {
+                if (!App.rc.client.active && model.finished && !downloadsItemTools.isFolder) {
                     App.downloads.mgr.openDownload(downloadsItemTools.itemId, -1)
-                } else if (model.finished && App.features.hasFeature(AppFeatures.OpenFolder) && downloadsItemTools.isFolder) {
+                } else if (!App.rc.client.active && model.finished && App.features.hasFeature(AppFeatures.OpenFolder) && downloadsItemTools.isFolder) {
                     App.downloads.mgr.openDownloadFolder(downloadsItemTools.itemId, -1);
                 } else {
                     stackView.waPush(Qt.resolvedUrl("DownloadItemPage/Page.qml"), {downloadItemId:downloadsItemTools.itemId});

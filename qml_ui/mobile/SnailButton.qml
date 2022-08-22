@@ -24,7 +24,7 @@ RoundButton
     icon.color: "#fff"
 
     onClicked: {
-        if (App.ready) {
+        if (App.asyncLoadMgr.ready) {
             if (App.settings.tum.currentMode == TrafficUsageMode.Snail) {
                 App.settings.tum.currentMode = prevTum;
             } else {

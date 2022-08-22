@@ -36,6 +36,14 @@ Item
 
     signal showingCompleteMessage(bool isShowing)
 
+    readonly property bool hasStatusItem: downloadsViewHeader.itemAt(2).visible
+    readonly property bool hasSpeedItem: downloadsViewHeader.itemAt(3).visible
+    readonly property bool hasSizeItem: downloadsViewHeader.itemAt(4).visible
+    readonly property bool hasAddedItem: downloadsViewHeader.itemAt(5).visible
+
+    readonly property bool eatStatusItem: hasStatusItem && statusItem.isEmpty
+    readonly property bool eatSpeedItem: (eatStatusItem || !hasStatusItem) && hasSpeedItem && speedColumnBlock.isEmpty
+
     onModelCheckedChanged: selectedDownloadsTools.modelCheckedChanged(model.id)
     onModelRunningChanged: selectedDownloadsTools.modelRunningChanged(model.id)
     onModelFinishedChanged: selectedDownloadsTools.modelFinishedChanged(model.id)
@@ -144,9 +152,9 @@ Item
             property string elidedText: fmTitle.myElidedText(downloadsItemTools.tplTitle, width-leftPadding-rightPadding)
             anchors.verticalCenter: parent.verticalCenter
             text: elidedText
-            width: root.downloadsViewHeader.itemAt(1).width
-                    + (statusItem.isEmpty ? root.downloadsViewHeader.itemAt(2).width : 0)
-                    + (statusItem.isEmpty && speedColumnBlock.isEmpty ? root.downloadsViewHeader.itemAt(3).width : 0)
+            width: root.downloadsViewHeader.nameColumnFullWidth
+                    + (root.eatStatusItem ? root.downloadsViewHeader.statusColumnFullWidth : 0)
+                    + (root.eatSpeedItem ? root.downloadsViewHeader.speedColumnFullWidth : 0)
             leftPadding: 6
             rightPadding: itemTags.width ? itemTags.width + 10 + 5 : 5
             font.pixelSize: appWindow.fonts.defaultSize
@@ -188,7 +196,7 @@ Item
                 id: hhTitleSpeedColumn
                 property bool hovered: false
                 anchors.right: parent.right
-                width: root.downloadsViewHeader.itemAt(3).width
+                width: root.hasSpeedItem ? root.downloadsViewHeader.speedColumnFullWidth : 150
                 height: parent.height
                 visible: statusItem.isEmpty && speedColumnBlock.isEmpty
                 HoverHandler {id: hhTitleSpeedColumn1}
@@ -216,8 +224,9 @@ Item
 
         //status
         Rectangle {
+            visible: root.hasStatusItem
             color: "transparent"
-            width: statusItem.isEmpty ? 0 : root.downloadsViewHeader.itemAt(2).width
+            width: statusItem.isEmpty ? 0 : root.downloadsViewHeader.statusColumnFullWidth
             height: parent.height
             Item {
                 anchors.fill: parent
@@ -235,6 +244,8 @@ Item
         Item {
             id: speedColumnBlock         
 
+            visible: root.hasSpeedItem
+
             property bool hovered: (hh1Row.hovered && hh2Row.hovered) ||
                                    priorUp.hovered || priorDown.hovered ||
                                    loAbortBlock.hovered || hhTitleSpeedColumn.hovered
@@ -249,7 +260,7 @@ Item
             property bool isEmpty: !visibleItem &&
                                    (appWindow.currentTime - lastTimeSpeedColumnHoveredWidthBecameZero) > 30000
 
-            width: statusItem.isEmpty && isEmpty ? 0 : root.downloadsViewHeader.itemAt(3).width
+            width: statusItem.isEmpty && isEmpty ? 0 : root.downloadsViewHeader.speedColumnFullWidth
             height: parent.height
 
             HoverHandler {id: hh1Row}
@@ -415,9 +426,10 @@ Item
 
         //file size
         BaseLabel {
+            visible: root.hasSizeItem
             anchors.verticalCenter: parent.verticalCenter
             text: JsTools.sizeUtils.byteProgressAsText(downloadsItemTools.selectedBytesDownloaded, downloadsItemTools.selectedSize);
-            width: root.downloadsViewHeader.itemAt(4).width
+            width: root.downloadsViewHeader.sizeColumnFullWidth
             leftPadding: 6
             font.pixelSize: appWindow.compactView ? 12 : 13
             opacity: downloadsItemTools.itemOpacity
@@ -425,8 +437,9 @@ Item
 
         //date
         BaseLabel {
+            visible: root.hasAddedItem
             anchors.verticalCenter: parent.verticalCenter
-            width: root.downloadsViewHeader.itemAt(5).width
+            width: root.downloadsViewHeader.dateColumnFullWidth
             leftPadding: 6
             rightPadding: 6
             text: App.loc.dateOrTimeToString(model.added, false) + App.loc.emptyString
@@ -436,7 +449,7 @@ Item
                 propagateComposedEvents: true
                 anchors.fill: parent
                 hoverEnabled: true
-                onClicked : function (mouse) {mouse.accepted = false;}
+                onClicked: function (mouse) {mouse.accepted = false;}
                 onPressed: function (mouse) {mouse.accepted = false;}
 
                 BaseToolTip {

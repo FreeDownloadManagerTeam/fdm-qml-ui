@@ -243,7 +243,7 @@ Flickable {
                     height: folderPath.height
                     anchors.verticalCenter: parent.verticalCenter
                     fillMode: Image.PreserveAspectFit
-                    source: App.features.hasFeature(AppFeatures.OpenFolder) ? "../../images/mobile/open_folder.svg" :
+                    source: (App.features.hasFeature(AppFeatures.OpenFolder) && !App.rc.client.active) ? "../../images/mobile/open_folder.svg" :
                                                                               "../../images/mobile/folder.svg"
                     layer {
                         effect: ColorOverlay {
@@ -254,7 +254,7 @@ Flickable {
                     MouseArea
                     {
                         anchors.fill: parent
-                        enabled: App.features.hasFeature(AppFeatures.OpenFolder)
+                        visible: App.features.hasFeature(AppFeatures.OpenFolder) && !App.rc.client.active
                         onClicked: App.downloads.mgr.openDownloadFolder(downloadsItemTools.itemId, -1)
                     }
                 }
@@ -266,7 +266,7 @@ Flickable {
                     anchors.right: parent.right
                     clip: true
                     elide: Text.ElideMiddle
-                    text: downloadsItemTools.destinationPath
+                    text: App.toNativeSeparators(downloadsItemTools.destinationPath)
                 }
             }
 
@@ -288,46 +288,6 @@ Flickable {
                 color: linkColor
                 onLinkActivated: App.openDownloadUrl(downloadsItemTools.resourceUrl)
             }
-
-            /*
-            Rectangle {
-                anchors.left: parent.left
-                anchors.right: parent.right
-
-                height: logButton.height
-
-                SchedulerButton {
-                    id: schedulerButton
-                    anchors.left: parent.left
-                    anchors.leftMargin: -18
-                    anchors.top: parent.top
-                    anchors.topMargin: -12
-                    onClicked: stackView.push(Qt.resolvedUrl("../../mobile/Sheduler.qml"))
-                }
-
-                Button {
-                    id: logButton
-                    anchors.right: parent.right
-                    anchors.top: parent.top
-                    text: qsTr("Log") + App.loc.emptyString
-                    flat: true
-                    font.capitalization: Font.Capitalize
-                    padding: 8
-
-                    Material.background: "#EEEEEE"
-    /*
-                    background: Rectangle {
-                        //color: Material.hintTextColor
-                        opacity: 0.5
-                        height: 24
-                        implicitHeight: 24
-                    }
-    *
-
-                    onClicked: stackView.push("LogPage.qml");
-                }
-            }
-            */
         }
 
         Rectangle {

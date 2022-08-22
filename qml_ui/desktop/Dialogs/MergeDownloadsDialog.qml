@@ -151,4 +151,15 @@ BaseDialog {
         id: mergeTools
         onWasResetted: appWindow.appWindowStateChanged()
     }
+
+    Connections {
+        target: App.downloads.mergeOptionsChooser
+        onGotAbortMergeRequest: function(newDownloadId, existingDownloadId) {
+            if (mergeTools.newDownloadId == newDownloadId)
+            {
+                root.close();
+                mergeTools.abortRequest();
+            }
+        }
+    }
 }

@@ -19,7 +19,8 @@ Rectangle {
 
         BaseLabel {
             Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
-            text: shutdownTools.powerManagement.shutdownType == VmsQt.SuspendComputer ? qsTr("Computer will be put to sleep after all downloads are completed.") :
+            text: !shutdownTools.powerManagement ? "" :
+                  shutdownTools.powerManagement.shutdownType == VmsQt.SuspendComputer ? qsTr("Computer will be put to sleep after all downloads are completed.") :
                   (shutdownTools.powerManagement.shutdownType == VmsQt.HibernateComputer ? qsTr("Computer will be hibernate after all downloads are completed.") :
                   (shutdownTools.powerManagement.shutdownType == VmsQt.ShutdownComputer  ? qsTr("Computer will be shutdown after all downloads are completed.") : "")) + App.loc.emptyString
             font.pixelSize: 13

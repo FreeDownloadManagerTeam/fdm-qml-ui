@@ -12,18 +12,34 @@ Rectangle {
     height: Math.max(folderBtn.height + 20, downloadFolder.implicitHeight)
     color: "transparent"
 
-    property bool isCurrentPathValid: false
+    QtObject {
+        id: d
+        property string checkingPath
+        property bool isCurrentPathInvalid: false
+    }
 
     function apply() {
-        var currentPath = App.localEncodePath(
-                    longUrl(downloadFolder.editText.trim()));
+        var currentPath = longUrl(downloadFolder.editText.trim());
+        if (!currentPath)
+        {
+            d.isCurrentPathInvalid = true;
+            return;
+        }
+        App.storages.isValidAbsoluteFilePath(d.checkingPath = currentPath);
+    }
 
-        root.isCurrentPathValid = App.tools.isValidAbsoluteFilePath(
-                    currentPath);
-
-        if (root.isCurrentPathValid) {
-            App.settings.dmcore.setValue(
-                DmCoreSettings.FixedDownloadPath, currentPath);
+    Connections {
+        target: App.storages
+        onIsValidAbsoluteFilePathResult: function(path, result) {
+            if (path === d.checkingPath)
+            {
+                d.checkingPath = ""
+                d.isCurrentPathInvalid = !result;
+                if (result) {
+                    App.settings.dmcore.setValue(
+                        DmCoreSettings.FixedDownloadPath, App.localEncodePath(path));
+                }
+            }
         }
     }
 
@@ -67,7 +83,7 @@ Rectangle {
         }
         contentItem: TextField {
             text: downloadFolder.currentText
-            color: root.isCurrentPathValid ? appWindow.theme.foreground : appWindow.theme.errorMessage
+            color: (!d.isCurrentPathInvalid || d.checkingPath) ? appWindow.theme.foreground : appWindow.theme.errorMessage
             leftPadding: 10
             font: downloadFolder.font
             opacity: enabled ? 1 : 0.5
@@ -102,6 +118,7 @@ Rectangle {
 
     RoundButton {
         id: folderBtn
+        visible: !App.rc.client.active
         enabled: root.enabled
         anchors.verticalCenter: parent.verticalCenter
         radius: 40
