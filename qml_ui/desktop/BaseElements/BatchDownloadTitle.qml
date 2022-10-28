@@ -1,19 +1,20 @@
 import QtQuick 2.10
 import QtQuick.Controls 2.3
 import "../BaseElements"
+import "../../common"
 
 Rectangle {
     id: root
     visible: downloadsViewTools.downloadsParentIdFilter > -1
     color: appWindow.theme.batchDownloadBackground
-    width: batchDownloadTitle.width + 24
-    height: 27
-    border.width: 1
+    width: batchDownloadTitle.width + 24*appWindow.zoom
+    height: 27*appWindow.zoom
+    border.width: 1*appWindow.zoom
     border.color: appWindow.theme.border
     anchors.right: parent.right
     anchors.top: parent.top
-    anchors.topMargin: 8
-    property int maxWidth: 250
+    anchors.topMargin: 8*appWindow.zoom
+    property int maxWidth: 250*appWindow.zoom
     signal visibilityChanged()
 
     onVisibleChanged: {
@@ -25,10 +26,10 @@ Rectangle {
 
     BaseLabel {
         id: batchDownloadTitle
-        font.pixelSize: 12
+        font.pixelSize: 12*appWindow.zoom
         anchors.verticalCenter: parent.verticalCenter
         elide: Label.ElideRight
-        leftPadding: 8
+        leftPadding: 8*appWindow.zoom
         font.weight: Font.DemiBold
     }
 
@@ -40,15 +41,16 @@ Rectangle {
     Rectangle {
         anchors.right: parent.right
         anchors.verticalCenter: parent.verticalCenter
-        height: 24
-        width: 24
+        height: 24*appWindow.zoom
+        width: 24*appWindow.zoom
         clip: true
         color: "transparent"
 
-        Image {
+        WaSvgImage {
             source: appWindow.theme.elementsIcons
-            x: 6
-            y: -366
+            zoom: appWindow.zoom
+            x: 6*zoom
+            y: -366*zoom
         }
 
         MouseArea {

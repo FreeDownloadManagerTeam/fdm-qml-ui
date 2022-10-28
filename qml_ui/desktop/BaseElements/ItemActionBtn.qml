@@ -1,7 +1,8 @@
 import QtQuick 2.12
 import org.freedownloadmanager.fdm 1.0
+import "../../common"
 
-Image
+WaSvgImage
 {
     id: root
 
@@ -10,12 +11,9 @@ Image
 
     signal clicked()
 
-    width: 17
-    height: 15
+    zoom: appWindow.zoom
 
     opacity: root.enabled ? 1 : 0.3
-
-    sourceSize: Qt.size(width, height)
 
     source: buttonType === "showInFolder" && moduleUid === "downloadsbt" ? appWindow.theme.btDldOpenFolder :
             buttonType === "showInFolder" ? appWindow.theme.folder :

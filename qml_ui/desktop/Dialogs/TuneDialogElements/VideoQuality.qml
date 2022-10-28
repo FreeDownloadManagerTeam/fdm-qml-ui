@@ -9,14 +9,14 @@ ColumnLayout {
     visible: downloadTools.versionCount > 1
 
     BaseLabel {
-        Layout.topMargin: 6
+        Layout.topMargin: 6*appWindow.zoom
         text: qsTr("Quality:") + App.loc.emptyString
     }
 
     DownloadQualityCombobox {
         id: combo
-        Layout.preferredWidth: 200
-        Layout.preferredHeight: 30
+        Layout.preferredWidth: 200*appWindow.zoom
+        Layout.preferredHeight: 30*appWindow.zoom
     }
 
     function initialization() {

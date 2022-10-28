@@ -9,14 +9,14 @@ ColumnLayout {
 
     visible: tree.downloadInfo && tree.downloadInfo.filesCount > 1
 
-    Layout.topMargin: 8
+    Layout.topMargin: 8*appWindow.zoom
     Layout.fillWidth: true
-    Layout.preferredHeight: Math.min((visible ? tree.rowsCount : 0) * 22 + 55, Math.min(450, Math.max(200, appWindow.height - 500)))
-    spacing: 5
+    Layout.preferredHeight: Math.min((visible ? tree.rowsCount : 0) * 22*appWindow.zoom + 55*appWindow.zoom, Math.min(450*appWindow.zoom, Math.max(200*appWindow.zoom, appWindow.height - 500*appWindow.zoom)))
+    spacing: 5*appWindow.zoom
 
     Rectangle {
         Layout.fillWidth: true
-        height: 20
+        Layout.preferredHeight: 20*appWindow.zoom
         color: "transparent"
 
         BaseLabel {
@@ -28,7 +28,7 @@ ColumnLayout {
             text: qsTr("Select all") + App.loc.emptyString
             color: linkColor
             anchors.right: selectNone.left
-            anchors.rightMargin: 20
+            anchors.rightMargin: 20*appWindow.zoom
             MouseArea {
                 anchors.fill: parent
                 onClicked: tree.selectAllToDownload()
@@ -51,7 +51,7 @@ ColumnLayout {
         Layout.fillWidth: true
         Layout.fillHeight: true
         border.color: appWindow.theme.border
-        border.width: 1
+        border.width: 1*appWindow.zoom
         color: appWindow.theme.filesTreeBackground
 
         FilesTree {
@@ -65,7 +65,7 @@ ColumnLayout {
         }
 
         Rectangle {
-            height: 1
+            height: 1*appWindow.zoom
             width: parent.width
             anchors.top: parent.top
             color: appWindow.theme.border

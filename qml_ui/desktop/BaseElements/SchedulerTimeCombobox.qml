@@ -1,14 +1,15 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.3
 import "../../qt5compat"
+import "../../common"
 
 ComboBox {
     id: root
 
-    rightPadding: 5
-    leftPadding: 5
-    implicitWidth: 100
-    implicitHeight: 30
+    rightPadding: 5*appWindow.zoom
+    leftPadding: 5*appWindow.zoom
+    implicitWidth: 100*appWindow.zoom
+    implicitHeight: 30*appWindow.zoom
 
     editable: true
 
@@ -21,11 +22,11 @@ ComboBox {
     delegate: Rectangle {
         property bool hover: false
         color: hover ? appWindow.theme.menuHighlight : "transparent"
-        height: 30
-        width: 100
+        height: 30*appWindow.zoom
+        width: 100*appWindow.zoom
 
         BaseLabel {
-            leftPadding: 6
+            leftPadding: 6*appWindow.zoom
             anchors.verticalCenter: parent.verticalCenter
             text: modelData
         }
@@ -46,13 +47,13 @@ ComboBox {
     background: Rectangle {
         color: appWindow.theme.background
         border.color: appWindow.theme.border
-        border.width: 1
+        border.width: 1*appWindow.zoom
     }
 
     contentItem: TextField {
         text: root.editText
-        font.pixelSize: 14
-        rightPadding: 30
+        font.pixelSize: 14*appWindow.fontZoom
+        rightPadding: 30*appWindow.zoom
         selectByMouse: true
         background: Rectangle {
             color: "transparent"
@@ -75,24 +76,23 @@ ComboBox {
         z: 1
         x: root.width - width
         y: root.topPadding + (root.availableHeight - height) / 2
-        width: height - 1
+        width: height - 1*appWindow.zoom
         height: root.height
         color: "transparent"
-        border.width: 1
+        border.width: 1*appWindow.zoom
         border.color: appWindow.theme.border
         Rectangle {
-            width: 9
-            height: 8
+            width: 9*appWindow.zoom
+            height: 8*appWindow.zoom
             color: "transparent"
             anchors.verticalCenter: parent.verticalCenter
             anchors.horizontalCenter: parent.horizontalCenter
             clip: true
-            Image {
+            WaSvgImage {
                 source: appWindow.theme.elementsIcons
-                sourceSize.width: 93
-                sourceSize.height: 456
+                zoom: appWindow.zoom
                 x: 0
-                y: -448
+                y: -448*zoom
             }
         }
 
@@ -114,13 +114,13 @@ ComboBox {
     popup: Popup {
         y: root.height - 1
         width: root.width
-        height: Math.min(visibleRowsCount, root.model.length) * 30 + 2
-        padding: 1
+        height: Math.min(visibleRowsCount, root.model.length) * 30*appWindow.zoom + 2*appWindow.zoom
+        padding: 1*appWindow.zoom
 
         background: Rectangle {
             color: appWindow.theme.background
             border.color: appWindow.theme.border
-            border.width: 1
+            border.width: 1*appWindow.zoom
         }
 
         contentItem: Item {

@@ -12,7 +12,7 @@ BaseDialog {
     property var downloadIds: []
     property string dialogType: uiSettingsTools.settings.deleteButtonAction == 0 ? "Always ask" : uiSettingsTools.settings.deleteButtonAction == 1 ? "Delete files" : "unknown"
 
-    width: 542
+    width: 542*appWindow.zoom
 
     contentItem: BaseDialogItem {
         titleText: qsTr("Delete selected downloads") + App.loc.emptyString
@@ -22,16 +22,16 @@ BaseDialog {
 
         ColumnLayout {
             Layout.fillWidth: true
-            Layout.leftMargin: 10
-            Layout.rightMargin: 10
-            spacing: 3
+            Layout.leftMargin: 10*appWindow.zoom
+            Layout.rightMargin: 10*appWindow.zoom
+            spacing: 3*appWindow.zoom
 
             ListView {
                 clip: true
                 Layout.fillWidth: true
-                Layout.preferredHeight: Math.min(contentHeight, 150)
+                Layout.preferredHeight: Math.min(contentHeight, 150*appWindow.zoom)
                 ScrollBar.vertical: ScrollBar {
-                    active: parent.contentHeight > 150
+                    active: parent.contentHeight > 150*appWindow.zoom
                 }
                 model: root.downloadIds
                 delegate: Rectangle {
@@ -48,28 +48,28 @@ BaseDialog {
                             id: downloadsItemTools
                             itemId: root.downloadIds[index]
                         }
-                        text: downloadsItemTools.hasChildDownloads ? downloadsItemTools.destinationPath : downloadsItemTools.tplPathAndTitle
+                        text: App.toNativeSeparators(downloadsItemTools.hasChildDownloads ? downloadsItemTools.destinationPath : downloadsItemTools.tplPathAndTitle)
                     }
                 }
             }
 
             ColumnLayout {
                 visible: root.dialogType === "Always ask"
-                Layout.topMargin: 10
-                Layout.bottomMargin: 10
+                Layout.topMargin: 10*appWindow.zoom
+                Layout.bottomMargin: 10*appWindow.zoom
                 Layout.fillWidth: true
-                spacing: 15
+                spacing: 15*appWindow.zoom
 
                 BaseCheckBox {
                     id: rememberChoiceCbx
-                    Layout.leftMargin: -6
+                    Layout.leftMargin: -6*appWindow.zoom
                     text: qsTr("Remember my choice") + App.loc.emptyString
                     checked: false
                 }
 
                 RowLayout {
                     Layout.fillWidth: true
-                    spacing: 5
+                    spacing: 5*appWindow.zoom
 
                     CustomButton {
                         id: btn1
@@ -101,11 +101,11 @@ BaseDialog {
 
             RowLayout {
                 visible: root.dialogType === "Delete files"
-                Layout.topMargin: 10
-                Layout.bottomMargin: 10
+                Layout.topMargin: 10*appWindow.zoom
+                Layout.bottomMargin: 10*appWindow.zoom
                 Layout.alignment: Qt.AlignRight
 
-                spacing: 5
+                spacing: 5*appWindow.zoom
 
                 CustomButton {
                     text: qsTr("OK")

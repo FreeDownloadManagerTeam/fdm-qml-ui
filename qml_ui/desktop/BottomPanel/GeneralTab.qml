@@ -44,10 +44,10 @@ Flickable {
         Row {
             id: myContent2
 
-            x: 10
+            x: 10*appWindow.zoom
             width: parent.width - x*2
 
-            spacing: 20
+            spacing: 20*appWindow.zoom
 
             Image {
                 id: img
@@ -64,16 +64,16 @@ Flickable {
 
                 clip: true
 
-                spacing: 8
+                spacing: 8*appWindow.zoom
 
                 Flow {
                     id: flow
-                    spacing: 5
+                    spacing: 5*appWindow.zoom
                     width: parent.width
 
                     BaseSelectableLabel {
                         text: downloadsItemTools.tplTitle
-                        font.pixelSize: appWindow.smallWindow ? 15 : 18
+                        font.pixelSize: (appWindow.smallWindow ? 15 : 18)*appWindow.fontZoom
                         width: parent.width
                     }
 
@@ -96,10 +96,10 @@ Flickable {
 
                 GridLayout
                 {
-                    columns: parent.width > 500 ? 4 : 2
+                    columns: (parent.width > (300+200*appWindow.fontZoom)) ? 4 : 2
                     rowSpacing: topColumn.spacing
 
-                    readonly property int horizSpacing: 30
+                    readonly property int horizSpacing: 30*appWindow.zoom
 
                     BaseLabel {
                         visible: downloadsItemTools.finished
@@ -202,16 +202,15 @@ Flickable {
                     width: parent.width
 
                     Rectangle {
-                        width: 18
-                        height: 18
+                        width: 18*appWindow.zoom
+                        height: 18*appWindow.zoom
                         clip: true
                         color: "transparent"
-                        Image {
+                        WaSvgImage {
                             source: appWindow.theme.elementsIcons
-                            sourceSize.width: 93
-                            sourceSize.height: 456
-                            x: -1
-                            y: -329
+                            zoom: appWindow.zoom
+                            x: -1*zoom
+                            y: -329*zoom
                         }
                         MouseArea {
                             anchors.fill: parent

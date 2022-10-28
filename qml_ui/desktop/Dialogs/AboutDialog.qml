@@ -10,7 +10,7 @@ BaseDialog {
     contentItem: BaseDialogItem {
         titleText: qsTr("About") + App.loc.emptyString
 
-        width: col.width + 20
+        width: col.width + 20*appWindow.zoom
 
         focus: true
         Keys.onEscapePressed: root.close()
@@ -19,10 +19,10 @@ BaseDialog {
 
         Column {
             id: col
-            Layout.leftMargin: 10
-            Layout.rightMargin: 10
-            Layout.bottomMargin: 10
-            spacing: 5
+            Layout.leftMargin: 10*appWindow.zoom
+            Layout.rightMargin: 10*appWindow.zoom
+            Layout.bottomMargin: 10*appWindow.zoom
+            spacing: 5*appWindow.zoom
 
             BaseLabel {
                 text: App.displayName + App.loc.emptyString
@@ -33,7 +33,7 @@ BaseDialog {
                 }
             }
 
-            Label
+            BaseHandCursorLabel
             {
                 visible: App.testVersion
                 text: "Test mode is active <a href='#'>turn off</a>"
@@ -50,7 +50,7 @@ BaseDialog {
 
             Rectangle {
                 color: "transparent"
-                height: 3
+                height: 3*appWindow.zoom
                 width: height
             }
 
@@ -74,7 +74,7 @@ BaseDialog {
 
             Rectangle {
                 color: "transparent"
-                height: 5
+                height: 5*appWindow.zoom
                 width: height
             }
 

@@ -7,7 +7,7 @@ import "../Dialogs"
 Rectangle {
     id: root
     width: btn.implicitWidth
-    height: 18
+    height: 18*appWindow.fontZoom
     color: appWindow.theme.filterBtnBackground
 
     property var tag
@@ -19,42 +19,19 @@ Rectangle {
     Row {
         id: btn
         anchors.verticalCenter: parent.verticalCenter
-        spacing: 3
-        topPadding: 2
-        bottomPadding: 2
-        leftPadding: 6
-        rightPadding: 6
+        spacing: 3*appWindow.zoom
+        topPadding: 2*appWindow.zoom
+        bottomPadding: 2*appWindow.zoom
+        leftPadding: 6*appWindow.zoom
+        rightPadding: 6*appWindow.zoom
 
         //color
         Rectangle {
             anchors.verticalCenter: parent.verticalCenter
             visible: tag && !tag.readOnly
-            width: 9
-            height: 8
+            width: 9*appWindow.zoom
+            height: 8*appWindow.zoom
             color: tag ? tag.color : undefined
-//            clip: true
-
-//            Image {
-//                visible: colorMouseArea.containsMouse
-//                source: appWindow.theme.elementsIcons
-//                sourceSize.width: 93
-//                sourceSize.height: 456
-//                x: 0
-//                y: -448
-//                layer {
-//                    effect: ColorOverlay {
-//                        color: "#fff"
-//                    }
-//                    enabled: true
-//                }
-//            }
-
-//            MouseArea {
-//                id: colorMouseArea
-//                anchors.fill: parent
-//                hoverEnabled: true
-//                onClicked: tagColorDialog.toggle()
-//            }
         }
 
         //tag
@@ -64,7 +41,7 @@ Rectangle {
             text: tag.readOnly ? App.loc.tr(tag.name) + App.loc.emptyString : tag.name
             color: selected ? appWindow.theme.filterBtnSelectedText : appWindow.theme.filterBtnText
             padding: 0
-            font.pixelSize: 11
+            font.pixelSize: 11*appWindow.fontZoom
             textFormat: Text.PlainText
         }
 
@@ -72,7 +49,7 @@ Rectangle {
             id: textInput
             visible: editMode
             width: contentWidth
-            font.pixelSize: 11
+            font.pixelSize: 11*appWindow.fontZoom
             color: appWindow.theme.filterBtnText
             selectByMouse: true
             selectionColor: appWindow.theme.textHighlight
@@ -96,7 +73,7 @@ Rectangle {
             visible: tag && downloadsIds.length > 0
             color: appWindow.theme.filterBtnText
             padding: 0
-            font.pixelSize: 11
+            font.pixelSize: 11*appWindow.fontZoom
         }
     }
 
@@ -105,7 +82,7 @@ Rectangle {
         visible: root.selected
         color: "#16a4fa"
         width: parent.width
-        height: 1
+        height: 1*appWindow.zoom
         anchors.bottom: parent.bottom
         anchors.horizontalCenter: parent.horizontalCenter
     }
@@ -131,20 +108,13 @@ Rectangle {
 
     TagColorDialog {
         id: tagColorDialog
-        x: 18
-        y: 20
+        x: 18*appWindow.zoom
+        y: 20*appWindow.zoom
         tagId: tag.id
         tagColor: tag ? tag.color : undefined
         visible: editMode
         onOpened: textInput.forceActiveFocus();
         onClosed: tagsTools.changeTagName()
-//        function toggle() {
-//            if (this.opened) {
-//                this.close()
-//            } else {
-//                tagsTools.startTagEditing(tag)
-//            }
-//        }
     }
 
 

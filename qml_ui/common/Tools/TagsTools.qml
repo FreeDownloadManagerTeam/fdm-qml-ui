@@ -72,7 +72,7 @@ Item {
     function checkTagSize(tagLabel)
     {
         textMetrics.text = tagLabel.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-        return Math.max(45, textMetrics.width + 15 + 12 + 5);
+        return Math.max(45*appWindow.zoom, textMetrics.width + (15 + 12 + 5)*appWindow.zoom);
     }
 
     function downloadsIds(tag)
@@ -382,7 +382,7 @@ Item {
 
     TextMetrics {
         id: textMetrics
-        font.pixelSize: 11
+        font.pixelSize: 11*appWindow.fontZoom
         font.family: Qt.platform.os === "osx" ? font.family : "Arial"
     }
 }

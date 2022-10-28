@@ -35,7 +35,7 @@ TablesHeaderItem {
 
     Rectangle {
         width: parent.width
-        height: 1
+        height: 1*appWindow.zoom
         anchors.top: parent.top
         color: appWindow.theme.border
     }

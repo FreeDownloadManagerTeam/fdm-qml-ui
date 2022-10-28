@@ -5,10 +5,9 @@ Button {
 
     id: customBtn
 
-//    property bool enabled: true
     property bool blueBtn: false
     property bool smallBtn: false
-    property int radius: appWindow.macVersion ? 5 : 0
+    property int radius: (appWindow.macVersion ? 5 : 0)*appWindow.zoom
     property bool alternateBtnPressed: false
 
     property color gradientTop
@@ -35,9 +34,8 @@ Button {
         customBtn.state = !customBtn.enabled ? "disabled" : (isPressed ? "pressed" : "active");
     }
 
-//    width: Math.max(labelElement.width + 20, 80)
-    leftPadding: 10
-    rightPadding: 10
+    leftPadding: 10*appWindow.zoom
+    rightPadding: 10*appWindow.zoom
     opacity: enabled ? 1 : 0.7
 
     property bool isHovered: false
@@ -99,11 +97,11 @@ Button {
     ]
 
     background: Rectangle {
-        implicitHeight: appWindow.macVersion ? 22 : 30
-        implicitWidth: customBtn.smallBtn ? (labelElement.implicitWidth + 20) : Math.max(labelElement.implicitWidth + 20, 90)
+        implicitHeight: (appWindow.macVersion ? 22 : 30)*appWindow.zoom
+        implicitWidth: customBtn.smallBtn ? (labelElement.implicitWidth + 20*appWindow.zoom) : Math.max(labelElement.implicitWidth + 20*appWindow.zoom, 90*appWindow.zoom)
 
         border.color: customBtn.borderColor
-        border.width: 1
+        border.width: 1*appWindow.zoom
         radius: customBtn.radius
 
         gradient: Gradient {

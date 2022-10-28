@@ -16,15 +16,15 @@ Rectangle {
 
     property var indicatorElemRealWidth: root.textMode ?
                                              lbl.contentWidth + lbl.leftPadding + lbl.rightPadding :
-                                             img.width + 6*2
+                                             img.width + 6*2*appWindow.zoom
 
-    property int headerMinimumWidth: indicatorElemRealWidth + 16
+    property int headerMinimumWidth: indicatorElemRealWidth + 16*appWindow.zoom
 
     property int mouseAcceptedButtons: Qt.LeftButton
 
     signal clicked(var mouse)
 
-    height: 24
+    implicitHeight: 24*appWindow.zoom
     color: "transparent"
 
     BaseLabel {
@@ -32,22 +32,23 @@ Rectangle {
         visible: root.textMode
         text: root.text
         font.bold: false
-        font.pixelSize: 13
-        padding: 6
+        font.pixelSize: 13*appWindow.fontZoom
+        padding: 6*appWindow.zoom
         anchors.left: parent.left
         anchors.verticalCenter: parent.verticalCenter
         color: appWindow.theme.tableHeaderItem
-        width: parent.width - 11
+        width: parent.width - 11*appWindow.zoom
     }
 
     WaSvgImage
     {
         id: img
+        zoom: appWindow.zoom
         visible: !root.textMode
         source: imageSource
         anchors.left: parent.left
         anchors.verticalCenter: parent.verticalCenter
-        anchors.leftMargin: 6
+        anchors.leftMargin: 6*zoom
     }
 
     Rectangle {
@@ -55,28 +56,27 @@ Rectangle {
         anchors.left: parent.left
         anchors.leftMargin: root.indicatorElemRealWidth
         visible: showSortIndicator
-        width: 10
-        height: 10
+        width: 10*appWindow.zoom
+        height: 10*appWindow.zoom
         clip: true
         color: "transparent"
-        Image {
+        WaSvgImage {
+            zoom: appWindow.zoom
             source: appWindow.theme.elementsIcons
-            sourceSize.width: 93
-            sourceSize.height: 456
-            x: sortAscendingOrder ? -39 : -19
-            y: -105
+            x: (sortAscendingOrder ? -39 : -19)*zoom
+            y: -105*zoom
         }
     }
 
     Rectangle {
         height: parent.height
-        width: 1
+        width: 1*appWindow.zoom
         anchors.left: parent.left
         color: appWindow.theme.border
     }
     Rectangle {
         width: parent.width
-        height: 1
+        height: 1*appWindow.zoom
         anchors.bottom: parent.bottom
         color: appWindow.theme.border
     }

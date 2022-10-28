@@ -8,5 +8,5 @@ ListView
 
     delegate: PluginsViewItem {}
 
-    spacing: 20
+    spacing: 20*appWindow.zoom
 }

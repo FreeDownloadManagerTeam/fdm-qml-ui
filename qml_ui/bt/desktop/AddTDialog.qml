@@ -8,7 +8,7 @@ import org.freedownloadmanager.fdm 1.0
 BaseDialog {
     id: root
 
-    width: 542
+    width: 542*appWindow.zoom
 
     property var downloadIds
 
@@ -19,23 +19,23 @@ BaseDialog {
 
         ColumnLayout {
             Layout.fillWidth: true
-            Layout.leftMargin: 10
-            Layout.rightMargin: 10
-            spacing: 7
+            Layout.leftMargin: 10*appWindow.zoom
+            Layout.rightMargin: 10*appWindow.zoom
+            spacing: 7*appWindow.zoom
 
             BaseTextArea {
                 id: trackers
                 Layout.fillWidth: true
-                Layout.preferredHeight: 60
+                Layout.preferredHeight: 60*appWindow.zoom
             }
 
             RowLayout {
-                Layout.topMargin: 10
-                Layout.bottomMargin: 10
+                Layout.topMargin: 10*appWindow.zoom
+                Layout.bottomMargin: 10*appWindow.zoom
                 Layout.alignment: Qt.AlignRight
                 Layout.fillWidth: true
 
-                spacing: 5
+                spacing: 5*appWindow.zoom
 
                 CustomButton {
                     id: cnclBtn

@@ -16,7 +16,8 @@ RowLayout
         source: model.icon.toString() ?
                     model.icon :
                     Qt.resolvedUrl("../../images/desktop/plugin.svg")
-        Layout.preferredHeight: 64
+        zoom: appWindow.zoom
+        Layout.preferredHeight: 64*zoom
         Layout.preferredWidth: Layout.preferredHeight
     }
 
@@ -24,7 +25,7 @@ RowLayout
     {
         Layout.fillHeight: true
         Layout.fillWidth: true
-        Layout.leftMargin: 15
+        Layout.leftMargin: 15*appWindow.zoom
 
         RowLayout
         {
@@ -44,7 +45,7 @@ RowLayout
 
                     closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
 
-                    x: parent.width + 10
+                    x: parent.width + 10*appWindow.zoom
 
                     BaseContextMenuItem {
                         enabled: model.supportsAutoUpdate
@@ -81,8 +82,8 @@ RowLayout
                 DownloadsItemProgressIndicator
                 {
                     infinityIndicator: true
-                    Layout.preferredHeight: smallPage ? 6 : 10
-                    Layout.preferredWidth: 150
+                    Layout.preferredHeight: (smallPage ? 6 : 10)*appWindow.zoom
+                    Layout.preferredWidth: 150*appWindow.zoom
                 }
             }
         }
@@ -103,7 +104,8 @@ RowLayout
             {
                 visible: errorMsg.visible
                 source: Qt.resolvedUrl("../../images/warning.svg")
-                Layout.leftMargin: 10
+                zoom: appWindow.zoom
+                Layout.leftMargin: 10*appWindow.zoom
                 Layout.preferredHeight: errorMsg.height
                 Layout.preferredWidth: Layout.preferredHeight
             }

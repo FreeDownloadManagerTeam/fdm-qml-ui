@@ -42,13 +42,13 @@ Column {
             onClicked: tryApplyProxySettings()
         }
 
-        Rectangle { color: "transparent"; height: 1; width: 1}
+        Rectangle { color: "transparent"; height: 1*appWindow.zoom; width: 1*appWindow.zoom}
 
         GridLayout {
             columns: 4
             enabled: manualProxy.checked
             anchors.left: parent.left
-            anchors.leftMargin: 40
+            anchors.leftMargin: 40*appWindow.zoom
 
             Label {text: " "}
             SettingsGridLabel { text: qsTr("Address") + App.loc.emptyString }
@@ -59,14 +59,14 @@ Column {
             SettingsTextField {
                 id: httpHost
                 text: App.settings.dmcore.value(DmCoreSettings.Http_ProxyHost)
-                implicitWidth: 145
+                implicitWidth: 145*appWindow.zoom
                 onTextChanged: tryApplyProxySettingsTimer.restart()
             }
             SettingsGridLabel { text: qsTr(":") + App.loc.emptyString }
             SettingsTextField {
                 id: httpPort
                 text: App.settings.dmcore.value(DmCoreSettings.Http_ProxyPort)
-                implicitWidth: 55
+                implicitWidth: 55*appWindow.zoom
                 inputMethodHints: Qt.ImhDigitsOnly
                 validator: QtRegExpValidator { regExp: /\d+/ }
                 onTextChanged: tryApplyProxySettingsTimer.restart()
@@ -76,14 +76,14 @@ Column {
             SettingsTextField {
                 id: httpsHost
                 text: App.settings.dmcore.value(DmCoreSettings.Https_ProxyHost)
-                implicitWidth: 145
+                implicitWidth: 145*appWindow.zoom
                 onTextChanged: tryApplyProxySettingsTimer.restart()
             }
             SettingsGridLabel { text: qsTr(":") + App.loc.emptyString }
             SettingsTextField {
                 id: httpsPort
                 text: App.settings.dmcore.value(DmCoreSettings.Https_ProxyPort)
-                implicitWidth: 55
+                implicitWidth: 55*appWindow.zoom
                 inputMethodHints: Qt.ImhDigitsOnly
                 validator: QtRegExpValidator { regExp: /\d+/ }
                 onTextChanged: tryApplyProxySettingsTimer.restart()
@@ -93,14 +93,14 @@ Column {
             SettingsTextField {
                 id: ftpHost
                 text: App.settings.dmcore.value(DmCoreSettings.Ftp_ProxyHost)
-                implicitWidth: 145
+                implicitWidth: 145*appWindow.zoom
                 onTextChanged: tryApplyProxySettingsTimer.restart()
             }
             SettingsGridLabel {text: ":" + App.loc.emptyString}
             SettingsTextField {
                 id: ftpPort
                 text: App.settings.dmcore.value(DmCoreSettings.Ftp_ProxyPort)
-                implicitWidth: 55
+                implicitWidth: 55*appWindow.zoom
                 inputMethodHints: Qt.ImhDigitsOnly
                 validator: QtRegExpValidator { regExp: /\d+/ }
                 onTextChanged: tryApplyProxySettingsTimer.restart()
@@ -110,14 +110,14 @@ Column {
             SettingsTextField {
                 id: socks5Host
                 text: App.settings.dmcore.value(DmCoreSettings.Socks5_ProxyHost)
-                implicitWidth: 145
+                implicitWidth: 145*appWindow.zoom
                 onTextChanged: tryApplyProxySettingsTimer.restart()
             }
             SettingsGridLabel {text: ":" + App.loc.emptyString}
             SettingsTextField {
                 id: socks5Port
                 text: App.settings.dmcore.value(DmCoreSettings.Socks5_ProxyPort)
-                implicitWidth: 55
+                implicitWidth: 55*appWindow.zoom
                 inputMethodHints: Qt.ImhDigitsOnly
                 validator: QtRegExpValidator { regExp: /\d+/ }
                 onTextChanged: tryApplyProxySettingsTimer.restart()

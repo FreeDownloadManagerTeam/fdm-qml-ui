@@ -68,7 +68,7 @@ Column
 
             enabled: torrentFolderCheck.checked
 
-            x: torrentFolderCheck.x + 20
+            x: torrentFolderCheck.x + 20*appWindow.zoom
             width: root.width - x
 
             SettingsTextField
@@ -82,24 +82,10 @@ Column
                 onTextChanged: monitoring.applySettings()
             }
 
-            CustomButton {
+            PickFileButton {
                 id: folderBtn
-                implicitWidth: 38
-                implicitHeight: 25
                 Layout.alignment: Qt.AlignRight
-                clip: true
-                Image {
-                    source: Qt.resolvedUrl("../../images/desktop/pick_file.svg")
-                    sourceSize.width: 37
-                    sourceSize.height: 30
-                    y: -5
-                    layer {
-                        effect: ColorOverlay {
-                            color: folderBtn.isPressed ? folderBtn.secondaryTextColor : folderBtn.primaryTextColor
-                        }
-                        enabled: true
-                    }
-                }
+                Layout.preferredHeight: 25*appWindow.zoom
                 onClicked: browseDlg.open()
                 QtLabs.FolderDialog {
                     id: browseDlg
@@ -115,7 +101,7 @@ Column
         {
             id: torrentFolderSilent
             enabled: torrentFolderCheck.checked
-            anchors.leftMargin: 25
+            anchors.leftMargin: 25*appWindow.zoom
             text: qsTr("Start downloading without confirmation") + App.loc.emptyString
             checked: App.settings.toBool(
                          App.settings.app.value(AppSettings.ForceSilentDownloadsFromTorrentFolder))
@@ -160,8 +146,8 @@ Column
 
         Row {
             visible: !useSystemDefinedPort.checked
-            leftPadding: 40
-            spacing: 5
+            leftPadding: 40*appWindow.zoom
+            spacing: 5*appWindow.zoom
 
             SettingsSubgroupHeader {
                 text: qsTr("Custom port:") + App.loc.emptyString
@@ -170,7 +156,7 @@ Column
 
             SettingsTextField {
                 id: customPortText
-                implicitWidth: 60
+                implicitWidth: 60*appWindow.zoom
                 inputMethodHints: Qt.ImhDigitsOnly
                 validator: QtRegExpValidator { regExp: /\d+/ }
                 text: App.settings.dmcore.value(DmCoreSettings.BtSessionPort)

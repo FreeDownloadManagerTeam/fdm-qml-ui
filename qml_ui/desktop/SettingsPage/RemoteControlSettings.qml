@@ -36,7 +36,7 @@ Item
 
         Row
         {
-            spacing: 40
+            spacing: 40*appWindow.zoom
 
             SettingsGroupColumn {
                 id: settingsGroupColumn
@@ -53,11 +53,11 @@ Item
 
                     enabled: allowRcCb.checked
                     anchors.left: parent.left
-                    anchors.leftMargin: 38
+                    anchors.leftMargin: 38*appWindow.zoom
 
                     columns: 2
-                    rowSpacing: 5
-                    columnSpacing: 30
+                    rowSpacing: 5*appWindow.zoom
+                    columnSpacing: 30*appWindow.zoom
 
                     BaseLabel {
                         text: qsTr("ID") + App.loc.emptyString
@@ -74,7 +74,7 @@ Item
 
                     Row
                     {
-                        spacing: 5
+                        spacing: 5*appWindow.zoom
 
                         BaseSelectableLabel {
                             id: passwordText
@@ -87,6 +87,7 @@ Item
                             height: passwordText.height
                             width: height
                             smooth: false
+                            zoom: appWindow.zoom
                             MouseArea {
                                 anchors.fill: parent
                                 cursorShape: Qt.PointingHandCursor
@@ -102,7 +103,7 @@ Item
                     ElidedLabelWithTooltip {
                         id: statusText
                         sourceText: App.rc.server.statusString || " "
-                        width: Math.min(sourceTextWidth, 250)
+                        width: Math.min(sourceTextWidth, 250*appWindow.zoom)
                         color: App.rc.server.status == RemoteControl.ServerStarting ? appWindow.theme.foreground :
                                App.rc.server.status == RemoteControl.ServerStillStarting ? appWindow.theme.lowMode :
                                App.rc.server.status == RemoteControl.ServerFailedToStart ? appWindow.theme.lowMode :
@@ -114,7 +115,7 @@ Item
 
             Column
             {
-                topPadding: settingsGroupColumn.topPadding - 8
+                topPadding: settingsGroupColumn.topPadding - 8*appWindow.zoom
 
                 Image
                 {

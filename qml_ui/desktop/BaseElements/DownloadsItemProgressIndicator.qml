@@ -1,4 +1,5 @@
 import QtQuick 2.0
+import "../../common"
 
 Rectangle {
 
@@ -7,7 +8,7 @@ Rectangle {
     property bool inProgress: true
     property bool small: true
 
-    height: small ? 6 : 10
+    height: (small ? 6 : 10)*appWindow.zoom
     color: parent.inProgress ? appWindow.theme.progressRunningBackground : appWindow.theme.progressPausedBackground
     clip: true
 
@@ -18,12 +19,11 @@ Rectangle {
         width: parent.width * percent / 100
     }
 
-    Image {
+    WaSvgImage {
         visible: infinityIndicator && !parent.inProgress
         width: parent.width
         source: small ? appWindow.theme.infiniteInactiveSmall : appWindow.theme.infiniteInactive
-        sourceSize.width: small ? 20 : 40
-        sourceSize.height: small ? 20 : 40
+        zoom: appWindow.zoom
         fillMode: Image.TileHorizontally
         verticalAlignment: Image.AlignLeft
     }
@@ -36,8 +36,6 @@ Rectangle {
             model: parseInt(parent.width/20) + 1
             AnimatedImage {
                 source: small ? appWindow.theme.infiniteActiveSmall : appWindow.theme.infiniteActive
-//                sourceSize.width: small ? 20 : 40
-//                sourceSize.height: small ? 20 : 40
                 paused: !visible
             }
         }

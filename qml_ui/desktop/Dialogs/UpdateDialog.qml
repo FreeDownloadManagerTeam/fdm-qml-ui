@@ -9,8 +9,8 @@ import "../BaseElements"
 Item {
     id: root
     visible: updateTools.showDialog
-    height: 100
-    width: 300
+    height: 100*appWindow.zoom
+    width: 300*appWindow.zoom
 
     property int arrowCenterX: width/2
 
@@ -21,10 +21,10 @@ Item {
     Rectangle {
         clip: true
         color: "transparent"
-        width: 10
-        height: 5
+        width: 10*appWindow.zoom
+        height: 5*appWindow.zoom
         x: arrowCenterX - width/2
-        anchors.leftMargin: 25
+        anchors.leftMargin: 25*appWindow.zoom
         z: 10
 
         Canvas {
@@ -32,7 +32,7 @@ Item {
             height: parent.height
             onPaint: {
                 var ctx = getContext("2d")
-                ctx.lineWidth = 1
+                ctx.lineWidth = 1*appWindow.zoom
                 ctx.strokeStyle = appWindow.theme.background
                 ctx.fillStyle = appWindow.theme.background
                 ctx.beginPath()
@@ -51,18 +51,18 @@ Item {
         id: dlg
         width: parent.width
         height: parent.height
-        x: -20
-        y: 5
+        x: -20*appWindow.zoom
+        y: 5*appWindow.zoom
         color: appWindow.theme.background
-        radius: 5
+        radius: 5*appWindow.zoom
         clip: true
 
         ColumnLayout {
             visible: updateTools.stage == QtUpdate.CheckUpdates
-            anchors.margins: 10
+            anchors.margins: 10*appWindow.zoom
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.fill: parent
-            spacing: 5
+            spacing: 5*appWindow.zoom
 
             BaseLabel {
                 visible: updateTools.state == QtUpdate.Ready || updateTools.state == QtUpdate.InProgress
@@ -92,7 +92,7 @@ Item {
             Row {
                 visible: updateTools.state == QtUpdate.Failed
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignCenter
-                spacing: 10
+                spacing: 10*appWindow.zoom
 
                 CustomButton {
                     text: qsTr("Retry") + App.loc.emptyString
@@ -145,7 +145,7 @@ Item {
 
         ColumnLayout {
             visible: updateTools.stage == QtUpdate.DownloadUpdates
-            anchors.margins: 10
+            anchors.margins: 10*appWindow.zoom
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.fill: parent
 
@@ -182,7 +182,7 @@ Item {
             Row {
                 visible: updateTools.state == QtUpdate.Failed
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignCenter
-                spacing: 10
+                spacing: 10*appWindow.zoom
 
                 CustomButton {
                     text: qsTr("Retry") + App.loc.emptyString
@@ -200,7 +200,7 @@ Item {
 
         ColumnLayout {
             visible: updateTools.stage == QtUpdate.PostDownloadCheck
-            anchors.margins: 10
+            anchors.margins: 10*appWindow.zoom
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.fill: parent
 
@@ -237,7 +237,7 @@ Item {
             Row {
                 visible: updateTools.state == QtUpdate.Failed
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignCenter
-                spacing: 10
+                spacing: 10*appWindow.zoom
 
                 CustomButton {
                     text: qsTr("Retry") + App.loc.emptyString
@@ -259,7 +259,7 @@ Item {
             Row {
                 visible: updateTools.state == QtUpdate.Finished && updateTools.updater.initiator == QtUpdate.InitiatorAutomatic
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignCenter
-                spacing: 10
+                spacing: 10*appWindow.zoom
 
                 CustomButton {
                     text: qsTr("Install update") + App.loc.emptyString
@@ -277,7 +277,7 @@ Item {
 
         ColumnLayout {
             visible: updateTools.stage == QtUpdate.PreInstallCheck
-            anchors.margins: 10
+            anchors.margins: 10*appWindow.zoom
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.fill: parent
 
@@ -307,7 +307,7 @@ Item {
             Row {
                 visible: updateTools.state == QtUpdate.Failed
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignCenter
-                spacing: 10
+                spacing: 10*appWindow.zoom
 
                 CustomButton {
                     text: qsTr("Retry") + App.loc.emptyString
@@ -325,7 +325,7 @@ Item {
 
         ColumnLayout {
             visible: updateTools.stage == QtUpdate.InstallUpdates
-            anchors.margins: 10
+            anchors.margins: 10*appWindow.zoom
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.fill: parent
 
@@ -355,7 +355,7 @@ Item {
             Row {
                 visible: updateTools.state == QtUpdate.Failed
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignCenter
-                spacing: 10
+                spacing: 10*appWindow.zoom
 
                 CustomButton {
                     text: qsTr("Retry") + App.loc.emptyString
@@ -377,7 +377,7 @@ Item {
             Row {
                 visible: updateTools.state == QtUpdate.Finished && updateTools.restartRequired
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignCenter
-                spacing: 10
+                spacing: 10*appWindow.zoom
 
                 CustomButton {
                     text: qsTr("Relaunch") + App.loc.emptyString
@@ -416,7 +416,7 @@ Item {
         anchors.fill: dlg
         horizontalOffset: 0
         verticalOffset: 0
-        radius: 8.0
+        radius: 8.0*appWindow.zoom
         samples: 17
         color: appWindow.theme.shadow
         source: dlg

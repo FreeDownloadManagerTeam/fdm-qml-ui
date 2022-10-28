@@ -7,7 +7,7 @@ import "../common"
 ListView {
     id: listView
     property var downloadsViewHeader
-    property int itemHeight: appWindow.compactView ? 24 : 40
+    property int itemHeight: (appWindow.compactView ? 24 : 40)*appWindow.zoom*Math.max(Math.min(appWindow.zoom2, 1.2), 0.8)
     property double speedColumnHoveredDownloadId: -1
     property int speedColumnHoveredWidth: 0
     property double speedColumnNotHoveredSinceTime: 0
@@ -23,7 +23,7 @@ ListView {
     delegate: DownloadsViewItem {
         id: viewItem
         z: model.id === selectedDownloadsTools.currentDownloadId ? 5 : 3
-        height: lastChild ? itemHeight + 1 : itemHeight
+        height: lastChild ? itemHeight + 1*appWindow.zoom : itemHeight
         downloadsViewHeader: listView.downloadsViewHeader
         parentY: y
         noActionsAllowed: downloadsViewTools.showingDownloadsWithMissingFilesOnly
@@ -80,7 +80,7 @@ ListView {
             anchors.top: parent.top
             anchors.leftMargin: 1
             anchors.topMargin: 1
-            width: 4
+            width: 4*appWindow.zoom
             height: lastChild ? parent.height-2 : parent.height-1
             color: model.priority == AbstractDownloadsUi.DownloadPriorityHigh ? appWindow.theme.highMode : appWindow.theme.lowMode
             visible: model.priority != AbstractDownloadsUi.DownloadPriorityNormal
@@ -91,7 +91,7 @@ ListView {
             visible: index
             color: appWindow.theme.downloadItemsBorder
             width: parent.width - 2
-            height: 1
+            height: 1*appWindow.zoom
             anchors.top: viewItem.top
             anchors.horizontalCenter: parent.horizontalCenter
         }
@@ -101,7 +101,7 @@ ListView {
             visible: lastChild
             color: appWindow.theme.downloadItemsBorder
             width: parent.width - 2
-            height: 1
+            height: 1*appWindow.zoom
             anchors.bottom: viewItem.bottom
             anchors.horizontalCenter: parent.horizontalCenter
         }
@@ -110,6 +110,7 @@ ListView {
         Rectangle {
             visible: model.id === selectedDownloadsTools.currentDownloadId
             border.color: appWindow.active ? appWindow.theme.selectedBorder : appWindow.theme.inactiveSelectedBorder
+            border.width: 1*appWindow.zoom
             width: parent.width
             height: lastChild ? parent.height : parent.height + 1
             color: "transparent"

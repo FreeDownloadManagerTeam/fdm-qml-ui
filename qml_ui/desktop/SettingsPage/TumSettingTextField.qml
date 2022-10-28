@@ -12,7 +12,7 @@ SettingsTextField {
     property int setting: DmCoreSettings.MaxDownloadSpeed
     property int maxValue: 0
 
-    implicitWidth: 123
+    implicitWidth: 123*appWindow.zoom
 
     Material.accent: Material.Blue
 

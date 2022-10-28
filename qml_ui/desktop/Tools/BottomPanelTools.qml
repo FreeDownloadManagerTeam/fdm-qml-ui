@@ -6,9 +6,9 @@ Item {
     property bool panelVisible: false
     property bool panelCanBeShown: false
 
-    property bool sufficientWindowHeight: appWindow.height >= 480
+    property bool sufficientWindowHeight: appWindow.height >= 380+100*appWindow.zoom
 
-    property int panelHeigth: 210
+    property int panelHeigth: 210*appWindow.zoom
 
     property var currentTabsModel: []
     property string currentTab

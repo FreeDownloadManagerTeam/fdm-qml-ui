@@ -25,10 +25,10 @@ Item {
         font: fmLabel.font
     }
 
-    property int priorityColWidth: Math.max(fm.advanceWidth(qsTr("Priority") + App.loc.emptyString) + 30,
-                                            fm.advanceWidth(qsTr('Normal') + App.loc.emptyString) + 60,
-                                            fm.advanceWidth(qsTr('High') + App.loc.emptyString) + 60,
-                                            fm.advanceWidth(qsTr('Low') + App.loc.emptyString) + 60) +
+    property int priorityColWidth: Math.max(fm.advanceWidth(qsTr("Priority") + App.loc.emptyString) + 30*appWindow.zoom,
+                                            fm.advanceWidth(qsTr('Normal') + App.loc.emptyString) + 60*appWindow.zoom,
+                                            fm.advanceWidth(qsTr('High') + App.loc.emptyString) + 60*appWindow.zoom,
+                                            fm.advanceWidth(qsTr('Low') + App.loc.emptyString) + 60*appWindow.zoom) +
                                    fm.font.pixelSize*0
 
     signal selectAllToDownload()
@@ -47,21 +47,21 @@ Item {
             id: nameItem
             text: qsTr("Name") + App.loc.emptyString
             Layout.fillWidth: true
-            Layout.minimumWidth: 200
+            Layout.minimumWidth: 200*appWindow.zoom
             sortBy: AbstractDownloadsUi.SortByName
         }
 
         FilesTabTablesHeaderItem {
             id: sizeItem
             text: qsTr("Size") + App.loc.emptyString
-            Layout.preferredWidth: 80
+            Layout.preferredWidth: 80*appWindow.zoom
             sortBy: AbstractDownloadsUi.SortBySize
         }
 
         FilesTabTablesHeaderItem {
             id: progressItem
             text: qsTr("Progress") + App.loc.emptyString
-            Layout.preferredWidth: 150
+            Layout.preferredWidth: 150*appWindow.zoom
             visible: !root.createDownloadDialog
             sortBy: AbstractDownloadsUi.SortByProgress
         }
@@ -74,7 +74,7 @@ Item {
 
             Rectangle {
                 height: parent.height
-                width: 1
+                width: 1*appWindow.zoom
                 anchors.right: parent.right
                 color: appWindow.theme.border
             }
@@ -99,7 +99,7 @@ Item {
             boundsBehavior: Flickable.StopAtBounds
 
             delegate: Item {
-                property int rowHeigth: 22
+                property int rowHeigth: 22*appWindow.zoom
                 width: parent.width
                 height: rowHeigth
                 Layout.preferredHeight: rowHeigth
@@ -155,14 +155,14 @@ Item {
                 Rectangle {
                     visible: index === selectedIndex
                     border.color: appWindow.theme.selectedBorder
-                    border.width: 1
+                    border.width: 1*appWindow.zoom
                     anchors.fill: parent
                     color: appWindow.theme.selectedBackground
                 }
 
                 RowLayout {
                     width: parent.width
-                    height: 15
+                    height: 15*appWindow.zoom
                     spacing: 0
 
                     RowLayout {
@@ -172,8 +172,8 @@ Item {
                         spacing: 0
 
                         Rectangle {
-                            Layout.leftMargin: 5
-                            width: (model.level + (model.folder ? 0 : 1)) * 15
+                            Layout.leftMargin: 5*appWindow.zoom
+                            width: ((model.level + (model.folder ? 0 : 1)) * 15)*appWindow.zoom
                             height: rowHeigth
                             color: "transparent"
                         }
@@ -181,16 +181,15 @@ Item {
                         Rectangle {
                             visible: model.folder
                             Layout.alignment: Qt.AlignVCenter
-                            width: 15
-                            height: 15
+                            width: 15*appWindow.zoom
+                            height: 15*appWindow.zoom
                             color: "transparent"
                             clip: true
-                            Image {
+                            WaSvgImage {
                                 source: appWindow.theme.elementsIcons
-                                sourceSize.width: 93
-                                sourceSize.height: 456
-                                x: model.isOpened ? -17 : 5
-                                y: model.isOpened ? -189 : -191
+                                zoom: appWindow.zoom
+                                x: (model.isOpened ? -17 : 5)*zoom
+                                y: (model.isOpened ? -189 : -191)*zoom
                             }
 
                             MouseArea {
@@ -216,8 +215,8 @@ Item {
 
                         Rectangle {
                             Layout.fillWidth: true
-                            Layout.leftMargin: 5
-                            Layout.rightMargin: 5
+                            Layout.leftMargin: 5*appWindow.zoom
+                            Layout.rightMargin: 5*appWindow.zoom
                             height: rowHeigth
                             color: "transparent"
                             clip: true
@@ -227,7 +226,7 @@ Item {
                                 elide: Text.ElideRight
                                 width: parent.width
                                 text: model.name
-                                font.pixelSize: 13
+                                font.pixelSize: 13*appWindow.fontZoom
                                 color: appWindow.theme.filesTreeText
 
                                 MouseArea {
@@ -257,13 +256,13 @@ Item {
                         Rectangle {
                             color: "transparent"
                             anchors.fill: parent
-                            anchors.leftMargin: 5
-                            anchors.rightMargin: 5
+                            anchors.leftMargin: 5*appWindow.zoom
+                            anchors.rightMargin: 5*appWindow.zoom
                             BaseLabel {
                                 anchors.verticalCenter: parent.verticalCenter
                                 anchors.left: parent.left
                                 text: JsTools.sizeUtils.bytesAsText(model.selectedSize)
-                                font.pixelSize: 13
+                                font.pixelSize: 13*appWindow.fontZoom
                                 color: appWindow.theme.filesTreeText
                             }
                         }
@@ -276,8 +275,8 @@ Item {
                         visible: !root.createDownloadDialog
 
                         Rectangle {
-                            Layout.leftMargin: 5
-                            height: 6
+                            Layout.leftMargin: 5*appWindow.zoom
+                            height: 6*appWindow.zoom
                             Layout.fillWidth: true
                             Layout.alignment: Qt.AlignVCenter
                             color: appWindow.theme.progressRunningBackground
@@ -292,12 +291,12 @@ Item {
 
                         Rectangle {
                             Layout.alignment: Qt.AlignVCenter
-                            width: 45
+                            width: 45*appWindow.zoom
 
                             BaseLabel {
                                 anchors.verticalCenter: parent.verticalCenter
                                 text: model.progress + '%'
-                                font.pixelSize: 12
+                                font.pixelSize: 12*appWindow.fontZoom
                                 color: appWindow.theme.filesTreeText
                             }
                         }
@@ -327,7 +326,7 @@ Item {
                             Rectangle {
                                 height: rowHeigth
                                 Layout.fillWidth: true
-                                Layout.leftMargin: 5
+                                Layout.leftMargin: 5*appWindow.zoom
 
                                 color: "transparent"
 
@@ -339,7 +338,7 @@ Item {
                                         : (model.priority == AbstractDownloadsUi.DownloadPriorityHigh ? qsTr('High')
                                             : (model.priority == AbstractDownloadsUi.DownloadPriorityLow ? qsTr('Low')
                                                 : ''))) + App.loc.emptyString
-                                    font.pixelSize: 13
+                                    font.pixelSize: 13*appWindow.fontZoom
                                     elide: Label.ElideRight
                                     color: appWindow.theme.filesTreeText
 
@@ -362,7 +361,7 @@ Item {
                             Rectangle {
                                 height: rowHeigth
                                 color: "transparent"
-                                width: 16
+                                width: 16*appWindow.zoom
                                 enabled: model.priority != AbstractDownloadsUi.DownloadPriorityHigh
 
                                 Rectangle {
@@ -371,20 +370,18 @@ Item {
                                     anchors.fill: parent
                                     opacity: enabled ? 1 : 0.3
 
-                                    Image {
+                                    WaSvgImage {
                                         visible: mouseAreaUp.containsMouse
                                         anchors.verticalCenter: parent.verticalCenter
                                         source: Qt.resolvedUrl("../../images/desktop/priority_up_active.svg")
-                                        sourceSize.width: 16
-                                        sourceSize.height: 16
+                                        zoom: appWindow.zoom
                                     }
 
-                                    Image {
+                                    WaSvgImage {
                                         visible: !mouseAreaUp.containsMouse
                                         anchors.verticalCenter: parent.verticalCenter
                                         source: Qt.resolvedUrl("../../images/desktop/priority_up.svg")
-                                        sourceSize.width: 16
-                                        sourceSize.height: 16
+                                        zoom: appWindow.zoom
                                     }
                                 }
 
@@ -406,8 +403,8 @@ Item {
                             Rectangle {
                                 height: rowHeigth
                                 color: "transparent"
-                                width: 16
-                                Layout.rightMargin: 10
+                                width: 16*appWindow.zoom
+                                Layout.rightMargin: 10*appWindow.zoom
                                 enabled: model.priority != AbstractDownloadsUi.DownloadPriorityLow
 
                                 Rectangle {
@@ -416,20 +413,18 @@ Item {
                                     anchors.fill: parent
                                     opacity: enabled ? 1 : 0.3
 
-                                    Image {
+                                    WaSvgImage {
                                         visible: mouseAreaDown.containsMouse
                                         anchors.verticalCenter: parent.verticalCenter
                                         source: Qt.resolvedUrl("../../images/desktop/priority_down_active.svg")
-                                        sourceSize.width: 16
-                                        sourceSize.height: 16
+                                        zoom: appWindow.zoom
                                     }
 
-                                    Image {
+                                    WaSvgImage {
                                         visible: !mouseAreaDown.containsMouse
                                         anchors.verticalCenter: parent.verticalCenter
                                         source: Qt.resolvedUrl("../../images/desktop/priority_down.svg")
-                                        sourceSize.width: 16
-                                        sourceSize.height: 16
+                                        zoom: appWindow.zoom
                                     }
                                 }
 

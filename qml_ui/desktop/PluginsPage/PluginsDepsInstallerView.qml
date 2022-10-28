@@ -16,13 +16,14 @@ RowLayout
     {
         source: App.plugins.depsInstaller.componentIconUrl
         visible: source.toString()
-        Layout.preferredHeight: 64
+        zoom: appWindow.zoom
+        Layout.preferredHeight: 64*zoom
         Layout.preferredWidth: Layout.preferredHeight
     }
 
     ColumnLayout
     {
-        Layout.leftMargin: 15
+        Layout.leftMargin: 15*appWindow.zoom
 
         BaseLabel
         {
@@ -36,6 +37,7 @@ RowLayout
             {
                 visible: hasError
                 source: Qt.resolvedUrl("../../images/warning.svg")
+                zoom: appWindow.zoom
                 Layout.preferredHeight: msg.height
                 Layout.preferredWidth: Layout.preferredHeight
             }
@@ -58,8 +60,8 @@ RowLayout
             visible: App.plugins.depsInstaller.running
             infinityIndicator: App.plugins.depsInstaller.progress === -1
             percent: App.plugins.depsInstaller.progress
-            Layout.preferredHeight: small ? 6 : 10
-            Layout.preferredWidth: 150
+            Layout.preferredHeight: (small ? 6 : 10)*appWindow.zoom
+            Layout.preferredWidth: 150*appWindow.zoom
         }
     }
 }

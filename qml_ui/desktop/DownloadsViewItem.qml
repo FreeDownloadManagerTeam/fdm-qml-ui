@@ -18,8 +18,8 @@ Item
     property var downloadsViewHeader
     property bool speedColumnHovered: speedColumnBlock.hovered
     property int speedColumnHoveredWidth: !speedColumnHovered ? 0 :
-                                          speedColumnBlock.visibleItem == btBlock ? btBlock.implicitWidth+10 :
-                                          speedColumnBlock.visibleItem == priorityBlock ? priorityText.contentWidth + imgUp.width*2 + 10 : 0
+                                          speedColumnBlock.visibleItem == btBlock ? btBlock.implicitWidth+10*appWindow.zoom :
+                                          speedColumnBlock.visibleItem == priorityBlock ? priorityText.contentWidth + imgUp.width*2 + 10*appWindow.zoom : 0
     property double lastTimeSpeedColumnHoveredWidthBecameZero: 0
     onSpeedColumnHoveredWidthChanged: {
         if (!speedColumnHoveredWidth)
@@ -69,10 +69,10 @@ Item
         RowLayout {
             width: root.downloadsViewHeader.itemAt(0).width
             anchors.verticalCenter: parent.verticalCenter
-            spacing: 8
+            spacing: 8*appWindow.zoom
 
             BaseCheckBox {
-                Layout.leftMargin: 8
+                Layout.leftMargin: 8*appWindow.zoom
                 Layout.alignment: Qt.AlignVCenter
                 xOffset: 0
                 locked: downloadsItemTools.locked
@@ -156,7 +156,7 @@ Item
                     + (root.eatStatusItem ? root.downloadsViewHeader.statusColumnFullWidth : 0)
                     + (root.eatSpeedItem ? root.downloadsViewHeader.speedColumnFullWidth : 0)
             leftPadding: 6
-            rightPadding: itemTags.width ? itemTags.width + 10 + 5 : 5
+            rightPadding: itemTags.width ? itemTags.width + 10*appWindow.zoom + 5*appWindow.zoom : 5*appWindow.zoom
             font.pixelSize: appWindow.fonts.defaultSize
             opacity: downloadsItemTools.itemOpacity
 
@@ -185,7 +185,7 @@ Item
             DownloadsViewItemTags {
                 id: itemTags
                 anchors.left: parent.left
-                anchors.leftMargin: parent.contentWidth + parent.leftPadding + 10
+                anchors.leftMargin: parent.contentWidth + parent.leftPadding + 10*appWindow.zoom
                 anchors.verticalCenter: parent.verticalCenter
             }
 
@@ -196,11 +196,11 @@ Item
                 id: hhTitleSpeedColumn
                 property bool hovered: false
                 anchors.right: parent.right
-                width: root.hasSpeedItem ? root.downloadsViewHeader.speedColumnFullWidth : 150
+                width: root.hasSpeedItem ? root.downloadsViewHeader.speedColumnFullWidth : 150*appWindow.zoom
                 height: parent.height
                 visible: statusItem.isEmpty && speedColumnBlock.isEmpty
                 HoverHandler {id: hhTitleSpeedColumn1}
-                CppControls.HoverHandler {id: hhTitleSpeedColumn2; margins: -2}
+                CppControls.HoverHandler {id: hhTitleSpeedColumn2; margins: -2*appWindow.zoom}
                 property bool internalHovered: hhTitleSpeedColumn1.hovered && hhTitleSpeedColumn2.hovered
                 Timer {
                     id: hhTitleSpeedColumnTimer
@@ -230,8 +230,8 @@ Item
             height: parent.height
             Item {
                 anchors.fill: parent
-                anchors.leftMargin: 6
-                anchors.rightMargin: 6
+                anchors.leftMargin: 6*appWindow.zoom
+                anchors.rightMargin: 6*appWindow.zoom
                 DownloadsViewStatusItem {
                     id: statusItem
                     anchors.fill: parent
@@ -264,15 +264,15 @@ Item
             height: parent.height
 
             HoverHandler {id: hh1Row}
-            CppControls.HoverHandler {id: hh2Row; margins: -2}
+            CppControls.HoverHandler {id: hh2Row; margins: -2*appWindow.zoom}
 
             //speed
             DownloadSpeed {
                 id: speedBlock
                 visible: speedColumnBlock.visibleItem == speedBlock
                 anchors.fill: parent
-                anchors.leftMargin: 6
-                anchors.rightMargin: 6
+                anchors.leftMargin: 6*appWindow.zoom
+                anchors.rightMargin: 6*appWindow.zoom
                 myDownloadsItemTools: downloadsItemTools
             }
 
@@ -281,8 +281,8 @@ Item
                 id: priorityBlock
                 visible: speedColumnBlock.visibleItem == priorityBlock
                 anchors.fill: parent
-                anchors.leftMargin: 5
-                spacing: 5
+                anchors.leftMargin: 5*appWindow.zoom
+                spacing: 5*appWindow.zoom
                 clip: true
 
                 Rectangle {
@@ -293,17 +293,16 @@ Item
                     color: "transparent"
                     enabled: model.priority != AbstractDownloadsUi.DownloadPriorityHigh
 
-                    Image {
+                    WaSvgImage {
                         id: imgUp
                         anchors.verticalCenter: parent.verticalCenter
                         opacity: enabled ? 1 : 0.3
                         source: Qt.resolvedUrl("../images/desktop/" + (priorUp.hovered ? "priority_up_active.svg" : "priority_up.svg"))
-                        sourceSize.width: 16
-                        sourceSize.height: 16
+                        zoom: appWindow.zoom
                     }
 
                     HoverHandler {id: hh1Up}
-                    CppControls.HoverHandler {id: hh2Up; margins: -1}
+                    CppControls.HoverHandler {id: hh2Up; margins: -1*appWindow.zoom}
 
                     MouseArea {
                         anchors.fill: parent
@@ -326,17 +325,16 @@ Item
                     color: "transparent"
                     enabled: model.priority != AbstractDownloadsUi.DownloadPriorityLow
 
-                    Image {
+                    WaSvgImage {
                         id: imgDown
                         opacity: enabled ? 1 : 0.3
                         anchors.verticalCenter: parent.verticalCenter
                         source: Qt.resolvedUrl("../images/desktop/" + (priorDown.hovered ? "priority_down_active.svg" : "priority_down.svg"))
-                        sourceSize.width: 16
-                        sourceSize.height: 16
+                        zoom: appWindow.zoom
                     }
 
                     HoverHandler {id: hh1Down}
-                    CppControls.HoverHandler {id: hh2Down; margins: -1}
+                    CppControls.HoverHandler {id: hh2Down; margins: -1*appWindow.zoom}
 
                     MouseArea {
                         anchors.fill: parent
@@ -356,7 +354,7 @@ Item
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignVCenter
                     color: appWindow.theme.foreground
-                    font.pixelSize: appWindow.compactView ? 9 : 11
+                    font.pixelSize: (appWindow.compactView ? 9 : 11)*appWindow.fontZoom
                     text: qsTr('Priority') + App.loc.emptyString
                 }
             }
@@ -368,7 +366,7 @@ Item
                 visible: speedColumnBlock.visibleItem == btBlock
                 source: "../bt/desktop/DownloadsSpeedColumnItem.qml"
                 anchors.fill: parent
-                anchors.leftMargin: 5
+                anchors.leftMargin: 5*appWindow.zoom
                 onItemChanged: {
                     if (item) {
                         item.downloadId = Qt.binding(function(){return model.id;});
@@ -383,9 +381,9 @@ Item
                 visible: speedColumnBlock.visibleItem == btPausedBlock
                 color: appWindow.theme.foreground
                 text: qsTr("Upload paused") + App.loc.emptyString
-                font.pixelSize: appWindow.compactView ? 9 : 11
-                x: 7
-                width: parent.width - x - 20
+                font.pixelSize: (appWindow.compactView ? 9 : 11)*appWindow.fontZoom
+                x: 7*appWindow.zoom
+                width: parent.width - x - 20*appWindow.zoom
                 height: parent.height
                 verticalAlignment: Text.AlignVCenter
                 wrapMode: Text.WordWrap
@@ -396,20 +394,18 @@ Item
                 id: loAbortBlock
                 visible: speedColumnBlock.visibleItem == loAbortBlock
                 color: "transparent"
-                width: 24
-                height: 24
+                width: loAbortImg.preferredWidth
+                height: loAbortImg.preferredHeight
                 anchors.left: parent.left
-                anchors.leftMargin: 5
+                anchors.leftMargin: 5*appWindow.zoom
                 anchors.verticalCenter: parent.verticalCenter
                 property bool hovered: hh1LoAbort.hovered && hh2LoAbort.hovered
 
-                Image
+                WaSvgImage
                 {
                     id: loAbortImg
                     source: Qt.resolvedUrl("../images/close-circle.svg")
-                    anchors.fill: parent
-                    sourceSize.width: 24*Screen.devicePixelRatio
-                    sourceSize.height: 24*Screen.devicePixelRatio
+                    zoom: appWindow.zoom
                 }
 
                 HoverHandler {id: hh1LoAbort}
@@ -430,8 +426,8 @@ Item
             anchors.verticalCenter: parent.verticalCenter
             text: JsTools.sizeUtils.byteProgressAsText(downloadsItemTools.selectedBytesDownloaded, downloadsItemTools.selectedSize);
             width: root.downloadsViewHeader.sizeColumnFullWidth
-            leftPadding: 6
-            font.pixelSize: appWindow.compactView ? 12 : 13
+            leftPadding: 6*appWindow.zoom
+            font.pixelSize: (appWindow.compactView ? 12 : 13)*appWindow.fontZoom
             opacity: downloadsItemTools.itemOpacity
         }
 
@@ -440,10 +436,10 @@ Item
             visible: root.hasAddedItem
             anchors.verticalCenter: parent.verticalCenter
             width: root.downloadsViewHeader.dateColumnFullWidth
-            leftPadding: 6
-            rightPadding: 6
+            leftPadding: 6*appWindow.zoom
+            rightPadding: 6*appWindow.zoom
             text: App.loc.dateOrTimeToString(model.added, false) + App.loc.emptyString
-            font.pixelSize: appWindow.compactView ? 12 : 13
+            font.pixelSize: (appWindow.compactView ? 12 : 13)*appWindow.fontZoom
             opacity: downloadsItemTools.itemOpacity
             MouseArea {
                 propagateComposedEvents: true

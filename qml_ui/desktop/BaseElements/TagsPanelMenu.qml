@@ -7,8 +7,8 @@ import "../BaseElements"
 Popup {
     id: root
     closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
-    padding: 12
-    width: 250 + 24
+    padding: 12*appWindow.zoom
+    width: (250 + 24)*appWindow.zoom
 
     background: Item {
         implicitWidth: contentItem.implicitWidth
@@ -17,19 +17,19 @@ Popup {
         Rectangle {
             clip: true
             color: "transparent"
-            width: 10
-            height: 5
+            width: 10*appWindow.zoom
+            height: 5*appWindow.zoom
             anchors.left: parent.left
-            anchors.leftMargin: 200
-            y: -5
-            z: 10
+            anchors.leftMargin: 200*appWindow.zoom
+            y: -5*appWindow.zoom
+            z: 10*appWindow.zoom
 
             Canvas {
                 width: parent.width
                 height: parent.height
                 onPaint: {
                     var ctx = getContext("2d")
-                    ctx.lineWidth = 1
+                    ctx.lineWidth = 1*appWindow.zoom
                     ctx.strokeStyle = appWindow.theme.background
                     ctx.fillStyle = appWindow.theme.background
                     ctx.beginPath()
@@ -49,31 +49,31 @@ Popup {
             color: "gray"
             glowRadius: 0
             spread: 0
-            cornerRadius: 20
+            cornerRadius: 20*appWindow.zoom
         }
 
         Rectangle {
             id: menuBackground
             anchors.fill: parent
             color: appWindow.theme.background
-            radius: 6
+            radius: 6*appWindow.zoom
         }
     }
 
     contentItem: Column {
         id: col
-        width: 250
-        spacing: 10
+        width: 250*appWindow.zoom
+        spacing: 10*appWindow.zoom
 
         ListView {
             id: tagsList
-            width: 250
+            width: 250*appWindow.zoom
             height: Math.min(tagsTools.tagsScrollMaxHeight, contentHeight)
             flickableDirection: Flickable.VerticalFlick
             ScrollBar.vertical: ScrollBar{ visible: tagsList.height < tagsList.contentHeight; policy: ScrollBar.AlwaysOn; }
             boundsBehavior: Flickable.StopAtBounds
             clip: true
-            spacing: 10
+            spacing: 10*appWindow.zoom
 
             model: tagsTools.hiddenTags
 
@@ -91,13 +91,13 @@ Popup {
         Rectangle {
             visible: tagsTools.hiddenTags.length > 0
             color: appWindow.theme.downloadItemsBorder
-            width: 250 + 24
-            height: 1
-            x: - 12
+            width: (250 + 24)*appWindow.zoom
+            height: 1*appWindow.zoom
+            x: - 12*appWindow.zoom
         }
 
         AddTag{
-            width: 250
+            width: 250*appWindow.zoom
             tagPanelMenuHeight: root.height
         }
     }

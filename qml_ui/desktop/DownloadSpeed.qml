@@ -1,5 +1,6 @@
 import QtQuick 2.12
 import "./BaseElements"
+import "../common"
 import org.freedownloadmanager.fdm 1.0
 
 Row
@@ -14,16 +15,14 @@ Row
                                        (myDownloadsItemTools.finished || myDownloadsItemTools.uploadSpeed > 0)
 
         // Workaround: attempt to achieve a correctly centered vertical position under macOS
-        property int textBottomPadding: Qt.platform.os === "osx" ? 1 : 0
+        property int textBottomPadding: Qt.platform.os === "osx" ? 1*appWindow.zoom : 0
     }
 
-    Image {
+    WaSvgImage {
         visible: myDownloadsItemTools.showDownloadSpeed
         anchors.verticalCenter: parent.verticalCenter
         source: appWindow.theme.arrowDownListImg
-        width: 7
-        height: 7
-        sourceSize: Qt.size(width, height)
+        zoom: appWindow.zoom
         fillMode: Image.PreserveAspectFit
     }
     BaseLabel {
@@ -31,8 +30,8 @@ Row
         visible: myDownloadsItemTools.showDownloadSpeed
         anchors.verticalCenter: parent.verticalCenter
         text: App.speedAsText(myDownloadsItemTools.downloadSpeed) + App.loc.emptyString
-        font.pixelSize: appWindow.compactView ? 12 : 13
-        leftPadding: 2
+        font.pixelSize: (appWindow.compactView ? 12 : 13)*appWindow.fontZoom
+        leftPadding: 2*appWindow.zoom
         bottomPadding: d.textBottomPadding
     }
 
@@ -40,25 +39,23 @@ Row
     {
         visible: myDownloadsItemTools.showDownloadSpeed && d.showUploadSpeed
         color: "transparent"
-        width: 67 - labelDown.x - labelDown.width // make a "grid"
+        width: 15*appWindow.zoom+52*appWindow.fontZoom - labelDown.x - labelDown.width // make a "grid"
         height: parent.height
     }
 
-    Image {
+    WaSvgImage {
         visible: d.showUploadSpeed
         anchors.verticalCenter: parent.verticalCenter
         source: appWindow.theme.arrowUpListImg
-        width: 7
-        height: 7
-        sourceSize: Qt.size(width, height)
+        zoom: appWindow.zoom
         fillMode: Image.PreserveAspectFit
     }
     BaseLabel {
         visible: d.showUploadSpeed
         anchors.verticalCenter: parent.verticalCenter
         text: App.speedAsText(myDownloadsItemTools.uploadSpeed) + App.loc.emptyString
-        font.pixelSize: appWindow.compactView ? 12 : 13
-        leftPadding: 2
+        font.pixelSize: (appWindow.compactView ? 12 : 13)*appWindow.fontZoom
+        leftPadding: 2*appWindow.zoom
         bottomPadding: d.textBottomPadding
     }
 }

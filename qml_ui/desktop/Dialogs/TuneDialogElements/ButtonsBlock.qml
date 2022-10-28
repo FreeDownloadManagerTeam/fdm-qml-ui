@@ -6,11 +6,11 @@ import "../../BaseElements"
 RowLayout {
     property bool forceDisableOK: false
 
-    Layout.topMargin: 10
-    Layout.bottomMargin: 15
+    Layout.topMargin: 10*appWindow.zoom
+    Layout.bottomMargin: 15*appWindow.zoom
     Layout.alignment: Qt.AlignRight
 
-    spacing: 5
+    spacing: 5*appWindow.zoom
 
     Rectangle {
         color: "transparent"
@@ -34,7 +34,7 @@ RowLayout {
             clip: true
             elide: Text.ElideRight
             width: parent.width
-            font.pixelSize: 13
+            font.pixelSize: 13*appWindow.fontZoom
             color: "#585759"
         }
     }

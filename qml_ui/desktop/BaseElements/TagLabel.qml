@@ -5,7 +5,7 @@ import "../BaseElements"
 Rectangle {
     id: root
     width: btn.implicitWidth
-    height: 18
+    height: 18*appWindow.zoom
     color: appWindow.theme.filterBtnBackground
     property var tag
     property int downloadId
@@ -13,23 +13,23 @@ Rectangle {
     Row {
         id: btn
         anchors.verticalCenter: parent.verticalCenter
-        spacing: 3
-        topPadding: 2
-        bottomPadding: 2
-        leftPadding: 6
-        rightPadding: 6
+        spacing: 3*appWindow.zoom
+        topPadding: 2*appWindow.zoom
+        bottomPadding: 2*appWindow.zoom
+        leftPadding: 6*appWindow.zoom
+        rightPadding: 6*appWindow.zoom
         Rectangle {
             anchors.verticalCenter: parent.verticalCenter
             visible: tag ? !tag.readOnly : false
-            width: 8
-            height: 8
+            width: 8*appWindow.zoom
+            height: 8*appWindow.zoom
             color: tag ? tag.color : "#000"
         }
         Label {
             text: tag ? tag.name : ""
             color: appWindow.theme.filterBtnText
             padding: 0
-            font.pixelSize: 11
+            font.pixelSize: 11*appWindow.fontZoom
             textFormat: Text.PlainText
         }
     }

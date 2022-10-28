@@ -152,7 +152,7 @@ Rectangle {
                 {
                     Layout.leftMargin: 30
                     enabled: App.settings.hasNonDefaultValues || uiSettingsTools.hasNonDefaultValues
-                    text: qsTr("Reset")
+                    text: qsTr("Reset settings") + App.loc.emptyString
                     onClicked: okToResetMsg.open()
                     MessageDialog
                     {

@@ -3,10 +3,11 @@ import QtQuick.Layouts 1.3
 import org.freedownloadmanager.fdm 1.0
 import "../../../qt5compat"
 import "../../BaseElements"
+import "../../../common"
 
 RowLayout {
     visible: downloadTools.subtitlesEnabled
-    Layout.preferredHeight: visible ? 40 : 0
+    Layout.preferredHeight: visible ? 40*appWindow.zoom : 0
 
     BaseCheckBox {
         id: subsCheckbox
@@ -19,34 +20,29 @@ RowLayout {
         }
     }
 
-    Rectangle {
+    WaSvgImage {
         id: editListBtn
-        width: 16
-        height: 16
-        color: "transparent"
-
-        Image {
-            source: Qt.resolvedUrl("../../../images/desktop/edit_list.png")
-            sourceSize.width: 16
-            sourceSize.height: 16
-            layer {
-                effect: ColorOverlay {
-                    color: appWindow.theme.foreground
-                }
-                enabled: true
+        source: Qt.resolvedUrl("../../../images/desktop/edit_list.svg")
+        Layout.preferredHeight: preferredHeight
+        Layout.preferredWidth: preferredWidth
+        zoom: appWindow.zoom
+        layer {
+            effect: ColorOverlay {
+                color: appWindow.theme.foreground
             }
-            MouseArea {
-                anchors.fill: parent
-                cursorShape: Qt.PointingHandCursor
-                hoverEnabled: true
-                onClicked: function (mouse) {showMenu(mouse);}
-                onEntered: toolTipHosts.visible = true
-                onExited: toolTipHosts.visible = false
+            enabled: true
+        }
+        MouseArea {
+            anchors.fill: parent
+            cursorShape: Qt.PointingHandCursor
+            hoverEnabled: true
+            onClicked: function (mouse) {showMenu(mouse);}
+            onEntered: toolTipHosts.visible = true
+            onExited: toolTipHosts.visible = false
 
-                BaseToolTip {
-                    id: toolTipHosts
-                    text: qsTr("Edit list") + App.loc.emptyString
-                }
+            BaseToolTip {
+                id: toolTipHosts
+                text: qsTr("Edit list") + App.loc.emptyString
             }
         }
     }

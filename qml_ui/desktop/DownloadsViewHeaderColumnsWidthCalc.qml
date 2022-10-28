@@ -23,13 +23,13 @@ Item
 
     FontMetrics {
         id: fm9_11
-        font.pixelSize: appWindow.compactView ? 9 : 11
+        font.pixelSize: (appWindow.compactView ? 9 : 11)*appWindow.fontZoom
         font.family: Qt.platform.os === "osx" ? font.family : "Arial"
     }
 
     FontMetrics {
         id: fm11_12
-        font.pixelSize: appWindow.compactView ? 11 : 12
+        font.pixelSize: (appWindow.compactView ? 11 : 12)*appWindow.fontZoom
         font.family: Qt.platform.os === "osx" ? font.family : "Arial"
     }
 
@@ -68,13 +68,13 @@ Item
 
     function calc()
     {
-        const p = 7*2; // padding
+        const p = 7*2*appWindow.zoom; // padding
 
-        const nameColumnMaxWidth = 188;
-        const statusColumnMaxWidth = 150;
-        const speedColumnMaxWidth = 150;
-        const sizeColumnMaxWidth = 108;
-        const dateColumnMaxWidth = 85;
+        const nameColumnMaxWidth = 188*appWindow.fontZoom;
+        const statusColumnMaxWidth = 150*appWindow.fontZoom;
+        const speedColumnMaxWidth = 150*appWindow.fontZoom;
+        const sizeColumnMaxWidth = 108*appWindow.fontZoom;
+        const dateColumnMaxWidth = 85*appWindow.fontZoom;
 
         header.nameColumnWidth = Qt.binding(function() {
             return Math.min(fmDefSize.advanceWidth(
@@ -97,7 +97,7 @@ Item
                     const pausedStr = qsTr("Paused");
                     var w = fm11_12.advanceWidth(pausedStr+" 100%");
                     if (!appWindow.compactView)
-                        w += 15;
+                        w += 15*appWindow.zoom;
                     minw = Math.max(minw, w + p + fm11_12.font.pixelSize*0);
                 }
                 var err = App.downloads.modelTracker.longestError;
@@ -114,7 +114,7 @@ Item
                         err = missingStorageStr;
                 }
                 if (err.length > 0)
-                    minw = Math.max(minw, fmDefSize.advanceWidth(err) + 17 + 3 + fmDefSize.font.pixelSize*0); // 17 - error icon width
+                    minw = Math.max(minw, fmDefSize.advanceWidth(err) + 17*appWindow.zoom + 3*appWindow.zoom + fmDefSize.font.pixelSize*0); // 17 - error icon width
                 return Math.min(minw + p, statusColumnMaxWidth);
             }
         });
@@ -125,14 +125,14 @@ Item
             var w = 0;
             if (appWindow.btSupported)
             {
-                w = 16 + 5 + fm9_11.advanceWidth(appWindow.btS.speedHoverLongestText() + App.loc.emptyString) +
-                        fm9_11.font.pixelSize*0 + 10 + p;
+                w = 16*appWindow.zoom + 5*appWindow.zoom + fm9_11.advanceWidth(appWindow.btS.speedHoverLongestText() + App.loc.emptyString) +
+                        fm9_11.font.pixelSize*0 + 10*appWindow.zoom + p;
             }
             if (App.downloads.modelTracker.hasDisabledPostFinishedTasks)
             {
                 const uploadPausedStr = qsTr("Upload paused");
                 var ww = fm9_11.advanceWidth(uploadPausedStr) + fm9_11.font.pixelSize*0;
-                w = Math.max(w, Math.min(ww+20+p, speedColumnMaxWidth*2/3)); // force two lines of text if the width is too big
+                w = Math.max(w, Math.min(ww+20*appWindow.zoom+p, speedColumnMaxWidth*2/3)); // force two lines of text if the width is too big
             }
             if (App.downloads.modelTracker.speedValuesCount > 0)
                 w = Math.max(w, speedColumnMaxWidth/2);

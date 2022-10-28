@@ -14,8 +14,8 @@ Rectangle {
     RowLayout {
         anchors.fill: parent
         height: parent.height
-        anchors.leftMargin: 10
-        anchors.rightMargin: 10
+        anchors.leftMargin: 10*appWindow.zoom
+        anchors.rightMargin: 10*appWindow.zoom
 
         BaseLabel {
             Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
@@ -23,7 +23,7 @@ Rectangle {
                   shutdownTools.powerManagement.shutdownType == VmsQt.SuspendComputer ? qsTr("Computer will be put to sleep after all downloads are completed.") :
                   (shutdownTools.powerManagement.shutdownType == VmsQt.HibernateComputer ? qsTr("Computer will be hibernate after all downloads are completed.") :
                   (shutdownTools.powerManagement.shutdownType == VmsQt.ShutdownComputer  ? qsTr("Computer will be shutdown after all downloads are completed.") : "")) + App.loc.emptyString
-            font.pixelSize: 13
+            font.pixelSize: 13*appWindow.fontZoom
             color: "#ffffff"
         }
 

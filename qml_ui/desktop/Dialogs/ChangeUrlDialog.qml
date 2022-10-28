@@ -7,7 +7,7 @@ import org.freedownloadmanager.fdm 1.0
 BaseDialog {
     id: root
 
-    width: 542
+    width: 542*appWindow.zoom
 
     property var downloadModel
     property string destinationPath
@@ -19,9 +19,9 @@ BaseDialog {
 
         ColumnLayout {
             Layout.fillWidth: true
-            Layout.leftMargin: 10
-            Layout.rightMargin: 10
-            spacing: 7
+            Layout.leftMargin: 10*appWindow.zoom
+            Layout.rightMargin: 10*appWindow.zoom
+            spacing: 7*appWindow.zoom
 
             BaseLabel {
                 text: qsTr("Enter new URL") + App.loc.emptyString
@@ -46,7 +46,7 @@ BaseDialog {
 
             Rectangle {
                 width: parent.width
-                height: 30
+                height: 30*appWindow.zoom
 
                 BaseLabel
                 {
@@ -57,12 +57,12 @@ BaseDialog {
             }
 
             RowLayout {
-                Layout.topMargin: 10
-                Layout.bottomMargin: 10
+                Layout.topMargin: 10*appWindow.zoom
+                Layout.bottomMargin: 10*appWindow.zoom
                 Layout.alignment: Qt.AlignRight
                 Layout.fillWidth: true
 
-                spacing: 5
+                spacing: 5*appWindow.zoom
 
                 BaseCheckBox {
                     id: startDownload

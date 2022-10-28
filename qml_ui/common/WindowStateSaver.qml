@@ -21,11 +21,15 @@ Item
         property int width
         property int height
         property int visibility
+        property int desktopAvailableWidth
+        property int desktopAvailableHeight
     }
 
     Component.onCompleted:
     {
-        if (s.width && s.height)
+        if (s.width && s.height &&
+                s.desktopAvailableWidth === Screen.desktopAvailableWidth &&
+                s.desktopAvailableHeight === Screen.desktopAvailableHeight)
         {
             window.x = s.x;
             window.y = s.y;
@@ -87,6 +91,8 @@ Item
             s.visibility = window.visibility;
             break;
         }
+        s.desktopAvailableWidth = Screen.desktopAvailableWidth;
+        s.desktopAvailableHeight = Screen.desktopAvailableHeight;
     }
 
     Timer
@@ -104,15 +110,34 @@ Item
 
     function checkWindowPos()
     {
+        // I don't know if this can really happen, but just in case...
+        if (!window.screen)
+        {
+            scheduleCheckWindowPos();
+            return;
+        }
+
         App.log("Checking window position.");
         App.log("Window position: (" + window.x + "," + window.y + ")");
+        App.log("Screen.virtualX: " + window.screen.virtualX);
+        App.log("Screen.virtualY: " + window.screen.virtualY);
+        App.log("Screen.width: " + window.screen.width);
+        App.log("Screen.height: " + window.screen.height);
         App.log("desktopAvailableWidth: " + window.screen.desktopAvailableWidth);
         App.log("desktopAvailableHeight: " + window.screen.desktopAvailableHeight);
-        // Math.max(0, ...) could not be used due to bug:
-        //  https://bugreports.qt.io/browse/QTBUG-85454
-        if (window.x < 0 || window.x >= window.screen.desktopAvailableWidth - 50)
-            window.x = Math.max(50, (window.screen.desktopAvailableWidth - window.width) / 2);
-        if (window.y < 0 || window.y >= window.screen.desktopAvailableHeight - 50)
-            window.y = Math.max(50, (window.screen.desktopAvailableHeight - window.height) / 2);
+
+        let isXinvalid = (window.x + window.width < window.screen.virtualX + 50) ||
+            (window.x > window.screen.virtualX + window.screen.width - 50);
+
+        let isYinvalid = (window.y < window.screen.virtualY) ||
+            (window.y > window.screen.virtualY + window.screen.height - 50);
+
+        App.log("X invalid: " + isXinvalid + ", Y invalid: " + isYinvalid);
+
+        if (isXinvalid)
+            window.x = window.screen.virtualX + Math.max(50, (window.screen.width - window.width) / 2);
+
+        if (isYinvalid)
+            window.y = window.screen.virtualY + Math.max(50, (window.screen.height - window.height) / 2);
     }
 }

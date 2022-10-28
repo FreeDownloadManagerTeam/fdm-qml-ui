@@ -9,7 +9,7 @@ import org.freedownloadmanager.fdm.appnotificationevent 1.0
 BaseDialog {
     id: root
 
-    width: 542
+    width: 542*appWindow.zoom
 
     property int selectedItem: -1
 
@@ -20,22 +20,22 @@ BaseDialog {
 
         ColumnLayout {
             Layout.fillWidth: true
-            Layout.leftMargin: 10
-            Layout.rightMargin: 10
-            spacing: 7
+            Layout.leftMargin: 10*appWindow.zoom
+            Layout.rightMargin: 10*appWindow.zoom
+            spacing: 7*appWindow.zoom
 
             Rectangle {
                 color: appWindow.theme.background
-                border.width: 1
+                border.width: 1*appWindow.zoom
                 border.color: appWindow.theme.border
-                Layout.preferredWidth: 500
-                Layout.preferredHeight: 150
+                Layout.preferredWidth: 500*appWindow.zoom
+                Layout.preferredHeight: 150*appWindow.zoom
 
                 ListView {
                     id: soundsList
                     anchors.fill: parent
-                    anchors.bottomMargin: 1
-                    anchors.topMargin: 1
+                    anchors.bottomMargin: 1*appWindow.zoom
+                    anchors.topMargin: 1*appWindow.zoom
                     ScrollBar.vertical: ScrollBar{}
                     flickableDirection: Flickable.AutoFlickIfNeeded
                     boundsBehavior: Flickable.StopAtBounds
@@ -51,19 +51,19 @@ BaseDialog {
                         TablesHeaderItem {
                             id: hostItem
                             text: qsTr("Event") + App.loc.emptyString
-                            Layout.preferredWidth: 250
+                            Layout.preferredWidth: 250*appWindow.zoom
                             color: appWindow.theme.background
                         }
 
                         TablesHeaderItem {
                             id: portItem
                             text: qsTr("Sound file") + App.loc.emptyString
-                            Layout.preferredWidth: 250
+                            Layout.preferredWidth: 250*appWindow.zoom
                             color: appWindow.theme.background
 
                             Rectangle {
                                 height: parent.height
-                                width: 1
+                                width: 1*appWindow.zoom
                                 anchors.right: parent.right
                                 color: appWindow.theme.border
                             }
@@ -71,7 +71,7 @@ BaseDialog {
                     }
 
                     delegate: Rectangle {
-                        property int rowHeigth: 22
+                        property int rowHeigth: 22*appWindow.zoom
                         width: parent.width
                         height: rowHeigth
                         color: "transparent"
@@ -82,17 +82,19 @@ BaseDialog {
 
                             BaseLabel {
                                 text: modelData.text
-                                Layout.preferredWidth: 250
-                                height: rowHeigth
-                                leftPadding: 6
+                                Layout.preferredWidth: 250*appWindow.zoom
+                                Layout.fillHeight: true
+                                verticalAlignment: Text.AlignVCenter
+                                leftPadding: 6*appWindow.zoom
                             }
 
                             BaseLabel {
                                 id: label
                                 text: modelData.soundFile.length ? modelData.soundFile : qsTr("No sound") + App.loc.emptyString
-                                Layout.preferredWidth: 250
-                                height: rowHeigth
-                                leftPadding: 6
+                                Layout.preferredWidth: 250*appWindow.zoom
+                                Layout.fillHeight: true
+                                verticalAlignment: Text.AlignVCenter
+                                leftPadding: 6*appWindow.zoom
                                 elide: Text.ElideMiddle
 
                                 MouseArea {
@@ -106,7 +108,7 @@ BaseDialog {
                                     BaseToolTip {
                                         text: label.text
                                         visible: label.truncated && mouseAreaLabel.containsMouse
-                                        width: 250
+                                        width: 250*appWindow.zoom
                                         onVisibleChanged: {
                                             if (visible) {
                                                 x = mouseAreaLabel.mouseX
@@ -137,13 +139,13 @@ BaseDialog {
 
                     Rectangle {
                         height: parent.height
-                        width: 1
+                        width: 1*appWindow.zoom
                         anchors.left: parent.left
                         color: appWindow.theme.border
                     }
                     Rectangle {
                         height: parent.height
-                        width: 1
+                        width: 1*appWindow.zoom
                         anchors.right: parent.right
                         color: appWindow.theme.border
                     }
@@ -162,12 +164,12 @@ BaseDialog {
             }
 
             RowLayout {
-                Layout.topMargin: 10
-                Layout.bottomMargin: 10
+                Layout.topMargin: 10*appWindow.zoom
+                Layout.bottomMargin: 10*appWindow.zoom
                 Layout.alignment: Qt.AlignRight
                 Layout.fillWidth: true
 
-                spacing: 5
+                spacing: 5*appWindow.zoom
 
                 CustomButton {
                     text: qsTr("Set sound") + App.loc.emptyString

@@ -3,13 +3,14 @@ import QtQuick.Controls 2.4
 import "../../qt5compat"
 import org.freedownloadmanager.fdm 1.0
 import "../BaseElements"
+import "../../common"
 
 Row {
     property var browser
 
     Rectangle {
         color: "transparent"
-        width: 30
+        width: 30*appWindow.zoom
         height: lbl.height
 
         Rectangle {
@@ -17,15 +18,14 @@ Row {
             anchors.right: parent.right
             anchors.rightMargin: 2
             color: "transparent"
-            width: 8
-            height: 8
+            width: 8*appWindow.zoom
+            height: 8*appWindow.zoom
             clip: true
-            Image {
+            WaSvgImage {
                 source: appWindow.theme.elementsIcons
-                sourceSize.width: 93
-                sourceSize.height: 456
-                x: -60
-                y: -120
+                zoom: appWindow.zoom
+                x: -60*zoom
+                y: -120*zoom
                 layer {
                     effect: ColorOverlay {
                         color: appWindow.theme.inactiveControl
@@ -40,7 +40,7 @@ Row {
         id: lbl
         text: browser.title
         color: browser.installed ? linkColor : appWindow.theme.settingsItem
-        leftPadding: 8
+        leftPadding: 8*appWindow.zoom
         MouseArea {
             enabled: browser.installed
             anchors.fill: parent
@@ -56,6 +56,6 @@ Row {
         visible: !browser.installed
         text: qsTr("(browser is not installed)") + App.loc.emptyString
         color: "#999"
-        leftPadding: 3
+        leftPadding: 3*appWindow.zoom
     }
 }

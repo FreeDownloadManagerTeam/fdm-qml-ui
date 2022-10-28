@@ -9,12 +9,14 @@ Rectangle {
 
     property string text
     property bool showTitleIcon: false
+    property bool showCloseButton: true
     property url titleIconUrl: Qt.resolvedUrl("../../images/mobile/fdmlogo.svg")
-    property int titleIconSize: 32
 
     signal closeClick
 
-    height: 36
+    readonly property int prefferedHeight: 36*appWindow.zoom
+
+    implicitHeight: prefferedHeight
     color: appWindow.theme.dialogTitleBackground
 
     Rectangle {
@@ -28,12 +30,13 @@ Rectangle {
 
     RowLayout {
         anchors.fill: parent
-        anchors.leftMargin: 10
-        anchors.rightMargin: 10
+        anchors.leftMargin: 10*appWindow.zoom
+        anchors.rightMargin: 10*appWindow.zoom
 
         WaSvgImage {
             source: root.titleIconUrl
-            Layout.preferredHeight: Math.min(root.titleIconSize, parent.height - 6)
+            zoom: appWindow.zoom
+            Layout.preferredHeight: Math.min(preferredHeight, root.prefferedHeight - 6*appWindow.zoom)
             Layout.preferredWidth: Layout.preferredHeight
             Layout.alignment: Qt.AlignVCenter
             visible: root.showTitleIcon
@@ -47,18 +50,18 @@ Rectangle {
         }
 
         Rectangle {
+            visible: showCloseButton
             Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-            Layout.preferredHeight: 24
-            Layout.preferredWidth: 24
+            Layout.preferredHeight: 24*appWindow.zoom
+            Layout.preferredWidth: 24*appWindow.zoom
             clip: true
             color: "transparent"
 
-            Image {
+            WaSvgImage {
                 source: appWindow.theme.elementsIcons
-                sourceSize.width: 93
-                sourceSize.height: 456
-                x: 6
-                y: -366
+                zoom: appWindow.zoom
+                x: 6*zoom
+                y: -366*zoom
             }
 
             MouseArea {

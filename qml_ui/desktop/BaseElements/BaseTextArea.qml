@@ -12,7 +12,7 @@ Rectangle {
     property alias rightPadding: textArea.rightPadding
     signal selectAll
 
-    border.width: 1
+    border.width: 1*appWindow.zoom
     border.color: appWindow.theme.border
 
     onSelectAll: textArea.selectAll()
@@ -23,7 +23,7 @@ Rectangle {
         property bool hasVerticalScrollbar: contentHeight > height
 
         anchors.fill: parent
-        anchors.margins: 1
+        anchors.margins: 1*appWindow.zoom
         clip: true
         flickableDirection: Flickable.VerticalFlick
 
@@ -37,7 +37,7 @@ Rectangle {
 
             focus: true
             wrapMode: TextArea.WordWrap
-            font.pixelSize: 14
+            font.pixelSize: 14*appWindow.fontZoom
             color: appWindow.theme.foreground
             selectByMouse: true
             Keys.onEscapePressed: root.close()

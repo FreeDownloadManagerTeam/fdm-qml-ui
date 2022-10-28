@@ -10,7 +10,7 @@ import "../../common"
 BaseDialog {
     id: root
 
-    width: 542
+    width: 542*appWindow.zoom
 
     contentItem: BaseDialogItem {
         titleText: qsTr("Authentication required") + App.loc.emptyString
@@ -27,19 +27,19 @@ BaseDialog {
 
         ColumnLayout {
             Layout.fillWidth: true
-            Layout.leftMargin: 10
-            Layout.rightMargin: 10
-            spacing: 10
+            Layout.leftMargin: 10*appWindow.zoom
+            Layout.rightMargin: 10*appWindow.zoom
+            spacing: 10*appWindow.zoom
 
             ColumnLayout {
                 Layout.fillWidth: true
-                Layout.leftMargin: 80
+                Layout.leftMargin: 80*appWindow.zoom
 
                 BaseLabel {
                     Layout.fillWidth: true
                     text: downloadTools.authProxyText
                     wrapMode: Text.Wrap
-                    Layout.minimumHeight: 10
+                    Layout.minimumHeight: 10*appWindow.zoom
                 }
                 BaseLabel {
                     visible: downloadTools.authRealm.length > 0
@@ -53,14 +53,14 @@ BaseDialog {
                 Layout.fillWidth: true
 
                 BaseLabel {
-                    Layout.preferredWidth: 80
+                    Layout.preferredWidth: 80*appWindow.zoom
                     text: qsTr("Username:") + App.loc.emptyString
                 }
 
                 BaseTextField {
                     id: usernameField
                     focus: true
-                    Layout.preferredWidth: 400
+                    Layout.preferredWidth: 400*appWindow.zoom
                     onAccepted: {
                         downloadTools.doAuth(usernameField.text, passField.text, rememberField.checked)
                         root.close();
@@ -76,7 +76,7 @@ BaseDialog {
                 Layout.fillWidth: true
 
                 BaseLabel {
-                    Layout.preferredWidth: 80
+                    Layout.preferredWidth: 80*appWindow.zoom
                     text: qsTr("Password:") + App.loc.emptyString
                 }
 
@@ -85,8 +85,8 @@ BaseDialog {
                     focus: true
                     inputMethodHints: Qt.ImhHiddenText
                     echoMode: TextInput.Password
-                    passwordMaskDelay: 100
-                    Layout.preferredWidth: 400
+                    passwordMaskDelay: 0
+                    Layout.preferredWidth: 400*appWindow.zoom
                     onAccepted: {
                         downloadTools.doAuth(usernameField.text, passField.text, rememberField.checked)
                         root.close();
@@ -101,15 +101,15 @@ BaseDialog {
             BaseCheckBox {
                 id: rememberField
                 text: qsTr("remember") + App.loc.emptyString
-                Layout.leftMargin: 80
+                Layout.leftMargin: 80*appWindow.zoom
             }
 
             RowLayout {
-                Layout.topMargin: 10
-                Layout.bottomMargin: 10
+                Layout.topMargin: 10*appWindow.zoom
+                Layout.bottomMargin: 10*appWindow.zoom
                 Layout.alignment: Qt.AlignRight
 
-                spacing: 5
+                spacing: 5*appWindow.zoom
 
                 CustomButton {
                     id: cnclBtn

@@ -1,24 +1,32 @@
-import QtQuick 2.0
-import QtQuick.Controls 2.3
-import QtQuick.Layouts 1.3
+import QtQuick 2.12
+import QtQuick.Controls 2.12
+import QtQuick.Layouts 1.12
+import QtQuick.Window 2.12
 import org.freedownloadmanager.fdm 1.0
 import "../../common/Tools"
 import "../BaseElements"
 import "TuneDialogElements"
 
-BaseDialog {
+BaseStandaloneCapableDialog {
     id: tuneDialog
 
-    property int preferredWidth: downloadTools.batchDownload || filesTree.visible ? 685 : 542
-    property int dialogMargins: 20
-    property int dialogTitleHeight: 36
+    property int preferredWidth: ((downloadTools.batchDownload || filesTree.visible) ? 685 : 542)*appWindow.zoom
+    property int dialogMargins: 20*appWindow.zoom
+    property int dialogTitleHeight: 36*appWindow.zoom
 
-    topMargin: 20
+    topMargin: 20*appWindow.zoom
 
     property double requestId: -1
     signal doOK
     signal gotPreview(string url)
     onDoOK: accept()
+
+    height: standalone ?
+                Math.min(implicitHeight, Screen.height - 200) :
+                Math.min(implicitHeight, appWindow.height - 50)
+    width: standalone ?
+               Math.min(preferredWidth, Screen.width - 200) :
+               Math.min(preferredWidth, appWindow.width - 50)
 
     QtObject {
         id: d
@@ -27,6 +35,7 @@ BaseDialog {
 
     contentItem: BaseDialogItem {
         titleText: qsTr("New download") + App.loc.emptyString
+        showCloseButton: !root.standalone
         Keys.onEscapePressed: downloadTools.doReject()
         onCloseClick: downloadTools.doReject()
         spacing: 0
@@ -46,11 +55,11 @@ BaseDialog {
             ColumnLayout {
                 id: mainLayout
 
-                width: dlgContent.width - 20
+                width: dlgContent.width - 20*appWindow.zoom
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.top: parent.top
-                anchors.topMargin: 10
-                spacing: 2
+                anchors.topMargin: 10*appWindow.zoom
+                spacing: 2*appWindow.zoom
 
                 Title {}
 
@@ -80,7 +89,7 @@ BaseDialog {
 
                 Rectangle {
                     Layout.fillWidth: true
-                    Layout.preferredHeight: fileType.visible || batchVideoQuality.visible ? 70 : 0
+                    Layout.preferredHeight: (fileType.visible || batchVideoQuality.visible) ? 70*appWindow.zoom : 0
                     color: "transparent"
 
                     FileType { id: fileType}
@@ -96,7 +105,7 @@ BaseDialog {
 
                 Rectangle {//40
                     Layout.fillWidth: true
-                    Layout.preferredHeight: 40
+                    Layout.preferredHeight: 40*appWindow.zoom
                     color: "transparent"
 
                     DiskSpace {
@@ -111,7 +120,7 @@ BaseDialog {
                 SchedulerBlock {
                     id: schedulerBlock
                     visible: schedulerCheckbox.checked
-                    Layout.preferredHeight: visible ? 84 : 0
+                    Layout.preferredHeight: visible ? 84*appWindow.zoom : 0
                 }
 
                 ButtonsBlock {forceDisableOK: d.accepting}

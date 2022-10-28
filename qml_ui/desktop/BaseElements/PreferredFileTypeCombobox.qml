@@ -1,14 +1,15 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.3
 import org.freedownloadmanager.fdm 1.0
+import "../../common"
 
 ComboBox {
     id: combo
 
     visible: count > 1
 
-    rightPadding: 5
-    leftPadding: 5
+    rightPadding: 5*appWindow.zoom
+    leftPadding: 5*appWindow.zoom
     width: parent.width
     height: parent.height
 
@@ -22,10 +23,11 @@ ComboBox {
     delegate: Rectangle {
         property bool hover: false
         color: hover ? appWindow.theme.menuHighlight : "transparent"
-        height: 30
-        width: parent.width
+        implicitHeight: Math.max(l1.implicitHeight, 30*appWindow.zoom)
+        width: Math.max(l1.implicitWidth, parent.width)
         BaseLabel {
-            leftPadding: 6
+            id: l1
+            leftPadding: 6*appWindow.zoom
             anchors.verticalCenter: parent.verticalCenter
             text: label
         }
@@ -46,7 +48,7 @@ ComboBox {
     background: Rectangle {
         color: appWindow.theme.background
         border.color: appWindow.theme.border
-        border.width: 1
+        border.width: 1*appWindow.zoom
     }
 
     contentItem: Rectangle {
@@ -60,24 +62,23 @@ ComboBox {
     indicator: Rectangle {
         x: combo.width - width
         y: combo.topPadding + (combo.availableHeight - height) / 2
-        width: height - 1
+        width: height - 1*appWindow.zoom
         height: combo.height
         color: "transparent"
-        border.width: 1
+        border.width: 1*appWindow.zoom
         border.color: appWindow.theme.border
         Rectangle {
-            width: 9
-            height: 8
+            width: 9*appWindow.zoom
+            height: 8*appWindow.zoom
             color: "transparent"
             anchors.verticalCenter: parent.verticalCenter
             anchors.horizontalCenter: parent.horizontalCenter
             clip: true
-            Image {
+            WaSvgImage {
                 source: appWindow.theme.elementsIcons
-                sourceSize.width: 93
-                sourceSize.height: 456
+                zoom: appWindow.zoom
                 x: 0
-                y: -448
+                y: -448*zoom
             }
         }
     }
@@ -85,20 +86,18 @@ ComboBox {
     popup: Popup {
         y: combo.height - 1
         width: combo.width
-        height: Math.min(combo.visibleRowsCount, combo.count) * 30 + 2
-        padding: 1
+        height: Math.min(combo.visibleRowsCount, combo.count) * 30*appWindow.zoom + 2*appWindow.zoom
+        padding: 1*appWindow.zoom
 
         background: Rectangle {
             color: appWindow.theme.background
             border.color: appWindow.theme.border
-            border.width: 1
+            border.width: 1*appWindow.zoom
         }
 
         contentItem: Item {
             ListView {
                 clip: true
-//                flickableDirection: Flickable.VerticalFlick
-//                ScrollBar.vertical: ScrollBar{ visible: downloadTools.versionCount > visibleRowsCount; policy: ScrollBar.AlwaysOn; }
                 boundsBehavior: Flickable.StopAtBounds
                 anchors.fill: parent
                 model: combo.model

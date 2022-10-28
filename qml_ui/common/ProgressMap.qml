@@ -25,8 +25,8 @@ Item {
         filledSquareColor: appWindow.theme.progressMapFillBackground
         emptySquareBorderColor: appWindow.theme.progressMapClearBorder
         emptySquareColor: appWindow.theme.background
-        squareSize: 8
-        squareSpacing: 3
+        squareSize: 8*appWindow.zoom
+        squareSpacing: 3*appWindow.zoom
     }
 }
 

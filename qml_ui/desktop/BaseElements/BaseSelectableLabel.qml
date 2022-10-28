@@ -3,7 +3,7 @@ import QtQuick 2.11
 TextEdit {
     id: selectableLabel
     opacity: enabled ? 1 : 0.5
-    font.pixelSize: 14
+    font.pixelSize: 14*appWindow.fontZoom
     font.family: Qt.platform.os === "osx" ? font.family : "Arial"
     color: appWindow.theme.foreground
     wrapMode: TextEdit.Wrap

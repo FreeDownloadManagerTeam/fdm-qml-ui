@@ -61,7 +61,19 @@ Item
             loaded();
     }
 
+    function reload()
+    {
+        load(false);
+        load(true);
+    }
+
     onActiveChanged: load(active)
+
+    onSourceChanged: {
+        if (active)
+            reload();
+    }
+
     Component.onCompleted: {
         if (active)
             load(true);

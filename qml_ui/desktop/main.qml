@@ -22,10 +22,18 @@ ApplicationWindow {
     property bool macVersion: false
     property bool mobileVersion: false
 
+    property alias zoom: uiSettingsTools.zoom
+    property alias zoom2: uiSettingsTools.zoom2
+    // commented due to QTBUG-105706
+    // readonly property double fontZoom: zoom*zoom2
+    // this is working instead:
+    readonly property double fontZoom: uiSettingsTools.zoom*uiSettingsTools.zoom2
+
     property int lastOkVisibility: ApplicationWindow.Windowed
 
-    property int mainToolbarHeight: macVersion ? 75 : 50
-    property bool modalDialogOpened: buildDownloadDlg.opened || tuneAddDownloadDlg.opened || aboutDlg.opened
+    property int mainToolbarHeight: (macVersion ? 75 : 50) * zoom
+    property bool modalDialogOpened: (buildDownloadDlg && buildDownloadDlg.opened) ||
+                                     (tuneAddDownloadDlg && tuneAddDownloadDlg.opened) || aboutDlg.opened
                                     || deleteDownloadsDlg.opened || deleteDownloadsDlgSimple.opened
                                     || shutdownDlg.opened || mergeDownloadsDlg.opened || authenticationDlg.opened
                                     || movingFailedDlg.opened || fileIntegrityDlg.opened || changeUrlDlg.opened
@@ -46,11 +54,8 @@ ApplicationWindow {
     property bool showIntegrationBanner: false
     property string integrationId: 'APPBTSETDEFTRCLIENT'
 
-    property bool smallWindow: width < 910 || height < 610
+    property bool smallWindow: width < 910*zoom || height < 610*zoom
     property bool compactView: uiSettingsTools.settings.compactView || smallWindow
-
-    property bool forceWindowVisibility: false
-    property int forceWindowVisibilityTo: Window.Windowed
 
     signal uiReadyStateChanged
     signal newDownloadAdded
@@ -68,8 +73,8 @@ ApplicationWindow {
 
     width: 910
     height: 610
-    minimumWidth: 550//Math.min(910, screen.desktopAvailableWidth - 50)
-    minimumHeight: 340//Math.min(610, screen.desktopAvailableHeight - 50)
+    minimumWidth: 550*zoom
+    minimumHeight: 340*zoom
     title: App.isSelfTestMode ? App.displayName + " [Self Test Mode]" :
            (App.rc.client.active && App.asyncLoadMgr.remoteName) ? App.displayName + " [" + qsTr("Remote connection to %1").arg(App.asyncLoadMgr.remoteName) + "]" + App.loc.emptyString :
            App.displayName
@@ -101,7 +106,7 @@ ApplicationWindow {
     readonly property var fonts: fonts_
     QtObject {
         id: fonts_
-        readonly property int defaultSize: appWindow.compactView ? 13 : 14
+        readonly property int defaultSize: (appWindow.compactView ? 13 : 14)*fontZoom
     }
 
     KeyboardItemsFocusTools {
@@ -222,7 +227,7 @@ ApplicationWindow {
         visibility = lastOkVisibility;
         setForegroundWindow();
         if (forceForeground)
-            App.forceSetAppForeground();
+            App.forceSetWindowForeground(this);
     }
 
     function resizeWindow() {
@@ -501,15 +506,19 @@ ApplicationWindow {
         id: downloadsWithMissingFilesTools
     }
 
-    BuildDownloadDialog {
-        id: buildDownloadDlg
+    StandaloneCapableDialogManager {
+        id: buildDownloadDlgMgr
+        standalone: uiSettingsTools.settings.enableStandaloneCreateDownloadsWindows
+        componentSource: Qt.resolvedUrl("Dialogs/BuildDownloadDialog.qml")
     }
+    property alias buildDownloadDlg: buildDownloadDlgMgr.dialog
 
-    TuneAndAddDownloadDialog {
-        id: tuneAddDownloadDlg
-        height: Math.min(implicitHeight, appWindow.height - 50)
-        width: Math.min(preferredWidth, appWindow.width - 50)
+    StandaloneCapableDialogManager {
+        id: tuneAddDownloadDlgMgr
+        standalone: uiSettingsTools.settings.enableStandaloneCreateDownloadsWindows
+        componentSource: Qt.resolvedUrl("Dialogs/TuneAndAddDownloadDialog.qml")
     }
+    property alias tuneAddDownloadDlg: tuneAddDownloadDlgMgr.dialog
 
     AuthenticationDialog {
         id: authenticationDlg
@@ -674,24 +683,8 @@ ApplicationWindow {
 
         if (isShowingDlg)
         {
-            if (uiSettingsTools.settings.autoHideWhenFinishedAddingDownloads &&
-                    !appWindow.active)
-            {
-                appWindow.forceWindowVisibility = true;
-                appWindow.forceWindowVisibilityTo = visibility == Window.Minimized ? Window.Minimized :
-                            appWindow.visible && !appWindow.macVersion ? Window.Minimized :
-                            Window.Hidden;
-            }
-
-            appWindow.showWindow(true);
-        }
-        else
-        {
-            if (appWindow.forceWindowVisibility)
-            {
-                appWindow.forceWindowVisibility = false;
-                waSetVisibility(appWindow.forceWindowVisibilityTo);
-            }
+            if (!buildDownloadDlgMgr.standalone)
+                appWindow.showWindow(true);
         }
     }
 
@@ -836,27 +829,11 @@ ApplicationWindow {
         onNewDownloadAdded: downloadsViewTools.resetAllFilters()
     }
 
-    Connections {
-        target: uiSettingsTools.settings
-        onEnableUserDefinedOrderOfDownloadsChanged: {
-            if (uiSettingsTools.settings.enableUserDefinedOrderOfDownloads)
-            {
-                if (sortTools.sortBy != AbstractDownloadsUi.DownloadsSortByOrder)
-                    sortTools.setSortByAndAsc(AbstractDownloadsUi.DownloadsSortByOrder, false);
-            }
-            else
-            {
-                if (sortTools.sortBy == AbstractDownloadsUi.DownloadsSortByOrder)
-                    sortTools.setSortByAndAsc(AbstractDownloadsUi.DownloadsSortByCreationTime, false);
-            }
-        }
-    }
-
     signal doDownloadUpdate()
     WhatsNewDialog {
         id: whatsnew
-        width: Math.min(500, appWindow.width - 100)
-        height: Math.min(250, appWindow.height - 100)
+        width: Math.min(500*appWindow.zoom, appWindow.width - 100*appWindow.zoom)
+        height: Math.min(250*appWindow.zoom, appWindow.height - 100*appWindow.zoom)
         onUpdateClicked: doDownloadUpdate()
     }
     function openWhatsNewDialog(version, changelog)
@@ -868,7 +845,7 @@ ApplicationWindow {
 
     DownloadExpiredDialog {
         id: downloadExpiredDlg
-        width: Math.min(500, appWindow.width - 100)
+        width: Math.min(500*appWindow.zoom, appWindow.width - 100*appWindow.zoom)
         onClosed: {
             App.downloads.expiredDownloads.onExpiredDownloadNotificationFinished(downloadId);
             openDownloadExpiredDialogForNextDownload();
@@ -905,16 +882,16 @@ ApplicationWindow {
     ConvertFilesFailedDialog
     {
         id: convertFilesFailedDialog
-        width: Math.min(appWindow.width - 50, recommendedWidth)
-        height: Math.min(appWindow.height - 100, recommendedHeight)
+        width: Math.min(appWindow.width - 50*appWindow.zoom, recommendedWidth)
+        height: Math.min(appWindow.height - 100*appWindow.zoom, recommendedHeight)
     }
 
     ConvertDestinationFilesExistsDialog
     {
         id: convertDestinationFilesExistsDialog
 
-        width: Math.min(appWindow.width - 50, recommendedWidth)
-        height: Math.min(appWindow.height - 100, recommendedHeight)
+        width: Math.min(appWindow.width - 50*appWindow.zoom, recommendedWidth)
+        height: Math.min(appWindow.height - 100*appWindow.zoom, recommendedHeight)
 
         onClosed: {
             if (requests.length)

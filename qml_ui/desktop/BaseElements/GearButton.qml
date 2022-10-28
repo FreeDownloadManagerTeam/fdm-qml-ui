@@ -8,7 +8,7 @@ Rectangle
 
     signal clicked()
 
-    implicitHeight: 26
+    implicitHeight: 26*appWindow.zoom
     implicitWidth: implicitHeight
 
     readonly property var colorFn: appWindow.theme.isLightTheme ? Qt.darker : Qt.lighter
@@ -17,14 +17,15 @@ Rectangle
                colorFn(appWindow.theme.background, 1.4) :
                colorFn(appWindow.theme.background, 1.1)
 
-    radius: 4
+    radius: 4*appWindow.zoom
 
     WaSvgImage
     {
         id: img
         source: Qt.resolvedUrl("../../images/gear.svg")
+        zoom: appWindow.zoom
 
-        height: root.height - 6
+        height: root.height - 6*appWindow.zoom
         width: height
 
         anchors.centerIn: parent

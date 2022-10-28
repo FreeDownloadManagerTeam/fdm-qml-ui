@@ -5,7 +5,7 @@ import "../../desktop/SettingsPage"
 
 Column {
     id: integrationCol
-    spacing: 8
+    spacing: 8*appWindow.zoom
     property bool isIntegrationSupported: App.integration.isIntegrationSupported(appWindow.integrationId)
     property bool isIntegrationEnabled: App.integration.isIntegrationEnabled(appWindow.integrationId)
     property bool isIntegrationAutoCheckEnabled: App.integration.isIntegrationAutoCheckEnabled(appWindow.integrationId)
@@ -23,7 +23,7 @@ Column {
     CustomButton {
         id: intBtn
         anchors.left: parent.left
-        anchors.leftMargin: 38
+        anchors.leftMargin: 38*appWindow.zoom
         blueBtn: true
         enabled: !integrationCol.isIntegrationEnabled
         text: App.my_BT_qsTranslate("IntegrationSettings", "Make %1 default torrent client").arg(App.shortDisplayName) + App.loc.emptyString

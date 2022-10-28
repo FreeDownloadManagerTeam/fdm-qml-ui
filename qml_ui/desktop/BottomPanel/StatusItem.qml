@@ -1,6 +1,7 @@
 import QtQuick 2.10
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
+import "../../common"
 import "../../common/Tools"
 import org.freedownloadmanager.fdm 1.0
 import "../BaseElements"
@@ -17,7 +18,7 @@ Item
 
         GridLayout
         {
-            property bool smallWidth: parent.width < 400
+            property bool smallWidth: parent.width < 400/appWindow.zoom
 
             width: parent.width
             visible: downloadsItemTools.showProgressIndicator
@@ -25,7 +26,7 @@ Item
             rows: smallWidth ? 1 : 2
 
             DownloadsItemProgressIndicator {
-                Layout.preferredWidth: 230
+                Layout.preferredWidth: 230*appWindow.zoom
                 small: false
                 percent: downloadsItemTools.progress
                 infinityIndicator: downloadsItemTools.infinityIndicator
@@ -70,7 +71,7 @@ Item
 
         RowLayout {
             Layout.alignment: Qt.AlignVCenter
-            spacing: 3
+            spacing: 3*appWindow.zoom
             width: parent.width
 
             RowLayout {
@@ -84,18 +85,17 @@ Item
             RowLayout {
                 visible: downloadsItemTools.inError
                 width: parent.width
-                spacing: 3
+                spacing: 3*appWindow.zoom
                 Rectangle {
                     clip: true
-                    width: 17
-                    height: 15
+                    width: 17*appWindow.zoom
+                    height: 15*appWindow.zoom
                     color: "transparent"
-                    Image {
-                        x: -41
-                        y: -269
+                    WaSvgImage {
+                        zoom: appWindow.zoom
+                        x: -41*zoom
+                        y: -269*zoom
                         source: appWindow.theme.elementsIcons
-                        sourceSize.width: 93
-                        sourceSize.height: 456
                     }
                 }
                 BaseLabel {

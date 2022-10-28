@@ -8,7 +8,7 @@ import org.freedownloadmanager.fdm.tum 1.0
 import "../BaseElements"
 
 Column {
-    spacing: 10
+    spacing: 10*appWindow.zoom
 
     SettingsGroupHeader {
         text: qsTr("Traffic Limits") + App.loc.emptyString
@@ -18,8 +18,8 @@ Column {
         columns: 4
         id: grid
 
-        property int labelMaxWidth: 165
-        property int rowMinimumHeight: 38
+        property int labelMaxWidth: 165*appWindow.zoom
+        property int rowMinimumHeight: 38*appWindow.zoom
 
         SettingsGridLabel {text: " "}
         SettingsGridLabel {text: qsTr("Low") + App.loc.emptyString}

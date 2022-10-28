@@ -11,7 +11,7 @@ Item {
         visible: App.settings.tum.currentMode == TrafficUsageMode.Snail
         source: App.settings.tum.currentMode == TrafficUsageMode.Snail ? Qt.resolvedUrl("../images/desktop/mode_snail.svg") : Qt.resolvedUrl("../images/desktop/mode_high.svg")
         anchors.fill: parent
-        anchors.margins: 50
+        anchors.margins: 50*appWindow.zoom
         fillMode: Image.PreserveAspectFit
         anchors.verticalCenter: parent.verticalCenter
         opacity: App.settings.tum.currentMode == TrafficUsageMode.Snail ? appWindow.theme.snailBackgroundOpacity : appWindow.theme.modeBackgroundOpacity

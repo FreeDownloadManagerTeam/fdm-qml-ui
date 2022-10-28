@@ -3,6 +3,7 @@ import QtQuick.Layouts 1.3
 import "../../../qt5compat"
 import org.freedownloadmanager.fdm 1.0
 import "../../BaseElements"
+import "../../../common"
 
 ColumnLayout {
     property var saveToControl: null
@@ -11,13 +12,12 @@ ColumnLayout {
 
     //file name / create subfolder
     BaseLabel {
-        Layout.topMargin: 6
+        Layout.topMargin: 6*appWindow.zoom
         text: (downloadTools.batchDownload ? qsTr("Create subfolder") : qsTr("File name")) + App.loc.emptyString
     }
 
     RowLayout {
-        height: folderBtn.height + 1
-        width: parent.width
+        Layout.fillWidth: true
 
         BaseTextField {
             id: fileName
@@ -27,25 +27,11 @@ ColumnLayout {
             onAccepted: tuneDialog.doOK()
         }
 
-        CustomButton {
+        PickFileButton {
             visible: uiSettingsTools.settings.showSaveAsButton && saveToControl !== null
             id: folderBtn
-            implicitWidth: 38
-            implicitHeight: 30
             Layout.alignment: Qt.AlignRight
-            Layout.preferredHeight: height
-            Image {
-                source: Qt.resolvedUrl("../../../images/desktop/pick_file.svg")
-                sourceSize.width: 37
-                sourceSize.height: 30
-                layer {
-                    effect: ColorOverlay {
-                        color: folderBtn.isPressed ? folderBtn.secondaryTextColor : folderBtn.primaryTextColor
-                    }
-                    enabled: true
-                }
-            }
-
+            Layout.fillHeight: true
             onClicked: browseDlg.open()
             FileDialog {
                 readonly property string currentFileSuffix: fileName.text.lastIndexOf('.') !== -1 ? fileName.text.substring(fileName.text.lastIndexOf('.')+1) : ""

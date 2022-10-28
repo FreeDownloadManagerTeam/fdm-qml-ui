@@ -8,17 +8,17 @@ import "../../BaseElements"
 
 ColumnLayout {
     visible: downloadTools.batchDownload
-    Layout.topMargin: 8
+    Layout.topMargin: 8*appWindow.zoom
     Layout.fillWidth: true
-    Layout.preferredHeight: Math.min(list.count * 26 + 35, Math.max(130, (appWindow.height <= 680 ? appWindow.height - 480 : (appWindow.height > 680 && appWindow.height < 810 ? 200 : appWindow.height - 610))))
-    spacing: 5
+    Layout.preferredHeight: Math.min(list.count * 26*appWindow.zoom + 35*appWindow.zoom, Math.max(130*appWindow.zoom, ((appWindow.height <= 680*appWindow.zoom) ? appWindow.height - 480*appWindow.zoom : (appWindow.height > 680*appWindow.zoom && appWindow.height < 810*appWindow.zoom ? 200*appWindow.zoom : appWindow.height - 610*appWindow.zoom))))
+    spacing: 5*appWindow.zoom
 
     property bool showAgeCol
     property bool showMediaDurationCol
 
     Rectangle {
         Layout.fillWidth: true
-        height: 20
+        Layout.preferredHeight: 20*appWindow.zoom
         color: "transparent"
 
         BaseLabel {
@@ -30,7 +30,7 @@ ColumnLayout {
             text: qsTr("Select all") + App.loc.emptyString
             color: linkColor
             anchors.right: selectNone.left
-            anchors.rightMargin: 20
+            anchors.rightMargin: 20*appWindow.zoom
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
@@ -56,7 +56,7 @@ ColumnLayout {
         Layout.fillWidth: true
         Layout.fillHeight: true
         border.color: appWindow.theme.border
-        border.width: 1
+        border.width: 1*appWindow.zoom
         color: appWindow.theme.background
 
         ButtonGroup {
@@ -68,15 +68,15 @@ ColumnLayout {
         ListView {
             id: list
             anchors.fill: parent
-            spacing: 10
+            spacing: 10*appWindow.zoom
             clip: true
-            anchors.topMargin: 5
-            anchors.bottomMargin: 5
-            anchors.rightMargin: 5
+            anchors.topMargin: 5*appWindow.zoom
+            anchors.bottomMargin: 5*appWindow.zoom
+            anchors.rightMargin: 5*appWindow.zoom
 
             flickableDirection: Flickable.VerticalFlick
             ScrollBar.vertical: ScrollBar{
-                minimumSize: 0.2
+                minimumSize: 0.2*appWindow.zoom
 
                 onVisualPositionChanged: {
                     if (visualPosition + visualSize == 1) {
@@ -98,13 +98,13 @@ ColumnLayout {
 
             delegate: RowLayout {
                 width: parent.width
-                spacing: 10
+                spacing: 10*appWindow.zoom
 
                 BaseCheckBox {
                     id: label
                     text: (index + 1) + ". " + title
                     checkBoxStyle: "black"
-                    fontSize: 13
+                    fontSize: 13*appWindow.fontZoom
                     Layout.fillWidth: true
                     textColor: checked ? appWindow.theme.foreground : "#737373"
                     checked: !excluded
@@ -123,11 +123,11 @@ ColumnLayout {
                         BaseToolTip {
                             text: title
                             visible: label.truncated && mouseAreaLabel.containsMouse
-                            width: 250
+                            width: 250*appWindow.zoom
                             onVisibleChanged: {
                                 if (visible) {
                                     x = mouseAreaLabel.mouseX
-                                    y = mouseAreaLabel.mouseY + 20
+                                    y = mouseAreaLabel.mouseY + 20*appWindow.zoom
                                 }
                             }
                         }
@@ -135,12 +135,12 @@ ColumnLayout {
                         Popup {
                             visible: remotePreviewImgUrl && mouseAreaLabel.containsMouse && !list.flicking
                             parent: tuneDialog.overlay
-                            x: label.x + 27
-                            y: label.y - 115
+                            x: label.x + 27*appWindow.zoom
+                            y: label.y - 115*appWindow.zoom
                             contentItem: Image {
                                 source: remotePreviewImgUrl
-                                sourceSize.width: 200
-                                sourceSize.height: 100
+                                sourceSize.width: 200*appWindow.zoom
+                                sourceSize.height: 100*appWindow.zoom
                             }
                         }
                     }
@@ -150,9 +150,9 @@ ColumnLayout {
                     id: ageHrLabel
                     visible: showAgeCol
                     text: ageHr
-                    Layout.preferredWidth: 90
+                    Layout.preferredWidth: 90*appWindow.zoom
                     elide: Label.ElideRight
-                    font.pixelSize: 13
+                    font.pixelSize: 13*appWindow.fontZoom
 
                     MouseArea {
                         anchors.fill: parent
@@ -168,10 +168,10 @@ ColumnLayout {
                 BaseLabel {
                     visible: showMediaDurationCol
                     text: "[" + mediaDurationHr + "]"
-                    Layout.preferredWidth: 80
+                    Layout.preferredWidth: 80*appWindow.zoom
                     elide: Label.ElideRight
                     horizontalAlignment: Text.AlignRight
-                    font.pixelSize: 13
+                    font.pixelSize: 13*appWindow.fontZoom
                 }
             }
 

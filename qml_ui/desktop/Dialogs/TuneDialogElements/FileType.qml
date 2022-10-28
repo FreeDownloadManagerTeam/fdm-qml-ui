@@ -10,13 +10,13 @@ ColumnLayout {
     anchors.left: parent.left
 
     BaseLabel {
-        Layout.topMargin: 6
+        Layout.topMargin: 6*appWindow.zoom
         text: qsTr("File type:") + App.loc.emptyString
     }
 
     PreferredFileTypeCombobox {
         id: ftcombo
-        Layout.preferredWidth: 150
-        Layout.preferredHeight: 30
+        Layout.preferredWidth: 150*appWindow.zoom
+        Layout.preferredHeight: 30*appWindow.zoom
     }
 }

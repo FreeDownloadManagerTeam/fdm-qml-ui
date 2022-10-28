@@ -9,7 +9,7 @@ import "../../common/Tools"
 BaseDialog {
     id: root
 
-    width: 542
+    width: 400*appWindow.zoom
 
     contentItem: BaseDialogItem {
         titleText: qsTr("Virus check") + App.loc.emptyString
@@ -20,22 +20,22 @@ BaseDialog {
 
         ColumnLayout {
             Layout.fillWidth: true
-            Layout.leftMargin: 10
-            Layout.rightMargin: 10
-            spacing: 3
+            Layout.leftMargin: 10*appWindow.zoom
+            Layout.rightMargin: 10*appWindow.zoom
+            spacing: 3*appWindow.zoom
 
             BaseLabel {
                 Layout.fillWidth: true
                 text: qsTr("There is no antivirus specified in the settings.") + App.loc.emptyString
-                Layout.bottomMargin: 7
+                Layout.bottomMargin: 7*appWindow.zoom
             }
 
             RowLayout {
-                Layout.topMargin: 10
-                Layout.bottomMargin: 10
+                Layout.topMargin: 10*appWindow.zoom
+                Layout.bottomMargin: 10*appWindow.zoom
                 Layout.alignment: Qt.AlignRight
 
-                spacing: 5
+                spacing: 5*appWindow.zoom
 
                 CustomButton {
                     text: qsTr("Go to settings") + App.loc.emptyString

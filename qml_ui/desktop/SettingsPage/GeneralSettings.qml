@@ -2,6 +2,7 @@ import QtQuick 2.10
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
 import "../../qt5compat"
+import "../../common"
 import org.freedownloadmanager.fdm 1.0
 import org.freedownloadmanager.fdm.dmcoresettings 1.0
 import org.freedownloadmanager.fdm.appsettings 1.0
@@ -25,14 +26,14 @@ Column {
 
         ThemeComboBox {
             anchors.left: parent.left
-            anchors.leftMargin: 16
+            anchors.leftMargin: 16*appWindow.zoom
         }
 
         BaseLabel {
             text: qsTr("A light theme will be used, if the system theme is unknown.") + App.loc.emptyString
             anchors.left: parent.left
-            anchors.leftMargin: 16
-            font.pixelSize: 12
+            anchors.leftMargin: 16*appWindow.zoom
+            font.pixelSize: 12*appWindow.fontZoom
             visible: uiSettingsTools.settings.theme === 'system'
         }
     }
@@ -48,8 +49,8 @@ Column {
         BaseHyperLabel {
             text: qsTr("Your language is not listed or the translation isn't complete?") + " <a href='https://github.com/FreeDownloadManagerTeam/FDM6-localization'>" + qsTr("Let's fix it!") + "</a>" + App.loc.emptyString
             anchors.left: parent.left
-            anchors.leftMargin: 16
-            font.pixelSize: 12
+            anchors.leftMargin: 16*appWindow.zoom
+            font.pixelSize: 12*appWindow.fontZoom
         }
     }
 
@@ -73,7 +74,7 @@ Column {
             text: qsTr("Suggest folders based on file type") + App.loc.emptyString
             enabled: autoFolderRadioBtn.checked
             checked: App.settings.toBool(App.settings.dmcore.value(DmCoreSettings.DownloadPathDependsOnFileType))
-            anchors.leftMargin: 34
+            anchors.leftMargin: 34*appWindow.zoom
             onClicked: {
                 App.settings.dmcore.setValue(
                             DmCoreSettings.DownloadPathDependsOnFileType,
@@ -85,7 +86,7 @@ Column {
             text: qsTr("Suggest folders based on download URL") + App.loc.emptyString
             enabled: autoFolderRadioBtn.checked
             checked: App.settings.toBool(App.settings.dmcore.value(DmCoreSettings.DownloadPathDependsOnSourceUrl))
-            anchors.leftMargin: 34
+            anchors.leftMargin: 34*appWindow.zoom
             onClicked: {
                 App.settings.dmcore.setValue(
                             DmCoreSettings.DownloadPathDependsOnSourceUrl,
@@ -104,7 +105,7 @@ Column {
         }
 
         RowLayout {
-            spacing: 10
+            spacing: 10*appWindow.zoom
 
             DownloadFolderComboBox {
                 id: fixedDownloadFolder
@@ -117,24 +118,10 @@ Column {
                 }
             }
 
-            CustomButton {
+            PickFileButton {
                 id: folderBtn
-                implicitWidth: 38
-                implicitHeight: 25
                 enabled: fixedFolderRadioBtn.checked
-                Image {
-                    source: Qt.resolvedUrl("../../images/desktop/pick_file.svg")
-                    sourceSize.width: 37
-                    sourceSize.height: 30
-                    y: -5
-                    layer {
-                        effect: ColorOverlay {
-                            color: folderBtn.isPressed ? folderBtn.secondaryTextColor : folderBtn.primaryTextColor
-                        }
-                        enabled: true
-                    }
-                }
-
+                implicitHeight: 25*appWindow.zoom
                 onClicked: browseDlg.open()
                 QtLabs.FolderDialog {
                     id: browseDlg
@@ -227,7 +214,7 @@ Column {
 
     SettingsGroupColumn {
         Row {
-            spacing: 5
+            spacing: 5*appWindow.zoom
 
             SettingsSubgroupHeader {
                 id: batchDownloadLimit
@@ -236,9 +223,9 @@ Column {
             }
 
             SettingsTextField {
-                implicitWidth: 60
+                implicitWidth: 60*appWindow.zoom
                 inputMethodHints: Qt.ImhDigitsOnly
-                validator: QtRegExpValidator { regExp: /\d+/ }
+                validator: QtRegExpValidator { regExp: /[1-9]\d*/ }
                 text: uiSettingsTools.settings.batchDownloadMaxUrlsCount
                 onTextChanged: {
                     if (parseInt(text) > 0) {

@@ -3,6 +3,7 @@
 import QtQuick 2.10
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
+import "../common"
 import "../common/Tools"
 import org.freedownloadmanager.fdm 1.0
 import "./BaseElements"
@@ -14,8 +15,8 @@ Row {
         model: downloadsItemTools.topTags
 
         delegate: Rectangle {
-            width: 8
-            height: 8
+            width: 8*appWindow.zoom
+            height: 8*appWindow.zoom
             color: modelData.color
 
             MouseArea {
@@ -34,16 +35,15 @@ Row {
 
     Rectangle {
         visible: downloadsItemTools.moreTags
-        width: 8
-        height: 8
+        width: 8*appWindow.zoom
+        height: 8*appWindow.zoom
         color: "transparent"
         clip: true
-        Image {
+        WaSvgImage {
             source: appWindow.theme.elementsIcons
-            sourceSize.width: 93
-            sourceSize.height: 456
+            zoom: appWindow.zoom
             x: 0
-            y: -448
+            y: -448*zoom
         }
     }
 }

@@ -1,23 +1,30 @@
 import QtQuick 2.10
 import QtQuick.Controls 2.3
 import "../BaseElements"
+import "../../common"
 
 Rectangle {
     id: root
-    width: 18
-    height: 18
+    width: 18*appWindow.fontZoom
+    height: 18*appWindow.fontZoom
     color: appWindow.theme.filterBtnBackground
-    clip: true
 
     property bool plusBtn: !(tagsTools.hiddenTags.length > 0)
     property double timeMenuClosed: 0
 
-    Image {
-        source: appWindow.theme.elementsIcons
-        sourceSize.width: 93
-        sourceSize.height: 456
-        x: plusBtn ? 3 : -57
-        y: plusBtn ? 3 : 8
+    Rectangle {
+        width: 18*Math.min(appWindow.fontZoom, appWindow.zoom)
+        height: 18*Math.min(appWindow.fontZoom, appWindow.zoom)
+        color: appWindow.theme.filterBtnBackground
+        clip: true
+        anchors.centerIn: parent
+
+        WaSvgImage {
+            source: appWindow.theme.elementsIcons
+            zoom: Math.min(appWindow.fontZoom, appWindow.zoom)
+            x: (plusBtn ? 3 : -57)*zoom
+            y: (plusBtn ? 3 : 8)*zoom
+        }
     }
 
     MouseArea {
@@ -32,8 +39,8 @@ Rectangle {
     {
         var component = Qt.createComponent("TagsPanelMenu.qml");
         var menu = component.createObject(root, {});
-        menu.x = -196;
-        menu.y = 25;
+        menu.x = -196*appWindow.fontZoom;
+        menu.y = 25*appWindow.fontZoom;
         menu.open();
         menu.aboutToHide.connect(function(){
             root.timeMenuClosed = Date.now();

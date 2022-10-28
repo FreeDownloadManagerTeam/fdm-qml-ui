@@ -1,6 +1,7 @@
 import QtQuick 2.10
 import QtQuick.Window 2.12
 import org.freedownloadmanager.fdm 1.0
+import "../common"
 
 Item
 {
@@ -8,17 +9,15 @@ Item
     readonly property url previewUrl: preview ? preview.small : null
     readonly property bool hasPreview : previewUrl && previewUrl.toString()
 
-    implicitWidth: 25
-    implicitHeight: 25
+    implicitWidth: 25*appWindow.zoom
+    implicitHeight: 25*appWindow.zoom
 
     //batch download icon
-    Image
+    WaSvgImage
     {
         visible: !hasPreview && model.hasChildDownloads
         opacity: downloadsItemTools.itemOpacity
-        width: 19
-        height: 19
-        sourceSize: Qt.size(width, height)
+        zoom: appWindow.zoom
         source: appWindow.theme.batch
         anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter
@@ -29,8 +28,8 @@ Item
     Image {
         visible: hasPreview
         opacity: downloadsItemTools.itemOpacity
-        width: 25
-        height: 25
+        width: 25*appWindow.zoom
+        height: 25*appWindow.zoom
         sourceSize.height: height*Screen.devicePixelRatio
         sourceSize.width: width*Screen.devicePixelRatio
         fillMode: Image.PreserveAspectFit
@@ -40,12 +39,10 @@ Item
     }
 
     //default icon
-    Image {
+    WaSvgImage {
         visible: !hasPreview && !model.hasChildDownloads
         opacity: downloadsItemTools.itemOpacity
-        width: 25
-        height: 25
-        sourceSize: Qt.size(width, height)
+        zoom: appWindow.zoom
         source: appWindow.theme.defaultFileIconSmall
         fillMode: Image.PreserveAspectFit
     }

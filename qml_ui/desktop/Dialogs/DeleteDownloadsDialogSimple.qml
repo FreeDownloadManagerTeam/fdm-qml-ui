@@ -11,7 +11,7 @@ BaseDialog {
 
     property var downloadIds: []
 
-    width: 542
+    width: 542*appWindow.zoom
 
     contentItem: BaseDialogItem {
         titleText: qsTr("Delete selected downloads") + App.loc.emptyString
@@ -22,22 +22,22 @@ BaseDialog {
 
         ColumnLayout {
             Layout.fillWidth: true
-            Layout.leftMargin: 10
-            Layout.rightMargin: 10
-            spacing: 3
+            Layout.leftMargin: 10*appWindow.zoom
+            Layout.rightMargin: 10*appWindow.zoom
+            spacing: 3*appWindow.zoom
 
             BaseLabel {
                 Layout.fillWidth: true
                 text: qsTr("Are you sure you want to delete the selected file(s)?") + App.loc.emptyString
-                Layout.bottomMargin: 7
+                Layout.bottomMargin: 7*appWindow.zoom
             }
 
             ListView {
                 clip: true
                 Layout.fillWidth: true
-                Layout.preferredHeight: Math.min(contentHeight, 150)
+                Layout.preferredHeight: Math.min(contentHeight, 150*appWindow.zoom)
                 ScrollBar.vertical: ScrollBar {
-                    active: parent.contentHeight > 150
+                    active: parent.contentHeight > 150*appWindow.zoom
                 }
                 model: root.downloadIds
                 delegate: Rectangle {
@@ -55,17 +55,17 @@ BaseDialog {
                             id: downloadsItemTools
                             itemId: root.downloadIds[index]
                         }
-                        text: downloadsItemTools.hasChildDownloads ? downloadsItemTools.destinationPath : downloadsItemTools.tplPathAndTitle
+                        text: App.toNativeSeparators(downloadsItemTools.hasChildDownloads ? downloadsItemTools.destinationPath : downloadsItemTools.tplPathAndTitle)
                     }
                 }
             }
 
             RowLayout {
-                Layout.topMargin: 10
-                Layout.bottomMargin: 10
+                Layout.topMargin: 10*appWindow.zoom
+                Layout.bottomMargin: 10*appWindow.zoom
                 Layout.alignment: Qt.AlignRight
 
-                spacing: 5
+                spacing: 5*appWindow.zoom
 
                 CustomButton {
                     text: qsTr("OK") + App.loc.emptyString

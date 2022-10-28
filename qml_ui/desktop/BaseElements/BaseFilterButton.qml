@@ -14,7 +14,7 @@ ToolButton {
         elide: Text.ElideRight
         leftPadding: 2
         rightPadding: 2
-        font.pixelSize: 11
+        font.pixelSize: 11*appWindow.fontZoom
     }
 
     background: Rectangle {
@@ -25,7 +25,7 @@ ToolButton {
             visible: selected
             color: "#16a4fa"
             width: parent.width
-            height: 1
+            height: 1*appWindow.zoom
             anchors.bottom: parent.bottom
             anchors.horizontalCenter: parent.horizontalCenter
         }

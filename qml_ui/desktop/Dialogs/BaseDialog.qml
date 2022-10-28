@@ -18,9 +18,9 @@ Dialog {
         RectangularGlow {
             anchors.fill: parent
             color: appWindow.theme.dialogGlow
-            glowRadius: 4
+            glowRadius: 4*appWindow.zoom
             spread: 0
-            cornerRadius: 4
+            cornerRadius: 4*appWindow.zoom
         }
 
         Rectangle {

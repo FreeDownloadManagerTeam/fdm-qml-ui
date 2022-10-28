@@ -42,7 +42,7 @@ ToolBar {
             id: titleBar
             visible: appWindow.macVersion
             width: parent.width
-            height: visible ? 20 : 0
+            height: visible ? 20*appWindow.zoom : 0
             color: "transparent"
 
             BaseLabel {
@@ -50,7 +50,7 @@ ToolBar {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.top: parent.top
                 anchors.topMargin: 5
-                font.pixelSize: 13
+                font.pixelSize: 13*appWindow.zoom*appWindow.zoom2
                 color: appWindow.theme.titleBar
             }
         }
@@ -75,11 +75,11 @@ ToolBar {
             Row {
                 visible: !pageId
                 anchors.verticalCenter: parent.verticalCenter
-                leftPadding: appWindow.macVersion ? 6 : -2
+                leftPadding: (appWindow.macVersion ? 6 : -2)*appWindow.zoom
 
                 ToolBarButton {
-                    width: 50
-                    height: 50
+                    width: 50*appWindow.zoom
+                    height: 50*appWindow.zoom
                     source: appWindow.theme.mainTbImg.plus
                     onClicked: buildDownloadDlg.newDownload();
                     tooltipText: qsTr("Add new download...") + App.loc.emptyString
@@ -88,18 +88,18 @@ ToolBar {
                     Rectangle {
                         z: -1
                         color: "#16a4fa"
-                        radius: 4
+                        radius: 4*appWindow.zoom
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.horizontalCenter: parent.horizontalCenter
-                        width: 36
-                        height: 36
+                        width: 36*appWindow.zoom
+                        height: 36*appWindow.zoom
                     }
                 }
 
                 // start download btn +
                 ToolBarButton {
-                    width: 50
-                    height: 50
+                    width: 50*zoom
+                    height: 50*zoom
                     source: appWindow.theme.mainTbImg.play_all
                     visible: selectedDownloadsTools.checkedDownloadsCount === 0
                     enabled: selectedDownloadsTools.downloadsToStartExist
@@ -110,8 +110,8 @@ ToolBar {
                 }
 
                 ToolBarButton {
-                    width: 50
-                    height: 50
+                    width: 50*appWindow.zoom
+                    height: 50*appWindow.zoom
                     source: appWindow.theme.mainTbImg.play_check
                     visible: selectedDownloadsTools.checkedDownloadsCount > 0
                     enabled: selectedDownloadsTools.checkedDownloadsToStartExist
@@ -124,8 +124,8 @@ ToolBar {
 
                 // pause download btn +
                 ToolBarButton {
-                    width: 50
-                    height: 50
+                    width: 50*appWindow.zoom
+                    height: 50*appWindow.zoom
                     source: appWindow.theme.mainTbImg.pause_all
                     visible: selectedDownloadsTools.checkedDownloadsCount === 0
                     enabled: selectedDownloadsTools.downloadsToStopExist
@@ -141,8 +141,8 @@ ToolBar {
                 }
 
                 ToolBarButton {
-                    width: 50
-                    height: 50
+                    width: 50*appWindow.zoom
+                    height: 50*appWindow.zoom
                     source: appWindow.theme.mainTbImg.pause_check
                     visible: selectedDownloadsTools.checkedDownloadsCount > 0
                     enabled: selectedDownloadsTools.checkedDownloadsToStopExist
@@ -155,8 +155,8 @@ ToolBar {
 
                 //delete btn +
                 ToolBarButton {
-                    width: 50
-                    height: 50
+                    width: 50*zoom
+                    height: 50*zoom
                     source: appWindow.theme.mainTbImg.bin
                     visible: selectedDownloadsTools.checkedDownloadsCount === 0
                     enabled: selectedDownloadsTools.currentDownloadId > 0
@@ -168,8 +168,8 @@ ToolBar {
                 }
 
                 ToolBarButton {
-                    width: 50
-                    height: 50
+                    width: 50*appWindow.zoom
+                    height: 50*appWindow.zoom
                     source: appWindow.theme.mainTbImg.bin_check
                     visible: selectedDownloadsTools.checkedDownloadsCount > 0
                     enabled: !downloadsViewTools.emptySearchResults
@@ -182,8 +182,8 @@ ToolBar {
 
                 //move btn +
                 ToolBarButton {
-                    width: 50
-                    height: 50
+                    width: 50*appWindow.zoom
+                    height: 50*appWindow.zoom
                     source: appWindow.theme.mainTbImg.folder
                     visible: !App.rc.client.active && selectedDownloadsTools.checkedDownloadsCount === 0
                     enabled: selectedDownloadsTools.currentDownloadId > 0
@@ -195,8 +195,8 @@ ToolBar {
                 }
 
                 ToolBarButton {
-                    width: 50
-                    height: 50
+                    width: 50*appWindow.zoom
+                    height: 50*appWindow.zoom
                     source: appWindow.theme.mainTbImg.folder_check
                     visible: !App.rc.client.active && selectedDownloadsTools.checkedDownloadsCount > 0
                     enabled: !downloadsViewTools.emptySearchResults
@@ -208,8 +208,8 @@ ToolBar {
                 //move btn -
 
                 ToolBarButton {
-                    width: 50
-                    height: 50
+                    width: 50*appWindow.zoom
+                    height: 50*appWindow.zoom
                     visible: uiSettingsTools.settings.enableUserDefinedOrderOfDownloads
                     enabled: App.downloads.model.canMoveSelectedDownloadsUp ||
                              (App.downloads.model.rowCount > 1 && sortTools.sortBy != AbstractDownloadsUi.DownloadsSortByOrder)
@@ -227,8 +227,8 @@ ToolBar {
                 }
 
                 ToolBarButton {
-                    width: 50
-                    height: 50
+                    width: 50*appWindow.zoom
+                    height: 50*appWindow.zoom
                     visible: uiSettingsTools.settings.enableUserDefinedOrderOfDownloads
                     enabled: App.downloads.model.canMoveSelectedDownloadsDown ||
                              (App.downloads.model.rowCount > 1 && sortTools.sortBy != AbstractDownloadsUi.DownloadsSortByOrder)

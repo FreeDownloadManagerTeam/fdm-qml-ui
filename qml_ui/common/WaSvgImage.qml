@@ -2,9 +2,14 @@ import QtQuick 2.12
 
 Image
 {
+    property double zoom: 1.0
+
+    readonly property int preferredWidth: sameHiddenImg.implicitWidth * zoom
+    readonly property int preferredHeight: sameHiddenImg.implicitHeight * zoom
+
     // it works buggy under e.g. Retina displays without this
-    width: sameHiddenImg.implicitWidth
-    height: sameHiddenImg.implicitHeight
+    width: preferredWidth
+    height: preferredHeight
 
     // it works buggy under e.g. Retina displays without this
     sourceSize: Qt.size(width, height)

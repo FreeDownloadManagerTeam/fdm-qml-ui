@@ -1,6 +1,7 @@
 import QtQuick 2.12
 import "../../qt5compat"
 import "../BaseElements"
+import "../../common"
 
 Item
 {
@@ -17,16 +18,16 @@ Item
     BaseLabel {
         id: lbl
         width: parent.width
-        font.pixelSize: smallSettingsPage ? 18 : 24
+        font.pixelSize: (smallSettingsPage ? 18 : 24)*appWindow.fontZoom
         color: appWindow.theme.settingsGroupHeader
-        bottomPadding: 10
+        bottomPadding: 10*appWindow.zoom
         text: root.text
 
         Rectangle {
             visible: !root.enableHideButton || !root.hidden
             color: appWindow.theme.settingsLine
             width: parent.width
-            height: 1
+            height: 1*appWindow.zoom
             anchors.bottom: parent.bottom
         }
     }
@@ -36,27 +37,26 @@ Item
 
         visible: root.enableHideButton
 
-        x: lbl.contentWidth + 7
+        x: lbl.contentWidth + 7*appWindow.zoom
         y: (lbl.contentHeight - height) / 2
 
 
         color: "transparent"
-        width: 19
-        height: 21
+        width: 19*appWindow.zoom
+        height: 21*appWindow.zoom
 
         Rectangle {
             anchors.verticalCenter: parent.verticalCenter
             anchors.horizontalCenter: parent.horizontalCenter
             color: "transparent"
-            width: 19
-            height: 15
+            width: 19*appWindow.zoom
+            height: 15*appWindow.zoom
             clip: true
-            Image {
+            WaSvgImage {
                 source: appWindow.theme.elementsIcons
-                sourceSize.width: 93
-                sourceSize.height: 456
-                x: root.hidden ? 3 : -37
-                y: -22
+                zoom: appWindow.zoom
+                x: (root.hidden ? 3 : -37)*zoom
+                y: -22*zoom
                 layer {
                     effect: ColorOverlay {
                         color: appWindow.theme.settingsSubgroupHeader

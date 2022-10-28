@@ -7,7 +7,7 @@ Rectangle {
 
     id: draggleRct
     width: parent.width
-    height: 10
+    height: 10*appWindow.zoom
     visible: bottomPanelTools.panelVisible && bottomPanelRct.visible
     color: "transparent"
     MouseArea {

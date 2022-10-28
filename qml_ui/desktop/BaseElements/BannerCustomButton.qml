@@ -8,20 +8,19 @@ Button {
     property bool enabled: true
     property int radius: 0
 
-//    width: Math.max(labelElement.width + 20, 80)
-    leftPadding: 10
-    rightPadding: 10
+    leftPadding: 10*appWindow.zoom
+    rightPadding: 10*appWindow.zoom
     opacity: enabled ? 1 : 0.4
 
     property bool isHovered: false
     property bool isPressed: false
 
     background: Rectangle {
-        implicitHeight: 22
-        implicitWidth: Math.max(labelElement.implicitWidth + 6, 60)
+        implicitHeight: 22*appWindow.zoom
+        implicitWidth: Math.max(labelElement.implicitWidth + 6*appWindow.zoom, 60*appWindow.zoom)
 
         border.color: "#d4d4d4"
-        border.width: 1
+        border.width: 1*appWindow.zoom
         radius: customBtn.radius
     }
 
@@ -31,7 +30,7 @@ Button {
         verticalAlignment: Text.AlignVCenter
         text: parent.text
         color: "#000"
-        font.pixelSize: 13
+        font.pixelSize: 13*appWindow.fontZoom
         font.family: Qt.platform.os === "osx" ? font.family : "Arial"
     }
 

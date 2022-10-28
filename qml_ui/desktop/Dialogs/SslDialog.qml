@@ -10,7 +10,7 @@ import "../../common"
 BaseDialog {
     id: root
 
-    width: 542
+    width: 542*appWindow.zoom
 
     contentItem: BaseDialogItem {
         titleText: qsTr("Warning: potential security risk ahead") + App.loc.emptyString
@@ -33,9 +33,9 @@ BaseDialog {
 
         ColumnLayout {
             Layout.fillWidth: true
-            Layout.leftMargin: 10
-            Layout.rightMargin: 10
-            spacing: 10
+            Layout.leftMargin: 10*appWindow.zoom
+            Layout.rightMargin: 10*appWindow.zoom
+            spacing: 10*appWindow.zoom
 
             BaseLabel {
                 Layout.fillWidth: true
@@ -44,13 +44,14 @@ BaseDialog {
             }
 
             RowLayout {
-                spacing: 5
+                spacing: 5*appWindow.zoom
 
-                Image {
+                WaSvgImage {
                     Layout.alignment: Qt.AlignVCenter
-                    source: Qt.resolvedUrl("../../images/desktop/ssl_warning.png")
-                    sourceSize.width: 23
-                    sourceSize.height: 22
+                    source: Qt.resolvedUrl("../../images/desktop/ssl_warning.svg")
+                    zoom: appWindow.zoom
+                    Layout.preferredHeight: preferredHeight
+                    Layout.preferredWidth: preferredWidth
                 }
 
                 BaseLabel {
@@ -63,7 +64,7 @@ BaseDialog {
 
             BaseLabel {
                 Layout.fillWidth: true
-                Layout.topMargin: 10
+                Layout.topMargin: 10*appWindow.zoom
                 text: qsTr("Certificate fingerprints") + App.loc.emptyString
             }
 
@@ -72,7 +73,7 @@ BaseDialog {
                 columns: 2
 
                 BaseLabel {
-                    Layout.preferredWidth: 70
+                    Layout.preferredWidth: 70*appWindow.zoom
                     Layout.alignment: Qt.AlignTop
                     text: qsTr("SHA-256:") + App.loc.emptyString
                     wrapMode: Text.Wrap
@@ -99,11 +100,11 @@ BaseDialog {
             }
 
             RowLayout {
-                Layout.topMargin: 10
-                Layout.bottomMargin: 10
+                Layout.topMargin: 10*appWindow.zoom
+                Layout.bottomMargin: 10*appWindow.zoom
                 Layout.alignment: Qt.AlignRight
 
-                spacing: 5
+                spacing: 5*appWindow.zoom
 
                 CustomButton {
                     id: cnclBtn

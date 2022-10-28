@@ -2,6 +2,7 @@ import QtQuick 2.11
 import org.freedownloadmanager.fdm 1.0
 import "./BaseElements"
 import "../common/Tests"
+import "../common"
 
 Item {
     id: root
@@ -11,16 +12,16 @@ Item {
 
     property bool hasActiveFocus: searchText.focus
 
-    property int maxFieldWidth: appWindow.macVersion ? (appWindow.width < 590 ? 150 : 200) : (appWindow.width < 695 ? 150 : 300)
+    property int maxFieldWidth: (appWindow.macVersion ? (appWindow.width < 590 ? 150 : 200) : (appWindow.width < 695 ? 150 : 300))*appWindow.zoom
 
     property int field_width: appWindow.macVersion ? maxFieldWidth : 0
-    property int field_height: appWindow.macVersion ? 22 : 34
-    property string border_color: appWindow.macVersion ? appWindow.theme.searchFieldBorderMac : appWindow.theme.searchFieldBorder
-    property int font_size: appWindow.macVersion ? 13 : 14
+    property int field_height: (appWindow.macVersion ? 22 : 34)*appWindow.zoom
+    property string border_color: (appWindow.macVersion ? appWindow.theme.searchFieldBorderMac : appWindow.theme.searchFieldBorder)*appWindow.zoom
+    property int font_size: (appWindow.macVersion ? 13 : 14)*appWindow.fontZoom
 
-    property int magnifier_width: appWindow.macVersion ? 20 : 30
-    property int magnifier_x: appWindow.macVersion ? -210 : 10
-    property int magnifier_y: appWindow.macVersion ? -9 : -415
+    property int magnifier_width: (appWindow.macVersion ? 20 : 30)*appWindow.zoom
+    property int magnifier_x: (appWindow.macVersion ? -210 : 10)*appWindow.zoom
+    property int magnifier_y: (appWindow.macVersion ? -9 : -415)*appWindow.zoom
     property string magnifier_img: appWindow.macVersion ? appWindow.theme.headerIconsMac : appWindow.theme.headerIcons
 
     property string clear_btn_img: appWindow.macVersion ? Qt.resolvedUrl("../images/desktop/search_clear_mac.svg") : Qt.resolvedUrl("../images/desktop/clean.svg")
@@ -61,14 +62,14 @@ Item {
             color: appWindow.theme.searchFieldBackgound
             anchors.verticalCenter: parent.verticalCenter
             border.color: appWindow.macVersion && searchText.activeFocus ? appWindow.theme.textFieldActiveBorderMac : border_color
-            border.width: appWindow.macVersion && searchText.activeFocus ? appWindow.theme.textFieldActiveBorderWidthMac : 1
-            radius: appWindow.macVersion ? appWindow.theme.textFieldBorderRadiusMac : 0
+            border.width: (appWindow.macVersion && searchText.activeFocus ? appWindow.theme.textFieldActiveBorderWidthMac : 1)*appWindow.zoom
+            radius: (appWindow.macVersion ? appWindow.theme.textFieldBorderRadiusMac : 0)*appWindow.zoom
 
             Rectangle {
                 id: searchMagnifier
 
                 anchors.left: parent.left
-                anchors.leftMargin: 1
+                anchors.leftMargin: 1*appWindow.zoom
                 anchors.verticalCenter: parent.verticalCenter
 
                 width: magnifier_width - searchMain.border.width
@@ -77,12 +78,11 @@ Item {
                 color: "transparent"
                 clip: true
 
-                Image {
+                WaSvgImage {
                     x: magnifier_x
                     y: magnifier_y
                     source: magnifier_img
-                    sourceSize.width: appWindow.macVersion ? 280 : 75
-                    sourceSize.height: appWindow.macVersion ? 80 : 559
+                    zoom: appWindow.zoom
                 }
             }
 
@@ -143,20 +143,17 @@ Item {
                 id: searchClear
                 anchors.right: parent.right
                 anchors.rightMargin: searchMain.border.width
-                width: 20 - searchMain.border.width
+                width: 20*appWindow.zoom - searchMain.border.width
                 height: parent.height - searchMain.border.width * 2
                 anchors.verticalCenter: parent.verticalCenter
                 color: "transparent"
 
-                Image {
+                WaSvgImage {
                     visible: searchText.text.length > 0
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.left: parent.left
-                    width: 12
-                    height: width
+                    zoom: appWindow.zoom
                     source: clear_btn_img
-                    sourceSize.width: 12
-                    sourceSize.height: 12
 
                     MouseArea {
                         anchors.fill: parent

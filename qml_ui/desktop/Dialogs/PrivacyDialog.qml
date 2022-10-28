@@ -10,7 +10,7 @@ import "../../common"
 BaseDialog {
     id: root
 
-    width: 542
+    width: 400*appWindow.zoom
 
     property int failedId
 
@@ -26,9 +26,9 @@ BaseDialog {
 
         ColumnLayout {
             width: parent.width
-            Layout.leftMargin: 10
-            Layout.rightMargin: 10
-            spacing: 20
+            Layout.leftMargin: 10*appWindow.zoom
+            Layout.rightMargin: 10*appWindow.zoom
+            spacing: 20*appWindow.zoom
 
             BaseLabel {
                 text: qsTr("A bug report will be sent to the server and used to improve %1 performance. We do not collect your personal data and do not share data with third parties.").arg(App.shortDisplayName) + App.loc.emptyString
@@ -39,14 +39,15 @@ BaseDialog {
             BaseCheckBox {
                 id: agree
                 text: qsTr("I agree (do not show it again)") + App.loc.emptyString
+                xOffset: 0
             }
 
             RowLayout {
-                Layout.topMargin: 10
-                Layout.bottomMargin: 10
+                Layout.topMargin: 10*appWindow.zoom
+                Layout.bottomMargin: 10*appWindow.zoom
                 Layout.alignment: Qt.AlignRight
 
-                spacing: 5
+                spacing: 5*appWindow.zoom
 
                 CustomButton {
                     id: okBtn

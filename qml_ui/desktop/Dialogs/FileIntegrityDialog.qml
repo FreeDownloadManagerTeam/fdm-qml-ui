@@ -8,7 +8,7 @@ import "../BaseElements"
 BaseDialog {
     id: root
 
-    width: 542
+    width: 542*appWindow.zoom
 
     property bool verificationEnabled: currentHash.text != "" && userHash.text != ""
     property bool verificationOK: verificationEnabled && currentHash.text.toLowerCase() == userHash.text.toLowerCase().trim()
@@ -24,22 +24,22 @@ BaseDialog {
 
         ColumnLayout {
             Layout.fillWidth: true
-            Layout.leftMargin: 10
-            Layout.rightMargin: 10
-            spacing: 7
+            Layout.leftMargin: 10*appWindow.zoom
+            Layout.rightMargin: 10*appWindow.zoom
+            spacing: 7*appWindow.zoom
 
             BaseLabel {
                 text: fileIntegrityTools.title + " (" + JsTools.sizeUtils.bytesAsText(fileIntegrityTools.size) + ")"
                 font.weight: Font.DemiBold
                 elide: Text.ElideMiddle
                 Layout.fillWidth: true
-                Layout.topMargin: 8
+                Layout.topMargin: 8*appWindow.zoom
             }
 
             BaseLabel
             {
                 text: qsTr("Hash") + App.loc.emptyString
-                Layout.topMargin: 5
+                Layout.topMargin: 5*appWindow.zoom
             }
 
             RowLayout {
@@ -47,8 +47,8 @@ BaseDialog {
 
                 HashAlgorithmCombobox {
                     id: hashCombo
-                    Layout.preferredWidth: 120
-                    Layout.preferredHeight: 30
+                    Layout.preferredWidth: 120*appWindow.zoom
+                    Layout.preferredHeight: 30*appWindow.zoom
                 }
 
                 //Progressbar
@@ -57,7 +57,7 @@ BaseDialog {
 
                     BaseLabel {
                         id: perscentText
-                        font.pixelSize: 12
+                        font.pixelSize: 12*appWindow.fontZoom
                         color: "#595959"
                         text: qsTr("Calculating %1\%").arg(Math.round(fileIntegrityTools.calculatingProgress)) + App.loc.emptyString
                     }
@@ -95,7 +95,7 @@ BaseDialog {
 
             Rectangle {
                 width: parent.width
-                height: 50
+                height: 50*appWindow.zoom
 
                 BaseLabel
                 {
@@ -106,11 +106,11 @@ BaseDialog {
             }
 
             RowLayout {
-                Layout.topMargin: 10
-                Layout.bottomMargin: 10
+                Layout.topMargin: 10*appWindow.zoom
+                Layout.bottomMargin: 10*appWindow.zoom
                 Layout.alignment: Qt.AlignRight
 
-                spacing: 5
+                spacing: 5*appWindow.zoom
 
                 CustomButton {
                     text: qsTr("Close") + App.loc.emptyString

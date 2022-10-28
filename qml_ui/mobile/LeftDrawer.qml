@@ -9,14 +9,15 @@ Drawer {
     id: root
     width: 285
     height: parent.height
-    interactive: stackView.depth == 1
+    interactive: stackView.depth === 1
 
     Material.background: appWindow.theme.drawerBackground
 
     ListView {
         focus: true
         currentIndex: -1
-        anchors.fill: parent
+        width: parent.width
+        height: parent.height - addNewDownloadBlock.height
         headerPositioning: ListView.OverlayHeader
 
         header: Rectangle {
@@ -144,6 +145,8 @@ Drawer {
     }
 
     Rectangle {
+        id: addNewDownloadBlock
+
         width: parent.width
         height: 38
         anchors.bottom: parent.bottom
@@ -208,5 +211,10 @@ Drawer {
     {
         target: App.loc
         onCurrentTranslationChanged: listModel.build()
+    }
+
+    Connections {
+        target: stackView
+        onCurrentItemChanged: if (root.opened) root.close()
     }
 }

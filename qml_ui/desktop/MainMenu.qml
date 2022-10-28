@@ -9,7 +9,7 @@ import "./BaseElements"
 
 BaseContextMenu {   
     id: root
-    implicitWidth: 240
+    implicitWidth: 240*appWindow.fontZoom
     y: 50
     closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
     property bool shutdownGroupOpened
@@ -248,6 +248,7 @@ BaseContextMenu {
     function openMenu() {
         root.shutdownGroupOpened = shutdownTools.powerManagement &&
                 shutdownTools.powerManagement.shutdownComputerWhenDownloadsFinished;
+        root.visible = true;
         root.open();
     }
 

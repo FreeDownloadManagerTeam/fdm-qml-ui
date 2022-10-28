@@ -14,7 +14,7 @@ RoundButton {
     text: notice ? notice : tumModeDialog.tumModeStr(currentTumMode)
     padding: 0
     opacity: enabled ? 1 : 0.3
-    implicitWidth: notice ? 190 : 116
+    implicitWidth: Math.max(label.contentWidth + 20, notice ? 190 : 116)
     implicitHeight: 18
     topInset: 0
     rightInset: 0
@@ -29,6 +29,7 @@ RoundButton {
     }
 
     contentItem: Label {
+        id: label
         text: parent.text
         font.capitalization: Font.AllUppercase
         font.pointSize: 12

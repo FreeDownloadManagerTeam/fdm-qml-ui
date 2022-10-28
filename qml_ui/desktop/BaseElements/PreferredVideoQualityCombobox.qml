@@ -1,12 +1,13 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.3
 import org.freedownloadmanager.fdm 1.0
+import "../../common"
 
 ComboBox {
     id: root
 
-    rightPadding: 5
-    leftPadding: 5
+    rightPadding: 5*appWindow.zoom
+    leftPadding: 5*appWindow.zoom
 
     property int visibleRowsCount: 4
 
@@ -67,10 +68,11 @@ ComboBox {
     delegate: Rectangle {
         property bool hover: false
         color: hover ? appWindow.theme.menuHighlight : "transparent"
-        height: 30
-        width: parent.width
+        implicitHeight: Math.max(30*appWindow.zoom, l1.implicitHeight)
+        implicitWidth: Math.max(parent.width, l1.implicitWidth)
         BaseLabel {
-            leftPadding: 6
+            id: l1
+            leftPadding: 6*appWindow.zoom
             anchors.verticalCenter: parent.verticalCenter
             text: modelData.label
         }
@@ -91,7 +93,7 @@ ComboBox {
     background: Rectangle {
         color: appWindow.theme.background
         border.color: appWindow.theme.border
-        border.width: 1
+        border.width: 1*appWindow.zoom
     }
 
     contentItem: Rectangle {
@@ -105,24 +107,23 @@ ComboBox {
     indicator: Rectangle {
         x: root.width - width
         y: root.topPadding + (root.availableHeight - height) / 2
-        width: height - 1
+        width: height - 1*appWindow.zoom
         height: root.height
         color: "transparent"
-        border.width: 1
+        border.width: 1*appWindow.zoom
         border.color: appWindow.theme.border
         Rectangle {
-            width: 9
-            height: 8
+            width: 9*appWindow.zoom
+            height: 8*appWindow.zoom
             color: "transparent"
             anchors.verticalCenter: parent.verticalCenter
             anchors.horizontalCenter: parent.horizontalCenter
             clip: true
-            Image {
+            WaSvgImage {
                 source: appWindow.theme.elementsIcons
-                sourceSize.width: 93
-                sourceSize.height: 456
+                zoom: appWindow.zoom
                 x: 0
-                y: -448
+                y: -448*zoom
             }
         }
     }
@@ -130,13 +131,13 @@ ComboBox {
     popup: Popup {
         y: root.height - 1
         width: root.width
-        height: visibleRowsCount * 30 + 2
-        padding: 1
+        height: visibleRowsCount * 30*appWindow.zoom + 2*appWindow.zoom
+        padding: 1*appWindow.zoom
 
         background: Rectangle {
             color: appWindow.theme.background
             border.color: appWindow.theme.border
-            border.width: 1
+            border.width: 1*appWindow.zoom
         }
 
         contentItem: Item {

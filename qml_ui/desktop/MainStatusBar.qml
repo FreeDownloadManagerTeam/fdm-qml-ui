@@ -12,7 +12,7 @@ import "./BaseElements"
 Rectangle {
     id: root
     width: parent.width
-    height: 31
+    height: 31*appWindow.zoom
     color: appWindow.theme.statusBar
 
     visible: App.asyncLoadMgr.ready
@@ -21,7 +21,7 @@ Rectangle {
 
     Rectangle {
         width: parent.width
-        height: 1
+        height: 1*appWindow.zoom
         color: appWindow.theme.border
     }
 
@@ -33,13 +33,13 @@ Rectangle {
             id: snailBtn
             property int prevTum: TrafficUsageMode.High
             property bool checked: root.currentTumMode == TrafficUsageMode.Snail
-            Layout.leftMargin: 5
+            Layout.leftMargin: 5*appWindow.zoom
             Layout.alignment: Qt.AlignVCenter
-            width: 32
-            height: 23
+            width: 32*appWindow.zoom
+            height: 23*appWindow.zoom
             border.color: appWindow.theme.snailBtnBorder
-            border.width: 1
-            radius: 3
+            border.width: 1*appWindow.zoom
+            radius: 3*appWindow.zoom
 
             gradient: Gradient {
                 GradientStop { position: 0.0; color: snailBtn.checked ? appWindow.theme.snailBtnBackgroundStartChecked : appWindow.theme.snailBtnBackgroundStart }
@@ -47,18 +47,17 @@ Rectangle {
             }
 
             Rectangle {
-                width: 23
-                height: 17
+                width: 23*appWindow.zoom
+                height: 17*appWindow.zoom
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
                 color: "transparent"
                 clip: true
-                Image {
+                WaSvgImage {
                     source: appWindow.theme.elementsIcons
-                    sourceSize.width: 93
-                    sourceSize.height: 456
-                    x: 1
-                    y: snailBtn.checked ? -422 : -397
+                    zoom: appWindow.zoom
+                    x: 1*zoom
+                    y: (snailBtn.checked ? -422 : -397)*zoom
                 }
             }
 
@@ -85,9 +84,9 @@ Rectangle {
         }
 
         Rectangle {
-            Layout.leftMargin: 5
+            Layout.leftMargin: 5*appWindow.zoom
             color: "transparent"
-            width: 200
+            width: 50*appWindow.zoom+150*appWindow.fontZoom
             height: root.height
             TumComboBox {
                 visible: root.currentTumMode != TrafficUsageMode.Snail
@@ -95,7 +94,7 @@ Rectangle {
             BaseLabel {
                 visible: root.currentTumMode == TrafficUsageMode.Snail
                 anchors.verticalCenter: parent.verticalCenter
-                leftPadding: 5
+                leftPadding: 5*appWindow.zoom
                 text: qsTr("Snail mode") + App.loc.emptyString
             }
         }
@@ -103,7 +102,7 @@ Rectangle {
         Item {
             height: root.height
             Layout.fillWidth: true
-            Layout.leftMargin: Qt.platform.os === "osx" ? 3 : 0
+            Layout.leftMargin: (Qt.platform.os === "osx" ? 3 : 0)*appWindow.zoom
             clip: true
 
             BaseLabel {
@@ -122,7 +121,7 @@ Rectangle {
                     BaseToolTip {
                         text: noInternet.text
                         visible: parent.enabled && parent.containsMouse
-                        fontSize: 11
+                        fontSize: 11*appWindow.fontZoom
                     }
                 }
             }
@@ -156,7 +155,7 @@ Rectangle {
                     BaseToolTip {
                         text: statusBarTitle.myText
                         visible: parent.visible && parent.containsMouse && statusBarTitle.elidedText !== statusBarTitle.myText
-                        fontSize: 11
+                        fontSize: 11*appWindow.fontZoom
                     }
                 }
 
@@ -190,25 +189,24 @@ Rectangle {
         Rectangle {
             Layout.alignment: Qt.AlignLeft
             color: "transparent"
-            width: 32
-            height: 21
+            width: 32*appWindow.zoom
+            height: 21*appWindow.zoom
 
             Rectangle {
                 id: bottomPanelToggle
                 visible: appWindow.canShowSettingsPage() && bottomPanelTools.panelCanBeShown && bottomPanelTools.sufficientWindowHeight
-                anchors.rightMargin: 11
+                anchors.rightMargin: 11*appWindow.zoom
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
                 color: "transparent"
-                width: 19
-                height: 15
+                width: 19*appWindow.zoom
+                height: 15*appWindow.zoom
                 clip: true
-                Image {
+                WaSvgImage {
                     source: appWindow.theme.elementsIcons
-                    sourceSize.width: 93
-                    sourceSize.height: 456
-                    x: bottomPanelTools.panelVisible ? 3 : -37
-                    y: -22
+                    zoom: appWindow.zoom
+                    x: (bottomPanelTools.panelVisible ? 3 : -37)*zoom
+                    y: -22*zoom
                 }
 
             }

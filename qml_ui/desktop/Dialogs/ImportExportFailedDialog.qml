@@ -12,7 +12,7 @@ BaseDialog {
     property string filePath
     property string errorMessage
 
-    width: 542
+    width: 542*appWindow.zoom
 
     contentItem: BaseDialogItem {
         titleText: dialogTitle
@@ -23,14 +23,14 @@ BaseDialog {
 
         ColumnLayout {
             Layout.fillWidth: true
-            Layout.leftMargin: 10
-            Layout.rightMargin: 10
-            spacing: 3
+            Layout.leftMargin: 10*appWindow.zoom
+            Layout.rightMargin: 10*appWindow.zoom
+            spacing: 3*appWindow.zoom
 
             BaseLabel {
                 Layout.fillWidth: true
                 text: qsTr("Error: %1").arg(errorMessage) + App.loc.emptyString
-                Layout.bottomMargin: 7
+                Layout.bottomMargin: 7*appWindow.zoom
             }
 
             BaseLabel {
@@ -42,8 +42,8 @@ BaseDialog {
             }
 
             CustomButton {
-                Layout.topMargin: 10
-                Layout.bottomMargin: 10
+                Layout.topMargin: 10*appWindow.zoom
+                Layout.bottomMargin: 10*appWindow.zoom
                 Layout.alignment: Qt.AlignRight
                 blueBtn: true
                 text: qsTr("OK") + App.loc.emptyString

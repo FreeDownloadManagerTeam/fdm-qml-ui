@@ -5,18 +5,18 @@ import "../BaseElements"
 
 TextField {
     id: textInput
-    implicitHeight: /*appWindow.macVersion ? 26 :*/ 30
+    implicitHeight: 30*appWindow.fontZoom
     selectByMouse: true
     selectionColor: appWindow.theme.textHighlight
     selectedTextColor: appWindow.theme.foreground
-    font.pixelSize: 14
+    font.pixelSize: 14*appWindow.fontZoom
     color: appWindow.theme.foreground//enabled ? "#000" : "#757575"
     opacity: enabled ? 1 : 0.5
     horizontalAlignment: TextInput.AlignLeft
 
     background: Rectangle {
         border.color: appWindow.theme.border
-        border.width: 1
+        border.width: 1*appWindow.zoom
         color: appWindow.theme.background
 //        radius: appWindow.macVersion ? appWindow.theme.textFieldBorderRadiusMac : 0
     }

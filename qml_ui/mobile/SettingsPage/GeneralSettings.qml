@@ -149,9 +149,12 @@ Column {
             }
 
             BaseLabel {
-                text: qsTr("Using mobile data while roaming may result in additional charges.")
+                visible: App.features.hasFeature(AppFeatures.AllowedNetworkTypesList)
+                text: qsTr("Using mobile data while roaming may result in additional charges.") + App.loc.emptyString
                 leftPadding: switchSetting6.textMargins + 5
                 bottomPadding: switchSetting6.padding + 3
+                wrapMode: Text.WordWrap
+                width: clmn.width - leftPadding
             }
 
             SettingsSeparator{

@@ -1,6 +1,7 @@
 import QtQuick 2.10
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
+import "../../common"
 import "../../qt5compat"
 import org.freedownloadmanager.fdm 1.0
 import org.freedownloadmanager.fdm.dmcoresettings 1.0
@@ -51,14 +52,14 @@ Column {
 
         BaseLabel {
             width: parent.width
-            rightPadding: 10
+            rightPadding: 10*appWindow.zoom
             text: qsTr("Make sure you have %1 extension installed, otherwise, click one of the buttons below").arg(App.shortDisplayName) + App.loc.emptyString
             wrapMode: Label.WordWrap
-            bottomPadding: 6
+            bottomPadding: 6*appWindow.zoom
         }
 
         Row {
-            spacing: 16
+            spacing: 16*appWindow.zoom
 
             Repeater {
                 model: buttonsModel
@@ -70,7 +71,7 @@ Column {
         }
 
         Row {
-            topPadding: 20
+            topPadding: 20*appWindow.zoom
 
             BaseLabel {
                 id: lbl
@@ -85,22 +86,21 @@ Column {
 
             Rectangle {
                 color: "transparent"
-                width: 19
-                height: 21
+                width: 19*appWindow.zoom
+                height: 21*appWindow.zoom
 
                 Rectangle {
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.horizontalCenter: parent.horizontalCenter
                     color: "transparent"
-                    width: 19
-                    height: 15
+                    width: 19*appWindow.zoom
+                    height: 15*appWindow.zoom
                     clip: true
-                    Image {
+                    WaSvgImage {
                         source: appWindow.theme.elementsIcons
-                        sourceSize.width: 93
-                        sourceSize.height: 456
-                        x: !browsersList.visible ? 3 : -37
-                        y: -22
+                        zoom: appWindow.zoom
+                        x: (!browsersList.visible ? 3 : -37)*zoom
+                        y: -22*zoom
                         layer {
                             effect: ColorOverlay {
                                 color: appWindow.theme.settingsSubgroupHeader
@@ -178,16 +178,15 @@ Column {
             Rectangle {
                 visible: !unwantedHostsList.visible
                 anchors.left: skipDomains.right
-                anchors.leftMargin: 5
+                anchors.leftMargin: 5*appWindow.zoom
                 anchors.verticalCenter: parent.verticalCenter
-                width: 16
+                width: 16*appWindow.zoom
                 height: width
                 color: "transparent"
 
-                Image {
-                    source: Qt.resolvedUrl("../../images/desktop/edit_list.png")
-                    sourceSize.width: 16
-                    sourceSize.height: 16
+                WaSvgImage {
+                    zoom: appWindow.zoom
+                    source: Qt.resolvedUrl("../../images/desktop/edit_list.svg")
                     opacity: skipDomains.checked ? 1 : 0.5
                     layer {
                         effect: ColorOverlay {
@@ -215,11 +214,11 @@ Column {
         RowLayout {
             id: unwantedHostsList
             visible: false
-            width: 320
+            width: 320*appWindow.zoom
 
             ListEditor {
                 myStr: App.settings.app.value(AppSettings.WbDownloadsUnwantedHostsList)
-                Layout.leftMargin: 38
+                Layout.leftMargin: 38*appWindow.zoom
                 errorMsg: qsTr("Are you sure this is a valid domain?") + App.loc.emptyString
                 validationRegex: /^[\-\d\w\u0400-\u04FF]+(\.[\-\d\w\u0400-\u04FF]+)+$/i
 
@@ -254,15 +253,14 @@ Column {
             Rectangle {
                 visible: !extensionsList.visible
                 anchors.left: skipCheckBox.right
-                anchors.leftMargin: 5
+                anchors.leftMargin: 5*appWindow.zoom
                 anchors.verticalCenter: parent.verticalCenter
-                width: 16
+                width: 16*appWindow.zoom
                 height: width
                 color: "transparent"
-                Image {
-                    source: Qt.resolvedUrl("../../images/desktop/edit_list.png")
-                    sourceSize.width: 16
-                    sourceSize.height: 16
+                WaSvgImage {
+                    zoom: appWindow.zoom
+                    source: Qt.resolvedUrl("../../images/desktop/edit_list.svg")
                     opacity: skipCheckBox.checked ? 1 : 0.5
                     layer {
                         effect: ColorOverlay {
@@ -290,11 +288,11 @@ Column {
         RowLayout {
             id: extensionsList
             visible: false
-            width: 220
+            width: 220*appWindow.zoom
 
             ListEditor {
                 myStr: App.settings.app.value(AppSettings.WbDownloadsUnwantedExtensionsList)
-                Layout.leftMargin: 38
+                Layout.leftMargin: 38*appWindow.zoom
                 errorMsg: qsTr("Are you sure this is a valid file extension?") + App.loc.emptyString
                 validationRegex: /^[\d\w\+\-\!]+$/
 
@@ -330,9 +328,9 @@ Column {
                 id: smallSizeValue
                 enabled: noCatchSmaller.checked
                 anchors.left: noCatchSmaller.right
-                anchors.leftMargin: 5
+                anchors.leftMargin: 5*appWindow.zoom
                 anchors.verticalCenter: parent.verticalCenter
-                implicitWidth: 60
+                implicitWidth: 60*appWindow.zoom
                 text: parseInt(App.settings.app.value(AppSettings.WbDownloadsTooSmallSizeValue)/AppConstants.BytesInKB/AppConstants.BytesInKB)
                 onTextChanged: tryBrowserSettingsTimer.restart()
                 inputMethodHints: Qt.ImhDigitsOnly
@@ -341,7 +339,7 @@ Column {
 
             BaseLabel {
                 anchors.left: smallSizeValue.right
-                anchors.leftMargin: 5
+                anchors.leftMargin: 5*appWindow.zoom
                 anchors.verticalCenter: parent.verticalCenter
                 text: qsTr("Mbytes") + App.loc.emptyString
             }

@@ -2,6 +2,7 @@ import QtQuick 2.10
 import QtQuick.Controls 2.3
 import Qt.labs.settings 1.0
 import "../../qt5compat"
+import "../../common"
 import org.freedownloadmanager.fdm 1.0
 import org.freedownloadmanager.fdm.dmcoresettings 1.0
 import org.freedownloadmanager.fdm.appsettings 1.0
@@ -96,16 +97,15 @@ Column
 
             Rectangle {
                 anchors.left: useSounds.right
-                anchors.leftMargin: 5
+                anchors.leftMargin: 5*appWindow.zoom
                 anchors.verticalCenter: parent.verticalCenter
-                width: 16
+                width: 16*appWindow.zoom
                 height: width
                 color: "transparent"
 
-                Image {
-                    source: Qt.resolvedUrl("../../images/desktop/edit_list.png")
-                    sourceSize.width: 16
-                    sourceSize.height: 16
+                WaSvgImage {
+                    zoom: appWindow.zoom
+                    source: Qt.resolvedUrl("../../images/desktop/edit_list.svg")
                     opacity: useSounds.checked ? 1 : 0.5
                     layer {
                         effect: ColorOverlay {
@@ -197,7 +197,7 @@ Column
                 id: backupCombo
                 enabled: backupCheckbox.checked
                 anchors.left: backupCheckbox.right
-                anchors.leftMargin: 5
+                anchors.leftMargin: 5*appWindow.zoom
                 anchors.verticalCenter: parent.verticalCenter
             }
         }
@@ -235,7 +235,7 @@ Column
                 id: batteryCombo
                 enabled: batteryCheckbox.checked
                 anchors.left: batteryCheckbox.right
-                anchors.leftMargin: 5
+                anchors.leftMargin: 5*appWindow.zoom
                 anchors.verticalCenter: parent.verticalCenter
             }
         }
@@ -280,7 +280,19 @@ Column
         SettingsCheckBox {
             text: qsTr("Enable user defined order of downloads") + App.loc.emptyString
             checked: uiSettingsTools.settings.enableUserDefinedOrderOfDownloads
-            onClicked: uiSettingsTools.settings.enableUserDefinedOrderOfDownloads = checked
+            onClicked: {
+                uiSettingsTools.settings.enableUserDefinedOrderOfDownloads = checked;
+                if (checked)
+                {
+                    if (sortTools.sortBy != AbstractDownloadsUi.DownloadsSortByOrder)
+                        sortTools.setSortByAndAsc(AbstractDownloadsUi.DownloadsSortByOrder, false);
+                }
+                else
+                {
+                    if (sortTools.sortBy == AbstractDownloadsUi.DownloadsSortByOrder)
+                        sortTools.setSortByAndAsc(AbstractDownloadsUi.DownloadsSortByCreationTime, false);
+                }
+            }
         }
 
         SettingsCheckBox {
@@ -290,9 +302,90 @@ Column
         }
 
         SettingsCheckBox {
-            text: qsTr("Restore hidden state when finished adding new downloads") + App.loc.emptyString
-            checked: uiSettingsTools.settings.autoHideWhenFinishedAddingDownloads
-            onClicked: uiSettingsTools.settings.autoHideWhenFinishedAddingDownloads = checked
+            text: qsTr("Enable standalone create new downloads windows") + App.loc.emptyString
+            checked: uiSettingsTools.settings.enableStandaloneCreateDownloadsWindows
+            onClicked: uiSettingsTools.settings.enableStandaloneCreateDownloadsWindows = checked
+        }
+
+        Column
+        {
+            anchors.left: parent.left
+            anchors.leftMargin: 18*appWindow.zoom
+            spacing: 5*appWindow.zoom
+
+            Row {
+                spacing: 10*appWindow.zoom
+
+                BaseLabel {
+                    text: qsTr("Overall zoom") + App.loc.emptyString
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+                BaseComboBox {
+                    anchors.verticalCenter: parent.verticalCenter
+                    model: [
+                        {text: "100%", value: 1.0},
+                        {text: "200%", value: 2.0}
+                    ]
+                    currentIndex: {
+                        let z = uiSettingsTools.settings.scheduledZoom ?
+                                uiSettingsTools.settings.scheduledZoom :
+                                uiSettingsTools.zoom;
+                        for (let i = 0; i < model.length; ++i) {
+                            if (model[i].value === z)
+                                return i;
+                        }
+                        return 0;
+                    }
+                    onActivated: (index) => uiSettingsTools.settings.scheduledZoom = model[index].value
+                }
+                BaseLabel {
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: qsTr("Fonts zoom") + App.loc.emptyString
+                }
+                BaseComboBox {
+                    anchors.verticalCenter: parent.verticalCenter
+                    model: [
+                        {text: "70%", value: 0.7},
+                        {text: "80%", value: 0.8},
+                        {text: "90%", value: 0.9},
+                        {text: "100%", value: 1.0},
+                        {text: "110%", value: 1.1},
+                        {text: "120%", value: 1.2},
+                        {text: "130%", value: 1.3},
+                        {text: "140%", value: 1.4}
+                    ]
+                    currentIndex: {
+                        let z2 = uiSettingsTools.settings.scheduledZoom2 ?
+                                uiSettingsTools.settings.scheduledZoom2 :
+                                uiSettingsTools.zoom2;
+                        for (let i = 0; i < model.length; ++i) {
+                            if (model[i].value === z2)
+                                return i;
+                        }
+                        return 0;
+                    }
+                    onActivated: (index) => uiSettingsTools.settings.scheduledZoom2 = model[index].value
+                }
+            }
+
+            Row {
+                visible: (uiSettingsTools.settings.scheduledZoom && uiSettingsTools.settings.scheduledZoom !== appWindow.zoom) ||
+                         (uiSettingsTools.settings.scheduledZoom2 && uiSettingsTools.settings.scheduledZoom2 !== appWindow.zoom2)
+
+                spacing: 5*appWindow.zoom
+
+                WaSvgImage {
+                    source: appWindow.theme.attentionImg
+                    zoom: Math.max(1.0, appWindow.zoom*0.8)
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+                BaseHandCursorLabel {
+                    text: qsTr("<a href='#'>Restart is required</a>") + App.loc.emptyString
+                    font.pixelSize: 11*appWindow.fontZoom
+                    anchors.verticalCenter: parent.verticalCenter
+                    onLinkActivated: App.restart()
+                }
+            }
         }
     }
 
@@ -366,7 +459,7 @@ Column
             onClicked: okToResetMsg.open()
             blueBtn: true
             anchors.left: parent.left
-            anchors.leftMargin: 20
+            anchors.leftMargin: 20*appWindow.zoom
             MessageDialog
             {
                 id: okToResetMsg

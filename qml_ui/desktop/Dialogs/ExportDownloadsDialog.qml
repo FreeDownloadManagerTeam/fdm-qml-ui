@@ -5,6 +5,7 @@ import "../../qt5compat"
 import org.freedownloadmanager.fdm 1.0
 import org.freedownloadmanager.fdm.abstractdownloadsui 1.0
 import "../BaseElements"
+import "../../common"
 import "../../common/Tools"
 
 import Qt.labs.platform 1.0 as QtLabs
@@ -17,7 +18,7 @@ BaseDialog {
 
     property var selectedDownloads: []
 
-    width: 542
+    width: 542*appWindow.zoom
 
     contentItem: BaseDialogItem {
         titleText: (selectedDownloads.length > 0 ? qsTr("Export selected downloads") : qsTr("Export all downloads")) + App.loc.emptyString
@@ -28,17 +29,16 @@ BaseDialog {
 
         ColumnLayout {
             Layout.fillWidth: true
-            Layout.leftMargin: 10
-            Layout.rightMargin: 10
-            spacing: 3
+            Layout.leftMargin: 10*appWindow.zoom
+            Layout.rightMargin: 10*appWindow.zoom
+            spacing: 3*appWindow.zoom
 
             BaseLabel {
                 text: qsTr("Save to") + App.loc.emptyString
             }
 
             RowLayout {
-                height: folderBtn.height + 1
-                width: parent.width
+                Layout.fillWidth: true
 
                 BaseTextField {
                     id: path
@@ -47,23 +47,10 @@ BaseDialog {
                     onAccepted: doOK();
                 }
 
-                CustomButton {
+                PickFileButton {
                     id: folderBtn
-                    implicitWidth: 38
-                    implicitHeight: 30
                     Layout.alignment: Qt.AlignRight
-                    Layout.preferredHeight: height
-                    Image {
-                        source: Qt.resolvedUrl("../../images/desktop/pick_file.svg")
-                        sourceSize.width: 37
-                        sourceSize.height: 30
-                        layer {
-                            effect: ColorOverlay {
-                                color: folderBtn.isPressed ? folderBtn.secondaryTextColor : folderBtn.primaryTextColor
-                            }
-                            enabled: true
-                        }
-                    }
+                    Layout.fillHeight: true
 
                     onClicked: browseDlg.open()
 
@@ -83,10 +70,10 @@ BaseDialog {
 
             ExportDownloadsTypeCombobox {
                 id: typeCombo
-                Layout.preferredWidth: 200
-                Layout.preferredHeight: 30
-                Layout.topMargin: 10
-                Layout.bottomMargin: 10
+                Layout.preferredWidth: 200*appWindow.zoom
+                Layout.preferredHeight: 30*appWindow.zoom
+                Layout.topMargin: 10*appWindow.zoom
+                Layout.bottomMargin: 10*appWindow.zoom
                 onExtensionChanged: fixPath()
             }
 
@@ -94,13 +81,14 @@ BaseDialog {
                 id: finishedOnly
                 text: qsTr("Export only completed downloads") + App.loc.emptyString
                 checkBoxStyle: "gray"
-                Layout.topMargin: 10
-                Layout.bottomMargin: 10
+                Layout.topMargin: 10*appWindow.zoom
+                Layout.bottomMargin: 10*appWindow.zoom
+                xOffset: 0
             }
 
             RowLayout {
-                Layout.topMargin: 10
-                Layout.bottomMargin: 10
+                Layout.topMargin: 10*appWindow.zoom
+                Layout.bottomMargin: 10*appWindow.zoom
                 Layout.alignment: Qt.AlignRight
 
                 CustomButton {

@@ -8,7 +8,7 @@ import "../../common/Tools"
 BaseDialog {
     id: root
 
-    width: 542
+    width: 542*appWindow.zoom
 
     contentItem: BaseDialogItem {
         titleText: qsTr("Scheduler") + App.loc.emptyString
@@ -19,14 +19,14 @@ BaseDialog {
 
         ColumnLayout {
             Layout.fillWidth: true
-            Layout.leftMargin: 10
-            Layout.rightMargin: 10
-            Layout.topMargin: 5
-            spacing: 10
+            Layout.leftMargin: 10*appWindow.zoom
+            Layout.rightMargin: 10*appWindow.zoom
+            Layout.topMargin: 5*appWindow.zoom
+            spacing: 10*appWindow.zoom
 
             BaseLabel {
                 text: qsTr("Start and pause downloads at specified time") + App.loc.emptyString
-                Layout.leftMargin: 5
+                Layout.leftMargin: 5*appWindow.zoom
             }
 
             BaseCheckBox {
@@ -34,7 +34,6 @@ BaseDialog {
                 text: qsTr("Enable Scheduler") + App.loc.emptyString
                 checked: schedulerTools.schedulerCheckboxEnabled
                 checkBoxStyle: "gray"
-//                textColor: "#303942"
                 onClicked: schedulerTools.onSchedulerCheckboxChanged(checked)
             }
 
@@ -42,15 +41,20 @@ BaseDialog {
                 id: scheduler
                 enabled: schedulerTools.schedulerCheckboxEnabled
                 Layout.fillWidth: true
-                Layout.topMargin: 5
+                Layout.topMargin: 5*appWindow.zoom
+            }
+
+            Item {
+                Layout.fillHeight: true
+                Layout.preferredWidth: 1
             }
 
             RowLayout {
-                Layout.topMargin: 10
-                Layout.bottomMargin: 10
+                Layout.topMargin: 10*appWindow.zoom
+                Layout.bottomMargin: 10*appWindow.zoom
                 Layout.alignment: Qt.AlignRight
 
-                spacing: 5
+                spacing: 5*appWindow.zoom
 
                 Rectangle {
                     color: "transparent"
@@ -64,7 +68,7 @@ BaseDialog {
                         clip: true
                         wrapMode: Text.Wrap
                         width: parent.width
-                        font.pixelSize: 13
+                        font.pixelSize: 13*appWindow.fontZoom
                         color: "#585759"
                     }
                 }

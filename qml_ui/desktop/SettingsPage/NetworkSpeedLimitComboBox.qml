@@ -2,6 +2,7 @@ import QtQuick 2.10
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
 import "../../qt5compat"
+import "../../common"
 import org.freedownloadmanager.fdm 1.0
 import org.freedownloadmanager.fdm.appconstants 1.0
 import "../BaseElements"
@@ -14,17 +15,17 @@ Item {
     property string kbps: qsTr("KB/s") + App.loc.emptyString
 
     implicitHeight: custom.visible ? custom.implicitHeight : combo.height
-    implicitWidth: 123
+    implicitWidth: 123*appWindow.fontZoom
 
     ComboBox {
         id: combo
-        height: 25
+        height: 25*appWindow.fontZoom
         width: parent.width
         anchors.verticalCenter: parent.verticalCenter
         enabled: root.enabled
 
-        rightPadding: 5
-        leftPadding: 5
+        rightPadding: 5*appWindow.zoom
+        leftPadding: 5*appWindow.zoom
 
         model: ListModel{}
 
@@ -44,12 +45,12 @@ Item {
         delegate: Rectangle {
             property bool hover: false
             color: hover ? appWindow.theme.menuHighlight : "transparent"
-            height: 18
+            height: 18*appWindow.zoom
             width: root.width
             BaseLabel {
-                leftPadding: 6
+                leftPadding: 6*appWindow.zoom
                 anchors.verticalCenter: parent.verticalCenter
-                font.pixelSize: 12
+                font.pixelSize: 12*appWindow.fontZoom
                 color: appWindow.theme.settingsItem
                 text: parseInt(modelData) ? modelData + " " + kbps : modelData
             }
@@ -75,9 +76,9 @@ Item {
 
         background: Rectangle {
             color: "transparent"
-            radius: 5
+            radius: 5*appWindow.zoom
             border.color: appWindow.theme.settingsControlBorder
-            border.width: 1
+            border.width: 1*appWindow.zoom
         }
 
         contentItem: Rectangle {
@@ -85,7 +86,7 @@ Item {
             clip: true
             BaseLabel {
                 anchors.verticalCenter: parent.verticalCenter
-                font.pixelSize: 12
+                font.pixelSize: 12*appWindow.fontZoom
                 color: appWindow.theme.settingsItem
                 text: parseInt(combo.currentText) ? combo.currentText + " " + kbps : combo.currentText
             }
@@ -94,22 +95,21 @@ Item {
         indicator: Rectangle {
             x: combo.width - width
             y: combo.topPadding + (combo.availableHeight - height) / 2
-            width: height - 1
+            width: height - 1*appWindow.zoom
             height: combo.height
             color: "transparent"
             Rectangle {
-                width: 9
-                height: 8
+                width: 9*appWindow.zoom
+                height: 8*appWindow.zoom
                 color: "transparent"
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
                 clip: true
-                Image {
+                WaSvgImage {
                     source: appWindow.theme.elementsIcons
-                    sourceSize.width: 93
-                    sourceSize.height: 456
+                    zoom: appWindow.zoom
                     x: 0
-                    y: -448
+                    y: -448*zoom
                 }
             }
         }
@@ -117,13 +117,13 @@ Item {
         popup: Popup {
             y: combo.height
             width: combo.width
-            height: 18*combo.model.length + 2
-            padding: 1
+            height: 18*appWindow.zoom*combo.model.length + 2*appWindow.zoom
+            padding: 1*appWindow.zoom
 
             background: Rectangle {
                 color: appWindow.theme.background
                 border.color: appWindow.theme.settingsControlBorder
-                border.width: 1
+                border.width: 1*appWindow.zoom
             }
 
             contentItem: Item {
@@ -143,14 +143,14 @@ Item {
         property bool inError: false
 
         anchors.fill: parent
-        anchors.topMargin: 6
-        spacing: 5
+        anchors.topMargin: 6*appWindow.zoom
+        spacing: 5*appWindow.zoom
         visible: !combo.visible
 
         RowLayout {
             Layout.alignment: Qt.AlignTop
             Layout.fillWidth: true
-            spacing: 5
+            spacing: 5*appWindow.zoom
 
             SettingsTextField {
                 id: value
@@ -168,7 +168,7 @@ Item {
             }
             BaseLabel {
                 text: kbps
-                font.pixelSize: 12
+                font.pixelSize: 12*appWindow.fontZoom
                 color: appWindow.theme.settingsItem
             }
         }
@@ -176,21 +176,20 @@ Item {
         RowLayout {
             Layout.alignment: Qt.AlignTop
             Layout.fillWidth: true
-            spacing: 5
+            spacing: 5*appWindow.zoom
             CustomButton {
                 id: okBtn
                 blueBtn: true
                 alternateBtnPressed: cnclBtn.isPressed
-                radius: 5
+                radius: 5*appWindow.zoom
                 implicitHeight: value.implicitHeight
                 Layout.fillWidth: true
                 onClicked: custom.tryAcceptValue()
-                Image {
+                WaSvgImage {
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.horizontalCenter: parent.horizontalCenter
                     source: Qt.resolvedUrl("../../images/desktop/ok_white.svg")
-                    sourceSize.width: 15
-                    sourceSize.height: 10
+                    zoom: appWindow.zoom
                     layer {
                         effect: ColorOverlay {
                             color: okBtn.alternateBtnPressed ? okBtn.secondaryTextColor : okBtn.primaryTextColor
@@ -201,16 +200,15 @@ Item {
             }
             CustomButton {
                 id: cnclBtn
-                radius: 5
+                radius: 5*appWindow.zoom
                 implicitHeight: value.implicitHeight
                 Layout.fillWidth: true
                 onClicked: custom.reject()                
-                Image {
+                WaSvgImage {
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.horizontalCenter: parent.horizontalCenter
                     source: Qt.resolvedUrl("../../images/desktop/clean.svg")
-                    sourceSize.width: 10
-                    sourceSize.height: 10
+                    zoom: appWindow.zoom
                     layer {
                         effect: ColorOverlay {
                             color: cnclBtn.isPressed ? cnclBtn.secondaryTextColor : cnclBtn.primaryTextColor

@@ -17,7 +17,6 @@ BaseDialog
 
         showTitleIcon: true
         titleIconUrl: appWindow.theme.attentionImg
-        titleIconSize: 16
 
         Keys.onEscapePressed: root.close()
         onCloseClick: root.close()
@@ -27,11 +26,11 @@ BaseDialog
             Layout.fillHeight: true
             Layout.fillWidth: true
 
-            Layout.leftMargin: 10
+            Layout.leftMargin: 10*appWindow.zoom
             Layout.rightMargin: Layout.leftMargin
             Layout.bottomMargin: Layout.leftMargin
 
-            spacing: 10
+            spacing: 10*appWindow.zoom
 
             BaseLabel {              
                 text: qsTr("Can't resume download. Download link likely expired. Resume attempts failed.") + "<br><br>" +

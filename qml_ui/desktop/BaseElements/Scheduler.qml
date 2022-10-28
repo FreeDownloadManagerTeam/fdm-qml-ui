@@ -9,18 +9,18 @@ import org.freedownloadmanager.fdm 1.0
 Item {
     id: root
 
-    height: 64
+    implicitHeight: 64*appWindow.zoom
 
     property string fromTimeComboValue
     property string toTimeComboValue
 
     ColumnLayout {
         anchors.fill: parent
-        spacing: 19
+        spacing: 19*appWindow.zoom
 
         RowLayout {
-            spacing: 5
-            height: 12
+            spacing: 5*appWindow.zoom
+            Layout.preferredHeight: 12*appWindow.zoom
 
             ButtonGroup {
                 id: daysGroup
@@ -32,7 +32,7 @@ Item {
                 Layout.fillWidth: true
                 Layout.alignment: Qt.AlignVCenter
                 orientation: ListView.Horizontal
-                spacing: 5
+                spacing: 5*appWindow.zoom
 
                 model: ListModel {}
 
@@ -57,9 +57,9 @@ Item {
         RowLayout {
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignLeft
-            Layout.leftMargin: 5
+            Layout.leftMargin: 5*appWindow.zoom
 
-            spacing: 10
+            spacing: 10*appWindow.zoom
 
             BaseLabel {
                 text: qsTr("From:") + App.loc.emptyString
@@ -75,7 +75,7 @@ Item {
 
             BaseLabel {
                 text: qsTr("To:") + App.loc.emptyString
-                Layout.leftMargin: 10
+                Layout.leftMargin: 10*appWindow.zoom
             }
 
             SchedulerTimeCombobox {

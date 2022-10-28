@@ -5,6 +5,7 @@ import org.freedownloadmanager.fdm 1.0
 import org.freedownloadmanager.fdm.dmcoresettings 1.0
 import org.freedownloadmanager.fdm.tum 1.0
 import org.freedownloadmanager.fdm.appconstants 1.0
+import "../common"
 import "../common/Tools"
 
 import "./BaseElements"
@@ -30,12 +31,12 @@ ComboBox {
 
     delegate: Rectangle {
         width: root.width
-        height: modelData.mode === TrafficUsageMode.Low ? 30 : 35
+        height: (modelData.mode === TrafficUsageMode.Low ? 30 : 35)*appWindow.zoom
         color: "transparent"
 
         Rectangle {
             width: parent.width
-            height: 30
+            height: 30*appWindow.zoom
             color: "transparent"
 
             property bool hover: false
@@ -50,7 +51,7 @@ ComboBox {
             }
 
             Rectangle {
-                width: 4
+                width: 4*appWindow.zoom
                 height: parent.height
                 color: modelData.mode === TrafficUsageMode.High ? appWindow.theme.highMode :
                        modelData.mode === TrafficUsageMode.Medium ? appWindow.theme.mediumMode :
@@ -62,24 +63,23 @@ ComboBox {
                 visible: root.currentTumMode == modelData.mode
                 anchors.left: parent.left
                 anchors.verticalCenter: parent.verticalCenter
-                anchors.leftMargin: 12
+                anchors.leftMargin: 12*appWindow.zoom
                 clip: true
-                width: 12
-                height: 10
-                Image {
+                width: 12*appWindow.zoom
+                height: 10*appWindow.zoom
+                WaSvgImage {
                     source: appWindow.theme.elementsIcons
-                    sourceSize.width: 93
-                    sourceSize.height: 456
+                    zoom: appWindow.zoom
                     x: 0
-                    y: -123
+                    y: -123*zoom
                 }
             }
 
             RowLayout {
                 anchors.verticalCenter: parent.verticalCenter
-                spacing: 5
+                spacing: 5*appWindow.zoom
                 BaseLabel {
-                    leftPadding: 30
+                    leftPadding: 30*appWindow.zoom
                     text: modelData.text
                 }
             }
@@ -99,7 +99,7 @@ ComboBox {
                     property string upSpeed: modelData.uploadSpeed != sUnlimited ? modelData.uploadSpeed + " " + kbps : qsTr("unlimited") + App.loc.emptyString
                     text: qsTr("Download: %1, Upload: %2").arg(downSpeed).arg(upSpeed) + App.loc.emptyString
                     visible: parent.containsMouse
-                    fontSize: 11
+                    fontSize: 11*appWindow.fontZoom
                 }
             }
         }
@@ -109,16 +109,15 @@ ComboBox {
         color: "transparent"
         anchors.verticalCenter: parent.verticalCenter
         anchors.right: parent.right
-        anchors.rightMargin: 8
-        width: 15
-        height: 15
+        anchors.rightMargin: 8*appWindow.zoom
+        width: 15*appWindow.zoom
+        height: 15*appWindow.zoom
         clip: true
-        Image {
+        WaSvgImage {
             source: appWindow.theme.elementsIcons
-            sourceSize.width: 93
-            sourceSize.height: 456
-            x: (root.popup.opened ? 2 : -38)
-            y: -22
+            zoom: appWindow.zoom
+            x: (root.popup.opened ? 2 : -38)*zoom
+            y: -22*zoom
         }
     }
 
@@ -134,7 +133,7 @@ ComboBox {
         }
 
         Rectangle {
-            height: 3
+            height: 3*appWindow.zoom
             width: parent.width
             anchors.bottom: parent.bottom
             color: root.currentTumMode == TrafficUsageMode.High ? appWindow.theme.highMode :
@@ -144,18 +143,18 @@ ComboBox {
 
         Rectangle {
             width: parent.width
-            height: 1
+            height: 1*appWindow.zoom
             color: appWindow.theme.border
         }
 
         Rectangle {
-            width: 1
+            width: 1*appWindow.zoom
             height: parent.height
             color: appWindow.theme.border
         }
 
         Rectangle {
-            width: 1
+            width: 1*appWindow.zoom
             height: parent.height
             color: appWindow.theme.border
             anchors.right: parent.right
@@ -171,42 +170,38 @@ ComboBox {
             anchors.fill: parent
             Rectangle {
                 color: "transparent"
-                width: 87
+                width: 15*appWindow.zoom+72*appWindow.fontZoom
                 height: parent.height
 
-                Image {
+                WaSvgImage {
                     source: appWindow.theme.arrowDownSbarImg
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.left: parent.left
-                    anchors.leftMargin: 8
-                    width: 8
-                    height: 8
-                    sourceSize: Qt.size(width, height)
+                    anchors.leftMargin: 8*appWindow.zoom
+                    zoom: appWindow.zoom
                 }
 
                 BaseLabel {
-                    leftPadding: 20
+                    leftPadding: 20*appWindow.zoom
                     anchors.verticalCenter: parent.verticalCenter
                     text: App.speedAsText(root.totalDownloadSpeed) + App.loc.emptyString
                 }
             }
             Rectangle {
                 color: "transparent"
-                width: 87
+                width: 15*appWindow.zoom+72*appWindow.fontZoom
                 height: parent.height
 
-                Image {
+                WaSvgImage {
                     source: appWindow.theme.arrowUpSbarImg
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.left: parent.left
-                    anchors.leftMargin: 8
-                    width: 8
-                    height: 8
-                    sourceSize: Qt.size(width, height)
+                    anchors.leftMargin: 8*appWindow.zoom
+                    zoom: appWindow.zoom
                 }
 
                 BaseLabel {
-                    leftPadding: 20
+                    leftPadding: 20*appWindow.zoom
                     anchors.verticalCenter: parent.verticalCenter
                     text: App.speedAsText(root.totalUploadSpeed) + App.loc.emptyString
                 }
@@ -219,13 +214,13 @@ ComboBox {
 
         y: 1 - height
         width: root.width
-        height: 102
-        padding: 1
+        height: 102*appWindow.zoom
+        padding: 1*appWindow.zoom
 
         background: Rectangle {
             color: appWindow.theme.background
             border.color: appWindow.theme.border
-            border.width: 1
+            border.width: 1*appWindow.zoom
         }
 
         contentItem: Item {

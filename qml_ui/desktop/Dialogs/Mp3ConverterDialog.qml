@@ -13,7 +13,7 @@ import "../../common"
 BaseDialog {
     id: root
 
-    width: 542
+    width: 542*appWindow.zoom
 
     property var downloadsIds: []
     property var filesIndices: []
@@ -42,9 +42,9 @@ BaseDialog {
 
         ColumnLayout {
             Layout.fillWidth: true
-            Layout.leftMargin: 10
-            Layout.rightMargin: 10
-            spacing: 10
+            Layout.leftMargin: 10*appWindow.zoom
+            Layout.rightMargin: 10*appWindow.zoom
+            spacing: 10*appWindow.zoom
 
 
             BaseLabel {
@@ -53,7 +53,6 @@ BaseDialog {
             }
 
             RowLayout {
-                height: folderBtn.implicitHeight + 1
 
                 BaseTextField {
                     id: destinationDir
@@ -64,25 +63,11 @@ BaseDialog {
                     Keys.onEscapePressed: root.close();
                 }
 
-                CustomButton {
+                PickFileButton {
                     id: folderBtn
                     enabled: !d.accepting
-                    implicitWidth: 38
-                    implicitHeight: 30
                     Layout.alignment: Qt.AlignRight
-                    Layout.preferredHeight: height
-
-                    Image {
-                        source: Qt.resolvedUrl("../../images/desktop/pick_file.svg")
-                        sourceSize.width: 37
-                        sourceSize.height: 30
-                        layer {
-                            effect: ColorOverlay {
-                                color: folderBtn.isPressed ? folderBtn.secondaryTextColor : folderBtn.primaryTextColor
-                            }
-                            enabled: true
-                        }
-                    }
+                    Layout.fillHeight: true
 
                     onClicked: browseDlg.open()
 
@@ -107,7 +92,7 @@ BaseDialog {
             }
 
             RowLayout {
-                RadioButton {
+                BaseRadioButton {
                     id: constantRadioBtn
                     text: qsTr("Constant bitrate of value") + ':' + App.loc.emptyString
                     ButtonGroup.group: qualityGroup
@@ -121,7 +106,7 @@ BaseDialog {
             }
 
             RowLayout {
-                RadioButton {
+                BaseRadioButton {
                     id: variableRadioBtn
                     text: qsTr("Variable bitrate (VBR)") + ':' + App.loc.emptyString
                     ButtonGroup.group: qualityGroup
@@ -140,11 +125,11 @@ BaseDialog {
 
 
             RowLayout {
-                Layout.topMargin: 10
-                Layout.bottomMargin: 10
+                Layout.topMargin: 10*appWindow.zoom
+                Layout.bottomMargin: 10*appWindow.zoom
                 Layout.alignment: Qt.AlignRight
 
-                spacing: 5
+                spacing: 5*appWindow.zoom
 
                 Rectangle {
                     color: "transparent"
@@ -158,7 +143,7 @@ BaseDialog {
                         clip: true
                         elide: Text.ElideRight
                         width: parent.width
-                        font.pixelSize: 13
+                        font.pixelSize: 13*appWindow.fontZoom
                         color: "#585759"
                     }
                 }

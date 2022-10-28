@@ -10,7 +10,7 @@ import "../BaseElements"
 
 Column
 {
-    spacing: 10
+    spacing: 10*appWindow.zoom
     width: parent.width
     property bool customSettingsEnabled: antivirusCombo.model.length > 0 && antivirusCombo.model[antivirusCombo.currentIndex].id === ""
     property bool autoCheckEnabled: !customSettingsEnabled || !urlField.inError && !args.inError
@@ -23,40 +23,40 @@ Column
         id: grid
 
         columns: 2
-        width: 548
-        rowSpacing: 12
+        width: 548*appWindow.zoom
+        rowSpacing: 12*appWindow.zoom
 
         BaseLabel {
-            Layout.topMargin: 5
+            Layout.topMargin: 5*appWindow.zoom
             text: qsTr("Select antivirus:") + App.loc.emptyString
             color: appWindow.theme.settingsItem
-            rightPadding: 10
+            rightPadding: 10*appWindow.zoom
         }
 
         RowLayout {
-            spacing: 10
+            spacing: 10*appWindow.zoom
 
             AntivirusComboBox {
                 id: antivirusCombo
-                Layout.topMargin: 5
+                Layout.topMargin: 5*appWindow.zoom
             }
 
             BaseHyperLabel {
                 text: "<a href='https://www.freedownloadmanager.org/board/viewtopic.php?f=1&t=18212'>" + qsTr("Is your antivirus not listed?") + "</a>" + App.loc.emptyString
-                font.pixelSize: 12
+                font.pixelSize: 12*appWindow.fontZoom
             }
         }
 
         BaseLabel {
             text: qsTr("Path:") + App.loc.emptyString
             enabled: customSettingsEnabled
-            leftPadding: 38
-            rightPadding: 10
+            leftPadding: 38*appWindow.zoom
+            rightPadding: 10*appWindow.zoom
             color: appWindow.theme.settingsItem
         }
 
         RowLayout {
-            height: folderBtn.implicitHeight + 1
+            Layout.preferredHeight: folderBtn.implicitHeight + 1
             enabled: customSettingsEnabled
 
             SettingsTextField {
@@ -92,24 +92,10 @@ Column
                 }
             }
 
-            CustomButton {
+            PickFileButton {
                 id: folderBtn
-                implicitWidth: 38
-                implicitHeight: 25
-                Layout.alignment: Qt.AlignRight
-                clip: true
-                Image {
-                    source: Qt.resolvedUrl("../../images/desktop/pick_file.svg")
-                    sourceSize.width: 37
-                    sourceSize.height: 30
-                    y: -5
-                    layer {
-                        effect: ColorOverlay {
-                            color: folderBtn.isPressed ? folderBtn.secondaryTextColor : folderBtn.primaryTextColor
-                        }
-                        enabled: true
-                    }
-                }
+                Layout.alignment: Qt.AlignRight               
+                implicitHeight: 25*appWindow.zoom
                 onClicked: browseDlg.open()
                 FileDialog {
                     id: browseDlg
@@ -123,8 +109,8 @@ Column
         BaseLabel {
             text: qsTr("Arguments:") + App.loc.emptyString
             enabled: customSettingsEnabled
-            leftPadding: 38
-            rightPadding: 10
+            leftPadding: 38*appWindow.zoom
+            rightPadding: 10*appWindow.zoom
             color: appWindow.theme.settingsItem
         }
 
@@ -162,7 +148,7 @@ Column
         Label{}
 
         SettingsGridLabel {
-            Layout.topMargin: -7
+            Layout.topMargin: -7*appWindow.zoom
             text: qsTr("Arguments must contain %path% variable") + App.loc.emptyString
             enabled: customSettingsEnabled
             color: "#999"

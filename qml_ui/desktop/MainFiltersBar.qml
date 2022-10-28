@@ -8,7 +8,7 @@ import org.freedownloadmanager.fdm.abstractdownloadsui 1.0
 Rectangle {
     id: root
     width: parent.width - 10
-    height: 34
+    height: 34*appWindow.fontZoom
     clip: true
     color: "transparent"
     anchors.top: parent.top
@@ -19,18 +19,18 @@ Rectangle {
         anchors.left: parent.left
         anchors.right: batchDownloadMarker.left
         anchors.top: parent.top
-        anchors.topMargin: 8
-        height: 18
+        anchors.topMargin: 8*appWindow.fontZoom
+        height: 18*appWindow.fontZoom
         color: "transparent"
 
         Row {
             height: parent.height
-            spacing: 8
+            spacing: 8*appWindow.fontZoom
 
             Row {
                 id: statesFilters
                 height: parent.height
-                spacing: 8
+                spacing: 8*appWindow.fontZoom
 
                 onWidthChanged: calculateTagsWidth()
 

@@ -4,30 +4,31 @@ import QtQuick.Layouts 1.11
 import "../../qt5compat"
 import org.freedownloadmanager.fdm 1.0
 import "../BaseElements"
+import "../../common"
 import "../../common/Tools"
 
-BaseDialog {
+BaseStandaloneCapableDialog {
     id: root
 
-    width: 542
+    width: 542*appWindow.zoom
 
     contentItem: BaseDialogItem {
         titleText: qsTr("Add download") + App.loc.emptyString
+        showCloseButton: !root.standalone
         onCloseClick: downloadTools.doReject()
 
         ColumnLayout {
             Layout.fillWidth: true
-            Layout.leftMargin: 10
-            Layout.rightMargin: 10
-            spacing: 3
+            Layout.leftMargin: 10*appWindow.zoom
+            Layout.rightMargin: 10*appWindow.zoom
+            spacing: 3*appWindow.zoom
 
             BaseLabel {
                 text: App.cfg.cdEnterUrlText + App.loc.emptyString
             }
 
             RowLayout {
-                height: folderBtn.implicitHeight + 1
-                width: parent.width
+                Layout.fillWidth: true
 
                 BaseTextField {
                     id: urlField
@@ -40,23 +41,11 @@ BaseDialog {
                     Keys.onEscapePressed: downloadTools.doReject()
                 }
 
-                CustomButton {
+                PickFileButton {
                     id: folderBtn
                     visible: App.cfg.cdShowOpenFileBtn
-                    implicitWidth: 38
-                    implicitHeight: 30
                     Layout.alignment: Qt.AlignRight
-                    Image {
-                        source: Qt.resolvedUrl("../../images/desktop/pick_file.svg")
-                        sourceSize.width: 37
-                        sourceSize.height: 30
-                        layer {
-                            effect: ColorOverlay {
-                                color: folderBtn.isPressed ? folderBtn.secondaryTextColor : folderBtn.primaryTextColor
-                            }
-                            enabled: true
-                        }
-                    }
+                    Layout.fillHeight: true
                     onClicked: browseDlg.open()
                     FileDialog {
                         id: browseDlg
@@ -70,20 +59,20 @@ BaseDialog {
             }
 
             ModulesCombobox {
-                Layout.preferredWidth: 200
-                Layout.preferredHeight: 30
+                Layout.preferredWidth: 200*appWindow.zoom
+                Layout.preferredHeight: 30*appWindow.zoom
             }
 
             RowLayout {
-                Layout.topMargin: 10
-                Layout.bottomMargin: 10
+                Layout.topMargin: 10*appWindow.zoom
+                Layout.bottomMargin: 10*appWindow.zoom
 
                 BusyIndicator
                 {
                     visible: downloadTools.buildingDownload
                     running: visible
-                    Layout.preferredHeight: 30
-                    Layout.preferredWidth: 30
+                    Layout.preferredHeight: 30*appWindow.zoom
+                    Layout.preferredWidth: 30*appWindow.zoom
                     Layout.alignment: Qt.AlignLeft
                 }
 
@@ -99,7 +88,7 @@ BaseDialog {
                         clip: true
                         wrapMode: Text.Wrap
                         width: parent.width
-                        font.pixelSize: 13
+                        font.pixelSize: 13*appWindow.fontZoom
                     }
                 }
 

@@ -11,7 +11,7 @@ BaseDialog {
 
     property var downloadIds: []
 
-    width: 542
+    width: 542*appWindow.zoom
 
     contentItem: BaseDialogItem {
         titleText: qsTr("Pause download") + App.loc.emptyString
@@ -22,22 +22,22 @@ BaseDialog {
 
         ColumnLayout {
             Layout.fillWidth: true
-            Layout.leftMargin: 10
-            Layout.rightMargin: 10
-            spacing: 3
+            Layout.leftMargin: 10*appWindow.zoom
+            Layout.rightMargin: 10*appWindow.zoom
+            spacing: 3*appWindow.zoom
 
             BaseLabel {
                 Layout.fillWidth: true
                 text: qsTr("The download(s) below can't be resumed after pausing.") + App.loc.emptyString
-                Layout.bottomMargin: 7
+                Layout.bottomMargin: 7*appWindow.zoom
             }
 
             ListView {
                 clip: true
                 Layout.fillWidth: true
-                Layout.preferredHeight: Math.min(contentHeight, 150)
+                Layout.preferredHeight: Math.min(contentHeight, 150*appWindow.zoom)
                 ScrollBar.vertical: ScrollBar {
-                    active: parent.contentHeight > 150
+                    active: parent.contentHeight > 150*appWindow.zoom
                 }
                 model: root.downloadIds
                 delegate: Rectangle {
@@ -61,11 +61,11 @@ BaseDialog {
             }
 
             RowLayout {
-                Layout.topMargin: 10
-                Layout.bottomMargin: 10
+                Layout.topMargin: 10*appWindow.zoom
+                Layout.bottomMargin: 10*appWindow.zoom
                 Layout.alignment: Qt.AlignRight
 
-                spacing: 5
+                spacing: 5*appWindow.zoom
 
                 CustomButton {
                     text: qsTr("Pause") + App.loc.emptyString

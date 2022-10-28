@@ -7,9 +7,9 @@ BaseLabel {
     signal clicked
 
     color: appWindow.theme.settingsSidebarHeader
-    leftPadding: smallSettingsPage ? 18 : 22
-    topPadding: smallSettingsPage ? 3 : 7
-    bottomPadding: smallSettingsPage ? 3 : 7
+    leftPadding: (smallSettingsPage ? 18 : 22)*appWindow.zoom
+    topPadding: (smallSettingsPage ? 3 : 7)*appWindow.zoom
+    bottomPadding: (smallSettingsPage ? 3 : 7)*appWindow.zoom
     wrapMode: Label.Wrap
     MouseArea {
         anchors.fill: parent
@@ -19,7 +19,7 @@ BaseLabel {
     Rectangle {
         visible: current
         color: "#4e5764"
-        width: 6
+        width: 6*appWindow.zoom
         height: parent.height
     }
 }

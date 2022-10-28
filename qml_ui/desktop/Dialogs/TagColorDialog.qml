@@ -5,7 +5,7 @@ import "../BaseElements"
 
 Popup {
     id: root
-    width: 130
+    width: 130*appWindow.zoom
     padding: 0
     focus: false
     closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
@@ -15,15 +15,15 @@ Popup {
     property string tagName
 
     contentItem: Column {
-        spacing: 5
-        padding: 1
-        topPadding: 6
-        bottomPadding: 6
-        width: parent.width - 2
+        spacing: 5*appWindow.zoom
+        padding: 1*appWindow.zoom
+        topPadding: 6*appWindow.zoom
+        bottomPadding: 6*appWindow.zoom
+        width: parent.width - 2*appWindow.zoom
 
         TagPalette {
             selectedColor: tagColor
-            width: parent.width - 2
+            width: parent.width - 2*appWindow.zoom
 
             onColorSelected: {
                 root.tagColor = selectedColor;
@@ -36,7 +36,7 @@ Popup {
 
     background: Rectangle {
         color: appWindow.theme.background
-        border.width: 1
+        border.width: 1*appWindow.zoom
         border.color: appWindow.theme.border
     }
 }

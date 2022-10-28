@@ -9,13 +9,13 @@ Page {
     property string pageName: "WaitingPage"
 
     header: Column {
-        height: 108
+        height: 108*appWindow.zoom
         width: parent.width
 
         Rectangle
         {
             width: parent.width
-            height: 60
+            height: 60*appWindow.zoom
 
             color: appWindow.theme.background
 
@@ -24,9 +24,9 @@ Page {
                 text: App.shortDisplayName
                 clip: true
                 elide: Text.ElideMiddle
-                anchors.leftMargin: 10
+                anchors.leftMargin: 10*appWindow.zoom
                 anchors.verticalCenter: parent.verticalCenter
-                font.pixelSize: 20
+                font.pixelSize: 20*appWindow.fontZoom
                 font.family: "Roboto"
                 horizontalAlignment: Text.AlignHCenter
                 font.weight: Font.DemiBold
@@ -35,7 +35,7 @@ Page {
 
         Rectangle {
             color: appWindow.theme.bottomPanelBar
-            height: 48
+            height: 48*appWindow.zoom
             width: parent.width
 
             BaseLabel {
@@ -57,7 +57,7 @@ Page {
 
     Column
     {
-        spacing: 10
+        spacing: 10*appWindow.zoom
         anchors.centerIn: parent
 
         BaseLabel
@@ -72,7 +72,7 @@ Page {
         Row
         {
             visible: !App.asyncLoadMgr.loading
-            spacing: 10
+            spacing: 10*appWindow.zoom
 
             CustomButton
             {

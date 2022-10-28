@@ -28,22 +28,17 @@ Item
 
         anchors.fill: parent
 
-        spacing: 3
+        spacing: 3*appWindow.zoom
 
-        Image
+        WaSvgImage
         {
             id: img
             source: d.customIcon ? d.customIcon : appWindow.theme.linkImg;
-            Layout.preferredWidth: img2.implicitWidth
-            Layout.preferredHeight: img2.implicitHeight
+            zoom: appWindow.zoom
+            Layout.preferredWidth: preferredWidth
+            Layout.preferredHeight: preferredHeight
             Layout.alignment: Qt.AlignVCenter
             Layout.topMargin: titleLabel.visible ? 0 : Math.max(1, fm.lineWidth/2) // helps the image to look visually centered
-            sourceSize: Qt.size(width, height)
-            Image {
-                id: img2
-                visible: false
-                source: parent.source
-            }
         }
 
         BaseLabel
@@ -85,7 +80,7 @@ Item
                 BaseToolTip {
                     text: root.url
                     visible: label.enabled && parent.containsMouse && url != label.elidedText
-                    fontSize: 11
+                    fontSize: 11*appWindow.fontZoom
                 }
             }
         }

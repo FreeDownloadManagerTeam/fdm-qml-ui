@@ -3,6 +3,7 @@ import QtQuick 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Window 2.12
+import "../common"
 import "../common/Tools"
 import "./BaseElements"
 import CppControls 1.0 as CppControls
@@ -62,11 +63,11 @@ ApplicationWindow
     {
         id: content
 
-        readonly property int prefWidth: Math.max(closeWhenStopped.implicitWidth + 50,
-                                                  bottomButtons.implicitWidth + 50,
-                                                  500)
-        readonly property int prefHeight: implicitHeight + 15
-        readonly property int myMargins: 5
+        readonly property int prefWidth: Math.max(closeWhenStopped.implicitWidth + 50*appWindow.zoom,
+                                                  bottomButtons.implicitWidth + 50*appWindow.zoom,
+                                                  500*appWindow.zoom)
+        readonly property int prefHeight: implicitHeight + 15*appWindow.zoom
+        readonly property int myMargins: 5*appWindow.zoom
 
         x: myMargins
         width: parent.width - myMargins*2
@@ -76,7 +77,7 @@ ApplicationWindow
         GridLayout
         {
             columns: 2
-            Layout.leftMargin: 6
+            Layout.leftMargin: 6*appWindow.zoom
 
             BaseLabel {
                 visible: downloadsItemTools.needToShowWebPageUrl
@@ -99,7 +100,7 @@ ApplicationWindow
                     BaseToolTip {
                         text: downloadsItemTools.webPageUrl
                         visible: parent.containsMouse && webPageUrl.truncated
-                        fontSize: 11
+                        fontSize: 11*appWindow.fontZoom
                     }
                 }
             }
@@ -125,7 +126,7 @@ ApplicationWindow
                     BaseToolTip {
                         text: downloadsItemTools.resourceUrl
                         visible: parent.containsMouse && resourceUrl.truncated
-                        fontSize: 11
+                        fontSize: 11*appWindow.fontZoom
                     }
                 }
             }
@@ -136,16 +137,15 @@ ApplicationWindow
 
                 Rectangle {
                     visible: downloadsItemTools.destinationPath
-                    width: 18
-                    height: 18
+                    width: 18*appWindow.zoom
+                    height: 18*appWindow.zoom
                     clip: true
                     color: "transparent"
-                    Image {
+                    WaSvgImage {
                         source: appWindow.theme.elementsIcons
-                        sourceSize.width: 93
-                        sourceSize.height: 456
-                        x: -1
-                        y: -329
+                        zoom: appWindow.zoom
+                        x: -1*zoom
+                        y: -329*zoom
                     }
                     MouseArea {
                         anchors.fill: parent
@@ -158,7 +158,7 @@ ApplicationWindow
                 ElidedLabelWithTooltip {
                     id: savedIn
                     sourceText: downloadsItemTools.tplPathAndTitle2
-                    width: parent.width - 18 - parent.spacing
+                    width: parent.width - 18*appWindow.zoom - parent.spacing
                 }
             }
 
@@ -193,17 +193,17 @@ ApplicationWindow
             filledSquareColor: theme.progressMapFillBackground
             emptySquareBorderColor: theme.progressMapClearBorder
             emptySquareColor: theme.background
-            squareSize: 8
-            squareSpacing: 3
+            squareSize: 8*appWindow.zoom
+            squareSpacing: 3*appWindow.zoom
             Layout.fillWidth: true
             Layout.fillHeight: true
-            Layout.minimumHeight: 70
+            Layout.minimumHeight: 70*appWindow.zoom
         }
 
         GridLayout
         {
             columns: 2
-            Layout.leftMargin: 6
+            Layout.leftMargin: 6*appWindow.zoom
 
             BaseLabel { text: qsTr("Downloaded") + ":" + App.loc.emptyString; Layout.preferredWidth: widest1stColumnItem.width }
             BaseLabel {

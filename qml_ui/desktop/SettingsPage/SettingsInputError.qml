@@ -1,35 +1,35 @@
 import QtQuick 2.0
 import "../BaseElements"
+import "../../common"
 
 Rectangle {
     property Component inputElement
     property string errorMessage
 
     anchors.bottom: parent.top
-    anchors.bottomMargin: 5
+    anchors.bottomMargin: 5*appWindow.zoom
     anchors.horizontalCenter: parent.horizontalCenter
 
-    height: errorLbl.height + 16
-    width: errorLbl.width + 16
+    height: errorLbl.height + 16*appWindow.zoom
+    width: errorLbl.width + 16*appWindow.zoom
     color: '#fde3e3'
-    border.width: 1
+    border.width: 1*appWindow.zoom
     border.color: "#cfa6a9"
-    radius: 5
+    radius: 5*appWindow.zoom
 
     Rectangle {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: parent.bottom
         anchors.topMargin: -(height/2)
         color: 'transparent'
-        width: 12
-        height: 12
+        width: 12*appWindow.zoom
+        height: 12*appWindow.zoom
         clip: true
-        Image {
+        WaSvgImage {
             source: appWindow.theme.elementsIcons
-            sourceSize.width: 93
-            sourceSize.height: 456
-            x: -20
-            y: -152
+            zoom: appWindow.zoom
+            x: -20*zoom
+            y: -152*zoom
         }
     }
 
@@ -40,12 +40,12 @@ Rectangle {
         text: errorMessage
         color: "#8f272b"
         wrapMode: Text.Wrap
-        width: 200
+        width: 200*appWindow.zoom
         Component.onCompleted: {
-            width = contentWidth < 200 ? contentWidth : 200;
+            width = contentWidth < 200*appWindow.zoom ? contentWidth : 200*appWindow.zoom;
         }
         onTextChanged: {
-            width = contentWidth < 200 ? contentWidth : 200;
+            width = contentWidth < 200*appWindow.zoom ? contentWidth : 200*appWindow.zoom;
         }
     }
 }

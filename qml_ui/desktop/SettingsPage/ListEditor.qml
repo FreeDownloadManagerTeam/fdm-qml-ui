@@ -2,6 +2,7 @@ import QtQuick 2.0
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.4
 import "../../qt5compat"
+import "../../common"
 import org.freedownloadmanager.fdm 1.0
 import "../BaseElements"
 
@@ -10,7 +11,7 @@ Item {
     property var myStr
     property var myModel: myStr.length > 0 ? myStr.split(' ') : null
     width: parent.width
-    height: 170
+    height: 170*appWindow.zoom
     property string clear_btn_img: appWindow.macVersion ? Qt.resolvedUrl("../../images/desktop/search_clear_mac.svg") : Qt.resolvedUrl("../../images/desktop/clean.svg")
     property string currentValue: ""
     property string errorMsg
@@ -24,10 +25,10 @@ Item {
 
         Rectangle {
             Layout.fillWidth: true
-            height: 110
+            height: 110*appWindow.zoom
             color: "transparent"
             clip: true
-            border.width: 1
+            border.width: 1*appWindow.zoom
             border.color: appWindow.theme.settingsControlBorder
 
             ListView {
@@ -51,16 +52,16 @@ Item {
                 boundsBehavior: Flickable.StopAtBounds
 
                 delegate: Item {
-                    property int rowHeigth: 22
+                    property int rowHeigth: 22*appWindow.zoom
                     width: parent.width
                     height: rowHeigth
                     Layout.preferredHeight: rowHeigth
-                    Layout.margins: 1
+                    Layout.margins: 1*appWindow.zoom
                     property bool enabledHover: false
 
                     Rectangle {
                         anchors.fill: parent
-                        anchors.margins: 1
+                        anchors.margins: 1*appWindow.zoom
                         color: appWindow.theme.menuHighlight
                         visible: enabledHover
                     }
@@ -74,39 +75,37 @@ Item {
 
                     RowLayout {
                         anchors.verticalCenter: parent.verticalCenter
-                        anchors.leftMargin: 5
+                        anchors.leftMargin: 5*appWindow.zoom
                         anchors.left: parent.left
 
-                        Rectangle {
-                            width: 12
-                            height: width
+                        WaSvgImage {
+                            id: clearBtnImg
+
+                            Layout.preferredWidth: preferredWidth
+                            Layout.preferredHeight: preferredHeight
                             Layout.alignment: Qt.AlignVCenter
-                            color: "transparent"
 
-                            Image {
-                                width: 12
-                                height: width
-                                source: clear_btn_img
-                                sourceSize: Qt.size(width, height)
+                            zoom: appWindow.zoom
+                            source: clear_btn_img
 
-                                layer {
-                                    effect: ColorOverlay {
-                                        color: appWindow.theme.foreground
-                                    }
-                                    enabled: true
+                            layer {
+                                effect: ColorOverlay {
+                                    color: appWindow.theme.foreground
                                 }
+                                enabled: true
+                            }
 
-                                MouseArea {
-                                    anchors.fill: parent
-                                    cursorShape: Qt.PointingHandCursor
-                                    onClicked: root.removeItem(index, modelData)
-                                }
+                            MouseArea {
+                                anchors.fill: parent
+                                cursorShape: Qt.PointingHandCursor
+                                onClicked: root.removeItem(index, modelData)
                             }
                         }
+
                         BaseLabel {
                             Layout.alignment: Qt.AlignVCenter
                             text: modelData
-                            font.pixelSize: 13
+                            font.pixelSize: 13*appWindow.fontZoom
                         }
                     }
                 }
@@ -115,9 +114,9 @@ Item {
             Component {
                 id: highlight
                 Rectangle {
-                    width: listView.width; height: 22
+                    width: listView.width; height: 22*appWindow.zoom
                     border.color: appWindow.theme.selectedBorder
-                    border.width: 1
+                    border.width: 1*appWindow.zoom
                     color: appWindow.theme.menuHighlight
                     y: listView.currentItem ? listView.currentItem.y : 0
                     Behavior on y {
@@ -149,13 +148,13 @@ Item {
             id: custom
             property bool inError: false
 
-            spacing: 5
+            spacing: 5*appWindow.zoom
             visible: !addBtn.visible
 
             RowLayout {
                 Layout.alignment: Qt.AlignTop
                 Layout.fillWidth: true
-                spacing: 5
+                spacing: 5*appWindow.zoom
 
                 SettingsTextField {
                     id: value
@@ -174,34 +173,32 @@ Item {
             RowLayout {
                 Layout.alignment: Qt.AlignTop
                 Layout.fillWidth: true
-                spacing: 5
+                spacing: 5*appWindow.zoom
                 CustomButton {
                     blueBtn: true
                     alternateBtnPressed: cnclBtn1.isPressed
-                    radius: 5
+                    radius: 5*appWindow.zoom
                     implicitHeight: value.implicitHeight
                     Layout.fillWidth: true
                     onClicked: custom.tryAcceptValue()
-                    Image {
+                    WaSvgImage {
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.horizontalCenter: parent.horizontalCenter
                         source: Qt.resolvedUrl("../../images/desktop/ok_white.svg")
-                        sourceSize.width: 15
-                        sourceSize.height: 10
+                        zoom: appWindow.zoom
                     }
                 }
                 CustomButton {
                     id: cnclBtn1
-                    radius: 5
+                    radius: 5*appWindow.zoom
                     implicitHeight: value.implicitHeight
                     Layout.fillWidth: true
                     onClicked: custom.reject()
-                    Image {
+                    WaSvgImage {
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.horizontalCenter: parent.horizontalCenter
                         source: Qt.resolvedUrl("../../images/desktop/clean.svg")
-                        sourceSize.width: 10
-                        sourceSize.height: 10
+                        zoom: appWindow.zoom
                     }
                 }
             }

@@ -10,10 +10,10 @@ RowLayout {
     Image {
         id: img
         source: downloadTools.previewUrl
-        sourceSize.width: 30
-        sourceSize.height: 30
-        width: 30
-        height: 30
+        sourceSize.width: 30*appWindow.zoom
+        sourceSize.height: 30*appWindow.zoom
+        width: 30*appWindow.zoom
+        height: 30*appWindow.zoom
         fillMode: Image.PreserveAspectCrop
     }
 

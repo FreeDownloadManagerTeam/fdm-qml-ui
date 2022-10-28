@@ -5,13 +5,14 @@ import "../../qt5compat"
 import org.freedownloadmanager.fdm 1.0
 import "../BaseElements"
 import "../SettingsPage"
+import "../../common"
 
 import Qt.labs.platform 1.0 as QtLabs
 
 BaseDialog {
     id: root
 
-    width: 480
+    width: 480*appWindow.zoom
 
     contentItem: BaseDialogItem {
         titleText: qsTr("Edit tag") + App.loc.emptyString
@@ -20,23 +21,23 @@ BaseDialog {
         onCloseClick: root.close()
 
         Column {
-            spacing: 5
+            spacing: 5*appWindow.zoom
             Layout.fillWidth: true
-            Layout.leftMargin: 10
-            Layout.rightMargin: 10
-            Layout.bottomMargin: 10
+            Layout.leftMargin: 10*appWindow.zoom
+            Layout.rightMargin: 10*appWindow.zoom
+            Layout.bottomMargin: 10*appWindow.zoom
 
 
-            Label {
+            BaseLabel {
                 text: qsTr("Tag") + App.loc.emptyString
             }
 
             Row {
-                spacing: 10
+                spacing: 10*appWindow.zoom
 
                 BaseTextField {
                     id: textInput
-                    width: 200
+                    width: 200*appWindow.zoom
                     focus: true
                     onTextEdited: {tagsTools.editedTagName = text }
                     onAccepted: save()
@@ -54,20 +55,19 @@ BaseDialog {
                 Rectangle {
                     id: marker
                     anchors.verticalCenter: parent.verticalCenter
-                    width: 11
-                    height: 12
+                    width: 11*appWindow.zoom
+                    height: 12*appWindow.zoom
                     color: tagsTools.editedTagColor
                     clip: true
 
                     Component.onCompleted: {marker.color = tagsTools.editedTagColor}
 
-                    Image {
+                    WaSvgImage {
                         visible: colorMouseArea.containsMouse
                         source: appWindow.theme.elementsIcons
-                        sourceSize.width: 93
-                        sourceSize.height: 456
-                        x: 1
-                        y: -447
+                        zoom: appWindow.zoom
+                        x: 1*appWindow.zoom
+                        y: -447*appWindow.zoom
                         layer {
                             effect: ColorOverlay {
                                 color: "#fff"
@@ -87,7 +87,7 @@ BaseDialog {
                         id: tagPalette
                         visible: false
                         tagColor: tagsTools.editedTagColor
-                        y: 14
+                        y: 14*appWindow.zoom
                         onOpened: textInput.forceActiveFocus();
                         onTagColorChanged: {
                             tagsTools.editedTagColor = tagColor;
@@ -111,9 +111,9 @@ BaseDialog {
                 }
             }
 
-            Label {
+            BaseLabel {
                 text: qsTr('Extensions (e.g. "avi mp3")') + App.loc.emptyString
-                topPadding: 5
+                topPadding: 5*appWindow.zoom
 
                 MouseArea {
                     anchors.fill: parent
@@ -128,7 +128,7 @@ BaseDialog {
             }
 
             BaseTextField {
-                width: 300
+                width: 300*appWindow.zoom
                 onVisibleChanged: {
                     if (tagsTools && tagsTools.editedTagExtensions) {
                         text = tagsTools.editedTagExtensions.join(" ");
@@ -141,42 +141,27 @@ BaseDialog {
                 onAccepted: save()
             }
 
-            Label {
+            BaseLabel {
                 text: qsTr("Default download folder") + App.loc.emptyString
-                topPadding: 5
+                topPadding: 5*appWindow.zoom
             }
 
             Row {
-                spacing: 10
+                spacing: 10*appWindow.zoom
 
                 FolderCombobox {
                     id: downloadFolder
-                    implicitWidth: 300
-                    implicitHeight: 30
+                    implicitWidth: 300*appWindow.zoom
                     onEditTextChanged: {
                         tagsTools.editedTagDownloadFolder = editText;
                     }
                     onAccepted: save()
                 }
 
-                CustomButton {
+                PickFileButton {
                     id: folderBtn
-                    visible: !App.rc.client.active
-                    implicitWidth: 38
-                    implicitHeight: 30
-                    Layout.preferredHeight: height
-                    Image {
-                        source: Qt.resolvedUrl("../../images/desktop/pick_file.svg")
-                        sourceSize.width: 37
-                        sourceSize.height: 30
-                        layer {
-                            effect: ColorOverlay {
-                                color: folderBtn.isPressed ? folderBtn.secondaryTextColor : folderBtn.primaryTextColor
-                            }
-                            enabled: true
-                        }
-                    }
-
+                    visible: !App.rc.client.active                  
+                    height: downloadFolder.height
                     onClicked: browseDlg.open()
                     QtLabs.FolderDialog {
                         id: browseDlg
@@ -189,7 +174,7 @@ BaseDialog {
 
                 CustomButton {
                     text: qsTr("Macros") + App.loc.emptyString
-                    implicitHeight: 30
+                    implicitHeight: 30*appWindow.zoom
                     onClicked: macrosMenu.open()
 
                     MacrosMenu {
@@ -200,9 +185,9 @@ BaseDialog {
             }
 
             Row {
-                spacing: 5
+                spacing: 5*appWindow.zoom
                 anchors.right: parent.right
-                height: 50
+                height: 50*appWindow.zoom
 
                 CustomButton {
                     id: cnclBtn

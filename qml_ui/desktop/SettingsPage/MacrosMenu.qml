@@ -4,7 +4,7 @@ import "../BaseElements"
 
 BaseContextMenu {
     id: root
-    y: 50
+    y: 50*appWindow.zoom
     signal macroSelected(string macro)
 
     BaseContextMenuItem {

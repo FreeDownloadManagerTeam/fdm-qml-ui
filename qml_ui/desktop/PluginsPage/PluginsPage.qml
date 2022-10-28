@@ -36,7 +36,7 @@ Page {
 
     ColumnLayout {       
         anchors.fill: parent
-        anchors.leftMargin: smallPage ? 18 : 22
+        anchors.leftMargin: (smallPage ? 18 : 22)*appWindow.zoom
 
         spacing: 0
 
@@ -46,25 +46,25 @@ Page {
 
             BaseLabel {
                 text: qsTr("Recently installed dependency") + App.loc.emptyString
-                font.pixelSize: smallPage ? 18 : 24
-                Layout.topMargin: smallPage ? 12 : 24
-                Layout.bottomMargin: smallPage ? 6 : 18
+                font.pixelSize: (smallPage ? 18 : 24)*appWindow.fontZoom
+                Layout.topMargin: (smallPage ? 12 : 24)*appWindow.zoom
+                Layout.bottomMargin: (smallPage ? 6 : 18)*appWindow.zoom
             }
 
             PluginsDepsInstallerView
             {
             }
 
-            Layout.bottomMargin: smallPage ? 6 : 18
+            Layout.bottomMargin: (smallPage ? 6 : 18)*appWindow.zoom
         }
 
         RowLayout
         {
             BaseLabel {
                 text: qsTr("Add-ons") + App.loc.emptyString
-                font.pixelSize: smallPage ? 18 : 24
-                Layout.topMargin: smallPage ? 12 : 24
-                Layout.bottomMargin: smallPage ? 6 : 18
+                font.pixelSize: (smallPage ? 18 : 24)*appWindow.fontZoom
+                Layout.topMargin: (smallPage ? 12 : 24)*appWindow.zoom
+                Layout.bottomMargin: (smallPage ? 6 : 18)*appWindow.zoom
             }
 
             GearButton
@@ -72,7 +72,7 @@ Page {
                 id: menuBtn
 
                 Layout.alignment: Qt.AlignVCenter
-                Layout.preferredHeight: 26
+                Layout.preferredHeight: 26*appWindow.zoom
                 Layout.preferredWidth: Layout.preferredHeight
 
                 onClicked: menu.opened ? menu.close() : menu.open()
@@ -83,7 +83,7 @@ Page {
 
                     closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
 
-                    x: parent.width + 10
+                    x: parent.width + 10*appWindow.zoom
 
                     BaseContextMenuItem {
                         enabled: App.plugins.model.atLeast1PluginSupportsAutoUpdate
@@ -129,8 +129,8 @@ Page {
                 DownloadsItemProgressIndicator
                 {
                     infinityIndicator: true
-                    Layout.preferredHeight: smallPage ? 6 : 10
-                    Layout.preferredWidth: 150
+                    Layout.preferredHeight: (smallPage ? 6 : 10)*appWindow.zoom
+                    Layout.preferredWidth: 150*appWindow.zoom
                 }
             }
         }

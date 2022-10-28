@@ -19,21 +19,21 @@ BaseDialog {
 
         Column {
             id: col
-            Layout.leftMargin: 10
-            Layout.rightMargin: 10
-            Layout.bottomMargin: 10
-            spacing: 5
+            Layout.leftMargin: 10*appWindow.zoom
+            Layout.rightMargin: 10*appWindow.zoom
+            Layout.bottomMargin: 10*appWindow.zoom
+            spacing: 5*appWindow.zoom
 
             BaseLabel
             {
-                bottomPadding: 10
+                bottomPadding: 10*appWindow.zoom
                 text: root.message
             }
 
             Row
             {
                 anchors.right: parent.right
-                spacing: 5
+                spacing: 5*appWindow.zoom
 
                 CustomButton {
                     text: qsTr("OK") + App.loc.emptyString

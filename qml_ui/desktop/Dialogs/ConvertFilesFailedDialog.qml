@@ -23,10 +23,10 @@ BaseDialog
         ColumnLayout
         {
             Layout.fillWidth: true
-            Layout.leftMargin: 10
-            Layout.rightMargin: 10
-            Layout.bottomMargin: 10
-            spacing: 10
+            Layout.leftMargin: 10*appWindow.zoom
+            Layout.rightMargin: 10*appWindow.zoom
+            Layout.bottomMargin: 10*appWindow.zoom
+            spacing: 10*appWindow.zoom
 
             ListView
             {
@@ -63,12 +63,12 @@ BaseDialog
 
     onFilesChanged:
     {
-        var w = 300, h = 110;
+        var w = 300*appWindow.zoom, h = 110*appWindow.zoom;
 
         for (var i = 0; i < files.length; ++i)
         {
-            w = Math.max(w, fm.advanceWidth(files[i]) + 10);
-            h += fm.font.pixelSize + 2;
+            w = Math.max(w, fm.advanceWidth(files[i]) + 10*appWindow.zoom);
+            h += fm.font.pixelSize + 2*appWindow.zoom;
         }
 
         root.recommendedWidth = w;

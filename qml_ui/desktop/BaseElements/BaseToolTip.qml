@@ -5,7 +5,7 @@ ToolTip {
     id: root
     delay: Qt.styleHints.mousePressAndHoldInterval
     timeout: 12000
-    property int fontSize: 13
+    property int fontSize: 13*appWindow.fontZoom
 
     contentItem: Text {
         text: root.text

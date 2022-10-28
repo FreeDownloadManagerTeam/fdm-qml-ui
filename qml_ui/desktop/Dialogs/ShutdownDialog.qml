@@ -9,7 +9,7 @@ BaseDialog {
     id: root
     property int timeout: 30
     property int countdown: root.timeout
-    width: 550
+    width: 550*appWindow.zoom
 
     contentItem: BaseDialogItem {
         titleText: qsTr("Confirm") + App.loc.emptyString
@@ -20,9 +20,9 @@ BaseDialog {
 
         ColumnLayout {
             Layout.fillWidth: true
-            Layout.leftMargin: 10
-            Layout.rightMargin: 10
-            spacing: 3
+            Layout.leftMargin: 10*appWindow.zoom
+            Layout.rightMargin: 10*appWindow.zoom
+            spacing: 3*appWindow.zoom
 
             BaseLabel {
                 text: !shutdownTools.powerManagement ? "" :
@@ -33,8 +33,8 @@ BaseDialog {
 
             RowLayout {
                 Layout.fillWidth: true
-                Layout.topMargin: 10
-                Layout.bottomMargin: 10
+                Layout.topMargin: 10*appWindow.zoom
+                Layout.bottomMargin: 10*appWindow.zoom
 
                 Item {
                     Layout.fillWidth: true

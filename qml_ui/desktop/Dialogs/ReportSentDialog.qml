@@ -6,7 +6,7 @@ import "../BaseElements"
 BaseDialog {
     id: root
 
-    width: 542
+    width: 542*appWindow.zoom
 
     property string errorMessage
 
@@ -19,14 +19,14 @@ BaseDialog {
 
         ColumnLayout {
             width: parent.width
-            Layout.leftMargin: 10
-            Layout.rightMargin: 10
-            spacing: 15
+            Layout.leftMargin: 10*appWindow.zoom
+            Layout.rightMargin: 10*appWindow.zoom
+            spacing: 15*appWindow.zoom
 
             BaseLabel {
                 Layout.fillWidth: true
                 text: (errorMessage.length > 0 ? qsTr("Sorry, the report hasn't been sent, an error occurred: %1").arg(errorMessage) : qsTr("The report has been sent. Thank you for your cooperation!")) + App.loc.emptyString
-                Layout.bottomMargin: 7
+                Layout.bottomMargin: 7*appWindow.zoom
                 wrapMode: Text.WordWrap
             }
 
@@ -34,7 +34,7 @@ BaseDialog {
                 text: qsTr("OK") + App.loc.emptyString
                 blueBtn: true
                 onClicked: root.close()
-                Layout.bottomMargin: 10
+                Layout.bottomMargin: 10*appWindow.zoom
                 Layout.alignment: Qt.AlignRight
             }
         }

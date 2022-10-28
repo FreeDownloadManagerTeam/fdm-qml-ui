@@ -11,7 +11,7 @@ BaseDialog {
     readonly property string remoteId: idField.text.trim()
     readonly property bool isRemoteIdValid: remoteId !== '' && remoteId !== App.rc.id
 
-    width: 542
+    width: 542*appWindow.zoom
 
     contentItem: BaseDialogItem {
         titleText: qsTr("Connect to remote %1").arg(App.shortDisplayName) + ' ' + qsTr("(beta)") + App.loc.emptyString
@@ -20,9 +20,9 @@ BaseDialog {
 
         ColumnLayout {
             Layout.fillWidth: true
-            Layout.leftMargin: 10
-            Layout.rightMargin: 10
-            spacing: 10
+            Layout.leftMargin: 10*appWindow.zoom
+            Layout.rightMargin: 10*appWindow.zoom
+            spacing: 10*appWindow.zoom
 
             DialogWrappedLabel {
                 text: qsTr("Here you can connect to %1 running on another device.").arg(App.shortDisplayName) + App.loc.emptyString
@@ -30,7 +30,7 @@ BaseDialog {
             }
 
             RowLayout {
-                spacing: 10
+                spacing: 10*appWindow.zoom
 
                 Layout.fillWidth: true
 
@@ -63,12 +63,12 @@ BaseDialog {
             }
 
             RowLayout {
-                Layout.topMargin: 10
-                Layout.bottomMargin: 10
+                Layout.topMargin: 10*appWindow.zoom
+                Layout.bottomMargin: 10*appWindow.zoom
                 Layout.alignment: Qt.AlignRight
                 Layout.fillWidth: true
 
-                spacing: 5
+                spacing: 5*appWindow.zoom
 
                 CustomButton {
                     id: cnclBtn

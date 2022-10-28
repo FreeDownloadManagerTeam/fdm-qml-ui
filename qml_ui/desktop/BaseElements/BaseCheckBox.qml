@@ -2,17 +2,18 @@ import QtQuick 2.6
 import QtQuick.Controls 2.1
 import QtQuick.Window 2.12
 import "../../qt5compat"
+import "../../common"
 
 CheckBox {
     id: root
     property string checkBoxStyle: "blue"
     property string textColor
-    property int fontSize: 14
+    property int fontSize: 14*appWindow.fontZoom
     property bool truncated: contentItem.truncated
     property bool elideText: true
     property bool locked: false
 
-    property int xOffset: 6
+    property int xOffset: 6*appWindow.zoom
 
     padding: 0
     focusPolicy: Qt.NoFocus
@@ -24,12 +25,12 @@ CheckBox {
         color: "transparent"
         anchors.verticalCenter: parent.verticalCenter
         x: root.xOffset
-        width: 12
-        height: 12
+        width: 12*appWindow.zoom
+        height: 12*appWindow.zoom
         clip: true
 
-        Image {
-            x: checkBoxStyle === "gray" ? (
+        WaSvgImage {
+            x: (checkBoxStyle === "gray" ? (
                        checkState === Qt.Checked ? -180 :
                        checkState === Qt.Unchecked ? -160 : -200)
                    : (
@@ -39,11 +40,10 @@ CheckBox {
                 : (
                     checkState === Qt.Checked ? -40 :
                     checkState === Qt.Unchecked ? 0 : -20
-            ))
-            y: -44
+            )))*zoom
+            y: -44*zoom
             source: appWindow.theme.checkboxIcons
-            sourceSize.width: 212
-            sourceSize.height: 76
+            zoom: appWindow.zoom
             opacity: root.locked || !root.enabled ? 0.4 : 1
             layer {
                 effect: ColorOverlay {
@@ -56,7 +56,7 @@ CheckBox {
 
     contentItem: BaseLabel {
         anchors.verticalCenter: parent.verticalCenter
-        leftPadding: root.xOffset + root.indicator.width + 8
+        leftPadding: root.xOffset + root.indicator.width + 8*appWindow.zoom
         text: parent.text
         color: parent.textColor ? parent.textColor : appWindow.theme.foreground
         font.pixelSize: fontSize

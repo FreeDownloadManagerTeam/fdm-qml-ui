@@ -10,6 +10,9 @@ Item {
 
     signal wasReset()
 
+    property alias zoom: settings.zoom
+    property alias zoom2: settings.zoom2
+
     Settings {
         id: settings
         fileName: App.appqSettingsIniFilePath()
@@ -44,13 +47,17 @@ Item {
         property bool reportProblemAccept: false
         property bool enableUserDefinedOrderOfDownloads: false
         property bool showSaveAsButton: false
-        property bool autoHideWhenFinishedAddingDownloads: false
         property string lastRemoteBannerId
         property string lastRemoteAppId
         property string downloadsListColumns
+        property double zoom: 1.0
+        property double zoom2: 1.0 // additional zoom for fonts
+        property double scheduledZoom: 0.0 // 0 means no change is scheduled
+        property double scheduledZoom2: 0.0
+        property bool enableStandaloneCreateDownloadsWindows: false
     }
 
-    property bool hasNonDefaultValues:
+    readonly property bool hasNonDefaultValues:
         settings.deleteButtonAction !== 0 ||
         settings.theme !== 'system' ||
         settings.compactView !== false ||
@@ -62,8 +69,10 @@ Item {
         settings.enableStandaloneDownloadsWindows !== false ||
         settings.enableUserDefinedOrderOfDownloads !== false ||
         settings.showSaveAsButton !== false ||
-        settings.autoHideWhenFinishedAddingDownloads !== false ||
-        settings.downloadsListColumns
+        settings.downloadsListColumns ||
+        settings.zoom !== 1.0 ||
+        settings.zoom2 !== 1.0 ||
+        settings.enableStandaloneCreateDownloadsWindows !== false
 
     function resetToDefaults()
     {
@@ -78,8 +87,10 @@ Item {
         settings.enableStandaloneDownloadsWindows = false;
         settings.enableUserDefinedOrderOfDownloads = false;
         settings.showSaveAsButton = false;
-        settings.autoHideWhenFinishedAddingDownloads = false;
         settings.downloadsListColumns = "";
+        settings.zoom = 1.0;
+        settings.zoom2 = 1.0;
+        settings.enableStandaloneCreateDownloadsWindows = false;
         wasReset();
     }
 
@@ -127,8 +138,10 @@ Item {
         uiSettingsTools.settings.reportProblemAccept = s.settings.reportProblemAccept;
         uiSettingsTools.settings.enableUserDefinedOrderOfDownloads = s.settings.enableUserDefinedOrderOfDownloads;
         uiSettingsTools.settings.showSaveAsButton = s.settings.showSaveAsButton;
-        uiSettingsTools.settings.autoHideWhenFinishedAddingDownloads = s.settings.autoHideWhenFinishedAddingDownloads;
         uiSettingsTools.settings.downloadsListColumns = s.settings.downloadsListColumns;
+        uiSettingsTools.settings.zoom = s.settings.zoom;
+        uiSettingsTools.settings.zoom2 = s.settings.zoom2;
+        uiSettingsTools.settings.enableStandaloneCreateDownloadsWindows = s.settings.enableStandaloneCreateDownloadsWindows;
         s.destroy();
     }
 }

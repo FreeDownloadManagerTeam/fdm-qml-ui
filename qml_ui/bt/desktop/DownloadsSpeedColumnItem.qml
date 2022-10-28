@@ -5,6 +5,7 @@ import QtQuick.Window 2.12
 import "../../qt5compat"
 import org.freedownloadmanager.fdm 1.0
 import "../../desktop/BaseElements"
+import "../../common"
 
 Item
 {
@@ -26,7 +27,7 @@ Item
 
         Image
         {
-            property int needSize: 16
+            property int needSize: 16*appWindow.zoom
             visible: doneSeeding
             Layout.preferredWidth: needSize
             Layout.preferredHeight: needSize
@@ -48,15 +49,12 @@ Item
 
             Layout.alignment: Qt.AlignVCenter
 
-            Image
+            WaSvgImage
             {
                 id: btnImg
+                zoom: appWindow.zoom
                 source: parent.isPause ? appWindow.theme.pause : appWindow.theme.play
                 opacity: parent.enabled ? 1 : 0.3
-                width: 16
-                height: 16
-                sourceSize.width: 16
-                sourceSize.height: 16
             }
 
             MouseArea
@@ -82,7 +80,7 @@ Item
             id: text
             Layout.alignment: Qt.AlignVCenter
             color: appWindow.theme.foreground
-            font.pixelSize: appWindow.compactView ? 9 : 11
+            font.pixelSize: (appWindow.compactView ? 9 : 11)*appWindow.fontZoom
             text: appWindow.btS.speedHoverText(
                       info ? info.bytesUploaded : 0,
                       downloadTools ? downloadTools.ratioText : "0")

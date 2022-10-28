@@ -6,13 +6,13 @@ import "../../BaseElements"
 Rectangle {
     Layout.fillWidth: true
     color: appWindow.theme.background
-    border.width: 1
+    border.width: 1*appWindow.zoom
     border.color: appWindow.theme.border
 
     Scheduler {
         id: scheduler
         anchors.fill: parent
-        anchors.margins: 10
+        anchors.margins: 10*appWindow.zoom
     }
 
     function initialization() {

@@ -33,6 +33,7 @@ Rectangle
             anchors.centerIn: parent
             opacity: root.enabled ? 1 : 0.3
             source: root.source
+            zoom: appWindow.zoom
 
             RotationAnimator on rotation {
                 from: 0;
@@ -49,11 +50,11 @@ Rectangle
         visible: root.indicator
         anchors.right: icon.right
         anchors.bottom: icon.bottom
-        anchors.rightMargin: 8
-        anchors.bottomMargin: 8
-        height: 8
-        width: 8
-        radius: 4
+        anchors.rightMargin: 8*appWindow.zoom
+        anchors.bottomMargin: 8*appWindow.zoom
+        height: 8*appWindow.zoom
+        width: 8*appWindow.zoom
+        radius: 4*appWindow.zoom
         color: "#40ca0a"
     }
 
@@ -65,7 +66,7 @@ Rectangle
         BaseToolTip {
             text: root.tooltipText
             visible: root.enabled && parent.containsMouse && text.length > 0
-            fontSize: 11
+            fontSize: 11*appWindow.fontZoom
         }
     }
 }

@@ -3,6 +3,7 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
+import "../common"
 import "../common/Tools"
 import org.freedownloadmanager.fdm 1.0
 import "./BaseElements"
@@ -26,7 +27,7 @@ Item {
                          || downloadsItemTools.inCheckingFiles && appWindow.compactView
                          || downloadsItemTools.inMergingFiles && appWindow.compactView
                          || downloadsItemTools.progress >= 0 && !downloadsItemTools.unknownFileSize && !downloadsItemTools.inQueue && !downloadsItemTools.inCheckingFiles && !downloadsItemTools.inMergingFiles && !downloadsItemTools.performingLo
-                font.pixelSize: appWindow.compactView ? 9 : 11
+                font.pixelSize: (appWindow.compactView ? 9 : 11)*appWindow.fontZoom
                 text: (downloadsItemTools.performingLo && appWindow.compactView ? (downloadsItemTools.loProgress !== -1 ? downloadsItemTools.loProgress : 0) :
                       (downloadsItemTools.inCheckingFiles && appWindow.compactView ? (downloadsItemTools.checkingFilesProgress > 0 ? downloadsItemTools.checkingFilesProgress : 0) :
                       (downloadsItemTools.inMergingFiles && appWindow.compactView ? (downloadsItemTools.mergingFilesProgress > 0 ? downloadsItemTools.mergingFilesProgress : 0) :
@@ -47,7 +48,7 @@ Item {
                      (downloadsItemTools.inPause ? qsTr("Paused") : '')))))) + App.loc.emptyString
 
                 visible: text.length > 0
-                font.pixelSize: appWindow.compactView ? 9 : 11
+                font.pixelSize: (appWindow.compactView ? 9 : 11)*appWindow.fontZoom
                 color: appWindow.theme.foreground
                 Layout.fillWidth: true
                 clip: true
@@ -72,7 +73,7 @@ Item {
 
             BaseLabel {
                 visible: downloadsItemTools.indicatorInProgress && !downloadsItemTools.unknownFileSize && !downloadsItemTools.inCheckingFiles && !downloadsItemTools.inMergingFiles && !downloadsItemTools.performingLo
-                font.pixelSize: appWindow.compactView ? 9 : 11
+                font.pixelSize: (appWindow.compactView ? 9 : 11)*appWindow.fontZoom
                 text: JsTools.timeUtils.remainingTime(downloadsItemTools.estimatedTimeSec)
                 Layout.alignment: Qt.AlignRight
             }
@@ -92,7 +93,7 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         visible: opacity > 0
         width: parent.width
-        spacing: 3
+        spacing: 3*appWindow.zoom
         opacity: 0
         OpacityAnimator on opacity {
             id: completeAnimation
@@ -114,15 +115,14 @@ Item {
         }
         Rectangle {
             clip: true
-            width: 12
-            height: 15
+            width: 12*appWindow.zoom
+            height: 15*appWindow.zoom
             color: "transparent"
-            Image {
+            WaSvgImage {
+                zoom: appWindow.zoom
                 x: 0
-                y: -120
+                y: -120*zoom
                 source: appWindow.theme.elementsIcons
-                sourceSize.width: 93
-                sourceSize.height: 456
             }
         }
         BaseLabel {
@@ -131,7 +131,7 @@ Item {
             elide: Text.ElideRight
             text: qsTr("Complete") + App.loc.emptyString
             verticalAlignment: Text.AlignVCenter
-            font.pixelSize: appWindow.compactView ? 9 : 11
+            font.pixelSize: (appWindow.compactView ? 9 : 11)*appWindow.fontZoom
         }
     }
 
@@ -140,18 +140,17 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         visible: downloadsItemTools.inError
         width: parent.width
-        spacing: 3
+        spacing: 3*appWindow.zoom
         Rectangle {
             clip: true
-            width: 17
-            height: 15
+            width: 17*appWindow.zoom
+            height: 15*appWindow.zoom
             color: "transparent"
-            Image {
-                x: -41
-                y: -269
+            WaSvgImage {
+                zoom: appWindow.zoom
+                x: -41*zoom
+                y: -269*zoom
                 source: appWindow.theme.elementsIcons
-                sourceSize.width: 93
-                sourceSize.height: 456
             }
         }
         BaseLabel {
@@ -161,7 +160,7 @@ Item {
             text: downloadsItemTools.errorMessage
             color: "#bc3737"
             verticalAlignment: Text.AlignVCenter
-            font.pixelSize: appWindow.compactView ? 12 : 13
+            font.pixelSize: (appWindow.compactView ? 12 : 13)*appWindow.fontZoom
 
             MouseArea {
                 enabled: parent.truncated

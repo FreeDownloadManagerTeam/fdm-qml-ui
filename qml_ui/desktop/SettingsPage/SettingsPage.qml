@@ -12,10 +12,10 @@ Page {
     property string pageName: "SettingsPage"
     property string lastInvalidSettingsMessage: ""
     property var keyboardFocusItem: keyboardFocusItem
-    property int navigationColumnWidth: smallSettingsPage ? 180 : 190
+    property int navigationColumnWidth: (smallSettingsPage ? 180 : 190)*appWindow.zoom
     property bool forceAntivirusBlock: false
 
-    property bool smallSettingsPage: width < 910 || height < 430
+    property bool smallSettingsPage: width < 910*appWindow.zoom || height < 430*appWindow.zoom
 
     Item {
         id: keyboardFocusItem
@@ -68,39 +68,39 @@ Page {
         {
             Layout.alignment: Qt.AlignTop
             Layout.preferredWidth: navigationColumnWidth
-            Layout.topMargin: smallSettingsPage ? 12 : 24
+            Layout.topMargin: (smallSettingsPage ? 12 : 24)*appWindow.zoom
 
             BaseLabel {
                 text: qsTr("Preferences") + App.loc.emptyString
-                font.pixelSize: smallSettingsPage ? 18 : 24
-                Layout.leftMargin: smallSettingsPage ? 18 : 22
-                Layout.bottomMargin: smallSettingsPage ? 6 : 18
+                font.pixelSize: (smallSettingsPage ? 18 : 24)*appWindow.fontZoom
+                Layout.leftMargin: (smallSettingsPage ? 18 : 22)*appWindow.zoom
+                Layout.bottomMargin: (smallSettingsPage ? 6 : 18)*appWindow.zoom
             }
 
             RightItemLabel {
                 text: qsTr("General") + App.loc.emptyString
-                onClicked: flick.contentY = general.y + 5
+                onClicked: flick.contentY = general.y + 5*appWindow.zoom
                 current: flick.currentTab === general
                 Layout.preferredWidth: navigationColumnWidth
             }
 
             RightItemLabel {
                 text: qsTr("Browser Integration") + App.loc.emptyString
-                onClicked: flick.contentY = browserIntegration.y + 5
+                onClicked: flick.contentY = browserIntegration.y + 5*appWindow.zoom
                 current: flick.currentTab === browserIntegration
                 Layout.preferredWidth: navigationColumnWidth
             }
 
             RightItemLabel {
                 text: qsTr("Network") + App.loc.emptyString
-                onClicked: flick.contentY = network.y + 5
+                onClicked: flick.contentY = network.y + 5*appWindow.zoom
                 current: flick.currentTab === network
                 Layout.preferredWidth: navigationColumnWidth
             }
 
             RightItemLabel {
                 text: qsTr("Traffic Limits") + App.loc.emptyString
-                onClicked: flick.contentY = tum.y + 5
+                onClicked: flick.contentY = tum.y + 5*appWindow.zoom
                 current: flick.currentTab === tum
                 Layout.preferredWidth: navigationColumnWidth
             }
@@ -108,7 +108,7 @@ Page {
             RightItemLabel {
                 id: antivirusHeader
                 text: qsTr("Antivirus") + App.loc.emptyString
-                onClicked: flick.contentY = antivirus.y + 5
+                onClicked: flick.contentY = antivirus.y + 5*appWindow.zoom
                 current: flick.currentTab === antivirus
                 Layout.preferredWidth: navigationColumnWidth
             }
@@ -116,7 +116,7 @@ Page {
             RightItemLabel {
                 visible: appWindow.btSupported
                 text: appWindow.btSupported ? appWindow.btS.protocolName : ""
-                onClicked: flick.contentY = bt.y + 5
+                onClicked: flick.contentY = bt.y + 5*appWindow.zoom
                 current: flick.currentTab === bt
                 Layout.preferredWidth: navigationColumnWidth
             }
@@ -124,7 +124,7 @@ Page {
             RightItemLabel {
                 visible: rc.visible
                 text: qsTr("Remote Access") + App.loc.emptyString
-                onClicked: flick.contentY = rc.y + 5
+                onClicked: flick.contentY = rc.y + 5*appWindow.zoom
                 current: flick.currentTab === rc
                 Layout.preferredWidth: navigationColumnWidth
             }
@@ -140,7 +140,7 @@ Page {
                     }
                     else
                     {
-                        flick.contentY = advanced.y + 5;
+                        flick.contentY = advanced.y + 5*appWindow.zoom;
                     }
                 }
                 current: flick.currentTab === advanced
@@ -148,7 +148,7 @@ Page {
                 Timer {
                     id: advancedTabTimer
                     interval: 100
-                    onTriggered: flick.contentY = advanced.y + 5
+                    onTriggered: flick.contentY = advanced.y + 5*appWindow.zoom
                 }
             }
         }
@@ -162,23 +162,23 @@ Page {
 
             Layout.fillWidth: true
             Layout.fillHeight: true
-            Layout.leftMargin: smallSettingsPage ? 10 : 30
+            Layout.leftMargin: (smallSettingsPage ? 10 : 30)*appWindow.zoom
 
-            flickableDirection: Flickable.HorizontalAndVerticalFlick//appWindow.width < 910 ? Flickable.VerticalFlick : Flickable.AutoFlickIfNeeded
+            flickableDirection: Flickable.HorizontalAndVerticalFlick
             ScrollBar.vertical: ScrollBar {}
-            ScrollBar.horizontal: ScrollBar { /*visible: appWindow.width < 910*/}
+            ScrollBar.horizontal: ScrollBar {}
 
             contentWidth: all.width
-            contentHeight: all.height + 48
+            contentHeight: all.height + 48*appWindow.zoom
 
             clip: true
 
             ColumnLayout
             {
                 id: all
-                spacing: 20
+                spacing: 20*appWindow.zoom
                 anchors.top: parent.top
-                anchors.topMargin: smallSettingsPage ? 12 : 24
+                anchors.topMargin: (smallSettingsPage ? 12 : 24)*appWindow.zoom
                 GeneralSettings {id: general; Layout.fillWidth: true}
                 BrowserIntegrationSettings {id: browserIntegration; Layout.fillWidth: true}
                 NetworkSettings {id: network; Layout.fillWidth: true}
@@ -200,19 +200,19 @@ Page {
 
             function updateCurrentTab()
             {
-                if (general.y - contentY + 5 >= 0) {
+                if (general.y - contentY + 5*appWindow.zoom >= 0) {
                     flick.currentTab = general;
-                } else if (browserIntegration.y - contentY + 5 >= 0) {
+                } else if (browserIntegration.y - contentY + 5*appWindow.zoom >= 0) {
                     flick.currentTab = browserIntegration;
-                } else if (network.y - contentY + 5 >= 0) {
+                } else if (network.y - contentY + 5*appWindow.zoom >= 0) {
                     flick.currentTab = network;
-                } else if (tum.y - contentY + 5 >= 0) {
+                } else if (tum.y - contentY + 5*appWindow.zoom >= 0) {
                     flick.currentTab = tum;
-                } else if (antivirus.y - contentY + 5 >= 0) {
+                } else if (antivirus.y - contentY + 5*appWindow.zoom >= 0) {
                     flick.currentTab = antivirus;
-                } else if (appWindow.btSupported && bt.y - contentY + 5 >= 0) {
+                } else if (appWindow.btSupported && bt.y - contentY + 5*appWindow.zoom >= 0) {
                     flick.currentTab = bt;
-                } else if (rc.visible && rc.y - contentY + 5 >= 0) {
+                } else if (rc.visible && rc.y - contentY + 5*appWindow.zoom >= 0) {
                     flick.currentTab = rc;
                 }else {
                     flick.currentTab = advanced;

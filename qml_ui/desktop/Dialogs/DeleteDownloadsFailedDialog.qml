@@ -12,7 +12,7 @@ BaseDialog {
     property bool ignoreAllMode: false
     property var taskQueue: []
 
-    width: 542
+    width: 542*appWindow.zoom
 
     contentItem: BaseDialogItem {
         titleText: qsTr("Download deleting failed") + App.loc.emptyString
@@ -23,23 +23,23 @@ BaseDialog {
 
         ColumnLayout {
             Layout.fillWidth: true
-            Layout.leftMargin: 10
-            Layout.rightMargin: 10
-            spacing: 3
+            Layout.leftMargin: 10*appWindow.zoom
+            Layout.rightMargin: 10*appWindow.zoom
+            spacing: 3*appWindow.zoom
 
             BaseLabel {
                 text: currentPath
                 Layout.fillWidth: true
-                Layout.bottomMargin: 7
+                Layout.bottomMargin: 7*appWindow.zoom
                 elide: Text.ElideMiddle
             }
 
             RowLayout {
-                Layout.topMargin: 10
-                Layout.bottomMargin: 10
+                Layout.topMargin: 10*appWindow.zoom
+                Layout.bottomMargin: 10*appWindow.zoom
                 Layout.alignment: Qt.AlignRight
 
-                spacing: 5
+                spacing: 5*appWindow.zoom
 
                 CustomButton {
                     text: qsTr("Try again") + App.loc.emptyString

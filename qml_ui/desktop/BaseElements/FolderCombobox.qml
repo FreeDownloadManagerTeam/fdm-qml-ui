@@ -2,17 +2,18 @@ import QtQuick 2.10
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
 import org.freedownloadmanager.fdm 1.0
+import "../../common"
 
 ComboBox {
     id: root
 
-    rightPadding: 5
-    leftPadding: 5
-    implicitHeight: 30
+    rightPadding: 5*appWindow.zoom
+    leftPadding: 5*appWindow.zoom
+    implicitHeight: 30*appWindow.zoom
 
     editable: true
 
-    property int popupWidth: 120
+    property int popupWidth: 120*appWindow.zoom
     property int visibleRowsCount: 5
 
     model: ListModel {}
@@ -20,10 +21,10 @@ ComboBox {
     delegate: Rectangle {
         property bool hover: false
         color: hover ? appWindow.theme.menuHighlight : "transparent"
-        height: 30
+        height: 30*appWindow.zoom
         width: parent.width
         BaseLabel {
-            leftPadding: 6
+            leftPadding: 6*appWindow.zoom
             anchors.verticalCenter: parent.verticalCenter
             text: App.toNativeSeparators(folder)
         }
@@ -44,12 +45,12 @@ ComboBox {
     background: Rectangle {
         color: appWindow.theme.background
         border.color: appWindow.theme.border
-        border.width: 1
+        border.width: 1*appWindow.zoom
     }
 
     contentItem: BaseTextField {
         text: root.editText
-        rightPadding: 30
+        rightPadding: 30*appWindow.zoom
         background: Rectangle {
             color: "transparent"
             border.color: "transparent"
@@ -60,24 +61,23 @@ ComboBox {
         z: 1
         x: root.width - width
         y: root.topPadding + (root.availableHeight - height) / 2
-        width: height - 1
+        width: height - 1*appWindow.zoom
         height: root.height
         color: "transparent"
-        border.width: 1
+        border.width: 1*appWindow.zoom
         border.color: appWindow.theme.border
         Rectangle {
-            width: 9
-            height: 8
+            width: 9*appWindow.zoom
+            height: 8*appWindow.zoom
             color: "transparent"
             anchors.verticalCenter: parent.verticalCenter
             anchors.horizontalCenter: parent.horizontalCenter
             clip: true
-            Image {
+            WaSvgImage {
                 source: appWindow.theme.elementsIcons
-                sourceSize.width: 93
-                sourceSize.height: 456
+                zoom: appWindow.zoom
                 x: 0
-                y: -448
+                y: -448*zoom
             }
         }
 
@@ -97,15 +97,15 @@ ComboBox {
     }
 
     popup: Popup {
-        y: root.height - 1
+        y: root.height - 1*appWindow.zoom
         width: Math.max(popupWidth, root.width)
-        height: Math.min(visibleRowsCount, root.model.count) * 30 + 2
-        padding: 1
+        height: (Math.min(visibleRowsCount, root.model.count) * 30 + 2)*appWindow.zoom
+        padding: 1*appWindow.zoom
 
         background: Rectangle {
             color: appWindow.theme.background
             border.color: appWindow.theme.border
-            border.width: 1
+            border.width: 1*appWindow.zoom
         }
 
         contentItem: Item {
@@ -131,7 +131,7 @@ ComboBox {
             currentVal = checkTextSize(model.get(index).folder);
             maxVal = maxVal < currentVal ? currentVal : maxVal;
         }
-        popupWidth = maxVal + 20;
+        popupWidth = maxVal + 20*appWindow.zoom;
     }
 
     function checkTextSize(text)
@@ -142,7 +142,7 @@ ComboBox {
 
     TextMetrics {
         id: textMetrics
-        font.pixelSize: 12
+        font.pixelSize: 12*appWindow.fontZoom
         font.family: Qt.platform.os === "osx" ? font.family : "Arial"
     }
 }

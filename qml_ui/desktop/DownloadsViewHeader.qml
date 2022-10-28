@@ -27,15 +27,15 @@ RowLayout
 
     DownloadsViewHeaderItem {
         id: manageItem
-        Layout.preferredWidth: appWindow.compactView ? 45 : 80
-        Layout.preferredHeight: manageItem.height        
+        Layout.preferredWidth: (appWindow.compactView ? 45 : 80)*appWindow.zoom
+        Layout.preferredHeight: manageItem.height
         onRightButtonClicked: (pt) => openMenu(pt)
 
         BaseCheckBox {
             id: cbx
             tristate: true
             xOffset: 0
-            anchors.leftMargin: 8
+            anchors.leftMargin: 8*appWindow.zoom
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
             checkBoxStyle: "black"

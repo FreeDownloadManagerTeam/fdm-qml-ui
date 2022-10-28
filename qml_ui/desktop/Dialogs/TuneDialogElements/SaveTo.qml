@@ -3,6 +3,7 @@ import QtQuick.Layouts 1.3
 import org.freedownloadmanager.fdm 1.0
 import "../../BaseElements"
 import "../../../qt5compat"
+import "../../../common"
 
 import Qt.labs.platform 1.0 as QtLabs
 
@@ -10,7 +11,7 @@ ColumnLayout {
     property alias path: combo.editText
 
     RowLayout {
-        width: parent.width
+        Layout.fillWidth: true
 
         BaseLabel {
             text: qsTr("Save to") + App.loc.emptyString
@@ -25,38 +26,22 @@ ColumnLayout {
     }
 
     RowLayout {
-        height: folderBtn.height + 1
-        width: parent.width
+        Layout.fillWidth: true
 
         FolderCombobox {
             id: combo
             Layout.fillWidth: true
-            Layout.preferredHeight: height
             onAccepted: tuneDialog.doOK()
             onEditTextChanged: {
                 downloadTools.wrongFilePathWarning = false;
             }
         }
 
-        CustomButton {
+        PickFileButton {
             visible: !App.rc.client.active
             id: folderBtn
-            implicitWidth: 38
-            implicitHeight: 30
             Layout.alignment: Qt.AlignRight
-            Layout.preferredHeight: height
-            Image {
-                source: Qt.resolvedUrl("../../../images/desktop/pick_file.svg")
-                sourceSize.width: 37
-                sourceSize.height: 30
-                layer {
-                    effect: ColorOverlay {
-                        color: folderBtn.isPressed ? folderBtn.secondaryTextColor : folderBtn.primaryTextColor
-                    }
-                    enabled: true
-                }
-            }
-
+            Layout.fillHeight: true
             onClicked: browseDlg.open()
             QtLabs.FolderDialog {
                 id: browseDlg

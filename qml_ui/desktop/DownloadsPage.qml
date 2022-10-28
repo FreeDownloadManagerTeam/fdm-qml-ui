@@ -107,7 +107,7 @@ Page {
         spacing: 0
 
         Rectangle {
-            Layout.preferredHeight: (integrationBanner.item && integrationBanner.item.visible) || shutdownBanner.visible ? 30 : 0
+            Layout.preferredHeight: (integrationBanner.item && integrationBanner.item.visible) || shutdownBanner.visible ? 30*appWindow.zoom : 0
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignTop
             color: "transparent"
@@ -154,7 +154,7 @@ Page {
                         anchors.fill: parent
                         anchors.margins: 5
                         border.color: App.downloads.infos.empty ? "transparent" : appWindow.theme.border
-                        border.width: 1
+                        border.width: 1*appWindow.zoom
                         color: "transparent"
                         anchors.topMargin: filtersBar.height
 
@@ -177,7 +177,7 @@ Page {
                                 z: 2
                                 width: parent.width
                                 anchors.top: downloadsViewHeader.bottom
-                                anchors.topMargin: -1
+                                anchors.topMargin: -1*appWindow.zoom
                                 anchors.bottom: parent.bottom
                                 color: "transparent"
                                 clip: true
@@ -205,15 +205,15 @@ Page {
                             visible: App.downloads.infos.empty
                             color: "transparent"
                             border.color: "transparent"
-                            border.width: 2
+                            border.width: 2*appWindow.zoom
                             clip: true
 
                             DottedBorder {
                                 anchors.fill: parent
-                                anchors.topMargin: 1
-                                anchors.bottomMargin: appWindow.macVersion ? 0 : 1
-                                anchors.leftMargin: 1
-                                anchors.rightMargin: 1
+                                anchors.topMargin: 1*appWindow.zoom
+                                anchors.bottomMargin: appWindow.macVersion ? 0 : 1*appWindow.zoom
+                                anchors.leftMargin: 1*appWindow.zoom
+                                anchors.rightMargin: 1*appWindow.zoom
                             }
 
                             ColumnLayout {
@@ -224,13 +224,13 @@ Page {
                                     Layout.alignment: Qt.AlignHCenter
                                     text: qsTr("Download list is empty.") + App.loc.emptyString
                                     color: appWindow.theme.emptyListText
-                                    font.pixelSize: 32
+                                    font.pixelSize: 32*appWindow.fontZoom
                                 }
                                 BaseLabel {
                                     Layout.alignment: Qt.AlignHCenter
                                     text: qsTr("Add new download URL.") + App.loc.emptyString
                                     color: appWindow.theme.emptyListText
-                                    font.pixelSize: 22
+                                    font.pixelSize: 22*appWindow.fontZoom
                                 }
                             }
 
@@ -243,7 +243,7 @@ Page {
                         //empty search results
                         Rectangle {
                             anchors.fill: parent
-                            anchors.margins: 5
+                            anchors.margins: 5*appWindow.zoom
                             color: "transparent"
                             visible: !App.downloads.infos.empty
                                      && (downloadsViewTools.emptySearchResults
@@ -255,20 +255,26 @@ Page {
                                 anchors.verticalCenter: parent.verticalCenter
                                 anchors.horizontalCenter: parent.horizontalCenter
                                 width: parent.width
-                                spacing: 15
+                                spacing: 15*appWindow.zoom
 
                                 BaseLabel {
                                     Layout.alignment: Qt.AlignHCenter
-                                    text: (downloadsViewTools.emptySearchResults ? qsTr("No results found for") + " \"" + downloadsViewTools.downloadsTitleFilter + "\"" :
+                                    text: (downloadsViewTools.emptySearchResults ? qsTr("No results found for") + " \"" + limitedString(downloadsViewTools.downloadsTitleFilter) + "\"" :
                                            downloadsViewTools.emptyTagResults ? qsTr("No results tagged \"%1\" found").arg(downloadsViewTools.downloadsSelectedTag) :
                                            downloadsViewTools.emptyActiveDownloadsList ? qsTr("No active downloads") :
                                            downloadsViewTools.emptyCompleteDownloadsList ? qsTr("No completed downloads") : "") + App.loc.emptyString
-                                    font.pixelSize: 24
+                                    font.pixelSize: 24*appWindow.fontZoom
                                     font.weight: Font.Light
                                     Layout.fillWidth: true
                                     wrapMode: Text.Wrap
                                     horizontalAlignment: Text.AlignHCenter
                                     textFormat: Text.PlainText
+
+                                    function limitedString(s) {
+                                        if (s.length > 100)
+                                            s = s.substring(0, 99) + "...";
+                                        return s;
+                                    }
                                 }
 
                                 BaseLabel {
@@ -300,8 +306,8 @@ Page {
             Rectangle {
                 width: parent.width
                 color: "transparent"
-                height: 100
-                y: bottomPanelRct.y - 50
+                height: 100*appWindow.zoom
+                y: bottomPanelRct.y - 50*appWindow.zoom
                 visible: dragDropRect.movingStarted
                 MouseArea {
                     anchors.fill: parent

@@ -3,8 +3,8 @@ import QtQuick 2.0
 Item {
     id: component
 
-    property int borderLine: 24
-    property int borderSpace: 10
+    property int borderLine: 24*appWindow.zoom
+    property int borderSpace: 10*appWindow.zoom
     property int borderItem: borderLine + borderSpace
     property string color: appWindow.theme.dottedBorder
 
@@ -14,16 +14,16 @@ Item {
         path: Path {
 
             startX: component.borderLine/2
-            startY: 1
+            startY: 1*appWindow.zoom
 
             PathLine {
-                x: component.width + component.borderLine - 2
-                y: 1
+                x: component.width + component.borderLine - 2*appWindow.zoom
+                y: 1*appWindow.zoom
             }
         }
         delegate: Rectangle {
             width: component.borderLine
-            height: 1
+            height: 1*appWindow.zoom
             color: component.color
         }
     }
@@ -33,16 +33,16 @@ Item {
         model: component.height > 0 ? component.height/component.borderItem : 0
         path: Path {
 
-            startX: 1
+            startX: 1*appWindow.zoom
             startY: component.borderLine/2
 
             PathLine {
-                x: 1
+                x: 1*appWindow.zoom
                 y: component.height + component.borderLine + 2
             }
         }
         delegate: Rectangle {
-            width: 1
+            width: 1*appWindow.zoom
             height: component.borderLine
             color: component.color
         }
@@ -63,7 +63,7 @@ Item {
         }
         delegate: Rectangle {
             width: component.borderLine
-            height: 1
+            height: 1*appWindow.zoom
             color: component.color
         }
     }
@@ -78,11 +78,11 @@ Item {
 
             PathLine {
                 x: component.width
-                y: component.height + component.borderLine + 2
+                y: component.height + component.borderLine + 2*appWindow.zoom
             }
         }
         delegate: Rectangle {
-            width: 1
+            width: 1*appWindow.zoom
             height: component.borderLine
             color: component.color
         }
