@@ -24,7 +24,7 @@ Dialog
                          "da_DK": -100, "nl_NL": -80, "fr_FR": -30, "de_DE": -20, "el_GR": -120, "id_ID": -180,
                          "it_IT": -50, "ja_JP": -150, "pl_PL": -70, "pt_BR": -200, "ro_RO": -60, "ru_RU": -110,
                          "sl_SI": -140, "es_ES": -10, "sv_SE": -90, "tr_TR": -160, "vi_VN": -190, "fa": -210,
-                         "hu": -230, "fa_IR": -240, "bg_BG": -280, "ko_KR": -290 }
+                         "hu_HU": -230, "fa_IR": -240, "bg_BG": -280, "ko_KR": -290, "hi_IN": -300 }
 
     contentItem: Item {
         anchors.fill: parent
@@ -103,11 +103,11 @@ Dialog
                         anchors.left: parent.left
                         visible: listItem.isCurrentLang
 
-                        Image {
+                        WaSvgImage {
+                            zoom: langList.bckgRatio
                             x: 0
-                            y: Math.ceil(flags[modelData]* langList.bckgRatio)
+                            y: flags[modelData] * zoom
                             source: Qt.resolvedUrl("../../images/flags.svg")
-                            sourceSize.width: Math.ceil(18 * langList.bckgRatio)
                             opacity: 0.1
                             layer{
                                 effect: FastBlur {
@@ -128,11 +128,11 @@ Dialog
                         anchors.leftMargin: 35
                         visible: listItem.isCurrentLang
 
-                        Image {
+                        WaSvgImage {
+                            zoom: langList.bckgRatio1
                             x: 0
-                            y: flags[modelData] * langList.bckgRatio1
+                            y: flags[modelData] * zoom
                             source: Qt.resolvedUrl("../../images/flags.svg")
-                            sourceSize.width: (18 * langList.bckgRatio1)
                             opacity: 0.3
                             layer{
                                 effect: FastBlur {
@@ -154,12 +154,10 @@ Dialog
                         anchors.left: parent.left
                         anchors.leftMargin: 70
 
-                        Image {
+                        WaSvgImage {
                             x: 0
                             y: flags[modelData]
                             source: Qt.resolvedUrl("../../images/flags.svg")
-                            sourceSize.width: 18
-                            sourceSize.height: 300
                         }
                     }
 

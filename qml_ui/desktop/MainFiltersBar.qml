@@ -64,6 +64,13 @@ Rectangle {
                     text: qsTr("Completed") + App.loc.emptyString + (cnt > 0 ? " (%1)".arg(cnt) : "")
                     value: AbstractDownloadsUi.FilterFinished
                 }
+
+                MainFilterButton {
+                    visible: cnt > 0
+                    cnt: App.downloads.tracker.nonFinishedDownloadsCount
+                    text: qsTr("Uncompleted") + App.loc.emptyString + (cnt > 0 ? " (%1)".arg(cnt) : "")
+                    value: AbstractDownloadsUi.FilterNonFinished
+                }
             }
 
             Repeater {

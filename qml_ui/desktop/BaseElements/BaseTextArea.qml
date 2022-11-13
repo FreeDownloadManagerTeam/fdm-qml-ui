@@ -10,6 +10,7 @@ Rectangle {
     property alias textFormat: textArea.textFormat
     property alias readOnly: textArea.readOnly
     property alias rightPadding: textArea.rightPadding
+    property alias wrapMode: textArea.wrapMode
     signal selectAll
 
     border.width: 1*appWindow.zoom

@@ -73,8 +73,8 @@ ApplicationWindow {
 
     width: 910
     height: 610
-    minimumWidth: 550*zoom
-    minimumHeight: 340*zoom
+    minimumWidth: 200*zoom+350*fontZoom
+    minimumHeight: 100*zoom+240*fontZoom
     title: App.isSelfTestMode ? App.displayName + " [Self Test Mode]" :
            (App.rc.client.active && App.asyncLoadMgr.remoteName) ? App.displayName + " [" + qsTr("Remote connection to %1").arg(App.asyncLoadMgr.remoteName) + "]" + App.loc.emptyString :
            App.displayName

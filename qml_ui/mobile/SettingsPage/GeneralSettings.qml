@@ -5,6 +5,7 @@ import org.freedownloadmanager.fdm.dmcoresettings 1.0
 import org.freedownloadmanager.fdm.appsettings 1.0
 import org.freedownloadmanager.fdm.appfeatures 1.0
 import "../BaseElements"
+import "../../common"
 
 Column {
     spacing: 7
@@ -13,7 +14,7 @@ Column {
                          "da_DK": -100, "nl_NL": -80, "fr_FR": -30, "de_DE": -20, "el_GR": -120, "id_ID": -180,
                          "it_IT": -50, "ja_JP": -150, "pl_PL": -70, "pt_BR": -200, "ro_RO": -60, "ru_RU": -110,
                          "sl_SI": -140, "es_ES": -10, "sv_SE": -90, "tr_TR": -160, "vi_VN": -190, "fa": -210,
-                         "hu": -230, "fa_IR": -240, "bg_BG": -280, "ko_KR": -290 }
+                         "hu_HU": -230, "fa_IR": -240, "bg_BG": -280, "ko_KR": -290, "hi_IN": -300 }
 
     Rectangle {
         anchors.left: parent.left
@@ -46,12 +47,10 @@ Column {
                 height: 10
                 anchors.verticalCenter: parent.verticalCenter
 
-                Image {
+                WaSvgImage {
                     x: 0
                     y: flags[App.loc.currentTranslation]
                     source: Qt.resolvedUrl("../../images/flags.svg")
-                    sourceSize.width: 18
-                    sourceSize.height: 300
                 }
             }
             BaseLabel {

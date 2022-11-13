@@ -4,10 +4,12 @@ import org.freedownloadmanager.fdm 1.0
 import "../../BaseElements"
 
 Rectangle {
-    Layout.fillWidth: true
     color: appWindow.theme.background
     border.width: 1*appWindow.zoom
     border.color: appWindow.theme.border
+
+    implicitWidth: scheduler.implicitWidth
+    implicitHeight: scheduler.implicitHeight
 
     Scheduler {
         id: scheduler

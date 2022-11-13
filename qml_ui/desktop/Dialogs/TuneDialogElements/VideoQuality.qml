@@ -15,8 +15,6 @@ ColumnLayout {
 
     DownloadQualityCombobox {
         id: combo
-        Layout.preferredWidth: 200*appWindow.zoom
-        Layout.preferredHeight: 30*appWindow.zoom
     }
 
     function initialization() {

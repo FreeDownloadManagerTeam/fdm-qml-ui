@@ -10,7 +10,7 @@ import "TuneDialogElements"
 BaseStandaloneCapableDialog {
     id: tuneDialog
 
-    property int preferredWidth: ((downloadTools.batchDownload || filesTree.visible) ? 685 : 542)*appWindow.zoom
+    property int preferredWidth: Math.max(dlgContent.implicitWidth+20*appWindow.zoom, ((downloadTools.batchDownload || filesTree.visible) ? 685 : 542)*appWindow.zoom)
     property int dialogMargins: 20*appWindow.zoom
     property int dialogTitleHeight: 36*appWindow.zoom
 
@@ -47,6 +47,7 @@ BaseStandaloneCapableDialog {
             Layout.fillHeight: true
             flickableDirection: Flickable.VerticalFlick
             implicitHeight: mainLayout.implicitHeight
+            implicitWidth: mainLayout.implicitWidth
             contentHeight: implicitHeight
             clip: true
             boundsBehavior: Flickable.StopAtBounds
@@ -55,10 +56,8 @@ BaseStandaloneCapableDialog {
             ColumnLayout {
                 id: mainLayout
 
-                width: dlgContent.width - 20*appWindow.zoom
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.top: parent.top
-                anchors.topMargin: 10*appWindow.zoom
+                anchors.fill: parent
+                anchors.margins: 10*appWindow.zoom
                 spacing: 2*appWindow.zoom
 
                 Title {}
@@ -103,23 +102,27 @@ BaseStandaloneCapableDialog {
                     id: addDate
                 }
 
-                Rectangle {//40
+                RowLayout {
                     Layout.fillWidth: true
                     Layout.preferredHeight: 40*appWindow.zoom
-                    color: "transparent"
-
-                    DiskSpace {
-                        saveToPath: App.fromNativeSeparators(saveTo.path)
-                    }
+                    spacing: 30*appWindow.zoom
 
                     SchedulerCheckbox {
                         id: schedulerCheckbox
+                        Layout.alignment: Qt.AlignVCenter
+                        Layout.fillWidth: true
+                    }
+
+                    DiskSpace {
+                        saveToPath: App.fromNativeSeparators(saveTo.path)
+                        Layout.alignment: Qt.AlignVCenter
                     }
                 }
 
                 SchedulerBlock {
                     id: schedulerBlock
                     visible: schedulerCheckbox.checked
+                    Layout.fillWidth: true
                     Layout.preferredHeight: visible ? 84*appWindow.zoom : 0
                 }
 

@@ -9,6 +9,9 @@ ComboBox {
     rightPadding: 5*appWindow.zoom
     leftPadding: 5*appWindow.zoom
 
+    implicitWidth: 120*appWindow.zoom+80*appWindow.fontZoom
+    implicitHeight: 30*appWindow.zoom
+
     property int visibleRowsCount: 5
 
     model: ListModel {}

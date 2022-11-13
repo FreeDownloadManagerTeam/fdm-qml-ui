@@ -163,6 +163,60 @@ Column
                 onTextChanged: applyAdvancedBtSettings()
             }
         }
+
+        SettingsCheckBox
+        {
+            id: enableTrackerList
+            text: App.my_BT_qsTranslate("Settings", "Enable list of predefined trackers") + App.loc.emptyString
+            checked: parseInt(App.settings.dmcore.value(DmCoreSettings.BtEnableTrackerList))
+            onClicked: {
+                App.settings.dmcore.setValue(
+                            DmCoreSettings.BtEnableTrackerList,
+                            App.settings.fromBool(checked));
+                if (checked)
+                    trackerList.forceActiveFocus();
+            }
+        }
+
+        Column
+        {
+            visible: enableTrackerList.checked
+
+            x: enableTrackerList.x + 20*appWindow.zoom
+            width: root.width - x
+
+            spacing: 10*appWindow.zoom
+
+            BaseHyperLabel
+            {
+                font.pixelSize: 12*appWindow.fontZoom
+                text: qsTr("The use of additional trackers can improve download speed in some cases. Lists of such trackers can be retrieved from different sources, e.g. from <a href='https://github.com/ngosang/trackerslist'>here</a>.") + App.loc.emptyString
+                width: parent.width
+                wrapMode: Text.WordWrap
+            }
+
+            BaseStringListArea
+            {
+                id: trackerList
+                width: parent.width
+                height: 100*appWindow.fontZoom
+                isValidItem: function(str) {
+                    return str.startsWith("http://") ||
+                            str.startsWith("https://") ||
+                            str.startsWith("udp://") ||
+                            str.startsWith("ws://") ||
+                            str.startsWith("wss://");
+                }
+                Component.onCompleted: {
+                    setString(App.settings.dmcore.value(DmCoreSettings.BtTrackerList));
+                }
+                Component.onDestruction: {
+                    App.settings.dmcore.setValue(
+                                DmCoreSettings.BtTrackerList,
+                                getString());
+                }
+            }
+        }
     }
 
     function applyAdvancedBtSettings()

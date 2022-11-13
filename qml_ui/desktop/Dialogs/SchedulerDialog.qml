@@ -8,7 +8,7 @@ import "../../common/Tools"
 BaseDialog {
     id: root
 
-    width: 542*appWindow.zoom
+    width: 392*appWindow.zoom+150*appWindow.fontZoom
 
     contentItem: BaseDialogItem {
         titleText: qsTr("Scheduler") + App.loc.emptyString

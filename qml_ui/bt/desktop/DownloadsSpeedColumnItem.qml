@@ -63,14 +63,9 @@ Item
                 cursorShape: Qt.PointingHandCursor
                 onClicked: {
                     if (parent.isPause)
-                    {
                         App.downloads.mgr.stopDownload(downloadId, true);
-                    }
                     else
-                    {
-                        info.disablePostFinishedTasks = false;
-                        info.autoStartAllowed = true;
-                    }
+                        App.downloads.mgr.startDownload(downloadId, true);
                 }
             }
         }

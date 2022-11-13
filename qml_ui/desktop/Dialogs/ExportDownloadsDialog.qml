@@ -45,6 +45,7 @@ BaseDialog {
                     Layout.fillWidth: true
                     Layout.preferredHeight: height
                     onAccepted: doOK();
+                    onTextChanged: browseDlg.currentFile = App.tools.urlFromLocalFile(text).url
                 }
 
                 PickFileButton {
@@ -138,9 +139,13 @@ BaseDialog {
     }
 
     function fixPath() {
-        path.text = path.text.replace(/\/([^\/\.]+)(\.\w*)?$/, '/$1.' + typeCombo.extension);
-        path.text = path.text.replace(/\/$/, '/' + App.shortDisplayName.toLowerCase() + '_downloads' + '.' + typeCombo.extension);
-        path.text = App.toNativeSeparators(path.text);
+        if (!path.text)
+            return;
+        let p = App.fromNativeSeparators(path.text);
+        p = App.tools.filePathPart(p) + "/" +
+                App.tools.fileTitlePart(p) + "." +
+                typeCombo.extension;
+        path.text = App.toNativeSeparators(p);
     }
 
     function doOK() {

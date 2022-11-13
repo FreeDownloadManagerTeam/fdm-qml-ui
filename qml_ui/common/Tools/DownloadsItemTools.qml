@@ -198,6 +198,8 @@ Item {
         } else if (finished) {
             showProgressIndicator = false;
             indicatorInProgress = false;
+            if (error)
+                new_in_error_status = true;
         }
         else if (error) {
             showProgressIndicator = false;

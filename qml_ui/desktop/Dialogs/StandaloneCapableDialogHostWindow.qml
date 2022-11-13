@@ -33,11 +33,10 @@ ApplicationWindow
         interval: 5
         repeat: true
         onTriggered: {
-            if (!root.visible || root.active) {
+            if (root.visible)
+                root.setForegroundWindow(true);
+            if (!root.visible || root.active)
                 stop();
-                return;
-            }
-            root.setForegroundWindow(true);
         }
     }
 

@@ -9,12 +9,15 @@ import org.freedownloadmanager.fdm 1.0
 Item {
     id: root
 
+    implicitWidth: content.implicitWidth
     implicitHeight: 64*appWindow.zoom
 
     property string fromTimeComboValue
     property string toTimeComboValue
 
     ColumnLayout {
+        id: content
+
         anchors.fill: parent
         spacing: 19*appWindow.zoom
 
@@ -51,6 +54,8 @@ Item {
                     onClicked: setDayChecked(i, checked, index)
                     ButtonGroup.group: daysGroup
                 }
+
+                implicitWidth: contentItem.childrenRect.width+30*appWindow.zoom
             }
         }
 

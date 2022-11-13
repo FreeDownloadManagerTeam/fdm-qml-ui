@@ -117,7 +117,13 @@ Item
             return;
         }
 
-        App.log("Checking window position.");
+        let isXinvalid = (window.x + window.width < window.screen.virtualX + 50) ||
+            (window.x > window.screen.virtualX + window.screen.width - 50);
+
+        let isYinvalid = (window.y < window.screen.virtualY) ||
+            (window.y > window.screen.virtualY + window.screen.height - 50);
+
+        /*App.log("Checking window position.");
         App.log("Window position: (" + window.x + "," + window.y + ")");
         App.log("Screen.virtualX: " + window.screen.virtualX);
         App.log("Screen.virtualY: " + window.screen.virtualY);
@@ -125,14 +131,7 @@ Item
         App.log("Screen.height: " + window.screen.height);
         App.log("desktopAvailableWidth: " + window.screen.desktopAvailableWidth);
         App.log("desktopAvailableHeight: " + window.screen.desktopAvailableHeight);
-
-        let isXinvalid = (window.x + window.width < window.screen.virtualX + 50) ||
-            (window.x > window.screen.virtualX + window.screen.width - 50);
-
-        let isYinvalid = (window.y < window.screen.virtualY) ||
-            (window.y > window.screen.virtualY + window.screen.height - 50);
-
-        App.log("X invalid: " + isXinvalid + ", Y invalid: " + isYinvalid);
+        App.log("X invalid: " + isXinvalid + ", Y invalid: " + isYinvalid);*/
 
         if (isXinvalid)
             window.x = window.screen.virtualX + Math.max(50, (window.screen.width - window.width) / 2);

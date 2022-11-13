@@ -83,7 +83,8 @@ Dialog {
 
     function redownloadClicked() {
         if (rememberField.checked) {
-            App.settings.dmcore.setValue(DmCoreSettings.AutoRestartFinishedDownloadIfRemoteResourceChanged, 1);
+            App.settings.dmcore.setValue(DmCoreSettings.AutoRestartFinishedDownloadIfRemoteResourceChanged,
+                                         App.settings.fromBool(true));
         }
 
         for (let i = 0; i < downloadsListModel.count; ++i) {

@@ -65,8 +65,15 @@ Item
 
             if (hostWindow)
             {
+                hostWindow.maximumWidth = Qt.binding(() => dialog ? dialog.width : 0);
+                hostWindow.maximumHeight = Qt.binding(() => dialog ? dialog.height : 0);
+
+                hostWindow.minimumWidth = Qt.binding(() => dialog ? dialog.width : 0);
+                hostWindow.minimumHeight = Qt.binding(() => dialog ? dialog.height : 0);
+
                 hostWindow.width = Qt.binding(() => dialog ? dialog.width : 0);
                 hostWindow.height = Qt.binding(() => dialog ? dialog.height : 0);
+
                 hostWindow.visible = Qt.binding(() => dialog ? dialog.opened : false);
                 hostWindow.closeClicked.connect(() => dialog.close());
             }

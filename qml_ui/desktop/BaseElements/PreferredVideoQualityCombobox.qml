@@ -15,6 +15,21 @@ ComboBox {
 
     textRole: "label"
 
+    BaseLabel {id: fml; visible: false}
+    MyFontMetrics {
+        id: fm
+        font: fml.font
+    }
+
+    implicitWidth: {
+        let maxw = 0;
+        for (let i = 0; i < model.length; ++i)
+            maxw = Math.max(maxw, fm.advanceWidth(model[i].label));
+        return maxw + 40*appWindow.zoom;
+    }
+
+    implicitHeight: 30*appWindow.zoom
+
     onVisibleChanged: {
         if (visible) {
             updateState();
