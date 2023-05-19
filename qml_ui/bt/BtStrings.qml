@@ -1,6 +1,7 @@
 import QtQuick 2.12
 import org.freedownloadmanager.fdm 1.0
 import org.freedownloadmanager.fdm.appconstants 1.0
+import "../common/Tools"
 
 Item {
     readonly property string protocolName: "BitTorrent"
@@ -15,7 +16,8 @@ Item {
 
     function speedHoverText(bytesUploaded, ratioText)
     {
-        return uploaded + ": " + App.bytesAsText(bytesUploaded) + "\n" +
+        return uploaded + ": " + App.bytesAsText(bytesUploaded)
+                + '\n' +
                 ratio + ": " + ratioText;
     }
 

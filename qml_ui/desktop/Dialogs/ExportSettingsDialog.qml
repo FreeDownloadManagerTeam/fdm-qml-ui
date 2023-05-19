@@ -1,5 +1,5 @@
 import QtQuick 2.0
-import Qt.labs.platform 1.0 as QtLabs
+import Qt.labs.platform 1.1 as QtLabs
 import org.freedownloadmanager.fdm 1.0
 
 QtLabs.FileDialog {

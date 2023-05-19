@@ -11,7 +11,7 @@ ColumnLayout {
 
     Layout.topMargin: 8*appWindow.zoom
     Layout.fillWidth: true
-    Layout.preferredHeight: Math.min((visible ? tree.rowsCount : 0) * 22*appWindow.zoom + 55*appWindow.zoom, Math.min(450*appWindow.zoom, Math.max(200*appWindow.zoom, appWindow.height - 500*appWindow.zoom)))
+    Layout.preferredHeight: Math.min((visible ? tree.rowsCount : 0) * 22*appWindow.fontZoom + 55*appWindow.zoom, Math.min(450*appWindow.zoom, Math.max(200*appWindow.fontZoom, appWindow.height - 500*appWindow.zoom)))
     spacing: 5*appWindow.zoom
 
     Rectangle {

@@ -111,6 +111,7 @@ BaseStandaloneCapableDialog {
                         id: schedulerCheckbox
                         Layout.alignment: Qt.AlignVCenter
                         Layout.fillWidth: true
+                        xOffset: 0
                     }
 
                     DiskSpace {

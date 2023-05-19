@@ -23,7 +23,8 @@ RowLayout
 
     ColumnLayout
     {
-        Layout.leftMargin: 15*appWindow.zoom
+        Layout.leftMargin: qtbug.leftMargin(15*appWindow.zoom, 0)
+        Layout.rightMargin: qtbug.rightMargin(15*appWindow.zoom, 0)
 
         BaseLabel
         {

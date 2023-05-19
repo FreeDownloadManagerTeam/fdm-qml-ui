@@ -41,10 +41,12 @@ Item
 
         Flickable
         {
+            id: flickable
+
             property bool hasVerticalScrollbar: contentHeight > height
 
             ScrollBar.vertical: ScrollBar {
-                policy: hasVerticalScrollbar ? ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
+                policy: flickable.hasVerticalScrollbar ? ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
             }
             ScrollBar.horizontal: null
 
@@ -64,6 +66,8 @@ Item
                 color: appWindow.theme.foreground
 
                 focus: visible
+
+                horizontalAlignment: Text.AlignLeft
 
                 onTextChanged: {
                     if (!d.changingText) {

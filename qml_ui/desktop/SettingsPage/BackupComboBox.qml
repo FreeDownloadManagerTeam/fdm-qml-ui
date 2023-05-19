@@ -7,7 +7,7 @@ import "../../common"
 ComboBox {
     id: root
     height: 25*appWindow.zoom
-    width: 100*appWindow.zoom
+    width: 70*appWindow.fontZoom + 30*appWindow.zoom
     rightPadding: 5*appWindow.zoom
     leftPadding: 5*appWindow.zoom
 
@@ -22,7 +22,9 @@ ComboBox {
         width: root.width
 
         BaseLabel {
-            leftPadding: 6*appWindow.zoom
+            anchors.left: parent.left
+            leftPadding: qtbug.leftPadding(6*appWindow.zoom, 0)
+            rightPadding: qtbug.rightPadding(6*appWindow.zoom, 0)
             anchors.verticalCenter: parent.verticalCenter
             font.pixelSize: 12*appWindow.fontZoom
             color: appWindow.theme.settingsItem
@@ -52,7 +54,9 @@ ComboBox {
     contentItem: Rectangle {
         color: "transparent"
         BaseLabel {
-            leftPadding: 2*appWindow.zoom
+            anchors.left: parent.left
+            leftPadding: qtbug.leftPadding(6*appWindow.zoom, 0)
+            rightPadding: qtbug.rightPadding(6*appWindow.zoom, 0)
             anchors.verticalCenter: parent.verticalCenter
             font.pixelSize: 12*appWindow.fontZoom
             color: appWindow.theme.settingsItem
@@ -61,7 +65,7 @@ ComboBox {
     }
 
     indicator: Rectangle {
-        x: root.width - width
+        x: LayoutMirroring.enabled ? 0 : root.width - width
         y: root.topPadding + (root.availableHeight - height) / 2
         width: height - 1*appWindow.zoom
         height: root.height
@@ -94,16 +98,14 @@ ComboBox {
             border.width: 1*appWindow.zoom
         }
 
-        contentItem: Item {
-            ListView {
-                clip: true
-                anchors.fill: parent
-                model: root.model
-                currentIndex: root.highlightedIndex
-                delegate: root.delegate
-                flickableDirection: Flickable.VerticalFlick
-                boundsBehavior: Flickable.StopAtBounds
-            }
+        contentItem: ListView {
+            clip: true
+            anchors.fill: parent
+            model: root.model
+            currentIndex: root.highlightedIndex
+            delegate: root.delegate
+            flickableDirection: Flickable.VerticalFlick
+            boundsBehavior: Flickable.StopAtBounds
         }
     }
 

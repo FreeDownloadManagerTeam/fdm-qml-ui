@@ -25,6 +25,7 @@ CenteredDialog
             text: qsTr("You're about to open a built-in web browser.\n\nIt helps you to add downloads into %1.\n\nSome of them (e.g. Google Drive downloads) can be added using this browser only, because they require additional information that your Android system's browser does not provide to %1 (or there is no universal way for all browsers to do this).").arg(App.shortDisplayName) + App.loc.emptyString
             Layout.fillWidth: parent
             wrapMode: Label.Wrap
+            horizontalAlignment: Text.AlignLeft
         }
 
         DialogButton {

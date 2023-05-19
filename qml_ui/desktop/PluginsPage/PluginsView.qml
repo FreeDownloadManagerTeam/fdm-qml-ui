@@ -6,7 +6,9 @@ ListView
 {
     model: App.plugins.model
 
-    delegate: PluginsViewItem {}
+    delegate: PluginsViewItem {
+        width: parent.width
+    }
 
     spacing: 20*appWindow.zoom
 }

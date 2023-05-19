@@ -20,8 +20,8 @@ Slider {
 
     property string currentText
 
-    leftPadding: 20
-    rightPadding: 40
+    leftPadding: qtbug.leftPadding(20, 40)
+    rightPadding: qtbug.rightPadding(20, 40)
     width: parent.width
 
     Material.accent: enabled ? appWindow.theme.switchTumblerOn : appWindow.theme.switchTumblerOff

@@ -112,6 +112,10 @@ Item {
         for (var i = 0; i < tags.length; i++){
 
             var tag = tags[i];
+
+            if (uiSettingsTools.settings.hideTags[tag.id])
+                continue;
+
             if (visible){
 
                 var name = tag.name;
@@ -378,6 +382,11 @@ Item {
         onWasReset: {
             updateState();
         }
+    }
+
+    Connections {
+        target: uiSettingsTools.settings
+        onHideTagsChanged: splitTagsByVisibility()
     }
 
     TextMetrics {

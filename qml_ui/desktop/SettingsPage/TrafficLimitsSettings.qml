@@ -15,8 +15,10 @@ Column {
     }
 
     GridLayout {
-        columns: 4
         id: grid
+
+        columns: 4
+        anchors.left: parent.left
 
         property int labelMaxWidth: 165*appWindow.zoom
         property int rowMinimumHeight: 38*appWindow.zoom

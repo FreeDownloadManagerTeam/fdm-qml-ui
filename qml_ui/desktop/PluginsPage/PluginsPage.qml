@@ -1,7 +1,7 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.3
-import Qt.labs.platform 1.0
+import Qt.labs.platform 1.1
 import org.freedownloadmanager.fdm 1.0
 import org.freedownloadmanager.fdm.appsettings 1.0
 import "../"
@@ -15,6 +15,9 @@ Page {
     readonly property bool smallPage: width < 910 || height < 430
     readonly property bool hasPlugins: !App.plugins.model.empty
     readonly property bool allowInstallPlugin: !App.plugins.depsInstaller.running
+    property bool checkUpdateAllLaunchedByUser: false
+    property string updateAllResult
+    property bool updateAllFailed: false
 
     property string waitingComponentsInstallForDistribPath
 
@@ -88,7 +91,12 @@ Page {
                     BaseContextMenuItem {
                         enabled: App.plugins.model.atLeast1PluginSupportsAutoUpdate
                         text: qsTr("Check for Updates") + App.loc.emptyString
-                        onTriggered: App.plugins.updateMgr.updateAll()
+                        onTriggered: {
+                            root.checkUpdateAllLaunchedByUser = true;
+                            root.updateAllResult = "";
+                            root.updateAllFailed = false;
+                            App.plugins.updateMgr.updateAll();
+                        }
                     }
 
                     BaseContextMenuSeparator {}
@@ -119,7 +127,7 @@ Page {
 
             RowLayout
             {
-                visible: App.plugins.updateMgr.updatingAll
+                visible: root.checkUpdateAllLaunchedByUser && App.plugins.updateMgr.updatingAll
 
                 BaseLabel
                 {
@@ -132,6 +140,13 @@ Page {
                     Layout.preferredHeight: (smallPage ? 6 : 10)*appWindow.zoom
                     Layout.preferredWidth: 150*appWindow.zoom
                 }
+            }
+
+            BaseLabel
+            {
+                visible: text
+                text: root.updateAllResult
+                color: root.updateAllFailed ? appWindow.theme.errorMessage : appWindow.theme.foreground
             }
         }
 
@@ -157,6 +172,15 @@ Page {
                 text: "<a href='#'>%1</a>.".arg(qsTr("Install add-on from file")) + App.loc.emptyString
                 onLinkActivated: installPluginDlg.open()
             }
+        }
+
+        BaseHandCursorLabel
+        {
+            visible: !hasPlugins
+            text: "<a href='https://www.freedownloadmanager.org/board/viewtopic.php?f=1&t=18630'>%1</a>."
+                  .arg(qsTr("Learn more about %1 add-ons").arg(App.shortDisplayName)) + App.loc.emptyString
+            onLinkActivated: (url) => Qt.openUrlExternally(url)
+            topPadding: 20*appWindow.zoom
         }
 
         Rectangle
@@ -282,6 +306,28 @@ Page {
                 waitingComponentsInstallForDistribPath = "";
                 if (!error)
                     App.plugins.mgr.installPlugin(path);                    
+            }
+        }
+    }
+
+    function pluginUpdateResultText(error, isNoUpdatesFound)
+    {
+        if (error)
+            return error;
+        else if (isNoUpdatesFound)
+            return qsTr("No updates found");
+        else
+            return "";
+    }
+
+    Connections {
+        target: App.plugins.updateMgr
+        onUpdateAllResult: (error, isNoUpdatesFound) => {
+            if (root.checkUpdateAllLaunchedByUser)
+            {
+                root.checkUpdateAllLaunchedByUser = false;
+                root.updateAllResult = pluginUpdateResultText(error, isNoUpdatesFound);
+                root.updateAllFailed = error;
             }
         }
     }

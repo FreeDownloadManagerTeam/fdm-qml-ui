@@ -28,7 +28,8 @@ Page {
 
                 DialogButton {
                     text: qsTr("OK") + App.loc.emptyString
-                    Layout.rightMargin: 10
+                    Layout.rightMargin: qtbug.rightMargin(0, 10)
+                    Layout.leftMargin: qtbug.leftMargin(0, 10)
                     textColor: appWindow.theme.toolbarTextColor
                     enabled: newUrl.displayText.length > 0
                     onClicked: doOK()
@@ -45,7 +46,7 @@ Page {
                 anchors.leftMargin: 20
 
                 BaseLabel {
-                    text: downloadModel.title + " " + JsTools.sizeUtils.bytesAsText(downloadModel.size)
+                    text: downloadModel.title + " " + App.bytesAsText(downloadModel.size) + App.loc.emptyString
                     width: parent.width
                     anchors.verticalCenter: parent.verticalCenter
                     elide: Text.ElideMiddle
@@ -70,7 +71,7 @@ Page {
             height: newUrl.height
             color: "transparent"
 
-            TextField {
+            BaseTextField {
                 id: newUrl
                 anchors {
                     left: parent.left

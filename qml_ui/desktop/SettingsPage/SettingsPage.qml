@@ -1,6 +1,6 @@
 import QtQuick 2.12
-import QtQuick.Controls 2.3
-import QtQuick.Layouts 1.3
+import QtQuick.Controls 2.12
+import QtQuick.Layouts 1.12
 import "../../qt5compat"
 import org.freedownloadmanager.fdm 1.0
 import ".."
@@ -12,7 +12,6 @@ Page {
     property string pageName: "SettingsPage"
     property string lastInvalidSettingsMessage: ""
     property var keyboardFocusItem: keyboardFocusItem
-    property int navigationColumnWidth: (smallSettingsPage ? 180 : 190)*appWindow.zoom
     property bool forceAntivirusBlock: false
 
     property bool smallSettingsPage: width < 910*appWindow.zoom || height < 430*appWindow.zoom
@@ -62,71 +61,75 @@ Page {
 
     RowLayout {
         anchors.fill: parent
-        spacing: 0
+        anchors.topMargin: (smallSettingsPage ? 12 : 24)*appWindow.zoom
+
+        spacing: 30*appWindow.zoom
 
         ColumnLayout
         {
             Layout.alignment: Qt.AlignTop
-            Layout.preferredWidth: navigationColumnWidth
-            Layout.topMargin: (smallSettingsPage ? 12 : 24)*appWindow.zoom
+            Layout.maximumWidth: Math.max(preferencesLabel.implicitWidth + (smallSettingsPage ? 18 : 22)*appWindow.zoom,
+                                          (smallSettingsPage ? 180 : 190)*appWindow.zoom)
 
             BaseLabel {
+                id: preferencesLabel
                 text: qsTr("Preferences") + App.loc.emptyString
                 font.pixelSize: (smallSettingsPage ? 18 : 24)*appWindow.fontZoom
-                Layout.leftMargin: (smallSettingsPage ? 18 : 22)*appWindow.zoom
+                Layout.leftMargin: qtbug.leftMargin((smallSettingsPage ? 18 : 22)*appWindow.zoom, 0)
+                Layout.rightMargin: qtbug.rightMargin((smallSettingsPage ? 18 : 22)*appWindow.zoom, 0)
                 Layout.bottomMargin: (smallSettingsPage ? 6 : 18)*appWindow.zoom
             }
 
             RightItemLabel {
                 text: qsTr("General") + App.loc.emptyString
-                onClicked: flick.contentY = general.y + 5*appWindow.zoom
+                onClicked: flick.contentY = general.y
                 current: flick.currentTab === general
-                Layout.preferredWidth: navigationColumnWidth
+                Layout.fillWidth: true
             }
 
             RightItemLabel {
                 text: qsTr("Browser Integration") + App.loc.emptyString
-                onClicked: flick.contentY = browserIntegration.y + 5*appWindow.zoom
+                onClicked: flick.contentY = browserIntegration.y
                 current: flick.currentTab === browserIntegration
-                Layout.preferredWidth: navigationColumnWidth
+                Layout.fillWidth: true
             }
 
             RightItemLabel {
                 text: qsTr("Network") + App.loc.emptyString
-                onClicked: flick.contentY = network.y + 5*appWindow.zoom
+                onClicked: flick.contentY = network.y
                 current: flick.currentTab === network
-                Layout.preferredWidth: navigationColumnWidth
+                Layout.fillWidth: true
             }
 
             RightItemLabel {
                 text: qsTr("Traffic Limits") + App.loc.emptyString
-                onClicked: flick.contentY = tum.y + 5*appWindow.zoom
+                onClicked: flick.contentY = tum.y
                 current: flick.currentTab === tum
-                Layout.preferredWidth: navigationColumnWidth
+                Layout.fillWidth: true
             }
 
             RightItemLabel {
                 id: antivirusHeader
                 text: qsTr("Antivirus") + App.loc.emptyString
-                onClicked: flick.contentY = antivirus.y + 5*appWindow.zoom
+                onClicked: flick.contentY = antivirus.y
                 current: flick.currentTab === antivirus
-                Layout.preferredWidth: navigationColumnWidth
+                Layout.fillWidth: true
             }
 
             RightItemLabel {
                 visible: appWindow.btSupported
                 text: appWindow.btSupported ? appWindow.btS.protocolName : ""
-                onClicked: flick.contentY = bt.y + 5*appWindow.zoom
+                onClicked: flick.contentY = bt.y
                 current: flick.currentTab === bt
-                Layout.preferredWidth: navigationColumnWidth
+                Layout.fillWidth: true
             }
 
             RightItemLabel {
                 visible: rc.visible
                 text: qsTr("Remote Access") + App.loc.emptyString
-                onClicked: flick.contentY = rc.y + 5*appWindow.zoom
+                onClicked: flick.contentY = rc.y
                 current: flick.currentTab === rc
-                Layout.preferredWidth: navigationColumnWidth
+                Layout.fillWidth: true
             }
 
             RightItemLabel {
@@ -140,15 +143,15 @@ Page {
                     }
                     else
                     {
-                        flick.contentY = advanced.y + 5*appWindow.zoom;
+                        flick.contentY = advanced.y;
                     }
                 }
                 current: flick.currentTab === advanced
-                Layout.preferredWidth: navigationColumnWidth
+                Layout.fillWidth: true
                 Timer {
                     id: advancedTabTimer
                     interval: 100
-                    onTriggered: flick.contentY = advanced.y + 5*appWindow.zoom
+                    onTriggered: flick.contentY = advanced.y
                 }
             }
         }
@@ -162,23 +165,30 @@ Page {
 
             Layout.fillWidth: true
             Layout.fillHeight: true
-            Layout.leftMargin: (smallSettingsPage ? 10 : 30)*appWindow.zoom
+
+            Layout.leftMargin:  qtbug.leftMargin(0, (smallSettingsPage ? 10 : 30)*appWindow.zoom)
+            Layout.rightMargin: qtbug.rightMargin(0, (smallSettingsPage ? 10 : 30)*appWindow.zoom)
 
             flickableDirection: Flickable.HorizontalAndVerticalFlick
+
             ScrollBar.vertical: ScrollBar {}
             ScrollBar.horizontal: ScrollBar {}
 
-            contentWidth: all.width
-            contentHeight: all.height + 48*appWindow.zoom
+            // there is no known way to specify contentWidth in a way it would work fine in all cases
+            // so just do NOT specify it
+            //contentWidth: Math.max(all.implicitWidth, width)
+            contentHeight: all.implicitHeight + 48*appWindow.zoom
+
+            implicitWidth: all.implicitWidth + 30*appWindow.zoom
+            implicitHeight: all.implicitHeight + 48*appWindow.zoom
 
             clip: true
 
             ColumnLayout
             {
                 id: all
+                width: parent.width
                 spacing: 20*appWindow.zoom
-                anchors.top: parent.top
-                anchors.topMargin: (smallSettingsPage ? 12 : 24)*appWindow.zoom
                 GeneralSettings {id: general; Layout.fillWidth: true}
                 BrowserIntegrationSettings {id: browserIntegration; Layout.fillWidth: true}
                 NetworkSettings {id: network; Layout.fillWidth: true}
@@ -200,23 +210,29 @@ Page {
 
             function updateCurrentTab()
             {
-                if (general.y - contentY + 5*appWindow.zoom >= 0) {
+                if (isCurrentTab(general)) {
                     flick.currentTab = general;
-                } else if (browserIntegration.y - contentY + 5*appWindow.zoom >= 0) {
+                } else if (isCurrentTab(browserIntegration)) {
                     flick.currentTab = browserIntegration;
-                } else if (network.y - contentY + 5*appWindow.zoom >= 0) {
+                } else if (isCurrentTab(network)) {
                     flick.currentTab = network;
-                } else if (tum.y - contentY + 5*appWindow.zoom >= 0) {
+                } else if (isCurrentTab(tum)) {
                     flick.currentTab = tum;
-                } else if (antivirus.y - contentY + 5*appWindow.zoom >= 0) {
+                } else if (isCurrentTab(antivirus)) {
                     flick.currentTab = antivirus;
-                } else if (appWindow.btSupported && bt.y - contentY + 5*appWindow.zoom >= 0) {
+                } else if (appWindow.btSupported && isCurrentTab(bt)) {
                     flick.currentTab = bt;
-                } else if (rc.visible && rc.y - contentY + 5*appWindow.zoom >= 0) {
+                } else if (rc.visible && isCurrentTab(rc)) {
                     flick.currentTab = rc;
                 }else {
                     flick.currentTab = advanced;
                 }
+            }
+
+            function isCurrentTab(tab)
+            {
+                return flick.contentY - tab.y <= 40*appWindow.fontZoom ||
+                        tab.y + tab.height - flick.contentY >= flick.height / 3;
             }
         }
     }

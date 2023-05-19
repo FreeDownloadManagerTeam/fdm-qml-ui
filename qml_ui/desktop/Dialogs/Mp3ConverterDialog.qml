@@ -13,8 +13,6 @@ import "../../common"
 BaseDialog {
     id: root
 
-    width: 542*appWindow.zoom
-
     property var downloadsIds: []
     property var filesIndices: []
     property bool wrongFilePathWarning: false

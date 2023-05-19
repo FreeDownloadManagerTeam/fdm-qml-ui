@@ -1,6 +1,8 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.11
+import QtQuick.Window 2.12
+import Qt.labs.platform 1.1
 import "../../qt5compat"
 import org.freedownloadmanager.fdm 1.0
 import "../BaseElements"
@@ -10,7 +12,14 @@ import "../../common/Tools"
 BaseStandaloneCapableDialog {
     id: root
 
-    width: 542*appWindow.zoom
+    readonly property int preferredWidth: 542*appWindow.zoom
+
+    height: standalone ?
+                Math.min(implicitHeight, Screen.height - 200) :
+                Math.min(implicitHeight, appWindow.height - 50)
+    width: standalone ?
+               Math.min(preferredWidth, Screen.width - 200) :
+               Math.min(preferredWidth, appWindow.width - 50)
 
     contentItem: BaseDialogItem {
         titleText: qsTr("Add download") + App.loc.emptyString
@@ -51,7 +60,7 @@ BaseStandaloneCapableDialog {
                         id: browseDlg
                         nameFilters: [ "Files (" + App.cfg.cdOpenFileDlgNameFilters + ')' ]
                         onAccepted: {
-                            downloadTools.onUrlTextChanged(fileUrl);
+                            downloadTools.onUrlTextChanged(file);
                             downloadTools.doOK();
                         }
                     }
@@ -61,6 +70,16 @@ BaseStandaloneCapableDialog {
             ModulesCombobox {
                 Layout.preferredWidth: 200*appWindow.zoom
                 Layout.preferredHeight: 30*appWindow.zoom
+            }
+
+            BaseLabel {
+                text: downloadTools.statusText
+                color: downloadTools.statusWarning ? appWindow.theme.errorMessage : appWindow.theme.successMessage
+                wrapMode: Text.Wrap
+                font.pixelSize: 13*appWindow.fontZoom
+                Layout.fillWidth: true
+                Layout.topMargin: 10*appWindow.zoom
+                Layout.bottomMargin: 10*appWindow.zoom
             }
 
             RowLayout {
@@ -76,24 +95,12 @@ BaseStandaloneCapableDialog {
                     Layout.alignment: Qt.AlignLeft
                 }
 
-                Rectangle {
-                    color: "transparent"
-                    height: okbtn.height
+                Item {
                     Layout.fillWidth: true
-
-                    BaseLabel {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: downloadTools.statusText
-                        color: downloadTools.statusWarning ? appWindow.theme.errorMessage : appWindow.theme.successMessage
-                        clip: true
-                        wrapMode: Text.Wrap
-                        width: parent.width
-                        font.pixelSize: 13*appWindow.fontZoom
-                    }
+                    implicitHeight: 1
                 }
 
                 CustomButton {
-                    Layout.preferredHeight: height
                     Layout.alignment: Qt.AlignRight
                     visible: downloadTools.statusWarning && downloadTools.allowedToReportLastError
                     text: qsTr("Report problem") + App.loc.emptyString
@@ -102,7 +109,6 @@ BaseStandaloneCapableDialog {
 
                 CustomButton {
                     id: cnclBtn
-                    Layout.preferredHeight: height
                     Layout.alignment: Qt.AlignRight
                     text: qsTr("Cancel") + App.loc.emptyString
                     onClicked: downloadTools.doReject()
@@ -110,7 +116,6 @@ BaseStandaloneCapableDialog {
 
                 CustomButton {
                     id: okbtn
-                    Layout.preferredHeight: height
                     Layout.alignment: Qt.AlignRight
                     text: (downloadTools.buildingDownload || downloadTools.buildingDownloadFinished ? qsTr("Download") : qsTr("OK")) + App.loc.emptyString
                     enabled: urlField.text.length > 0

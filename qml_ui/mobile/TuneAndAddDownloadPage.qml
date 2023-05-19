@@ -33,7 +33,8 @@ Page {
 
             DialogButton {
                 text: qsTr("Download") + App.loc.emptyString
-                Layout.rightMargin: 10
+                Layout.rightMargin: qtbug.rightMargin(0, 10)
+                Layout.leftMargin: qtbug.leftMargin(0, 10)
                 textColor: appWindow.theme.toolbarTextColor
                 onClicked: accept()
                 enabled: saveTo.currentText.length > 0 && downloadTools.hasWriteAccess
@@ -57,6 +58,7 @@ Page {
 
             Label {
                 text: qsTr("Save to") + App.loc.emptyString
+                anchors.left: parent.left
             }
 
             RowLayout {
@@ -71,13 +73,16 @@ Page {
                     onCurrentTextChanged: queryBytesAvailable()
                     delegate: Rectangle {
                         height: 30
-                        width: parent.width
+                        width: saveTo.width
                         color: appWindow.theme.background
                         BaseLabel {
-                            leftPadding: 6
+                            leftPadding: qtbug.leftPadding(6, 0)
+                            rightPadding: qtbug.rightPadding(6, 0)
+                            anchors.left: parent.left
                             anchors.verticalCenter: parent.verticalCenter
                             text: label
                             font.pixelSize: 13
+                            horizontalAlignment: Text.AlignLeft
                         }
                         MouseArea {
                             anchors.fill: parent
@@ -90,9 +95,11 @@ Page {
                     contentItem: Text {
                         text: saveTo.currentText
                         verticalAlignment: Text.AlignVCenter
+                        horizontalAlignment: Text.AlignLeft
                         color: theme.foreground
                         font.pixelSize: 13
-                        leftPadding: 6
+                        leftPadding: qtbug.leftPadding(6, 0)
+                        rightPadding: qtbug.rightPadding(6, 0)
                         elide: Text.ElideRight
                     }
                     indicator: Image {
@@ -142,6 +149,7 @@ Page {
             spacing : 2
             width: parent.width
             Label {
+                anchors.left: parent.left
                 text: qsTr("File name") + App.loc.emptyString
             }
 
@@ -153,6 +161,7 @@ Page {
                 selectByMouse: true
                 inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhSensitiveData
                 text: downloadTools.fileName
+                horizontalAlignment: Text.AlignLeft
                 onAccepted: accept()
             }
         }
@@ -205,8 +214,8 @@ Page {
             anchors.centerIn: parent
             color: !downloadTools.hasWriteAccess || downloadTools.notEnoughSpaceWarning ? appWindow.theme.errorMessage : appWindow.theme.foreground
             text: (!downloadTools.hasWriteAccess ? qsTr("No write access to the selected directory") :
-                   downloadTools.freeDiskSpace != -1 ? qsTr("Size: %1 (Disk space: %2)").arg(JsTools.sizeUtils.bytesAsText(downloadTools.fileSize)).arg(JsTools.sizeUtils.bytesAsText(downloadTools.freeDiskSpace < 0 ? 0 : downloadTools.freeDiskSpace)) :
-                   qsTr("Size: %1").arg(JsTools.sizeUtils.bytesAsText(downloadTools.fileSize))) + App.loc.emptyString
+                   downloadTools.freeDiskSpace != -1 ? qsTr("Size: %1 (Disk space: %2)").arg(App.bytesAsText(downloadTools.fileSize)).arg(App.bytesAsText(downloadTools.freeDiskSpace < 0 ? 0 : downloadTools.freeDiskSpace)) :
+                   qsTr("Size: %1").arg(App.bytesAsText(downloadTools.fileSize))) + App.loc.emptyString
             font.pixelSize: 14
         }
     }
@@ -303,12 +312,12 @@ Page {
 
     Connections {
         target: App.storages
-        onBytesAvailableResult: {
+        onBytesAvailableResult: (path, available) => {
             if (path == saveTo.model.get(saveTo.currentIndex).path) {
                 downloadTools.freeDiskSpace = available;
             }
         }
-        onHasWriteAccessResult: {
+        onHasWriteAccessResult: (path, result) => {
             if (path == saveTo.model.get(saveTo.currentIndex).path) {
                 downloadTools.hasWriteAccess = result;
             }

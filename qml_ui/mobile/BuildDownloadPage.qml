@@ -28,7 +28,8 @@ Page {
 
             DialogButton {
                 text: (downloadTools.buildingDownload || downloadTools.buildingDownloadFinished ? qsTr("Download") : qsTr("OK")) + App.loc.emptyString
-                Layout.rightMargin: 10
+                Layout.rightMargin: qtbug.rightMargin(0, 10)
+                Layout.leftMargin: qtbug.leftMargin(0, 10)
                 textColor: appWindow.theme.toolbarTextColor
                 enabled: url.text.length > 0 && !downloadTools.failed()
                 onClicked: url.accepted()
@@ -65,6 +66,7 @@ Page {
                     onAccepted: { if (downloadTools.urlCheck(url.displayText)) {downloadTools.doOK()}}
                     inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText | Qt.ImhSensitiveData
                     wrapMode: TextInput.WrapAnywhere
+                    horizontalAlignment: Label.AlignLeft
                 }
 
                 RoundButton {
@@ -125,7 +127,8 @@ Page {
             icon.height: 14
             Material.foreground: appWindow.theme.toolbarTextColor
             Material.background: appWindow.theme.selectModeBarAndPlusBtn
-            implicitWidth: 166
+            leftPadding: 20
+            rightPadding: 20
             height: 48
             flat: true
             font.capitalization: Font.MixedCase
@@ -161,7 +164,7 @@ Page {
             appWindow.newDownloadAdded();
             stackView.pop();
         }
-        onCreateRequestSuccess: {
+        onCreateRequestSuccess: (id) => {
             stackView.replace('TuneAndAddDownloadPage.qml', {requestId:id});
         }
         onReject: {
@@ -184,7 +187,7 @@ Page {
 
     Connections {
         target: appWindow
-        onReportError: {
+        onReportError: (failedId) => {
             if (failedId == downloadTools.lastFailedRequestId) {
                 downloadTools.doReject();
             }

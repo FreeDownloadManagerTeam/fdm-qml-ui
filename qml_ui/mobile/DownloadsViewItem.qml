@@ -167,7 +167,7 @@ ItemDelegate
             anchors.right: downloadItemMenuBtn.left
             anchors.leftMargin: 10
 
-            onCircleAnimationStart: {
+            onCircleAnimationStart: (xPosition, yPosition) => {
                 colorRect.x = xPosition;
                 colorRect.y = yPosition;
                 circleAnimation.start();

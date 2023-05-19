@@ -172,7 +172,8 @@ Item {
                         spacing: 0
 
                         Rectangle {
-                            Layout.leftMargin: 5*appWindow.zoom
+                            Layout.leftMargin: qtbug.leftMargin(5*appWindow.zoom, 0)
+                            Layout.rightMargin: qtbug.rightMargin(5*appWindow.zoom, 0)
                             width: ((model.level + (model.folder ? 0 : 1)) * 15)*appWindow.zoom
                             height: rowHeigth
                             color: "transparent"
@@ -206,9 +207,9 @@ Item {
                                     && model.childrenHasDontDownloadPriority ? Qt.PartiallyChecked : Qt.Checked )
                             onClicked: {
                                 if (checkState == Qt.Unchecked) {
-                                    model.priority = AbstractDownloadsUi.DownloadPriorityDontDownload;
+                                    model.selectedForDownload = AbstractDownloadsUi.IsNotSelectedForDownload;
                                 } else {
-                                    model.priority = AbstractDownloadsUi.DownloadPriorityNormal;
+                                    model.selectedForDownload = AbstractDownloadsUi.FullySelectedForDownload;
                                 }
                             }
                         }
@@ -261,7 +262,7 @@ Item {
                             BaseLabel {
                                 anchors.verticalCenter: parent.verticalCenter
                                 anchors.left: parent.left
-                                text: JsTools.sizeUtils.bytesAsText(model.selectedSize)
+                                text: App.bytesAsText(model.selectedSize) + App.loc.emptyString
                                 font.pixelSize: 13*appWindow.fontZoom
                                 color: appWindow.theme.filesTreeText
                             }
@@ -275,7 +276,8 @@ Item {
                         visible: !root.createDownloadDialog
 
                         Rectangle {
-                            Layout.leftMargin: 5*appWindow.zoom
+                            Layout.leftMargin: qtbug.leftMargin(5*appWindow.zoom, 0)
+                            Layout.rightMargin: qtbug.rightMargin(5*appWindow.zoom, 0)
                             height: 6*appWindow.zoom
                             Layout.fillWidth: true
                             Layout.alignment: Qt.AlignVCenter
@@ -283,7 +285,6 @@ Item {
 
                             Rectangle {
                                 height: parent.height
-                                anchors.left: parent.left
                                 width: parent.width * model.progress / 100
                                 color: appWindow.theme.progressRunning
                             }
@@ -294,6 +295,7 @@ Item {
                             width: 45*appWindow.zoom
 
                             BaseLabel {
+                                anchors.left: parent.left
                                 anchors.verticalCenter: parent.verticalCenter
                                 text: model.progress + '%'
                                 font.pixelSize: 12*appWindow.fontZoom
@@ -326,7 +328,8 @@ Item {
                             Rectangle {
                                 height: rowHeigth
                                 Layout.fillWidth: true
-                                Layout.leftMargin: 5*appWindow.zoom
+                                Layout.leftMargin: qtbug.leftMargin(5*appWindow.zoom, 0)
+                                Layout.rightMargin: qtbug.rightMargin(5*appWindow.zoom, 0)
 
                                 color: "transparent"
 
@@ -372,6 +375,7 @@ Item {
 
                                     WaSvgImage {
                                         visible: mouseAreaUp.containsMouse
+                                        anchors.left: parent.left
                                         anchors.verticalCenter: parent.verticalCenter
                                         source: Qt.resolvedUrl("../../images/desktop/priority_up_active.svg")
                                         zoom: appWindow.zoom
@@ -379,6 +383,7 @@ Item {
 
                                     WaSvgImage {
                                         visible: !mouseAreaUp.containsMouse
+                                        anchors.left: parent.left
                                         anchors.verticalCenter: parent.verticalCenter
                                         source: Qt.resolvedUrl("../../images/desktop/priority_up.svg")
                                         zoom: appWindow.zoom
@@ -404,7 +409,8 @@ Item {
                                 height: rowHeigth
                                 color: "transparent"
                                 width: 16*appWindow.zoom
-                                Layout.rightMargin: 10*appWindow.zoom
+                                Layout.rightMargin: qtbug.rightMargin(0, 10*appWindow.zoom)
+                                Layout.leftMargin: qtbug.leftMargin(0, 10*appWindow.zoom)
                                 enabled: model.priority != AbstractDownloadsUi.DownloadPriorityLow
 
                                 Rectangle {
@@ -415,12 +421,14 @@ Item {
 
                                     WaSvgImage {
                                         visible: mouseAreaDown.containsMouse
+                                        anchors.left: parent.left
                                         anchors.verticalCenter: parent.verticalCenter
                                         source: Qt.resolvedUrl("../../images/desktop/priority_down_active.svg")
                                         zoom: appWindow.zoom
                                     }
 
                                     WaSvgImage {
+                                        anchors.left: parent.left
                                         visible: !mouseAreaDown.containsMouse
                                         anchors.verticalCenter: parent.verticalCenter
                                         source: Qt.resolvedUrl("../../images/desktop/priority_down.svg")

@@ -11,8 +11,8 @@ CustomButton {
     property var browser
 
     enabled: App.integration.isBrowserInstalled(browser.id)
-    width: (browser.id == KnownWebBrowsers.Chrome ? 210 : 190)*appWindow.fontZoom
-    height: 44*appWindow.fontZoom
+    width: 30*appWindow.zoom+(browser.id == KnownWebBrowsers.Chrome ? 180 : 160)*appWindow.fontZoom
+    height: 20*appWindow.zoom+24*appWindow.fontZoom
 
     WaSvgImage {
         id: img

@@ -16,6 +16,7 @@ BaseContextMenu {
     property bool supportsSequentialDownload: selectedDownloadsTools.sequentialDownloadAllowed()
     property bool supportsDisablePostFinishedTasks: false
     property bool supportsAddT: false
+    property bool supportsForceReann: false
     property bool supportsIgnoreURatioLimit: false
     property int filesCount: 0
     property bool fileIntegrityVisible: root.finished === true && root.filesCount == 1
@@ -160,7 +161,7 @@ BaseContextMenu {
     readonly property bool showSequentialDownload: supportsSequentialDownload
     readonly property bool showAddMirror: modelIds.length === 1 && supportsMirror
     BaseContextMenuSeparator {
-        visible: showSequentialDownload || showAddMirror || supportsAddT || supportsIgnoreURatioLimit
+        visible: showSequentialDownload || showAddMirror || supportsAddT || supportsIgnoreURatioLimit || supportsForceReann
     }
     BaseContextMenuItem {
         visible: showSequentialDownload
@@ -282,6 +283,10 @@ BaseContextMenu {
             if (btTools.item.ignoreURatioLimitAllowed()) {
                 supportsIgnoreURatioLimit = true;
                 root.insertItem(index++, Qt.createQmlObject('import "../bt/desktop"; IgnoreURatioMenuItem {}', root));
+            }
+            if (btTools.item.forceReannounceAllowed()) {
+                supportsForceReann = true;
+                root.insertItem(index++, Qt.createQmlObject('import "../bt/desktop"; ForceReannMenuItem {}', root));
             }
         }
     }

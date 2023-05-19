@@ -10,7 +10,9 @@ import "../../common"
 BaseDialog {
     id: root
 
-    width: 542*appWindow.zoom
+    width: 442*appWindow.zoom+100*appWindow.fontZoom
+
+    readonly property int firstColWidth: 20*appWindow.zoom + 60*appWindow.fontZoom
 
     contentItem: BaseDialogItem {
         titleText: qsTr("Authentication required") + App.loc.emptyString
@@ -33,7 +35,8 @@ BaseDialog {
 
             ColumnLayout {
                 Layout.fillWidth: true
-                Layout.leftMargin: 80*appWindow.zoom
+                Layout.leftMargin: qtbug.leftMargin(root.firstColWidth, 0)
+                Layout.rightMargin: qtbug.rightMargin(root.firstColWidth, 0)
 
                 BaseLabel {
                     Layout.fillWidth: true
@@ -53,7 +56,7 @@ BaseDialog {
                 Layout.fillWidth: true
 
                 BaseLabel {
-                    Layout.preferredWidth: 80*appWindow.zoom
+                    Layout.preferredWidth: root.firstColWidth
                     text: qsTr("Username:") + App.loc.emptyString
                 }
 
@@ -76,7 +79,7 @@ BaseDialog {
                 Layout.fillWidth: true
 
                 BaseLabel {
-                    Layout.preferredWidth: 80*appWindow.zoom
+                    Layout.preferredWidth: root.firstColWidth
                     text: qsTr("Password:") + App.loc.emptyString
                 }
 
@@ -101,7 +104,8 @@ BaseDialog {
             BaseCheckBox {
                 id: rememberField
                 text: qsTr("remember") + App.loc.emptyString
-                Layout.leftMargin: 80*appWindow.zoom
+                Layout.leftMargin: qtbug.leftMargin(root.firstColWidth, 0)
+                Layout.rightMargin: qtbug.rightMargin(root.firstColWidth, 0)
             }
 
             RowLayout {

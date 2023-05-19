@@ -47,7 +47,7 @@ Item {
 
     function updateState()
     {
-        sortBy = App.settings.app.value(AppSettings.SortBy);
+        sortBy = parseInt(App.settings.app.value(AppSettings.SortBy));
         sortAscendingOrder = App.settings.toBool(App.settings.app.value(AppSettings.SortAscendingOrder));
     }
 

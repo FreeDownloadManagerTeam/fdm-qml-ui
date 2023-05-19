@@ -7,18 +7,40 @@ import org.freedownloadmanager.fdm.appfeatures 1.0
 
 Drawer {
     id: root
-    width: 285
+    width: listview.implicitWidth
     height: parent.height
     interactive: stackView.depth === 1
 
     Material.background: appWindow.theme.drawerBackground
 
+    edge: appWindow.LayoutMirroring.enabled ? Qt.RightEdge : Qt.LeftEdge
+
     ListView {
+        id: listview
         focus: true
         currentIndex: -1
         width: parent.width
         height: parent.height - addNewDownloadBlock.height
         headerPositioning: ListView.OverlayHeader
+
+        Label {
+            id: l
+            visible: false
+            font.pixelSize: 16
+        }
+        FontMetrics {
+            id: fm
+            font: l.font
+        }
+
+        implicitWidth: {
+            // icon + text
+            let h = 64 + fm.advanceWidth(App.displayName);
+            for (let i = 0; i < listModel.count; ++i)
+                h = Math.max(h, 24 + fm.advanceWidth(listModel.get(i).text));
+            // left padding + spacing between icon and text + h + right padding
+            return 20 + 10 + h + 20;
+        }
 
         header: Rectangle {
             id: header
@@ -50,9 +72,10 @@ Drawer {
         delegate: ItemDelegate {
             opacity: model.enabled ? 1 : 0.3
 
-            width: parent.width
+            width: listview.width
             highlighted: ListView.isCurrentItem
-            leftPadding: 20
+            leftPadding: qtbug.leftPadding(20, 0)
+            rightPadding: qtbug.rightPadding(20, 0)
 
             onClicked: {
                 if (model.enabled)
@@ -126,10 +149,22 @@ Drawer {
                         "enabled": App.downloads.tracker.finishedHasEnabledPostFinishedTasks,
                         "icon": Qt.resolvedUrl("../images/mobile/pause.svg"),});
             }
-            append({"text": qsTr("Browser"), "actionLabel": "browser", "enabled": true, "icon": Qt.resolvedUrl("../images/mobile/browser.svg")});
+
+            if (App.features.hasFeature(AppFeatures.BuiltinWebBrowser))
+            {
+                append({
+                           "text": qsTr("Browser"),
+                           "actionLabel": "browser",
+                           "enabled": true,
+                           "icon": Qt.resolvedUrl("../images/mobile/browser.svg")
+                       });
+            }
+
             if (!App.rc.client.active)
                 append({"text": qsTr("Settings"), "actionLabel": "settings", "enabled": true, "icon": Qt.resolvedUrl("../images/mobile/settings.svg")});
+
             append({"text": qsTr("Contact support"), 'actionLabel': "support", "enabled": true, "icon": Qt.resolvedUrl("../images/mobile/support.svg")});
+
             if (App.features.hasFeature(AppFeatures.RemoteControlClient))
             {
                 if (App.rc.client.active)
@@ -137,8 +172,11 @@ Drawer {
                 else
                     append({"text": qsTr("Connect to remote %1").arg(App.shortDisplayName), "actionLabel": "connectToRemoteApp", "enabled": true, "icon": Qt.resolvedUrl("../images/mobile/rc.svg")});
             }
+
             append({"text": qsTr("About"), "actionLabel": "about", "enabled": true, "icon": Qt.resolvedUrl("../images/mobile/about.svg")});
+
             append({"text": qsTr("Quit"), "actionLabel": "quit", "enabled": true, "icon": Qt.resolvedUrl("../images/mobile/quit.svg")});
+
             if (App.isSelfTestAvail)
                 append({"text": "Self Test", "actionLabel": "selfTest", "enabled": true, "icon": Qt.resolvedUrl("../images/mobile/self_test.svg")});
         }
@@ -146,6 +184,8 @@ Drawer {
 
     Rectangle {
         id: addNewDownloadBlock
+
+        visible: appWindow.hasDownloadMgr
 
         width: parent.width
         height: 38

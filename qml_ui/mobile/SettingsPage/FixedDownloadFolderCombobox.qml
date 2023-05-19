@@ -65,12 +65,14 @@ Rectangle {
                 id: lbl
                 leftPadding: 10
                 rightPadding: 10
+                anchors.left: parent.left
                 anchors.verticalCenter: parent.verticalCenter
                 text: label
                 font: downloadFolder.font
                 width: parent.width
                 wrapMode: Text.WrapAnywhere
                 color: appWindow.theme.foreground
+                horizontalAlignment: Label.AlignLeft
             }
             MouseArea {
                 anchors.fill: parent
@@ -84,12 +86,14 @@ Rectangle {
         contentItem: TextField {
             text: downloadFolder.currentText
             color: (!d.isCurrentPathInvalid || d.checkingPath) ? appWindow.theme.foreground : appWindow.theme.errorMessage
-            leftPadding: 10
+            leftPadding: qtbug.leftPadding(10, 0)
+            rightPadding: qtbug.rightPadding(10, 0)
             font: downloadFolder.font
             opacity: enabled ? 1 : 0.5
             selectByMouse: true
             wrapMode: Text.WrapAnywhere
             inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText | Qt.ImhSensitiveData
+            horizontalAlignment: TextField.AlignLeft
         }
         background: Rectangle {
             color: appWindow.theme.background
@@ -152,8 +156,7 @@ Rectangle {
         id: macrosBtn
         text: qsTr("Macros") + App.loc.emptyString
         enabled: root.enabled
-        radius: 40
-        width: 40
+        radius: 20
         height: 40
         flat: true
         opacity: enabled ? 1 : 0.5
@@ -165,7 +168,7 @@ Rectangle {
 
         MacrosMenu {
             id: macrosMenu
-            onMacroSelected: {
+            onMacroSelected: (macro) => {
                 updateCurrentFolder(downloadFolder.editText + macro)
             }
         }

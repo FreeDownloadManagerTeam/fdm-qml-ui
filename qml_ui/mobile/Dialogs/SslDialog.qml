@@ -8,15 +8,17 @@ import "../BaseElements"
 Dialog {
     id: root
 
-    parent: appWindow.overlay
+    readonly property int maximumWidth: Math.min(appWindow.width*0.8, appWindow.smallScreen ? 320 : 500)
+
+    parent: Overlay.overlay
 
     x: Math.round((appWindow.width - width) / 2)
     y: Math.round((appWindow.height - height) / 2)
-    width: appWindow.smallScreen ? 320 : 500
 
     modal: true
 
     contentItem: ColumnLayout {
+
         spacing: 20
         clip: true
 
@@ -30,6 +32,8 @@ Dialog {
             color: "#737373"
             wrapMode: Text.Wrap
             Layout.fillWidth: true
+            Layout.maximumWidth: root.maximumWidth
+            horizontalAlignment: Text.AlignLeft
         }
 
         Label {
@@ -37,9 +41,10 @@ Dialog {
             color: "#737373"
             wrapMode: Text.Wrap
             Layout.fillWidth: true
+            horizontalAlignment: Text.AlignLeft
         }
 
-        Column {
+        ColumnLayout {
             Layout.fillWidth: true
             spacing: 10
             BaseLabel {
@@ -48,22 +53,23 @@ Dialog {
                 text: qsTr("Certificate fingerprints") + App.loc.emptyString
             }
 
-            Column {
-                width: parent.width
+            ColumnLayout {
+                Layout.fillWidth: true
                 spacing: 5
                 BaseLabel {
                     text: qsTr("SHA-256:") + App.loc.emptyString
                     wrapMode: Text.Wrap
                 }
                 BaseLabel {
-                    width: parent.width
                     text: downloadTools.sslSha256Fingerprint
                     wrapMode: Text.Wrap
+                    Layout.fillWidth: true
+                    Layout.maximumWidth: root.maximumWidth
                 }
             }
 
-            Column {
-                width: parent.width
+            ColumnLayout {
+                Layout.fillWidth: true
                 spacing: 5
                 BaseLabel {
                     text: qsTr("SHA1:") + App.loc.emptyString
@@ -71,9 +77,10 @@ Dialog {
                 }
 
                 BaseLabel {
-                    width: parent.width
                     text: downloadTools.sslSha1Fingerprint
                     wrapMode: Text.Wrap
+                    Layout.fillWidth: true
+                    Layout.maximumWidth: root.maximumWidth
                 }
             }
         }

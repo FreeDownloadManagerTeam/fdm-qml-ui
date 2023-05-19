@@ -13,6 +13,8 @@ import org.freedownloadmanager.fdm.appconstants 1.0
 import "../BaseElements"
 
 Column {
+    id: root
+
     visible: App.features.hasFeature(AppFeatures.BrowsersIntegration)
     spacing: 0
 
@@ -48,30 +50,68 @@ Column {
     }
 
     SettingsGroupColumn {
+
+        anchors.left: parent.left
+
         width: parent.width
 
         BaseLabel {
             width: parent.width
-            rightPadding: 10*appWindow.zoom
+            rightPadding: qtbug.rightPadding(0, 10*appWindow.zoom)
+            leftPadding: qtbug.leftPadding(0, 10*appWindow.zoom)
             text: qsTr("Make sure you have %1 extension installed, otherwise, click one of the buttons below").arg(App.shortDisplayName) + App.loc.emptyString
             wrapMode: Label.WordWrap
             bottomPadding: 6*appWindow.zoom
         }
 
-        Row {
-            spacing: 16*appWindow.zoom
+        // browser buttons: 1 row (if there is enough space), or 1 column otherwise
+        Item {
+            id: browserButtonsItem
 
-            Repeater {
-                model: buttonsModel
+            width: parent.width
+            implicitHeight: browserButtonsRow.visible ? browserButtonsRow.implicitHeight : browserButtonsCol.implicitHeight
 
-                BrowserButton {
-                    browser: modelData
+            readonly property bool hasEnoughWidth: browserButtonsRow.implicitWidth - 10 <= width
+
+            Row {
+                id: browserButtonsRow
+                visible: browserButtonsItem.hasEnoughWidth
+
+                anchors.left: parent.left
+
+                spacing: 16*appWindow.zoom
+
+                Repeater {
+                    model: root.buttonsModel
+
+                    BrowserButton {
+                        browser: modelData
+                    }
+                }
+            }
+
+            Column {
+                id: browserButtonsCol
+                visible: !browserButtonsItem.hasEnoughWidth
+
+                anchors.left: parent.left
+
+                spacing: 10*appWindow.zoom
+
+                Repeater {
+                    model: root.buttonsModel
+
+                    BrowserButton {
+                        anchors.left: parent.left
+                        browser: modelData
+                    }
                 }
             }
         }
 
         Row {
             topPadding: 20*appWindow.zoom
+            anchors.left: parent.left
 
             BaseLabel {
                 id: lbl
@@ -122,8 +162,10 @@ Column {
             id: browsersList
             visible: false
             model: listModel
+            anchors.left: parent.left
 
             BrowserListElement {
+                anchors.left: parent.left
                 browser: modelData
                 visible: browsersList.visible
             }
@@ -131,6 +173,8 @@ Column {
     }
 
     SettingsGroupColumn {
+
+        anchors.left: parent.left
 
         SettingsSubgroupHeader {
             text: qsTr("Automatically catch downloads from browsers") + App.loc.emptyString
@@ -215,10 +259,12 @@ Column {
             id: unwantedHostsList
             visible: false
             width: 320*appWindow.zoom
+            anchors.left: parent.left
 
             ListEditor {
                 myStr: App.settings.app.value(AppSettings.WbDownloadsUnwantedHostsList)
-                Layout.leftMargin: 38*appWindow.zoom
+                Layout.leftMargin: qtbug.leftMargin(38*appWindow.zoom,0)
+                Layout.rightMargin: qtbug.rightMargin(38*appWindow.zoom,0)
                 errorMsg: qsTr("Are you sure this is a valid domain?") + App.loc.emptyString
                 validationRegex: /^[\-\d\w\u0400-\u04FF]+(\.[\-\d\w\u0400-\u04FF]+)+$/i
 
@@ -289,10 +335,12 @@ Column {
             id: extensionsList
             visible: false
             width: 220*appWindow.zoom
+            anchors.left: parent.left
 
             ListEditor {
                 myStr: App.settings.app.value(AppSettings.WbDownloadsUnwantedExtensionsList)
-                Layout.leftMargin: 38*appWindow.zoom
+                Layout.leftMargin: qtbug.leftMargin(38*appWindow.zoom,0)
+                Layout.rightMargin: qtbug.rightMargin(38*appWindow.zoom,0)
                 errorMsg: qsTr("Are you sure this is a valid file extension?") + App.loc.emptyString
                 validationRegex: /^[\d\w\+\-\!]+$/
 

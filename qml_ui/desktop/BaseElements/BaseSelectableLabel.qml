@@ -11,6 +11,7 @@ TextEdit {
     selectByMouse: true
     selectionColor: appWindow.theme.textHighlight
     selectedTextColor: color
+    horizontalAlignment: TextEdit.AlignLeft
 
     MouseArea {
         height: parent.height

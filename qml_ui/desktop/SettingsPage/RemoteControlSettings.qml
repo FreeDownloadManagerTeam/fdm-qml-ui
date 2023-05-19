@@ -36,6 +36,7 @@ Item
 
         Row
         {
+            anchors.left: parent.left
             spacing: 40*appWindow.zoom
 
             SettingsGroupColumn {
@@ -132,6 +133,33 @@ Item
                     smooth: false
                 }
             }
+        }
+
+        SettingsGroupColumn {
+
+            anchors.left: parent.left
+
+            SettingsCheckBox {
+                id: dontUseProxy
+                text: qsTr("Don't use network proxy") + App.loc.emptyString
+                checked: App.settings.toBool(App.settings.app.value(AppSettings.DontUseNetworkProxyForRemoteAccess))
+                onClicked: {
+                    App.settings.app.setValue(
+                                AppSettings.DontUseNetworkProxyForRemoteAccess,
+                                App.settings.fromBool(checked));
+                }
+            }
+            /*SettingsCheckBox {
+                enabled: !dontUseProxy.checked
+                text: qsTr("Don't use network proxy to listen for incoming connections") + App.loc.emptyString
+                anchors.leftMargin: 38*appWindow.zoom
+                checked: App.settings.toBool(App.settings.app.value(AppSettings.DontUseNetworkProxyForListeningIncomingRemoteAccessConnections))
+                onClicked: {
+                    App.settings.app.setValue(
+                                AppSettings.DontUseNetworkProxyForListeningIncomingRemoteAccessConnections,
+                                App.settings.fromBool(checked));
+                }
+            }*/
         }
     }
 

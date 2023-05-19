@@ -16,6 +16,8 @@ Rectangle {
     signal clicked
 
     Item {
+        anchors.left: parent.left
+
         width: content.width
         height: content.height
 

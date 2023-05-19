@@ -20,7 +20,8 @@ Column {
     Row {
         visible: tumMode !== TrafficUsageMode.Snail
         width: parent.width
-        leftPadding: 10
+        leftPadding: qtbug.leftPadding(10, 0)
+        rightPadding: qtbug.rightPadding(10, 0)
         ModeButton {
             currentTumMode: tumMode
             selectAllowed: true
@@ -33,7 +34,8 @@ Column {
 
     Row {
         width: parent.width
-        leftPadding: 20
+        leftPadding: qtbug.leftPadding(20, 0)
+        rightPadding: qtbug.rightPadding(20, 0)
         topPadding: 10
 
         visible: tumMode !== TrafficUsageMode.Snail
@@ -64,7 +66,8 @@ Column {
     Row {
         visible: tumMode !== TrafficUsageMode.Snail
         width: parent.width
-        leftPadding: 20
+        leftPadding: qtbug.leftPadding(20, 0)
+        rightPadding: qtbug.rightPadding(20, 0)
 
         BaseLabel {
             adaptive: true
@@ -105,7 +108,8 @@ Column {
         text: qsTr("Frees bandwidth without stopping downloads.") + App.loc.emptyString
         wrapMode: Label.WordWrap
         width: parent.width
-        leftPadding: 20//40
+        leftPadding: qtbug.leftPadding(20, 0)
+        rightPadding: qtbug.rightPadding(20, 0)
         font.pixelSize: 12
     }
 

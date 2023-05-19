@@ -11,7 +11,9 @@ import "../SettingsPage"
 CenteredDialog {
     id: root
 
-    parent: appWindow.overlay
+    modal: true
+
+    parent: Overlay.overlay
     width: 310
     height: parent.height < 550 ? parent.height - 60 : 470
     padding: 0
@@ -63,6 +65,7 @@ CenteredDialog {
                 Layout.rightMargin: 20
                 wrapMode: Text.WordWrap
                 font.pixelSize: 12
+                horizontalAlignment: Text.AlignLeft
             }
 
             Item {
@@ -102,6 +105,7 @@ CenteredDialog {
                             sourceSize.height: 8
                             source: Qt.resolvedUrl("../../images/mobile/arrow.svg")
                             Layout.alignment: Qt.AlignVCenter
+                            mirror: LayoutMirroring.enabled
                         }
 
                         TimePicker {

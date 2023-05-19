@@ -24,7 +24,7 @@ CheckBox {
     indicator: Rectangle {
         color: "transparent"
         anchors.verticalCenter: parent.verticalCenter
-        x: root.xOffset
+        x: LayoutMirroring.enabled ? root.width - width - root.xOffset : root.xOffset
         width: 12*appWindow.zoom
         height: 12*appWindow.zoom
         clip: true
@@ -55,8 +55,10 @@ CheckBox {
     }
 
     contentItem: BaseLabel {
+        anchors.left: parent.left
         anchors.verticalCenter: parent.verticalCenter
-        leftPadding: root.xOffset + root.indicator.width + 8*appWindow.zoom
+        leftPadding: qtbug.leftPadding(root.xOffset + root.indicator.width + 8*appWindow.zoom, 0)
+        rightPadding: qtbug.rightPadding(root.xOffset + root.indicator.width + 8*appWindow.zoom, 0)
         text: parent.text
         color: parent.textColor ? parent.textColor : appWindow.theme.foreground
         font.pixelSize: fontSize

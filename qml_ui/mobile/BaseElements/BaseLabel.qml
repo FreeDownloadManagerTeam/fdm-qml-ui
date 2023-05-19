@@ -3,7 +3,7 @@ import QtQuick.Controls 2.1
 
 Label {
     property bool enabled: true
-//    color: enabled ? "#737373" : "#BEBEBE"
+
     linkColor: appWindow.theme.link
     font.pixelSize: getPointSize()
     horizontalAlignment: Text.AlignLeft
@@ -31,6 +31,4 @@ Label {
             return 12;
         }
     }
-
-//    height: adaptive ? () :
 }

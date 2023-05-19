@@ -2,6 +2,7 @@ import QtQuick 2.12
 import QtQuick.Layouts 1.12
 import org.freedownloadmanager.fdm 1.0
 import "../../common"
+import "../../common/Tools"
 
 Item
 {
@@ -45,7 +46,7 @@ Item
         {
             id: titleLabel
             visible: root.title.length > 0
-            text: root.title + ":"
+            text: root.title + ':'
             Layout.alignment: Qt.AlignVCenter
             font.pixelSize: appWindow.fonts.defaultSize
             Layout.fillHeight: true

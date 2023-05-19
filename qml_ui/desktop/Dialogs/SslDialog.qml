@@ -10,8 +10,6 @@ import "../../common"
 BaseDialog {
     id: root
 
-    width: 542*appWindow.zoom
-
     contentItem: BaseDialogItem {
         titleText: qsTr("Warning: potential security risk ahead") + App.loc.emptyString
         focus: true
@@ -73,7 +71,7 @@ BaseDialog {
                 columns: 2
 
                 BaseLabel {
-                    Layout.preferredWidth: 70*appWindow.zoom
+                    Layout.preferredWidth: 70*appWindow.fontZoom
                     Layout.alignment: Qt.AlignTop
                     text: qsTr("SHA-256:") + App.loc.emptyString
                     wrapMode: Text.Wrap

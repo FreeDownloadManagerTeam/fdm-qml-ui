@@ -34,6 +34,7 @@ BaseDialog {
                 Layout.fillWidth: true
                 onAccepted: root.doOK()
                 Keys.onEscapePressed: root.close()
+                enable_QTBUG_110471_workaround_2: true
             }
 
             BaseLabel

@@ -18,23 +18,22 @@ Rectangle {
     {
         width: parent.width
         height: parent.height
-        //padding: 5
 
         Label
         {
-            //text: qsTr("Low") + App.loc.emptyString
             text: root.comboBoxText
             font.pixelSize: 16
             padding: 3
+            anchors.left: parent.left
+            horizontalAlignment: Text.AlignLeft
         }
 
         TumNetworkSpeedLimitComboBox
         {
-            //mode: TrafficUsageMode.Low
             mode: root.speedLimitMode
-            //setting: DmCoreSettings.MaxDownloadSpeed
             setting: speedLimitSetting
             enabled: speedLimitMode !== TrafficUsageMode.High
+            anchors.left: parent.left
         }
     }
 }

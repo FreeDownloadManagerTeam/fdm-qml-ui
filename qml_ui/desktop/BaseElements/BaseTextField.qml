@@ -5,12 +5,17 @@ import "../BaseElements"
 
 TextField {
     id: textInput
+
+    property bool enable_QTBUG_110471_workaround: true
+    property bool enable_QTBUG_110471_workaround_2: false
+    property bool selectAllAtInit: false
+
     implicitHeight: 30*appWindow.fontZoom
     selectByMouse: true
     selectionColor: appWindow.theme.textHighlight
     selectedTextColor: appWindow.theme.foreground
     font.pixelSize: 14*appWindow.fontZoom
-    color: appWindow.theme.foreground//enabled ? "#000" : "#757575"
+    color: appWindow.theme.foreground
     opacity: enabled ? 1 : 0.5
     horizontalAlignment: TextInput.AlignLeft
 
@@ -18,7 +23,6 @@ TextField {
         border.color: appWindow.theme.border
         border.width: 1*appWindow.zoom
         color: appWindow.theme.background
-//        radius: appWindow.macVersion ? appWindow.theme.textFieldBorderRadiusMac : 0
     }
 
     MouseArea {
@@ -72,5 +76,23 @@ TextField {
                 }
             }
         }
+    }
+
+    Component.onCompleted: {
+        // https://bugreports.qt.io/browse/QTBUG-110471
+        if (enable_QTBUG_110471_workaround &&
+                appWindow.LayoutMirroring.enabled &&
+                !LayoutMirroring.enabled)
+        {
+            LayoutMirroring.enabled = Qt.binding(() => appWindow.LayoutMirroring.enabled);
+            if (enable_QTBUG_110471_workaround_2)
+            {
+                let t = text;
+                text = t + ' ';
+                text = t;
+            }
+        }
+        if (selectAllAtInit)
+            selectAll();
     }
 }

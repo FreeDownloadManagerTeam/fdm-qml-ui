@@ -41,15 +41,15 @@ Menu {
         id: menuItem
         topPadding: 1*appWindow.zoom
         bottomPadding: 1*appWindow.zoom
-        leftPadding: 20*appWindow.zoom
-        rightPadding: 0
+        leftPadding: qtbug.leftPadding(20*appWindow.zoom, 0)
+        rightPadding: qtbug.rightPadding(20*appWindow.zoom, 0)
 
         background: Rectangle {
             color: menuItem.highlighted ? appWindow.theme.menuHighlight : "transparent"
         }
 
         arrow: Rectangle {
-            x: Math.round(parent.width - width)
+            x: LayoutMirroring.enabled ? 0 : Math.round(parent.width - width)
             implicitWidth: 20*appWindow.zoom
             implicitHeight: 20*appWindow.zoom
             anchors.verticalCenter: parent.verticalCenter
@@ -57,11 +57,12 @@ Menu {
             color: "transparent"
             clip: true
             WaSvgImage {
-                source: appWindow.theme.elementsIcons
+                source: Qt.resolvedUrl("../../images/desktop/menu_arrow.svg")
                 zoom: appWindow.zoom
-                x: 7*appWindow.zoom
-                y: -189*appWindow.zoom
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.horizontalCenter: parent.horizontalCenter
                 opacity: enabled ? 1 : 0.5
+                mirror: LayoutMirroring.enabled
                 layer {
                     effect: ColorOverlay {
                         color: appWindow.theme.foreground
@@ -72,7 +73,7 @@ Menu {
         }
 
         indicator: Rectangle {
-            x: 0
+            x: LayoutMirroring.enabled ? Math.round(parent.width - width) : 0
             implicitWidth: 20*appWindow.zoom
             implicitHeight: 20*appWindow.zoom
             visible: menuItem.checkable && menuItem.checked
@@ -98,7 +99,6 @@ Menu {
             verticalAlignment: Text.AlignVCenter
             color: appWindow.theme.foreground
             wrapMode: Label.WordWrap
-//            rightPadding: menuItem.arrow.width
         }
 
         MouseArea {

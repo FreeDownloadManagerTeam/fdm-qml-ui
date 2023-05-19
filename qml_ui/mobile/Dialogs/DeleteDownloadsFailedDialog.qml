@@ -12,7 +12,9 @@ Dialog {
     property bool ignoreAllMode: false
     property var taskQueue: []
 
-    parent: appWindow.overlay
+    parent: Overlay.overlay
+
+    closePolicy: Popup.NoAutoClose
 
     x: Math.round((appWindow.width - width) / 2)
     y: Math.round((appWindow.height - height) / 2)

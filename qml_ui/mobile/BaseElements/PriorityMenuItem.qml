@@ -11,7 +11,9 @@ MenuItem {
         implicitWidth: 30
         implicitHeight: 30
 
-        x: menuItem.width - width - menuItem.rightPadding
+        x: LayoutMirroring.enabled ?
+               qtbug.getRightPadding(menuItem) :
+               menuItem.width - width - qtbug.getRightPadding(menuItem)
         y: menuItem.topPadding + menuItem.availableHeight / 2 - height / 2
 
         Image {
@@ -35,6 +37,7 @@ MenuItem {
 
     contentItem: Item {
         Row {
+            anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
 
             spacing: 5
@@ -43,7 +46,8 @@ MenuItem {
                 text: menuItem.text
                 horizontalAlignment: Text.AlignLeft
                 verticalAlignment: Text.AlignVCenter
-                leftPadding: menuItem.enabled ? 16 : 10
+                leftPadding: qtbug.leftPadding(menuItem.enabled ? 16 : 10, 0)
+                rightPadding: qtbug.rightPadding(menuItem.enabled ? 16 : 10, 0)
                 font.pointSize: menuItem.enabled ? 14 : 16
                 color: appWindow.theme.foreground
             }

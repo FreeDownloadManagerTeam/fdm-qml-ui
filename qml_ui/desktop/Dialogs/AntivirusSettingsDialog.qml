@@ -9,8 +9,6 @@ import "../../common/Tools"
 BaseDialog {
     id: root
 
-    width: 400*appWindow.zoom
-
     contentItem: BaseDialogItem {
         titleText: qsTr("Virus check") + App.loc.emptyString
         focus: true

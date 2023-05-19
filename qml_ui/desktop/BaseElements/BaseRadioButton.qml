@@ -12,7 +12,7 @@ RadioButton {
     indicator: Rectangle {
         color: "transparent"
         anchors.verticalCenter: parent.verticalCenter
-        x: 6*appWindow.zoom
+        x: LayoutMirroring.enabled ? control.width - width - 6*appWindow.zoom : 6*appWindow.zoom
         width: 12*appWindow.zoom
         height: 12*appWindow.zoom
         clip: true
@@ -32,9 +32,11 @@ RadioButton {
     }
 
     contentItem: BaseLabel {
+        anchors.left: parent.left
         anchors.verticalCenter: control.verticalCenter
-        leftPadding: 27*appWindow.zoom
+        leftPadding: qtbug.leftPadding(27*appWindow.zoom, 0)
+        rightPadding: qtbug.rightPadding(27*appWindow.zoom, 0)
         text: parent.text
-        color: parent.textColor ? parent.textColor : color
+        color: parent.textColor ? parent.textColor : appWindow.theme.foreground
     }
 }

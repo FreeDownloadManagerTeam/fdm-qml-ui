@@ -29,7 +29,8 @@ Page {
 
             DialogButton {
                 text: qsTr("OK") + App.loc.emptyString
-                Layout.rightMargin: 10
+                Layout.rightMargin: qtbug.rightMargin(0, 10)
+                Layout.leftMargin: qtbug.leftMargin(0, 10)
                 textColor: appWindow.theme.toolbarTextColor
                 enabled: usernameField.displayText.length > 0
                 onClicked: accept()
@@ -60,17 +61,21 @@ Page {
 
                     Label
                     {
+                        anchors.left: parent.left
                         text: downloadTools.authProxyText
                         wrapMode: Text.Wrap
                         width: parent.width
+                        horizontalAlignment: Text.AlignLeft
                     }
 
                     Label
                     {
+                        anchors.left: parent.left
                         visible: downloadTools.authRealm.length > 0
                         text: qsTr("The site says: \"%1\".").arg(downloadTools.authRealm) + App.loc.emptyString
                         wrapMode: Text.Wrap
                         width: parent.width
+                        horizontalAlignment: Text.AlignLeft
                     }
                 }
 
@@ -82,6 +87,8 @@ Page {
                         text: qsTr("Username") + App.loc.emptyString
                         font.pixelSize: 16
                         padding: 3
+                        anchors.left: parent.left
+                        horizontalAlignment: Text.AlignLeft
                     }
 
                     TextField
@@ -95,6 +102,7 @@ Page {
                         onAccepted: accept()
                         focus: true
                         inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText | Qt.ImhSensitiveData
+                        horizontalAlignment: Text.AlignLeft
                     }
 
                     Label
@@ -102,6 +110,8 @@ Page {
                         text: qsTr("Password") + App.loc.emptyString
                         font.pixelSize: 16
                         padding: 3
+                        anchors.left: parent.left
+                        horizontalAlignment: Text.AlignLeft
                     }
 
                     TextField
@@ -117,6 +127,7 @@ Page {
                         inputMethodHints: Qt.ImhHiddenText
                         echoMode: TextInput.Password
                         passwordMaskDelay: 100
+                        horizontalAlignment: Text.AlignLeft
                     }
 
                     SwitchSetting {
@@ -150,6 +161,7 @@ Page {
                     visible: downloadTools.buildingDownload
                     running: downloadTools.buildingDownload
                     anchors.verticalCenter: parent.verticalCenter
+                    anchors.left: parent.left
                 }
 
                 Label
@@ -158,6 +170,8 @@ Page {
                     anchors.verticalCenter: parent.verticalCenter
                     text: downloadTools.statusText
                     color: downloadTools.statusWarning ? appWindow.theme.errorMessage : appWindow.theme.successMessage
+                    anchors.left: parent.left
+                    horizontalAlignment: Text.AlignLeft
                 }
             }
         }

@@ -9,6 +9,8 @@ import org.freedownloadmanager.fdm 1.0
 import "./BaseElements"
 
 Item {
+    id: root
+
     property bool isEmpty: !progressBlock.visible && !completeMsg.visible && !errorBlock.visible
 
     signal showingCompleteMessage(bool isShowing)
@@ -17,10 +19,10 @@ Item {
         id: progressBlock
         visible: downloadsItemTools.showProgressIndicator
         anchors.verticalCenter: parent.verticalCenter
-        width: parent.width
+        width: root.width
 
         RowLayout {
-            Layout.preferredWidth: parent.width
+            Layout.preferredWidth: root.width
 
             BaseLabel {
                 visible: downloadsItemTools.performingLo && appWindow.compactView
@@ -92,7 +94,7 @@ Item {
         id: completeMsg
         anchors.verticalCenter: parent.verticalCenter
         visible: opacity > 0
-        width: parent.width
+        width: root.width
         spacing: 3*appWindow.zoom
         opacity: 0
         OpacityAnimator on opacity {
@@ -139,7 +141,7 @@ Item {
         id: errorBlock
         anchors.verticalCenter: parent.verticalCenter
         visible: downloadsItemTools.inError
-        width: parent.width
+        width: root.width
         spacing: 3*appWindow.zoom
         Rectangle {
             clip: true

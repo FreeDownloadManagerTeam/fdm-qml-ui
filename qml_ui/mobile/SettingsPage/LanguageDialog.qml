@@ -10,10 +10,11 @@ import "../BaseElements"
 Dialog
 {
     id: root
+
+    parent: Overlay.overlay
+
     width: 320
     height: Math.min(parent.height, langList.count * 30) - 40
-
-    parent: appWindow.overlay
 
     x: Math.round((appWindow.width - width) / 2)
     y: Math.round((appWindow.height - height) / 2)
@@ -24,7 +25,8 @@ Dialog
                          "da_DK": -100, "nl_NL": -80, "fr_FR": -30, "de_DE": -20, "el_GR": -120, "id_ID": -180,
                          "it_IT": -50, "ja_JP": -150, "pl_PL": -70, "pt_BR": -200, "ro_RO": -60, "ru_RU": -110,
                          "sl_SI": -140, "es_ES": -10, "sv_SE": -90, "tr_TR": -160, "vi_VN": -190, "fa": -210,
-                         "hu_HU": -230, "fa_IR": -240, "bg_BG": -280, "ko_KR": -290, "hi_IN": -300 }
+                         "hu_HU": -230, "fa_IR": -240, "bg_BG": -280, "ko_KR": -290, "hi_IN": -300,
+                         "cs_CZ": -310 }
 
     contentItem: Item {
         anchors.fill: parent
@@ -63,16 +65,7 @@ Dialog
                 id: langList
                 anchors.fill: parent
 
-                property double bckgRatio: width / 18
-                property double bckgRatio1: 30 / 10
-                property string currentLang: App.loc.currentTranslation
-                property int currentLangIndex: 0
-
-                onVisibleChanged: {
-                    if (visible) {
-                        langList.positionViewAtIndex(currentLangIndex, ListView.Contain);
-                    }
-                }
+                property double bckgRatio: 30 / 10
 
                 flickableDirection: Flickable.VerticalFlick
                 boundsBehavior: Flickable.StopAtBounds
@@ -82,46 +75,15 @@ Dialog
                 delegate: Rectangle {
                     id: listItem
                     height: 30
-                    width: root.width
+                    width: langList.width
                     color: "transparent"
                     clip: true
-                    property bool isCurrentLang: langList.currentLang == modelData
-
-                    onIsCurrentLangChanged: {
-                        if (isCurrentLang) {
-                            langList.currentLangIndex = index;
-                            langList.positionViewAtIndex(langList.currentLangIndex, ListView.Contain);
-                        }
-                    }
+                    readonly property bool isCurrentLang: App.loc.currentTranslation == modelData
 
                     Rectangle {
                         clip: true
                         color: "transparent"
-                        width: parent.width
-                        height: parent.height
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.left: parent.left
-                        visible: listItem.isCurrentLang
-
-                        WaSvgImage {
-                            zoom: langList.bckgRatio
-                            x: 0
-                            y: flags[modelData] * zoom
-                            source: Qt.resolvedUrl("../../images/flags.svg")
-                            opacity: 0.1
-                            layer{
-                                effect: FastBlur {
-                                    radius: 64
-                                }
-                                enabled: true
-                            }
-                        }
-                    }
-
-                    Rectangle {
-                        clip: true
-                        color: "transparent"
-                        width: 18 * langList.bckgRatio1
+                        width: 18 * langList.bckgRatio
                         height: parent.height
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.left: parent.left
@@ -129,7 +91,7 @@ Dialog
                         visible: listItem.isCurrentLang
 
                         WaSvgImage {
-                            zoom: langList.bckgRatio1
+                            zoom: langList.bckgRatio
                             x: 0
                             y: flags[modelData] * zoom
                             source: Qt.resolvedUrl("../../images/flags.svg")
@@ -162,7 +124,9 @@ Dialog
                     }
 
                     BaseLabel {
-                        leftPadding: 15 + 18 + 70
+                        leftPadding: qtbug.leftPadding(15 + 18 + 70, 0)
+                        rightPadding: qtbug.rightPadding(15 + 18 + 70, 0)
+                        anchors.left: parent.left
                         anchors.verticalCenter: parent.verticalCenter
                         text: App.loc.translationLanguageString(modelData) + " (" + App.loc.translationCountryString(modelData) + ")"
                         font.capitalization: Font.Capitalize
@@ -176,12 +140,21 @@ Dialog
                     MouseArea {
                         anchors.fill: parent
                         onClicked: {
-                            App.loc.load(modelData)
+                            let name = modelData;
                             root.close();
+                            App.loc.load(name);
                         }
                     }
                 }
             }
+        }
+    }
+
+    onAboutToShow: {
+        for (let i = 0; i < langList.model.length; ++i)
+        {
+            if (App.loc.currentTranslation === langList.model[i])
+                langList.positionViewAtIndex(i, ListView.Contain);
         }
     }
 }

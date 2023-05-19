@@ -30,7 +30,9 @@ ComboBox {
         height: 30*appWindow.zoom
         width: parent.width
         BaseLabel {
-            leftPadding: 6*appWindow.zoom
+            anchors.left: parent.left
+            leftPadding: qtbug.leftPadding(6*appWindow.zoom, 0)
+            rightPadding: qtbug.rightPadding(6*appWindow.zoom, 0)
             anchors.verticalCenter: parent.verticalCenter
             text: modelData.text
         }
@@ -54,16 +56,13 @@ ComboBox {
         border.width: 1*appWindow.zoom
     }
 
-    contentItem: Rectangle {
-        color: "transparent"
-        BaseLabel {
-            anchors.verticalCenter: parent.verticalCenter
-            text: root.displayText
-        }
+    contentItem: BaseLabel {
+        verticalAlignment: Label.AlignVCenter
+        text: root.displayText
     }
 
     indicator: Rectangle {
-        x: root.width - width
+        x: LayoutMirroring.enabled ? 0 : root.width - width
         y: root.topPadding + (root.availableHeight - height) / 2
         width: height - 1*appWindow.zoom
         height: root.height

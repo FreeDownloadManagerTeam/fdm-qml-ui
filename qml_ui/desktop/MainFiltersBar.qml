@@ -7,7 +7,7 @@ import org.freedownloadmanager.fdm.abstractdownloadsui 1.0
 
 Rectangle {
     id: root
-    width: parent.width - 10
+    width: parent.width
     height: 34*appWindow.fontZoom
     clip: true
     color: "transparent"
@@ -24,6 +24,7 @@ Rectangle {
         color: "transparent"
 
         Row {
+            anchors.left: parent.left
             height: parent.height
             spacing: 8*appWindow.fontZoom
 
@@ -36,14 +37,14 @@ Rectangle {
 
                 MainFilterButton {
                     cnt: App.downloads.tracker.totalDownloadsCount
-                    text: qsTr("All") + App.loc.emptyString + (cnt > 0 ? " (%1)".arg(cnt) : "")
+                    title: qsTr("All") + App.loc.emptyString
                     value: 0
                 }
 
                 BaseFilterButton {
-                    readonly property int cnt: App.downloads.tracker.missingFilesDownloadsCount
+                    title: qsTr("Missing Files") + App.loc.emptyString
+                    cnt: App.downloads.tracker.missingFilesDownloadsCount
                     visible: cnt > 0 && downloadsWithMissingFilesTools.autoRemoveDownloads
-                    text: qsTr("Missing Files") + App.loc.emptyString + (cnt > 0 ? " (%1)".arg(cnt) : "")
                     value: AbstractDownloadsUi.MffAcceptMissingFiles
                     selected: downloadsWithMissingFilesTools.missingFilesFilter == value
                     onClicked: downloadsViewTools.setMissingFilesFilter(value)
@@ -54,21 +55,21 @@ Rectangle {
                 }
 
                 MainFilterButton {
+                    title: qsTr("Active") + App.loc.emptyString
                     cnt: App.downloads.tracker.runningDownloadsCount
-                    text: qsTr("Active") + App.loc.emptyString + (cnt > 0 ? " (%1)".arg(cnt) : "")
                     value: AbstractDownloadsUi.FilterRunning
                 }
 
                 MainFilterButton {
+                    title: qsTr("Completed") + App.loc.emptyString
                     cnt: App.downloads.tracker.finishedDownloadsCount
-                    text: qsTr("Completed") + App.loc.emptyString + (cnt > 0 ? " (%1)".arg(cnt) : "")
                     value: AbstractDownloadsUi.FilterFinished
                 }
 
                 MainFilterButton {
-                    visible: cnt > 0
+                    title: qsTr("Uncompleted") + App.loc.emptyString
                     cnt: App.downloads.tracker.nonFinishedDownloadsCount
-                    text: qsTr("Uncompleted") + App.loc.emptyString + (cnt > 0 ? " (%1)".arg(cnt) : "")
+                    visible: cnt > 0
                     value: AbstractDownloadsUi.FilterNonFinished
                 }
             }

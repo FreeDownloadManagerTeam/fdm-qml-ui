@@ -29,16 +29,19 @@ BaseDialog {
 
 
             BaseLabel {
+                anchors.left: parent.left
                 text: qsTr("Tag") + App.loc.emptyString
             }
 
             Row {
+                anchors.left: parent.left
                 spacing: 10*appWindow.zoom
 
                 BaseTextField {
                     id: textInput
                     width: 200*appWindow.zoom
                     focus: true
+                    text: tagsTools.editedTagName
                     onTextEdited: {tagsTools.editedTagName = text }
                     onAccepted: save()
                     onVisibleChanged: {
@@ -46,9 +49,7 @@ BaseDialog {
                     }
                     Keys.onEscapePressed: { root.close(); tagsTools.endTagEditing(); }
                     maximumLength: 20
-                    Component.onCompleted: {
-                        text = tagsTools.editedTagName;
-                    }
+                    enable_QTBUG_110471_workaround_2: true
                 }
 
                 //color
@@ -112,6 +113,7 @@ BaseDialog {
             }
 
             BaseLabel {
+                anchors.left: parent.left
                 text: qsTr('Extensions (e.g. "avi mp3")') + App.loc.emptyString
                 topPadding: 5*appWindow.zoom
 
@@ -128,6 +130,7 @@ BaseDialog {
             }
 
             BaseTextField {
+                anchors.left: parent.left
                 width: 300*appWindow.zoom
                 onVisibleChanged: {
                     if (tagsTools && tagsTools.editedTagExtensions) {
@@ -139,14 +142,17 @@ BaseDialog {
                     tagsTools.editedTagExtensions = m && m.length > 0 ? m : [];
                 }
                 onAccepted: save()
+                enable_QTBUG_110471_workaround_2: true
             }
 
             BaseLabel {
+                anchors.left: parent.left
                 text: qsTr("Default download folder") + App.loc.emptyString
                 topPadding: 5*appWindow.zoom
             }
 
             Row {
+                anchors.left: parent.left
                 spacing: 10*appWindow.zoom
 
                 FolderCombobox {

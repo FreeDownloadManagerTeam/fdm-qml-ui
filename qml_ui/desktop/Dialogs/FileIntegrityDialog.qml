@@ -29,7 +29,7 @@ BaseDialog {
             spacing: 7*appWindow.zoom
 
             BaseLabel {
-                text: fileIntegrityTools.title + " (" + JsTools.sizeUtils.bytesAsText(fileIntegrityTools.size) + ")"
+                text: fileIntegrityTools.title + " (" + App.bytesAsText(fileIntegrityTools.size) + ")" + App.loc.emptyString
                 font.weight: Font.DemiBold
                 elide: Text.ElideMiddle
                 Layout.fillWidth: true
@@ -93,12 +93,13 @@ BaseDialog {
                 focus: true
             }
 
-            Rectangle {
+            Item {
                 width: parent.width
                 height: 50*appWindow.zoom
 
                 BaseLabel
                 {
+                    anchors.left: parent.left
                     visible: verificationEnabled
                     color: verificationOK ? appWindow.theme.successMessage : appWindow.theme.errorMessage
                     text: (verificationOK ? qsTr("Verification OK") : qsTr("Verification failed")) + App.loc.emptyString

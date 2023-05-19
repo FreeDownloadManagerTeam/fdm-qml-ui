@@ -27,7 +27,10 @@ Rectangle {
         anchors.leftMargin: 11
         anchors.verticalCenter: parent.verticalCenter
 
-        icon.source: Qt.resolvedUrl("../images/mobile/arrow_back.svg")
+        icon.source: LayoutMirroring.enabled ?
+                         Qt.resolvedUrl("../images/mobile/arrow_forward.svg") :
+                         Qt.resolvedUrl("../images/mobile/arrow_back.svg")
+
         onClicked: {
             searchText.text = "";
             downloadsViewTools.resetDownloadsTitleFilter();

@@ -16,22 +16,21 @@ Rectangle {
     {
         width: parent.width
         height: parent.height
-        //padding: 5
 
         Label
         {
-            //text: qsTr("Low") + App.loc.emptyString
             text: root.comboBoxText
             font.pixelSize: 16
             padding: 3
+            anchors.left: parent.left
+            horizontalAlignment: Text.AlignLeft
         }
 
         TumMaxURatioComboBox
         {
-            //mode: TrafficUsageMode.Low
             mode: root.speedLimitMode
-            //setting: DmCoreSettings.MaxDownloadSpeed
             setting: speedLimitSetting
+            anchors.left: parent.left
         }
     }
 }

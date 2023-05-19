@@ -50,7 +50,7 @@ ToolBar {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.top: parent.top
                 anchors.topMargin: 5
-                font.pixelSize: 13*appWindow.zoom*appWindow.zoom2
+                font.pixelSize: 13*appWindow.fontZoom
                 color: appWindow.theme.titleBar
             }
         }
@@ -62,6 +62,7 @@ ToolBar {
             color: "transparent"
 
             Row {
+                anchors.left: parent.left
                 height: parent.height
                 visible: pageId
 
@@ -69,10 +70,12 @@ ToolBar {
                     source: appWindow.theme.mainTbImg.arrow_left
                     anchors.verticalCenter: parent.verticalCenter
                     onClicked: stackView.pop()
+                    mirror: LayoutMirroring.enabled
                 }
             }
 
             Row {
+                anchors.left: parent.left
                 visible: !pageId
                 anchors.verticalCenter: parent.verticalCenter
                 leftPadding: (appWindow.macVersion ? 6 : -2)*appWindow.zoom

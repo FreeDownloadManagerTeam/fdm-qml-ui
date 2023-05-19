@@ -22,8 +22,8 @@ ApplicationWindow
 
     property bool mobileVersion: true
 
-    property bool smallScreen: width < 500
-    property bool verySmallScreen: width < 400
+    readonly property bool smallScreen: width < 500
+    readonly property bool verySmallScreen: width < 400
 
     property real screenWidthInches: width / ( Screen.pixelDensity * 25.4 )
     property bool showBordersInDownloadsList: false//width > 799 && appWindow.screenWidthInches > 4.5
@@ -36,16 +36,21 @@ ApplicationWindow
     property bool searchMode: false
     property bool btSupported: App.features.hasFeature(AppFeatures.BT)
     property bool ytSupported: App.features.hasFeature(AppFeatures.YT)
+    property bool hasDownloadMgr: App.features.hasFeature(AppFeatures.LocalDownloadManager) || App.rc.client.active
     property alias btS: btStrings.item
 
     signal newDownloadAdded
     signal uiReadyStateChanged
     signal appWindowStateChanged
     signal tumSettingsChanged
+    signal openScheduler(double downloadId)
     signal stopDownload(var downloadIds)
     signal openBrowser
     signal startDownload
-    signal reportError(int failedId)
+    signal reportError(double failedId)
+
+    LayoutMirroring.enabled: App.loc.layoutDirection == Qt.RightToLeft
+    LayoutMirroring.childrenInherit: true
 
     visible: true
     width: 360
@@ -176,7 +181,7 @@ ApplicationWindow
     Connections
     {
         target: App.downloads.errorsReportsMgr
-        onReportFinished: {
+        onReportFinished: (downloadId, error) => {
             reportSentDlg.errorMessage = error;
             reportSentDlg.open();
         }
@@ -324,13 +329,16 @@ ApplicationWindow
 
     function canShowAuthDialog()
     {
-        if (stackView.depth === 0) {
-            return false;
-        }
-        var page = stackView.get(0);
-        var page_name = page.pageName;
-        if (['WaitingPage'].indexOf(page_name) >= 0) {
-            return false;
+        if (!App.rc.client.active)
+        {
+            if (stackView.depth === 0) {
+                return false;
+            }
+            var page = stackView.get(0);
+            var page_name = page.pageName;
+            if (['WaitingPage'].indexOf(page_name) >= 0) {
+                return false;
+            }
         }
 
         var current_page = stackView.currentItem;
@@ -463,14 +471,14 @@ ApplicationWindow
 
     Connections {
         target: App.downloads.filesExistsActionsMgr
-        onActionRequired: {
+        onActionRequired: (downloadId, fileIndex, files) => {
             filesExistsDlg.open(downloadId, fileIndex, files);
         }
     }
 
     Connections {
         target: App
-        onShowQuitConfirmation: {quitConfDlg.open(message);}
+        onShowQuitConfirmation: (message) => quitConfDlg.open(message)
     }
 
     Connections {
@@ -528,5 +536,18 @@ ApplicationWindow
             if (!connectToRemoteAppDlg.opened)
                 connectToRemoteAppDlg.open();
         }
+    }
+
+    QTBUG {
+        id: qtbug
+    }
+
+    Component.onCompleted: {
+        uiReadyTools.onReady(function()
+        {
+            let r = App.downloads.filesExistsActionsMgr.pendingRequest();
+            if (r)
+                filesExistsDlg.open(r.downloadId, r.fileIndex, r.files);
+        });
     }
 }

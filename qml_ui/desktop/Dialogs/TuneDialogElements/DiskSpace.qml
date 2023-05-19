@@ -10,8 +10,8 @@ BaseLabel {
 
     color: downloadTools.notEnoughSpaceWarning ? appWindow.theme.errorMessage : "#737373"
     text: (downloadTools.freeDiskSpace != -1 ?
-              qsTr("Size: %1 (Disk space: %2)").arg(JsTools.sizeUtils.bytesAsText(downloadTools.fileSize)).arg(JsTools.sizeUtils.bytesAsText(downloadTools.freeDiskSpace < 0 ? 0 : downloadTools.freeDiskSpace)) :
-              qsTr("Size: %1").arg(JsTools.sizeUtils.bytesAsText(downloadTools.fileSize))) + App.loc.emptyString
+              qsTr("Size: %1 (Disk space: %2)").arg(App.bytesAsText(downloadTools.fileSize)).arg(App.bytesAsText(downloadTools.freeDiskSpace < 0 ? 0 : downloadTools.freeDiskSpace)) :
+              qsTr("Size: %1").arg(App.bytesAsText(downloadTools.fileSize))) + App.loc.emptyString
 
     onSaveToPathChanged: {
         App.storages.queryBytesAvailable(saveToPath);

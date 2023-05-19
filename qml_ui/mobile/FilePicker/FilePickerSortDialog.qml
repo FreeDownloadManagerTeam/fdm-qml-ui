@@ -61,7 +61,7 @@ Drawer {
 
                 implicitWidth: 18
                 implicitHeight: 18
-                x: control.width - width - control.rightPadding
+                x: LayoutMirroring.enabled ? qtbug.getRightPadding(control) : control.width - width - qtbug.getRightPadding(control)
                 y: parent.height / 2 - height / 2
                 radius: 9
                 color: control.checked ? appWindow.theme.toolbarBackground : "transparent"

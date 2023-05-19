@@ -3,6 +3,7 @@ import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
 import "../../qt5compat"
 import org.freedownloadmanager.fdm 1.0
+import org.freedownloadmanager.fdm.abstractdownloadsui 1.0
 import org.freedownloadmanager.fdm.dmcoresettings 1.0
 import org.freedownloadmanager.fdm.appsettings 1.0
 import org.freedownloadmanager.fdm.appfeatures 1.0
@@ -24,12 +25,18 @@ Column
 
     SettingsGroupColumn
     {
+        anchors.left: parent.left
+
         SettingsSubgroupHeader
         {
+            anchors.left: parent.left
             text: qsTr("General") + App.loc.emptyString
         }
 
-        IntegrationSettings {}
+        IntegrationSettings
+        {
+            anchors.left: parent.left
+        }
 
         SettingsCheckBox
         {
@@ -49,8 +56,13 @@ Column
     {
         id: monitoring
 
+        anchors.left: parent.left
+
+        width: parent.width
+
         SettingsSubgroupHeader
         {
+            anchors.left: parent.left
             text: qsTr("Monitoring") + App.loc.emptyString
         }
 
@@ -62,56 +74,65 @@ Column
             onClicked: monitoring.applySettings()
         }
 
-        RowLayout
+        Column
         {
-            id: torrentFolderSettings
+            anchors.left: parent.left
+            anchors.leftMargin: 32*appWindow.zoom
+            spacing: 8*appWindow.zoom
+            width: parent.width
 
-            enabled: torrentFolderCheck.checked
-
-            x: torrentFolderCheck.x + 20*appWindow.zoom
-            width: root.width - x
-
-            SettingsTextField
+            RowLayout
             {
-                id: torrentFolder
-                readOnly: true
-                Layout.fillWidth: true
-                text: App.localDecodePath(App.settings.app.value(AppSettings.TorrentsFolder).length ?
-                                              App.settings.app.value(AppSettings.TorrentsFolder) :
-                                              App.systemDefaultDownloadPath())
-                onTextChanged: monitoring.applySettings()
-            }
+                enabled: torrentFolderCheck.checked
 
-            PickFileButton {
-                id: folderBtn
-                Layout.alignment: Qt.AlignRight
-                Layout.preferredHeight: 25*appWindow.zoom
-                onClicked: browseDlg.open()
-                QtLabs.FolderDialog {
-                    id: browseDlg
-                    folder: App.tools.urlFromLocalFile(torrentFolder.text).url
-                    acceptLabel: qsTr("Open") + App.loc.emptyString
-                    rejectLabel: qsTr("Cancel") + App.loc.emptyString
-                    onAccepted: torrentFolder.text = App.tools.url(folder).toLocalFile()
+                anchors.left: parent.left
+
+                width: Math.min(parent.width, 500*appWindow.zoom)
+
+                SettingsTextField
+                {
+                    id: torrentFolder
+                    readOnly: true
+                    Layout.fillWidth: true
+                    text: App.toNativeSeparators(
+                              App.localDecodePath(App.settings.app.value(AppSettings.TorrentsFolder).length ?
+                                                      App.settings.app.value(AppSettings.TorrentsFolder) :
+                                                      App.systemDefaultDownloadPath()))
+                    onTextChanged: monitoring.applySettings()
+                }
+
+                PickFileButton {
+                    id: folderBtn
+                    Layout.alignment: Qt.AlignRight
+                    Layout.preferredHeight: 25*appWindow.zoom
+                    onClicked: browseDlg.open()
+                    QtLabs.FolderDialog {
+                        id: browseDlg
+                        folder: App.tools.urlFromLocalFile(torrentFolder.text).url
+                        acceptLabel: qsTr("Open") + App.loc.emptyString
+                        rejectLabel: qsTr("Cancel") + App.loc.emptyString
+                        onAccepted: torrentFolder.text = App.tools.url(folder).toLocalFile()
+                    }
                 }
             }
-        }
 
-        SettingsCheckBox
-        {
-            id: torrentFolderSilent
-            enabled: torrentFolderCheck.checked
-            anchors.leftMargin: 25*appWindow.zoom
-            text: qsTr("Start downloading without confirmation") + App.loc.emptyString
-            checked: App.settings.toBool(
-                         App.settings.app.value(AppSettings.ForceSilentDownloadsFromTorrentFolder))
-            onClicked: monitoring.applySettings()
+            SettingsCheckBox
+            {
+                id: torrentFolderSilent
+                enabled: torrentFolderCheck.checked
+                anchors.leftMargin: 0
+                xOffset: 0
+                text: qsTr("Start downloading without confirmation") + App.loc.emptyString
+                checked: App.settings.toBool(
+                             App.settings.app.value(AppSettings.ForceSilentDownloadsFromTorrentFolder))
+                onClicked: monitoring.applySettings()
+            }
         }
 
         function applySettings()
         {
             var path = torrentFolderCheck.checked ?
-                        torrentFolder.text :
+                        App.fromNativeSeparators(torrentFolder.text) :
                         "";
             App.settings.app.setValue(
                         AppSettings.TorrentsFolder,
@@ -124,9 +145,95 @@ Column
 
     SettingsGroupColumn
     {
+        anchors.left: parent.left
+
         SettingsSubgroupHeader
         {
+            anchors.left: parent.left
+            text: qsTr("Privacy") + App.loc.emptyString
+        }
+
+        Row {
+            anchors.left: parent.left
+            leftPadding: qtbug.leftPadding(17*appWindow.zoom, 0)
+            rightPadding: qtbug.rightPadding(17*appWindow.zoom, 0)
+            spacing: 10*appWindow.zoom
+
+            SettingsSubgroupHeader {
+                text: qsTr("Encryption:") + App.loc.emptyString
+                anchors.verticalCenter: parent.verticalCenter
+            }
+
+            BaseComboBox {
+                anchors.verticalCenter: parent.verticalCenter
+                model: [
+                    {text: qsTr("No encryption allowed") + App.loc.emptyString, value: AbstractDownloadsUi.NoEncryptionAllowed},
+                    {text: qsTr("Prefer encryption") + App.loc.emptyString, value: AbstractDownloadsUi.PreferEncryption},
+                    {text: qsTr("Require encryption") + App.loc.emptyString, value: AbstractDownloadsUi.RequireEncryption},
+                ]
+                currentIndex: {
+                    let v = parseInt(App.settings.dmcore.value(DmCoreSettings.BtEncryptionPolicy));
+                    for (let i = 0; i < model.length; ++i) {
+                        if (model[i].value === v)
+                            return i;
+                    }
+                    return 0;
+                }
+                onActivated: (index) => App.settings.dmcore.setValue(DmCoreSettings.BtEncryptionPolicy, model[index].value.toString())
+            }
+        }
+
+        SettingsCheckBox
+        {
+            text: App.my_BT_qsTranslate("Settings", "Enable DHT to find more peers") + App.loc.emptyString
+            checked: App.settings.toBool(App.settings.dmcore.value(DmCoreSettings.BtEnableDht))
+            onClicked: App.settings.dmcore.setValue(DmCoreSettings.BtEnableDht,
+                                                    App.settings.fromBool(checked))
+        }
+
+        SettingsCheckBox
+        {
+            text: App.my_BT_qsTranslate("Settings", "Enable PeX to find more peers") + App.loc.emptyString
+            checked: App.settings.toBool(App.settings.dmcore.value(DmCoreSettings.BtEnablePex))
+            onClicked: {
+                App.settings.dmcore.setValue(DmCoreSettings.BtEnablePex,
+                                             App.settings.fromBool(checked));
+                pexRestartRequired.visible = true;
+            }
+        }
+        RestartRequiredLabel {
+            id: pexRestartRequired
+            visible: false
+            anchors.left: parent.left
+            anchors.leftMargin: 20*appWindow.zoom
+        }
+
+        SettingsCheckBox
+        {
+            text: App.my_BT_qsTranslate("Settings", "Enable Local Peer Discovery to find more peers") + App.loc.emptyString
+            checked: App.settings.toBool(App.settings.dmcore.value(DmCoreSettings.BtEnableLsd))
+            onClicked: App.settings.dmcore.setValue(DmCoreSettings.BtEnableLsd,
+                                                    App.settings.fromBool(checked))
+        }
+    }
+
+    SettingsGroupColumn
+    {
+        anchors.left: parent.left
+        width: parent.width
+
+        SettingsSubgroupHeader
+        {
+            anchors.left: parent.left
             text: qsTr("Advanced") + App.loc.emptyString
+        }
+
+        SettingsCheckBox
+        {
+            text: App.my_BT_qsTranslate("Settings", "Enable uTP") + App.loc.emptyString
+            checked: App.settings.toBool(App.settings.dmcore.value(DmCoreSettings.BtEnableUtp))
+            onClicked: App.settings.dmcore.setValue(DmCoreSettings.BtEnableUtp,
+                                                    App.settings.fromBool(checked))
         }
 
         SettingsCheckBox
@@ -144,9 +251,20 @@ Column
             }
         }
 
+        SettingsSubgroupHeader {
+            anchors.left: parent.left
+            visible: useSystemDefinedPort.checked && btTools.item.sessionPort > 0
+            text: qsTr("Current port: %1").arg(btTools.item.sessionPort) + App.loc.emptyString
+            leftPadding: qtbug.leftPadding(40*appWindow.zoom, 0)
+            rightPadding: qtbug.rightPadding(40*appWindow.zoom, 0)
+            font.pixelSize: 12*appWindow.fontZoom
+        }
+
         Row {
             visible: !useSystemDefinedPort.checked
-            leftPadding: 40*appWindow.zoom
+            anchors.left: parent.left
+            leftPadding: qtbug.leftPadding(40*appWindow.zoom, 0)
+            rightPadding: qtbug.rightPadding(40*appWindow.zoom, 0)
             spacing: 5*appWindow.zoom
 
             SettingsSubgroupHeader {
@@ -182,8 +300,10 @@ Column
         {
             visible: enableTrackerList.checked
 
-            x: enableTrackerList.x + 20*appWindow.zoom
-            width: root.width - x
+            anchors.left: parent.left
+            anchors.leftMargin: 32*appWindow.zoom
+
+            width: parent.width - 32*appWindow.zoom
 
             spacing: 10*appWindow.zoom
 
@@ -199,7 +319,7 @@ Column
             {
                 id: trackerList
                 width: parent.width
-                height: 100*appWindow.fontZoom
+                height: 150*appWindow.fontZoom
                 isValidItem: function(str) {
                     return str.startsWith("http://") ||
                             str.startsWith("https://") ||

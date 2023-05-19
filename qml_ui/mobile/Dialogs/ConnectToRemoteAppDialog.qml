@@ -45,17 +45,19 @@ CenteredDialog
             Layout.maximumWidth: root.maxWidth
 
             Label {
-                text: "ID:"
+                text: qsTr("ID:") + App.loc.emptyString
+                horizontalAlignment: Text.AlignLeft
             }
 
-            TextField {
+            BaseTextField {
                 id: idField
                 text: uiSettingsTools.settings.lastRemoteAppId
                 focus: true
                 Layout.fillWidth: true
+                enable_QTBUG_110471_workaround_2: true
+                selectAllAtInit: true
                 onAccepted: root.accept()
                 Keys.onEscapePressed: root.close()
-                Component.onCompleted: selectAll()
                 inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhSensitiveData
                 onTextChanged: {
                     var s = text.toUpperCase();
@@ -93,6 +95,13 @@ CenteredDialog
         }
     }
 
+    onAboutToShow: {
+        if (!idField.text)
+            setRemoteId(uiSettingsTools.settings.lastRemoteAppId);
+        idField.selectAll();
+        idField.forceActiveFocus();
+    }
+
     onAccepted: {
         uiSettingsTools.settings.lastRemoteAppId = remoteId;
         App.rc.client.connectToRemoteApp(remoteId, alwaysConnectOnAppStart.checked);
@@ -100,6 +109,7 @@ CenteredDialog
 
     function setRemoteId(remoteId)
     {
-        idField.text = remoteId;
+        idField.text = remoteId.toUpperCase();
+        idField.selectAll();
     }
 }

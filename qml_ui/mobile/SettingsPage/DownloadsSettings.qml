@@ -65,6 +65,7 @@ Page {
                 SettingsSeparator{}
 
                 SwitchSetting {
+                    id: removeFinished
                     description: qsTr("Automatically remove completed downloads from download list") + App.loc.emptyString
                     switchChecked: App.settings.toBool(App.settings.dmcore.value(DmCoreSettings.AutoRemoveFinishedDownloads))
                     onClicked: {
@@ -72,6 +73,77 @@ Page {
                         App.settings.dmcore.setValue(
                                     DmCoreSettings.AutoRemoveFinishedDownloads,
                                     App.settings.fromBool(switchChecked));
+                    }
+                }
+
+                Row {
+                    visible: removeFinished.switchChecked
+                    leftPadding: qtbug.leftPadding(40, 0)
+                    rightPadding: qtbug.rightPadding(40, 0)
+                    spacing: 3
+
+                    SettingsRadioButton {
+                        id: removeFinishedImmediately
+                        text: qsTr("Immediately") + App.loc.emptyString
+                        checked: !parseInt(App.settings.dmcore.value(DmCoreSettings.AutoRemoveFinishedDownloads_KeepDays))
+                        anchors.verticalCenter: parent.verticalCenter
+                        onClicked: {
+                            App.settings.dmcore.setValue(
+                                        DmCoreSettings.AutoRemoveFinishedDownloads_KeepDays,
+                                        "0");
+                        }
+                    }
+
+                    Item {
+                        implicitWidth: 15
+                        implicitHeight: 1
+                    }
+
+                    SettingsRadioButton {
+                        id: removeFinishedIn
+                        checked: !removeFinishedImmediately.checked
+                        //: Automatically remove finished downloads In N days
+                        text: qsTr("In") + App.loc.emptyString
+                        anchors.verticalCenter: parent.verticalCenter
+                        onClicked: {
+                            if (removeFinishedInDays.text)
+                            {
+                                App.settings.dmcore.setValue(
+                                            DmCoreSettings.AutoRemoveFinishedDownloads_KeepDays,
+                                            removeFinishedInDays.text);
+                            }
+                            else
+                            {
+                                removeFinishedInDays.forceActiveFocus();
+                            }
+                        }
+                    }
+
+                    SettingsTextField {
+                        id: removeFinishedInDays
+                        enabled: removeFinishedIn.checked
+                        text: parseInt(App.settings.dmcore.value(DmCoreSettings.AutoRemoveFinishedDownloads_KeepDays)) ?
+                                  App.settings.dmcore.value(DmCoreSettings.AutoRemoveFinishedDownloads_KeepDays) :
+                                  ""
+                        implicitWidth: 40
+                        inputMethodHints: Qt.ImhDigitsOnly
+                        validator: QtRegExpValidator { regExp: /[1-9]\d*/ }
+                        anchors.verticalCenter: parent.verticalCenter
+                        onActiveFocusChanged: {
+                            if (!activeFocus && removeFinishedIn.checked && text)
+                            {
+                                App.settings.dmcore.setValue(
+                                            DmCoreSettings.AutoRemoveFinishedDownloads_KeepDays,
+                                            text);
+                            }
+                        }
+                    }
+
+                    BaseLabel {
+                        enabled: removeFinishedIn.checked
+                        //: Automatically remove finished downloads In N days
+                        text: qsTr("days") + App.loc.emptyString
+                        anchors.verticalCenter: parent.verticalCenter
                     }
                 }
 
@@ -84,6 +156,19 @@ Page {
                         switchChecked = !switchChecked;
                         App.settings.dmcore.setValue(
                                     DmCoreSettings.AutoRetryFailedDownloads,
+                                    App.settings.fromBool(switchChecked));
+                    }
+                }
+
+                SettingsSeparator{}
+
+                SwitchSetting {
+                    description: qsTr("Detect unwanted behavior errors") + App.loc.emptyString
+                    switchChecked: App.settings.toBool(App.settings.dmcore.value(DmCoreSettings.DetectUnwantedDownloadErrors))
+                    onClicked: {
+                        switchChecked = !switchChecked;
+                        App.settings.dmcore.setValue(
+                                    DmCoreSettings.DetectUnwantedDownloadErrors,
                                     App.settings.fromBool(switchChecked));
                     }
                 }
@@ -113,7 +198,8 @@ Page {
                     id: autoFolderRadioBtn
                     text: qsTr("Choose default download folder automatically") + App.loc.emptyString
                     checked: !fixedFolderRadioBtn.checked
-                    leftPadding: 20
+                    leftPadding: qtbug.leftPadding(20, 0)
+                    rightPadding: qtbug.rightPadding(20, 0)
                     font.pixelSize: 16
                     width: parent.width
                     onCheckedChanged: {
@@ -163,7 +249,8 @@ Page {
                         if (checked)
                             fixedFolderCombo.apply();
                     }
-                    leftPadding: 20
+                    leftPadding: qtbug.leftPadding(20, 0)
+                    rightPadding: qtbug.rightPadding(20, 0)
                     topPadding: 20
                     font.pixelSize: 16
                     width: parent.width

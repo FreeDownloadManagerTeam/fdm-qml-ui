@@ -48,6 +48,7 @@ Flickable {
                 DownloadIcon {
                     id: forImg
                     anchors.top: parent.top
+                    anchors.left: parent.left
                 }
 
                 Column {
@@ -66,6 +67,7 @@ Flickable {
                         font.pixelSize: 16
                         font.family: "Roboto"
                         font.weight: Font.Medium
+                        anchors.left: parent.left
                     }
 
                     Rectangle {
@@ -88,6 +90,7 @@ Flickable {
                             id: progressbar_rect
                             //visible: downloadsItemTools.showProgressIndicator
                             visible: downloadsItemTools.selectedSize !== -1 || downloadsItemTools.performingLo
+                            anchors.left: parent.left
                             anchors.verticalCenter: parent.verticalCenter
                             small: false
                             progress: downloadsItemTools.progress
@@ -110,6 +113,7 @@ Flickable {
             RowLayout {
                 visible: downloadsItemTools.inError
                 width: parent.width
+                anchors.left: parent.left
                 spacing: 3
                 Image {
                     id: img
@@ -139,33 +143,37 @@ Flickable {
                 id: fakeTable
                 property int columnWidth: calcColumnWidth()
                 spacing: 7
+                anchors.left: parent.left
 
                 Row {
                     visible: downloadsItemTools.state.length > 0
+                    anchors.left: parent.left
                     BaseLabel {
                         width: fakeTable.columnWidth
-                        text: qsTr("State") + ":" + App.loc.emptyString
+                        text: qsTr("State") + ':' + App.loc.emptyString
                     }
                     BaseLabel {
                         text: downloadsItemTools.state
                     }
                 }
                 Row {
+                    anchors.left: parent.left
                     BaseLabel {
                         id: label1
                         width: fakeTable.columnWidth
                         text: (downloadsItemTools.finished ? qsTr("Total size:") : qsTr("Downloaded:")) + App.loc.emptyString
                     }
                     BaseLabel {
-                        text: (downloadsItemTools.finished || downloadsItemTools.unknownFileSize ? JsTools.sizeUtils.bytesAsText(downloadsItemTools.selectedBytesDownloaded) :
-                              qsTr("%1 of %2").arg(JsTools.sizeUtils.bytesAsText(downloadsItemTools.selectedBytesDownloaded)).arg(JsTools.sizeUtils.bytesAsText(downloadsItemTools.selectedSize))) + App.loc.emptyString
+                        text: (downloadsItemTools.finished || downloadsItemTools.unknownFileSize ? App.bytesAsText(downloadsItemTools.selectedBytesDownloaded) :
+                              qsTr("%1 of %2").arg(App.bytesAsText(downloadsItemTools.selectedBytesDownloaded)).arg(App.bytesAsText(downloadsItemTools.selectedSize))) + App.loc.emptyString
                     }
                 }
                 Row {
                     visible: downloadsItemTools.canUpload
+                    anchors.left: parent.left
                     BaseLabel {
                         width: fakeTable.columnWidth
-                        text: qsTr("Uploaded") + ":" + App.loc.emptyString
+                        text: qsTr("Uploaded") + ':' + App.loc.emptyString
                     }
                     BaseLabel {
                         text: App.bytesAsText(downloadsItemTools.bytesUploaded) +
@@ -175,6 +183,7 @@ Flickable {
                 }
                 Row {
                     visible: !downloadsItemTools.finished || downloadsItemTools.showDownloadSpeed
+                    anchors.left: parent.left
                     BaseLabel {
                         id: label2
                         width: fakeTable.columnWidth
@@ -188,6 +197,7 @@ Flickable {
                 }
                 Row {
                     visible: !downloadsItemTools.finished || downloadsItemTools.showUploadSpeed
+                    anchors.left: parent.left
                     BaseLabel {
                         id: label5
                         width: fakeTable.columnWidth
@@ -201,6 +211,7 @@ Flickable {
                 }
                 Row {
                     visible: downloadsItemTools.host
+                    anchors.left: parent.left
                     BaseLabel {
                         id: label3
                         width: fakeTable.columnWidth
@@ -211,6 +222,7 @@ Flickable {
                     }
                 }
                 Row {
+                    anchors.left: parent.left
                     BaseLabel {
                         id: label4
                         width: fakeTable.columnWidth
@@ -241,6 +253,7 @@ Flickable {
                     id: folderImg
                     width: folderPath.height
                     height: folderPath.height
+                    anchors.left: parent.left
                     anchors.verticalCenter: parent.verticalCenter
                     fillMode: Image.PreserveAspectFit
                     source: (App.features.hasFeature(AppFeatures.OpenFolder) && !App.rc.client.active) ? "../../images/mobile/open_folder.svg" :
@@ -301,6 +314,7 @@ Flickable {
 
             BaseLabel {
                 id: progressLabel
+                anchors.left: parent.left
                 clip: true
                 elide: Text.ElideMiddle
                 text: qsTr("Progress:") + App.loc.emptyString

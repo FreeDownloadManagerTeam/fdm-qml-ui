@@ -82,12 +82,15 @@ Rectangle {
 
                         //Downloads settings
                         SettingsItem {
+                            visible: appWindow.hasDownloadMgr
                             description: qsTr("Downloads settings") + App.loc.emptyString
                             onClicked: stackView.waPush(Qt.resolvedUrl("DownloadsSettings.qml"))
                             textWeight: Font.Bold
                         }
 
-                        SettingsSeparator{}
+                        SettingsSeparator{
+                            visible: appWindow.hasDownloadMgr
+                        }
 
                         //Proxy settings
                         SettingsItem {
@@ -100,6 +103,7 @@ Rectangle {
 
                         //Traffic settings
                         SettingsItem {
+                            visible: appWindow.hasDownloadMgr
                             description: qsTr("Traffic limits") + App.loc.emptyString
                             onClicked: stackView.waPush(Qt.resolvedUrl("TrafficLimitsSettings.qml"))
                             textWeight: Font.Bold
@@ -108,12 +112,15 @@ Rectangle {
                         SettingsSeparator{}
 
                         SettingsItem {
+                            visible: appWindow.hasDownloadMgr
                             description: qsTr("Sounds settings") + App.loc.emptyString
                             onClicked: stackView.waPush(Qt.resolvedUrl("SoundsSettings.qml"))
                             textWeight: Font.Bold
                         }
 
-                        SettingsSeparator{}
+                        SettingsSeparator{
+                            visible: appWindow.hasDownloadMgr
+                        }
 
                         SettingsItem {
                             visible: appWindow.btSupported
@@ -125,6 +132,14 @@ Rectangle {
                         SettingsSeparator {
                             visible: appWindow.btSupported
                         }
+
+                        SettingsItem {
+                            description: qsTr("Remote control settings") + App.loc.emptyString
+                            onClicked: stackView.waPush(Qt.resolvedUrl("RemoteControlSettings.qml"))
+                            textWeight: Font.Bold
+                        }
+
+                        SettingsSeparator{}
 
                         SettingsItem {
                             description: qsTr("Advanced settings") + App.loc.emptyString
@@ -142,7 +157,8 @@ Rectangle {
 
                 BaseLabel
                 {
-                    Layout.leftMargin: 20
+                    Layout.leftMargin: qtbug.leftMargin(20, 0)
+                    Layout.rightMargin: qtbug.rightMargin(20, 0)
                     font.pixelSize: 14
                     font.bold: true
                     text: qsTr("Go back to default settings") + App.loc.emptyString
@@ -150,7 +166,8 @@ Rectangle {
 
                 DialogButton
                 {
-                    Layout.leftMargin: 30
+                    Layout.leftMargin: qtbug.leftMargin(30, 0)
+                    Layout.rightMargin: qtbug.rightMargin(30, 0)
                     enabled: App.settings.hasNonDefaultValues || uiSettingsTools.hasNonDefaultValues
                     text: qsTr("Reset settings") + App.loc.emptyString
                     onClicked: okToResetMsg.open()

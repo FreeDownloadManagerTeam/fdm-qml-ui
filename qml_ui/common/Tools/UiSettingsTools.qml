@@ -26,9 +26,6 @@ Item {
         property string lastMovePath: QtLabs.StandardPaths.writableLocation(QtLabs.StandardPaths.DownloadLocation)
         property string exportImportPath: App.tools.url(QtLabs.StandardPaths.writableLocation(QtLabs.StandardPaths.DownloadLocation)).toLocalFile()
         property string pluginsDistribsPath: App.tools.url(QtLabs.StandardPaths.writableLocation(QtLabs.StandardPaths.DownloadLocation)).toLocalFile()
-        property int schedulerDaysEnabled: (1 | 1 << 1 | 1 << 2 | 1 << 3 | 1 << 4 | 1 << 5 | 1 << 6)
-        property int schedulerStartTime: 6*60
-        property int schedulerEndTime: 10*60
         property bool mp3ConverterConstantBitrateEnabled: true
         property int mp3ConverterConstantBitrate: 256
         property int mp3ConverterVariableMinBitrate: 220
@@ -55,6 +52,7 @@ Item {
         property double scheduledZoom: 0.0 // 0 means no change is scheduled
         property double scheduledZoom2: 0.0
         property bool enableStandaloneCreateDownloadsWindows: false
+        property var hideTags: ({})
     }
 
     readonly property bool hasNonDefaultValues:
@@ -72,7 +70,8 @@ Item {
         settings.downloadsListColumns ||
         settings.zoom !== 1.0 ||
         settings.zoom2 !== 1.0 ||
-        settings.enableStandaloneCreateDownloadsWindows !== false
+        settings.enableStandaloneCreateDownloadsWindows !== false ||
+        Object.keys(settings.hideTags).length
 
     function resetToDefaults()
     {
@@ -88,9 +87,10 @@ Item {
         settings.enableUserDefinedOrderOfDownloads = false;
         settings.showSaveAsButton = false;
         settings.downloadsListColumns = "";
-        settings.zoom = 1.0;
-        settings.zoom2 = 1.0;
+        settings.scheduledZoom = 1.0;
+        settings.scheduledZoom2 = 1.0;
         settings.enableStandaloneCreateDownloadsWindows = false;
+        settings.hideTags = {};
         wasReset();
     }
 
@@ -117,9 +117,6 @@ Item {
         uiSettingsTools.settings.lastMovePath = s.settings.lastMovePath;
         uiSettingsTools.settings.exportImportPath = s.settings.exportImportPath;
         uiSettingsTools.settings.pluginsDistribsPath = s.settings.pluginsDistribsPath;
-        uiSettingsTools.settings.schedulerDaysEnabled = s.settings.schedulerDaysEnabled;
-        uiSettingsTools.settings.schedulerStartTime = s.settings.schedulerStartTime;
-        uiSettingsTools.settings.schedulerEndTime = s.settings.schedulerEndTime;
         uiSettingsTools.settings.mp3ConverterConstantBitrateEnabled = s.settings.mp3ConverterConstantBitrateEnabled;
         uiSettingsTools.settings.mp3ConverterConstantBitrate = s.settings.mp3ConverterConstantBitrate;
         uiSettingsTools.settings.mp3ConverterVariableMinBitrate = s.settings.mp3ConverterVariableMinBitrate;
@@ -142,6 +139,7 @@ Item {
         uiSettingsTools.settings.zoom = s.settings.zoom;
         uiSettingsTools.settings.zoom2 = s.settings.zoom2;
         uiSettingsTools.settings.enableStandaloneCreateDownloadsWindows = s.settings.enableStandaloneCreateDownloadsWindows;
+        uiSettingsTools.settings.hideTags = s.settings.hideTags;
         s.destroy();
     }
 }

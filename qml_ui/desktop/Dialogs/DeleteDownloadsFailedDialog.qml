@@ -12,8 +12,6 @@ BaseDialog {
     property bool ignoreAllMode: false
     property var taskQueue: []
 
-    width: 542*appWindow.zoom
-
     contentItem: BaseDialogItem {
         titleText: qsTr("Download deleting failed") + App.loc.emptyString
         focus: true
@@ -28,8 +26,9 @@ BaseDialog {
             spacing: 3*appWindow.zoom
 
             BaseLabel {
-                text: currentPath
+                text: App.toNativeSeparators(currentPath)
                 Layout.fillWidth: true
+                Layout.maximumWidth: appWindow.width*0.9
                 Layout.bottomMargin: 7*appWindow.zoom
                 elide: Text.ElideMiddle
             }

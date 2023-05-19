@@ -1,5 +1,7 @@
 import QtQuick 2.10
 import QtQuick.Controls 2.3
+import QtQuick.Layouts 1.3
+import Qt.labs.platform 1.1
 import Qt.labs.settings 1.0
 import "../../qt5compat"
 import "../../common"
@@ -30,8 +32,10 @@ Column
     SettingsGroupColumn {
         visible: !root.hidden && App.features.hasFeature(AppFeatures.SystemNotifications)
         width: parent.width
+        anchors.left: parent.left
 
         SettingsSubgroupHeader {
+            anchors.left: parent.left
             text: qsTr("Notifications") + App.loc.emptyString
             visible: App.features.hasFeature(AppFeatures.SystemNotifications)
         }
@@ -133,8 +137,10 @@ Column
 
     SettingsGroupColumn {
         visible: !root.hidden && App.features.hasFeature(AppFeatures.PreventOsAutoSleep)
+        anchors.left: parent.left
 
         SettingsSubgroupHeader {
+            anchors.left: parent.left
             text: qsTr("Power management") + App.loc.emptyString
             visible: App.features.hasFeature(AppFeatures.PreventOsAutoSleep)
         }
@@ -163,8 +169,10 @@ Column
     SettingsGroupColumn {
 
         visible: !root.hidden
+        anchors.left: parent.left
 
         SettingsSubgroupHeader{
+            anchors.left: parent.left
             text: qsTr("Options") + App.loc.emptyString
         }
 
@@ -253,9 +261,11 @@ Column
     SettingsGroupColumn {
 
         visible: !root.hidden
+        anchors.left: parent.left
 
         SettingsSubgroupHeader{
             text: qsTr("Interface") + App.loc.emptyString
+            anchors.left: parent.left
         }
 
         SettingsCheckBox {
@@ -305,6 +315,33 @@ Column
             text: qsTr("Enable standalone create new downloads windows") + App.loc.emptyString
             checked: uiSettingsTools.settings.enableStandaloneCreateDownloadsWindows
             onClicked: uiSettingsTools.settings.enableStandaloneCreateDownloadsWindows = checked
+        }
+
+        Row {
+            anchors.left: parent.left
+            anchors.leftMargin: 18*appWindow.zoom
+
+            spacing: 10*appWindow.zoom
+
+            BaseLabel {
+                text: qsTr("Show built-in tags:") + App.loc.emptyString
+                anchors.verticalCenter: parent.verticalCenter
+            }
+
+            Repeater {
+                model: tagsTools.systemTags
+
+                delegate: BaseCheckBox {
+                    textColor: appWindow.theme.settingsItem
+                    text: modelData.name
+                    checked: !uiSettingsTools.settings.hideTags[modelData.id]
+                    onClicked: {
+                        let o = uiSettingsTools.settings.hideTags;
+                        o[modelData.id] = !checked;
+                        uiSettingsTools.settings.hideTags = o;
+                    }
+                }
+            }
         }
 
         Column
@@ -368,33 +405,171 @@ Column
                 }
             }
 
-            Row {
+            RestartRequiredLabel {
                 visible: (uiSettingsTools.settings.scheduledZoom && uiSettingsTools.settings.scheduledZoom !== appWindow.zoom) ||
                          (uiSettingsTools.settings.scheduledZoom2 && uiSettingsTools.settings.scheduledZoom2 !== appWindow.zoom2)
-
-                spacing: 5*appWindow.zoom
-
-                WaSvgImage {
-                    source: appWindow.theme.attentionImg
-                    zoom: Math.max(1.0, appWindow.zoom*0.8)
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-                BaseHandCursorLabel {
-                    text: qsTr("<a href='#'>Restart is required</a>") + App.loc.emptyString
-                    font.pixelSize: 11*appWindow.fontZoom
-                    anchors.verticalCenter: parent.verticalCenter
-                    onLinkActivated: App.restart()
-                }
+                anchors.left: parent.left
             }
         }
     }
 
     SettingsGroupColumn {
 
+        id: automationGroup
+
         visible: !root.hidden
+        anchors.left: parent.left
+        width: parent.width
+
+        SettingsSubgroupHeader{
+            text: qsTr("Automation") + App.loc.emptyString
+            anchors.left: parent.left
+        }
+
+        SettingsCheckBox {
+            id: launchExternalAppCheckBox
+            text: qsTr("Launch external application on download completion") + App.loc.emptyString
+            checked: App.settings.toBool(App.settings.dmcore.value(DmCoreSettings.LaunchExternalAppOnDownloadCompletion))
+            onClicked: automationGroup.applyLaunchExternalAppSettings()
+        }
+
+        GridLayout {
+
+            id: externalAppSettingsGrid
+
+            readonly property bool inError: urlField.inError || args.inError
+
+            enabled: launchExternalAppCheckBox.checked
+            anchors.left: parent.left
+
+            columns: 2
+            width: Math.min(parent.width, 650*appWindow.zoom)
+            rowSpacing: 12*appWindow.zoom
+
+            BaseLabel {
+                text: qsTr("Path:") + App.loc.emptyString
+                leftPadding: qtbug.leftPadding(38*appWindow.zoom, 10*appWindow.zoom)
+                rightPadding: qtbug.rightPadding(38*appWindow.zoom, 10*appWindow.zoom)
+                color: appWindow.theme.settingsItem
+            }
+
+            RowLayout {
+                Layout.preferredHeight: folderBtn.implicitHeight + 1
+
+                SettingsTextField {
+                    id: urlField
+                    property bool inError: false
+                    focus: true
+                    Layout.fillWidth: true
+                    text: App.settings.dmcore.value(DmCoreSettings.LaunchExternalAppOnDownloadCompletion_AppPath)
+
+                    onTextChanged: urlFieldUpdateStateTimer.restart()
+                    Component.onCompleted: urlFieldUpdateStateTimer.start()
+
+                    SettingsInputError {
+                        visible: urlField.inError && urlField.activeFocus
+                        errorMessage: qsTr("Please enter application's path") + App.loc.emptyString
+                    }
+
+                    function updatState() {
+                        urlField.inError = text && !App.tools.localFileExists2(text, true, true);
+                        if (!urlField.inError)
+                            automationGroup.applyLaunchExternalAppSettings();
+                    }
+
+                    Timer {
+                        id: urlFieldUpdateStateTimer
+                        interval: 300
+                        onTriggered: parent.updatState()
+                    }
+                }
+
+                PickFileButton {
+                    id: folderBtn
+                    Layout.alignment: Qt.AlignRight
+                    implicitHeight: 25*appWindow.zoom
+                    onClicked: browseDlg.open()
+                    FileDialog {
+                        id: browseDlg
+                        onAccepted: {
+                            urlField.text = App.tools.fixExternalApplicationPath(App.tools.url(file).toLocalFile());
+                        }
+                    }
+                }
+            }
+
+            BaseLabel {
+                text: qsTr("Arguments:") + App.loc.emptyString
+                leftPadding: qtbug.leftPadding(38*appWindow.zoom, 10*appWindow.zoom)
+                rightPadding: qtbug.rightPadding(38*appWindow.zoom, 10*appWindow.zoom)
+                color: appWindow.theme.settingsItem
+            }
+
+            SettingsTextField {
+                id: args
+                property bool inError: false
+                text: App.settings.dmcore.value(DmCoreSettings.LaunchExternalAppOnDownloadCompletion_AppArgsTemplate)
+                Layout.fillWidth: true
+
+                onTextChanged: {
+                    updatState()
+                    if (!args.inError)
+                        automationGroup.applyLaunchExternalAppSettings();
+                }
+
+                Component.onCompleted: updatState()
+
+                SettingsInputError {
+                    id: argsErr
+                    visible: args.inError && args.activeFocus
+                    errorMessage: qsTr("Arguments must contain %path% variable") + App.loc.emptyString
+                }
+
+                function updatState() {
+                    argsErr.errorMessage = App.settings.isValidExternalAppArgs(args.text);
+                    args.inError = argsErr.errorMessage != '';
+                }
+            }
+
+            Item {implicitHeight: 1; implicitWidth: 1}
+
+            SettingsGridLabel {
+                Layout.topMargin: -7*appWindow.zoom
+                text: qsTr("Arguments must contain %path% variable") + App.loc.emptyString
+                color: "#999"
+            }
+        }
+
+        function applyLaunchExternalAppSettings()
+        {
+            if (externalAppSettingsGrid.inError)
+                return;
+
+            let enabled = launchExternalAppCheckBox.checked && urlField.text.length > 0;
+
+            App.settings.dmcore.setValue(
+                        DmCoreSettings.LaunchExternalAppOnDownloadCompletion_AppArgsTemplate,
+                        args.text);
+
+            App.settings.dmcore.setValue(
+                        DmCoreSettings.LaunchExternalAppOnDownloadCompletion_AppPath,
+                        urlField.text);
+
+            App.settings.dmcore.setValue(
+                        DmCoreSettings.LaunchExternalAppOnDownloadCompletion,
+                        App.settings.fromBool(enabled));
+
+        }
+    }
+
+    SettingsGroupColumn {
+
+        visible: !root.hidden
+        anchors.left: parent.left
 
         SettingsSubgroupHeader{
             text: qsTr("Delete button action") + App.loc.emptyString
+            anchors.left: parent.left
         }
 
         SettingsRadioButton {
@@ -420,9 +595,11 @@ Column
         property int existingFileReaction: App.settings.dmcore.value(DmCoreSettings.ExistingFileReaction)
 
         visible: !root.hidden
+        anchors.left: parent.left
 
         SettingsSubgroupHeader{
             text: qsTr("File exists reaction") + App.loc.emptyString
+            anchors.left: parent.left
         }
 
         SettingsRadioButton {
@@ -449,7 +626,10 @@ Column
     SettingsGroupColumn {
         id: resetToDefaults
 
+        anchors.left: parent.left
+
         SettingsSubgroupHeader{
+            anchors.left: parent.left
             text: qsTr("Go back to default settings") + App.loc.emptyString
         }
 

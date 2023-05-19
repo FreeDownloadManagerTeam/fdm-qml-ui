@@ -23,8 +23,10 @@ Item {
     Item {
         id: actionElement
         width: btnWrapper.width + (laterBtnText.length > 0 ? 40 : 30 + 30 + 20)
-        height: content.height + 20//90
-        x: -width
+        height: content.height + 20
+        x: LayoutMirroring.enabled ?
+               parent.width + width :
+               -width
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 25
 
@@ -58,9 +60,11 @@ Item {
                 Column {
                     id: content
                     spacing: 7
+                    anchors.left: parent.left
 
                     Row {
                         spacing: 5
+                        anchors.left: parent.left
 
                         Image {
                             id: logo
@@ -75,12 +79,14 @@ Item {
                             color: appWindow.theme.voteDialogText
                             wrapMode: Text.WordWrap
                             width: actionElement.width - 30 - 30 - 25 - 5
+                            horizontalAlignment: Text.AlignLeft
                         }
                     }
 
                     Row {
                         id: btnWrapper
                         spacing: 10
+                        anchors.left: parent.left
 
                         onWidthChanged: {
                             actionElement.width = btnWrapper.width + (laterBtnText.length > 0 ? 40 : 30 + 30 + 20);
@@ -148,8 +154,12 @@ Item {
         NumberAnimation on x {
             id: moveIn
             running: false
-            from: - actionElement.width
-            to: -20
+            from: actionElement.LayoutMirroring.enabled ?
+                      actionElement.parent.width + actionElement.width :
+                      - actionElement.width
+            to: actionElement.LayoutMirroring.enabled ?
+                    actionElement.parent.width - actionElement.width + 20 :
+                    -20
             duration: 500
             onStarted: { root.opened = true; }
         }

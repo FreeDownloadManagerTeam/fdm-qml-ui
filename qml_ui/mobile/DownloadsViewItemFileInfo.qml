@@ -214,6 +214,7 @@ Rectangle {
         Row {
             id: complete_message
             visible: !downloadsItemTools.inError && model.finished && !progressbar_rect.visible
+            anchors.left: parent.left
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 29
             width: parent.width - progressbar_rect.width - 5
@@ -246,6 +247,7 @@ Rectangle {
         Row {
             id: error_message
             visible: downloadsItemTools.inError
+            anchors.left: parent.left
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 20
             width: parent.width - progressbar_rect.width - 5
@@ -278,9 +280,9 @@ Rectangle {
         // Download size
         Label {
             id: size_or_pause
-            property string downloadsize: model.selectedSize !== -1 ? JsTools.sizeUtils.bytesAsText(model.selectedSize) : ""
-            property string selectedBytesdownloaded: JsTools.sizeUtils.bytesAsText(model.selectedBytesDownloaded)
-            text: (model.finished ? downloadsize : selectedBytesdownloaded + " / " + downloadsize)
+            text: (model.finished ?
+                       (model.selectedSize !== -1 ? App.bytesAsText(model.selectedSize) : "") :
+                       App.bytesProgressAsText(model.selectedBytesDownloaded, model.selectedSize, false)) + App.loc.emptyString
             visible: model.selectedSize !== -1
             anchors.left: parent.left
             anchors.bottom: parent.bottom

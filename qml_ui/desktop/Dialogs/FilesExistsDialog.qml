@@ -129,7 +129,9 @@ BaseDialog {
                 App.settings.dmcore.setValue(DmCoreSettings.ExistingFileReaction, AbstractDownloadsUi.DefrAsk);
             }
         }
-        App.downloads.filesExistsActionsMgr.submitAction(downloadId, fileIndex, action, true);
+        let downloadId_ = root.downloadId;
+        let fileIndex_ = root.fileIndex;
         root.close();
+        App.downloads.filesExistsActionsMgr.submitAction(downloadId_, fileIndex_, action, true);
     }
 }

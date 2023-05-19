@@ -1,6 +1,8 @@
 import QtQuick 2.11
 import QtQuick.Controls 2.3
+import QtQuick.Layouts 1.12
 import org.freedownloadmanager.fdm 1.0
+import org.freedownloadmanager.fdm.abstractdownloadsui 1.0
 import org.freedownloadmanager.fdm.appsettings 1.0
 import org.freedownloadmanager.fdm.appfeatures 1.0
 import org.freedownloadmanager.fdm.dmcoresettings 1.0
@@ -38,6 +40,107 @@ Page {
                 topPadding: 7
 
 //-- contentColumn content - BEGIN -------------------------------------------------------------------
+
+                RowLayout {
+                    anchors.left: parent.left
+                    anchors.leftMargin: 20
+                    spacing: 10
+                    width: parent.width - 20 - 10
+
+                    BaseLabel {
+                        text: qsTr("Encryption:") + App.loc.emptyString
+                        Layout.alignment: Qt.AlignVCenter
+                        font.pixelSize: 16
+                    }
+
+                    BaseComboBox {
+                        Layout.alignment: Qt.AlignVCenter
+                        Layout.fillWidth: true
+                        Layout.preferredWidth: implicitWidth
+                        Layout.maximumWidth: implicitWidth
+                        model: [
+                            {text: qsTr("No encryption allowed") + App.loc.emptyString, value: AbstractDownloadsUi.NoEncryptionAllowed},
+                            {text: qsTr("Prefer encryption") + App.loc.emptyString, value: AbstractDownloadsUi.PreferEncryption},
+                            {text: qsTr("Require encryption") + App.loc.emptyString, value: AbstractDownloadsUi.RequireEncryption},
+                        ]
+                        currentIndex: {
+                            let v = parseInt(App.settings.dmcore.value(DmCoreSettings.BtEncryptionPolicy));
+                            for (let i = 0; i < model.length; ++i) {
+                                if (model[i].value === v)
+                                    return i;
+                            }
+                            return 0;
+                        }
+                        onActivated: (index) => App.settings.dmcore.setValue(DmCoreSettings.BtEncryptionPolicy, model[index].value.toString())
+                    }
+
+                    Item {implicitWidth: 1; implicitHeight: 1; Layout.fillWidth: true}
+                }
+
+                SettingsSeparator{}
+
+                SwitchSetting {
+                    description: App.my_BT_qsTranslate("Settings", "Enable DHT to find more peers") + App.loc.emptyString
+                    switchChecked: App.settings.toBool(App.settings.dmcore.value(DmCoreSettings.BtEnableDht))
+                    onClicked: {
+                        switchChecked = !switchChecked;
+                        App.settings.dmcore.setValue(DmCoreSettings.BtEnableDht,
+                                                     App.settings.fromBool(switchChecked));
+                    }
+                }
+
+                SettingsSeparator{}
+
+                SwitchSetting {
+                    description: App.my_BT_qsTranslate("Settings", "Enable PeX to find more peers") + App.loc.emptyString
+                    switchChecked: App.settings.toBool(App.settings.dmcore.value(DmCoreSettings.BtEnablePex))
+                    onClicked: {
+                        switchChecked = !switchChecked;
+                        App.settings.dmcore.setValue(DmCoreSettings.BtEnablePex,
+                                                     App.settings.fromBool(switchChecked));
+                        pexRestartRequired.visible = true;
+                    }
+                }
+
+                RestartRequiredLabel {
+                    id: pexRestartRequired
+                    visible: false
+                    leftPadding: qtbug.leftPadding(20, 0)
+                    rightPadding: qtbug.rightPadding(20, 0)
+                }
+
+                Item {
+                    implicitWidth: 1
+                    implicitHeight: 10
+                    visible: pexRestartRequired.visible
+                }
+
+                SettingsSeparator{}
+
+                SwitchSetting {
+                    description: App.my_BT_qsTranslate("Settings", "Enable Local Peer Discovery to find more peers") + App.loc.emptyString
+                    switchChecked: App.settings.toBool(App.settings.dmcore.value(DmCoreSettings.BtEnableLsd))
+                    onClicked: {
+                        switchChecked = !switchChecked;
+                        App.settings.dmcore.setValue(DmCoreSettings.BtEnableLsd,
+                                                     App.settings.fromBool(switchChecked));
+                    }
+                }
+
+                SettingsSeparator{}
+
+                SwitchSetting {
+                    description: App.my_BT_qsTranslate("Settings", "Enable uTP") + App.loc.emptyString
+                    switchChecked: App.settings.toBool(App.settings.dmcore.value(DmCoreSettings.BtEnableUtp))
+                    onClicked: {
+                        switchChecked = !switchChecked;
+                        App.settings.dmcore.setValue(DmCoreSettings.BtEnableUtp,
+                                                     App.settings.fromBool(switchChecked));
+                    }
+                }
+
+                SettingsSeparator{}
+
                 SwitchSetting {
                     id: useSystemDefinedPort
                     description: App.my_BT_qsTranslate("Settings", "Use system defined port for incoming connections") + App.loc.emptyString
@@ -50,12 +153,25 @@ Page {
                             customPortText.forceActiveFocus();
                             customPortText.selectAll();
                         }
+                        else
+                        {
+                            useSystemDefinedPort.forceActiveFocus();
+                        }
                     }
+                }
+
+                BaseLabel {
+                    visible: useSystemDefinedPort.switchChecked && btTools.item.sessionPort > 0
+                    text: qsTr("Current port: %1").arg(btTools.item.sessionPort) + App.loc.emptyString
+                    leftPadding: qtbug.leftPadding(40, 0)
+                    rightPadding: qtbug.rightPadding(40, 0)
+                    bottomPadding: 10
                 }
 
                 Row {
                     visible: !useSystemDefinedPort.switchChecked
-                    leftPadding: 40
+                    leftPadding: qtbug.leftPadding(40, 0)
+                    rightPadding: qtbug.rightPadding(40, 0)
                     spacing: 20
 
                     Label {
@@ -86,6 +202,8 @@ Page {
                                     App.settings.fromBool(switchChecked));
                         if (!switchChecked)
                             trackerList.forceActiveFocus();
+                        else
+                            enableTrackerList.forceActiveFocus();
                     }
                 }
 
@@ -93,15 +211,16 @@ Page {
                 {
                     visible: enableTrackerList.switchChecked
 
-                    leftPadding: 20
-                    width: root.width - leftPadding
+                    width: root.width
 
                     spacing: 10
 
                     BaseLabel
                     {
+                        anchors.left: parent.left
+                        anchors.leftMargin: 20
                         text: qsTr("The use of additional trackers can improve download speed in some cases. Lists of such trackers can be retrieved from different sources, e.g. from <a href='https://github.com/ngosang/trackerslist'>here</a>.") + App.loc.emptyString
-                        width: parent.width
+                        width: parent.width - 2*20
                         wrapMode: Text.WordWrap
                         onLinkActivated: Qt.openUrlExternally(link)
                     }
@@ -109,7 +228,9 @@ Page {
                     BaseStringListArea
                     {
                         id: trackerList
-                        width: parent.width
+                        anchors.left: parent.left
+                        anchors.leftMargin: 20
+                        width: parent.width - 2*20
                         height: 200
                         isValidItem: function(str) {
                             return str.startsWith("http://") ||
@@ -130,6 +251,11 @@ Page {
                 }
 
                 SettingsSeparator{}
+
+                Item {
+                    width: 1
+                    height: 20
+                }
 
 //-- contentColumn content - END ---------------------------------------------------------------------
             }

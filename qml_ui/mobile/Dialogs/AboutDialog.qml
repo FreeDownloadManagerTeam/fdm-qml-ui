@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 import org.freedownloadmanager.fdm 1.0
 import QtQuick.Controls.Material 2.4
 import "../../common"
+import "../../common/Tools"
 import "../BaseElements"
 
 CenteredDialog
@@ -20,6 +21,7 @@ CenteredDialog
 
         DialogTitle {
             text: App.displayName
+            Layout.fillWidth: true
         }
 
         Label
@@ -27,8 +29,9 @@ CenteredDialog
             text: qsTr("Version %1 (%2)").arg(App.version).arg(App.versionHash) + App.loc.emptyString
             topPadding: 20
             bottomPadding: 10
-            Layout.fillWidth: parent
+            Layout.fillWidth: true
             elide: Text.ElideRight
+            horizontalAlignment: Text.AlignLeft
 
             MouseArea {
                 anchors.fill: parent
@@ -50,7 +53,9 @@ CenteredDialog
             model: App.thirdPartyLibsInfos.size()
 
             Label {
-                text: "<a href='%1'>%2</a> ".arg(App.thirdPartyLibsInfos.url(index)).arg(App.thirdPartyLibsInfos.displayName(index)) + qsTr("version %1").arg(App.thirdPartyLibsInfos.displayVersion(index)) + App.loc.emptyString
+                text: "<a href='%1'>%2</a>".arg(App.thirdPartyLibsInfos.url(index)).arg(App.thirdPartyLibsInfos.displayName(index))
+                          + ' ' + qsTr("version %1").arg(App.thirdPartyLibsInfos.displayVersion(index))
+                          + App.loc.emptyString
                 onLinkActivated: Qt.openUrlExternally(link)
                 Material.accent: appWindow.theme.link
             }
@@ -59,7 +64,9 @@ CenteredDialog
         Label
         {
             topPadding: 20
-            text: "© <a href='https://www.freedownloadmanager.org'>FreeDownloadManager.org</a>, " + App.copyrightYears()
+            //: © FreeDownloadManager.org, 2004-2023
+            text: qsTr("© %1, %2-%3").arg("<a href='https://www.freedownloadmanager.org'>FreeDownloadManager.org</a>")
+                    .arg(App.copytightFirstYear()).arg(App.copytightLastYear()) + App.loc.emptyString
             onLinkActivated: Qt.openUrlExternally(link)
             Material.accent: appWindow.theme.link
         }

@@ -9,6 +9,7 @@ Rectangle
     property bool indicator: false
     property bool rotate: false
     property string tooltipText
+    property alias mirror: img.mirror
 
     signal clicked()
 

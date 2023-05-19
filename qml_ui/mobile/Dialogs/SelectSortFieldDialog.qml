@@ -55,7 +55,7 @@ Drawer {
             id: control
             text: modelData.name
             checked: sortTools.sortBy === modelData.sortBy
-            width: parent.width
+            width: sort.width
             height: 30
             font.pixelSize: 14
             onClicked: sortTools.setSortBy(modelData.sortBy)
@@ -67,7 +67,9 @@ Drawer {
 
                 implicitWidth: 18
                 implicitHeight: 18
-                x: control.width - width - control.rightPadding
+                x: LayoutMirroring.enabled ?
+                       qtbug.getRightPadding(control) :
+                       control.width - width - qtbug.getRightPadding(control)
                 y: parent.height / 2 - height / 2
                 radius: 9
                 color: control.checked ? appWindow.theme.toolbarBackground : "transparent"

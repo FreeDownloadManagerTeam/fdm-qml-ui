@@ -14,7 +14,7 @@ Dialog {
     property alias password: passField.text
     property alias save: rememberField.checked
 
-    parent: appWindow.overlay
+    parent: Overlay.overlay
 
     x: Math.round((appWindow.width - width) / 2)
     y: Math.round((appWindow.height - height) / 2)
@@ -32,7 +32,8 @@ Dialog {
             ColumnLayout {
                 visible:false
                 Layout.fillWidth: true
-                Layout.leftMargin: 80
+                Layout.leftMargin: qtbug.leftMargin(80, 0)
+                Layout.rightMargin: qtbug.rightMargin(80, 0)
 
                 Label {
                     visible: remoteName
@@ -40,12 +41,14 @@ Dialog {
                     text: qsTr("%1 requires authentication").arg(remoteName) + App.loc.emptyString
                     wrapMode: Text.Wrap
                     Layout.minimumHeight: 10
+                    horizontalAlignment: Text.AlignLeft
                 }
                 Label {
                     visible: realm
                     Layout.fillWidth: true
                     text: qsTr("The site says: \"%1\".").arg(realm) + App.loc.emptyString
                     wrapMode: Text.Wrap
+                    horizontalAlignment: Text.AlignLeft
                 }
             }
 
@@ -57,15 +60,17 @@ Dialog {
                 Label {
                     Layout.preferredWidth: 80
                     text: qsTr("Username:") + App.loc.emptyString
+                    horizontalAlignment: Text.AlignLeft
                 }
 
-                TextField {
+                BaseTextField {
                     id: usernameField
                     focus: !passwordOnly
                     Layout.preferredWidth: 400
                     onAccepted: root.accept()
                     Keys.onEscapePressed: root.reject()
                     inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText | Qt.ImhSensitiveData
+                    enable_QTBUG_110471_workaround_2: true
                 }
             }
 
@@ -75,15 +80,17 @@ Dialog {
                 Label {
                     Layout.preferredWidth: 80
                     text: qsTr("Password:") + App.loc.emptyString
+                    horizontalAlignment: Text.AlignLeft
                 }
 
-                TextField {
+                BaseTextField {
                     id: passField
                     focus: passwordOnly
                     inputMethodHints: Qt.ImhHiddenText | Qt.ImhNoPredictiveText | Qt.ImhSensitiveData
                     echoMode: TextInput.Password
                     passwordMaskDelay: 100
                     Layout.fillWidth: true
+                    enable_QTBUG_110471_workaround_2: true
                     onAccepted: root.accept()
                     Keys.onEscapePressed: root.reject()
                 }

@@ -4,6 +4,11 @@ import org.freedownloadmanager.fdm 1.0
 Item {
     id: root
 
+    readonly property string btSessionListeningPortInfo: "btSessionListeningPort"
+
+    property var btModule: null
+    property int sessionPort: 0
+
     function addTAllowed()
     {
         var allowed = true;
@@ -103,5 +108,74 @@ Item {
                     App.downloads.infos.info(ids[i]).ignoreURatioLimit = value;
             }
         }
+    }
+
+    function forceReannounceAllowed()
+    {
+        let ids = selectedDownloadsTools.getCurrentDownloadIds();
+        for (let i = 0; i < ids.length; i++)
+        {
+            let info = App.downloads.infos.info(ids[i]);
+            if (info.moduleUid !== "downloadsbt" ||
+                    !info.running)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function forceReannounce()
+    {
+        App.downloads.mgr.doCustomCommand(
+                    selectedDownloadsTools.getCurrentDownloadIds(),
+                    "forceReannounce",
+                    undefined);
+    }
+
+    Connections
+    {
+        target: App
+        onReadyChanged: {
+            if (App.ready)
+                refreshModule();
+        }
+    }
+
+    Component.onCompleted: {
+        if (App.ready)
+            refreshModule();
+    }
+
+    Connections
+    {
+        target: App.downloadsModules
+        onModulesUidsChanged: refreshModule()
+    }
+
+    function refreshModule()
+    {
+        let m = App.downloadsModules.module("downloadsbt");
+        if (btModule === m)
+            return;
+        btModule = m;
+        if (!btModule)
+        {
+            sessionPort = 0;
+            return;
+        }
+        btModule.customInfoChanged.connect(function(id) {
+            if (id === btSessionListeningPortInfo)
+                refreshSessionPort();
+        });
+        refreshSessionPort();
+    }
+
+    function refreshSessionPort()
+    {
+        if (btModule.hasCustomInfoValue(btSessionListeningPortInfo))
+            sessionPort = btModule.getCustomInfo(btSessionListeningPortInfo) || 0;
+        else
+            btModule.getCustomInfo(btSessionListeningPortInfo);
     }
 }

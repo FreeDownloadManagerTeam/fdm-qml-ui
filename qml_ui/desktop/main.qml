@@ -14,6 +14,7 @@ import org.freedownloadmanager.fdm.qtsystemtheme 1.0
 import org.freedownloadmanager.fdm.dmcoresettings 1.0
 import org.freedownloadmanager.fdm.abstractdownloadsui 1.0
 import "./Themes"
+import "../qt5compat"
 
 ApplicationWindow {
 
@@ -32,8 +33,10 @@ ApplicationWindow {
     property int lastOkVisibility: ApplicationWindow.Windowed
 
     property int mainToolbarHeight: (macVersion ? 75 : 50) * zoom
-    property bool modalDialogOpened: (buildDownloadDlg && buildDownloadDlg.opened) ||
-                                     (tuneAddDownloadDlg && tuneAddDownloadDlg.opened) || aboutDlg.opened
+
+    readonly property bool createDownloadDialogOpened: (buildDownloadDlg && buildDownloadDlg.opened) ||
+                                     (tuneAddDownloadDlg && tuneAddDownloadDlg.opened)
+    readonly property bool nonCreateDownloadDialogOpened: aboutDlg.opened
                                     || deleteDownloadsDlg.opened || deleteDownloadsDlgSimple.opened
                                     || shutdownDlg.opened || mergeDownloadsDlg.opened || authenticationDlg.opened
                                     || movingFailedDlg.opened || fileIntegrityDlg.opened || changeUrlDlg.opened
@@ -41,9 +44,11 @@ ApplicationWindow {
                                     || antivirusSettingsDialog.opened || addTDlg.opened || stopDownloadDlg.opened
                                     || addMirrorDlg.opened || createPortableDlg.opened || importExportFailedDlg.opened
                                     || importDlg.opened || exportDownloadsDlg.opened || exportSettingsDlg.opened
-                                    || deleteDownloadsFailedDlg.opened || customizeSoundsDlg.opened || editTagDlg.opened
+                                    || deleteDownloadsFailedDlg.opened || confirmDeleteExtraneousFilesDlg.opened
+                                    || customizeSoundsDlg.opened || editTagDlg.opened
                                     || mp4ConverterDlg.opened || privacyDlg.opened || reportSentDlg.opened
                                     || remoteBannerMgr.bannerOpened || renameDownloadFileDlg.opened
+    readonly property bool modalDialogOpened: createDownloadDialogOpened || nonCreateDownloadDialogOpened
     property bool supportComputerShutdown: App.features.hasFeature(AppFeatures.ComputerShutdown) &&
                                            !App.rc.client.active
     property bool updateSupported: App.features.hasFeature(AppFeatures.Updates)
@@ -56,6 +61,8 @@ ApplicationWindow {
 
     property bool smallWindow: width < 910*zoom || height < 610*zoom
     property bool compactView: uiSettingsTools.settings.compactView || smallWindow
+
+    property bool disableDrop: false
 
     signal uiReadyStateChanged
     signal newDownloadAdded
@@ -70,6 +77,9 @@ ApplicationWindow {
     signal nativeMenuItemTriggered()
     signal startDownload
     signal reportError(int failedId)
+
+    LayoutMirroring.enabled: App.loc.layoutDirection == Qt.RightToLeft
+    LayoutMirroring.childrenInherit: true
 
     width: 910
     height: 610
@@ -100,7 +110,31 @@ ApplicationWindow {
     onActiveChanged: {
         systemTheme = App.systemTheme
         if (active)
+        {
             appWindowStateSaver.scheduleCheckWindowPos();
+            raiseStandaloneCreateDownloadDialogIfRequired();
+        }
+    }
+
+    onNonCreateDownloadDialogOpenedChanged: raiseStandaloneCreateDownloadDialogIfRequired()
+
+    function raiseStandaloneCreateDownloadDialogIfRequired()
+    {
+        if (active &&
+                uiSettingsTools.settings.enableStandaloneCreateDownloadsWindows &&
+                createDownloadDialogOpened && !nonCreateDownloadDialogOpened)
+        {
+            if (buildDownloadDlgMgr.dialog && buildDownloadDlgMgr.dialog.opened)
+            {
+                buildDownloadDlgMgr.hostWindow.raise();
+                buildDownloadDlgMgr.hostWindow.requestActivate();
+            }
+            else if (tuneAddDownloadDlgMgr.dialog && tuneAddDownloadDlgMgr.dialog.opened)
+            {
+                tuneAddDownloadDlgMgr.hostWindow.raise();
+                tuneAddDownloadDlgMgr.hostWindow.requestActivate();
+            }
+        }
     }
 
     readonly property var fonts: fonts_
@@ -417,6 +451,10 @@ ApplicationWindow {
         id: deleteDownloadsFailedDlg
     }
 
+    ConfirmDeleteExtraneousFilesDialog {
+        id: confirmDeleteExtraneousFilesDlg
+    }
+
     AntivirusSettingsDialog {
         id: antivirusSettingsDialog
     }
@@ -639,19 +677,24 @@ ApplicationWindow {
         return true;
     }
 
-    function canShowMergeAuthSslDialog()
+    function canShowMergeAuthSslDialog(isAuth)
     {
-        var page = stackView.get(0);
-        if (!page) {
+        if (mergeDownloadsDlg.opened || authenticationDlg.opened || sslDlg.opened)
             return false;
+
+        // show auth dialog in "connecting to remote FDM" page
+        if (!isAuth || !App.rc.client.active)
+        {
+            var page = stackView.get(0);
+            if (!page) {
+                return false;
+            }
+            var page_name = page.pageName;
+            if (['WaitingPage'].indexOf(page_name) >= 0) {
+                return false;
+            }
         }
-        var page_name = page.pageName;
-        if (['WaitingPage'].indexOf(page_name) >= 0) {
-            return false;
-        }
-        if (mergeDownloadsDlg.opened || authenticationDlg.opened || sslDlg.opened) {
-            return false;
-        }
+
         return true;
     }
 
@@ -694,7 +737,7 @@ ApplicationWindow {
     function onMergeRequest(force)
     {
         appWindow.showWindow(true);
-        if (canShowMergeAuthSslDialog(force)) {
+        if (canShowMergeAuthSslDialog(false)) {
             var mergeRequestId = interceptionTools.getMergeRequestId();
             if (mergeRequestId) {
                 var existingRequestId = interceptionTools.getExistingRequestId(mergeRequestId);
@@ -705,7 +748,7 @@ ApplicationWindow {
 
     function onAuthenticationRequest() {
         appWindow.showWindow(true);
-        if (canShowMergeAuthSslDialog()) {
+        if (canShowMergeAuthSslDialog(true)) {
             var request = interceptionTools.getAuthRequest();
             if (request) {
                 authenticationDlg.newAuthenticationRequest(request);
@@ -715,7 +758,7 @@ ApplicationWindow {
 
     function onSslRequest() {
         appWindow.showWindow(true);
-        if (canShowMergeAuthSslDialog()) {
+        if (canShowMergeAuthSslDialog(false)) {
             var request = interceptionTools.getSslRequest();
             if (request) {
                 sslDlg.newSslRequest(request);
@@ -747,6 +790,16 @@ ApplicationWindow {
         uiReadyTools.onReady(updateMacVersionWorkaround);
 
         App.useDarkTheme = Qt.binding(function(){ return useDarkTheme;});
+
+        uiReadyTools.onReady(function()
+        {
+            let r = App.downloads.filesExistsActionsMgr.pendingRequest();
+            if (r)
+            {
+                filesExistsDlg.open(r.downloadId, r.fileIndex, r.files);
+                showWindow(true);
+            }
+        });
     }
 
     Connections {
@@ -803,7 +856,7 @@ ApplicationWindow {
 
     Connections {
         target: App.downloads.filesExistsActionsMgr
-        onActionRequired: {
+        onActionRequired: (downloadId, fileIndex, files) => {
             filesExistsDlg.open(downloadId, fileIndex, files);
             showWindow(true);
         }
@@ -970,5 +1023,9 @@ ApplicationWindow {
                 connectToRemoteAppDlg.open();
             showWindow(true);
         }
+    }
+
+    QTBUG {
+        id: qtbug
     }
 }

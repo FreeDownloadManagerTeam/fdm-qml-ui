@@ -132,8 +132,6 @@ Page {
             Layout.fillWidth: true
             Layout.fillHeight: true
 
-            DownloadPageBackground {}
-
             ColumnLayout {
                 id: columnLayout
                 anchors.fill: parent
@@ -148,6 +146,9 @@ Page {
                     //filters bar
                     MainFiltersBar {
                         id: filtersBar
+
+                        anchors.left: parent.left
+                        anchors.leftMargin: 5
                     }
 
                     Rectangle {
@@ -157,6 +158,8 @@ Page {
                         border.width: 1*appWindow.zoom
                         color: "transparent"
                         anchors.topMargin: filtersBar.height
+
+                        DownloadPageBackground {}
 
                         //downloads list
                         Rectangle {
@@ -217,9 +220,7 @@ Page {
                             }
 
                             ColumnLayout {
-                                anchors.verticalCenter: parent.verticalCenter
-                                anchors.horizontalCenter: parent.horizontalCenter
-
+                                anchors.centerIn: parent
                                 BaseLabel {
                                     Layout.alignment: Qt.AlignHCenter
                                     text: qsTr("Download list is empty.") + App.loc.emptyString
@@ -235,8 +236,12 @@ Page {
                             }
 
                             DropArea {
+                                enabled: !appWindow.disableDrop
                                 anchors.fill: parent
-                                onDropped: App.onDropped(drop)
+                                onDropped: {
+                                    if (!drag.source)
+                                        App.onDropped(drop);
+                                }
                             }
                         }
 

@@ -27,8 +27,10 @@ ComboBox {
         width: Math.max(l1.implicitWidth, parent.width)
         BaseLabel {
             id: l1
-            leftPadding: 6*appWindow.zoom
+            anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
+            leftPadding: qtbug.leftPadding(4*appWindow.zoom, 0)
+            rightPadding: qtbug.rightPadding(4*appWindow.zoom, 0)
             text: label
         }
 
@@ -54,13 +56,14 @@ ComboBox {
     contentItem: Rectangle {
         color: "transparent"
         BaseLabel {
+            anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
             text: combo.currentText
         }
     }
 
     indicator: Rectangle {
-        x: combo.width - width
+        x: LayoutMirroring.enabled ? 0 : combo.width - width
         y: combo.topPadding + (combo.availableHeight - height) / 2
         width: height - 1*appWindow.zoom
         height: combo.height

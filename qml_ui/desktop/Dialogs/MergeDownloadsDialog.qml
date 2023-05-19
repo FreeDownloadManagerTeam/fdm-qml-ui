@@ -82,7 +82,7 @@ BaseDialog {
                     id: size
                     visible: mergeTools.dialogEnabled && downloadsItemTools.selectedSize > 0
                     font.pixelSize: 13*appWindow.fontZoom
-                    text: JsTools.sizeUtils.bytesAsText(downloadsItemTools.selectedSize)
+                    text: App.bytesAsText(downloadsItemTools.selectedSize) + App.loc.emptyString
                 }
             }
             RowLayout {

@@ -6,10 +6,8 @@ import "../../common"
 
 ComboBox {
     id: root
-    height: 25*appWindow.fontZoom
-    width: 30*appWindow.zoom + 170*appWindow.fontZoom
-    anchors.left: parent.left
-    anchors.leftMargin: 16*appWindow.zoom
+    implicitHeight: 25*appWindow.fontZoom
+    implicitWidth: 30*appWindow.zoom + 170*appWindow.fontZoom
     rightPadding: 5*appWindow.zoom
     leftPadding: 5*appWindow.zoom
 
@@ -18,10 +16,12 @@ ComboBox {
     model: App.loc.installedTranslations
 
     property var flags: {"en_US": -250, "ar_EG": -260, "zh_CN": -130, "zh_TW": -270, "ug": -130, "uk_UA": -220,
-                         "da_DK": -100, "nl_NL": -80, "fr_FR": -30, "de_DE": -20, "el_GR": -120, "id_ID": -180,
-                         "it_IT": -50, "ja_JP": -150, "pl_PL": -70, "pt_BR": -200, "ro_RO": -60, "ru_RU": -110,
-                         "sl_SI": -140, "es_ES": -10, "sv_SE": -90, "tr_TR": -160, "vi_VN": -190, "fa": -210,
-                         "hu_HU": -230, "fa_IR": -240, "bg_BG": -280, "ko_KR": -290, "hi_IN": -300}
+        "da_DK": -100, "nl_NL": -80, "fr_FR": -30, "de_DE": -20, "el_GR": -120, "id_ID": -180,
+        "it_IT": -50, "ja_JP": -150, "pl_PL": -70, "pt_BR": -200, "ro_RO": -60, "ru_RU": -110,
+        "sl_SI": -140, "es_ES": -10, "sv_SE": -90, "tr_TR": -160, "vi_VN": -190, "fa": -210,
+        "hu_HU": -230, "fa_IR": -240, "bg_BG": -280, "ko_KR": -290, "hi_IN": -300,
+        "cs_CZ": -310
+    }
 
     delegate: Rectangle {
         property bool hover: false
@@ -29,31 +29,35 @@ ComboBox {
         height: 18*appWindow.fontZoom
         width: root.width
 
-        Rectangle {
-            id: icon
-            clip: true
-            color: "transparent"
-            width: 18*appWindow.zoom
-            height: 10*appWindow.zoom
-            anchors.verticalCenter: parent.verticalCenter
+        Row
+        {
             anchors.left: parent.left
             anchors.leftMargin: 6*appWindow.zoom
+            spacing: 5
 
-            WaSvgImage {
-                x: 0
-                y: flags[modelData]*zoom
-                source: Qt.resolvedUrl("../../images/flags.svg")
-                zoom: appWindow.zoom
+            Rectangle {
+                id: icon
+                clip: true
+                color: "transparent"
+                width: 18*appWindow.zoom
+                height: 10*appWindow.zoom
+                anchors.verticalCenter: parent.verticalCenter
+
+                WaSvgImage {
+                    x: 0
+                    y: flags[modelData]*zoom
+                    source: Qt.resolvedUrl("../../images/flags.svg")
+                    zoom: appWindow.zoom
+                }
             }
-        }
 
-        BaseLabel {
-            leftPadding: (6 + 18 + 6)*appWindow.zoom
-            anchors.verticalCenter: parent.verticalCenter
-            font.pixelSize: appWindow.fonts.defaultSize
-            color: appWindow.theme.settingsItem
-            text: App.loc.translationLanguageString(modelData) + " (" + App.loc.translationCountryString(modelData) + ")"
-            font.capitalization: Font.Capitalize
+            BaseLabel {
+                anchors.verticalCenter: parent.verticalCenter
+                font.pixelSize: appWindow.fonts.defaultSize
+                color: appWindow.theme.settingsItem
+                text: App.loc.translationLanguageString(modelData) + " (" + App.loc.translationCountryString(modelData) + ")"
+                font.capitalization: Font.Capitalize
+            }
         }
 
         MouseArea {
@@ -63,8 +67,9 @@ ComboBox {
             onExited: parent.hover = false
             onClicked: {
                 root.currentIndex = index;
-                App.loc.load(modelData)
+                let name = modelData;
                 root.popup.close();
+                App.loc.load(name);
             }
         }
     }
@@ -76,16 +81,17 @@ ComboBox {
         border.width: 1*appWindow.zoom
     }
 
-    contentItem: Rectangle {
-        color: "transparent"
+    contentItem: Row {
+        anchors.left: parent.left
+        anchors.leftMargin: 7*appWindow.zoom
+        spacing: 5*appWindow.zoom
+
         Rectangle {
             clip: true
             color: "transparent"
             width: 18*appWindow.zoom
             height: 10*appWindow.zoom
             anchors.verticalCenter: parent.verticalCenter
-            anchors.left: parent.left
-            anchors.leftMargin: 2*appWindow.zoom
 
             WaSvgImage {
                 x: 0
@@ -95,7 +101,6 @@ ComboBox {
             }
         }
         BaseLabel {
-            leftPadding: (6 + 18 + 2)*appWindow.zoom
             anchors.verticalCenter: parent.verticalCenter
             font.pixelSize: appWindow.fonts.defaultSize
             color: appWindow.theme.settingsItem
@@ -105,7 +110,7 @@ ComboBox {
     }
 
     indicator: Rectangle {
-        x: root.width - width
+        x: LayoutMirroring.enabled ? 0 : root.width - width
         y: root.topPadding + (root.availableHeight - height) / 2
         width: height - 1*appWindow.zoom
         height: root.height
@@ -138,17 +143,14 @@ ComboBox {
             border.width: 1*appWindow.zoom
         }
 
-        contentItem: Item {
-            ListView {
-                clip: true
-                anchors.fill: parent
-                model: root.model
-                currentIndex: root.highlightedIndex
-                delegate: root.delegate
-                flickableDirection: Flickable.VerticalFlick
-                ScrollBar.vertical: ScrollBar{ policy: ScrollBar.AlwaysOn; }
-                boundsBehavior: Flickable.StopAtBounds
-            }
+        contentItem: ListView {
+            clip: true
+            model: root.model
+            currentIndex: root.highlightedIndex
+            delegate: root.delegate
+            flickableDirection: Flickable.VerticalFlick
+            ScrollBar.vertical: ScrollBar{ policy: ScrollBar.AlwaysOn; }
+            boundsBehavior: Flickable.StopAtBounds
         }
     }
 }

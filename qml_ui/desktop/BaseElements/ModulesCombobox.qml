@@ -5,10 +5,13 @@ import "../../common"
 
 Item {
 
+    visible: downloadTools.modulesUrl && downloadTools.modulesUrl == downloadTools.urlText && combo.count > 1
+
+    implicitWidth: combo.implicitWidth
+    implicitHeight: combo.implicitHeight
+
     ComboBox {
         id: combo
-
-        visible: downloadTools.modulesUrl && downloadTools.modulesUrl == downloadTools.urlText && count > 1
 
         rightPadding: 5*appWindow.zoom
         leftPadding: 5*appWindow.zoom
@@ -27,7 +30,8 @@ Item {
             height: 30*appWindow.zoom
             width: parent.width
             BaseLabel {
-                leftPadding: 6*appWindow.zoom
+                leftPadding: qtbug.leftPadding(6*appWindow.zoom, 0)
+                rightPadding: qtbug.rightPadding(6*appWindow.zoom, 0)
                 anchors.verticalCenter: parent.verticalCenter
                 text: label
             }

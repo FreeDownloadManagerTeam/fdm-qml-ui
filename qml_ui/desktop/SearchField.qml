@@ -16,7 +16,7 @@ Item {
 
     property int field_width: appWindow.macVersion ? maxFieldWidth : 0
     property int field_height: (appWindow.macVersion ? 22 : 34)*appWindow.zoom
-    property string border_color: (appWindow.macVersion ? appWindow.theme.searchFieldBorderMac : appWindow.theme.searchFieldBorder)*appWindow.zoom
+    property string border_color: appWindow.macVersion ? appWindow.theme.searchFieldBorderMac : appWindow.theme.searchFieldBorder
     property int font_size: (appWindow.macVersion ? 13 : 14)*appWindow.fontZoom
 
     property int magnifier_width: (appWindow.macVersion ? 20 : 30)*appWindow.zoom

@@ -35,7 +35,7 @@ BaseDialog {
                 Layout.fillWidth: true
 
                 BaseLabel {
-                    text: "ID:"
+                    text: qsTr("ID:") + App.loc.emptyString
                 }
 
                 BaseTextField {
@@ -48,18 +48,20 @@ BaseDialog {
                             root.accept();
                     }
                     Keys.onEscapePressed: root.close()
-                    Component.onCompleted: selectAll()
                     onTextChanged: {
                         var s = text.toUpperCase();
                         if (text != s)
                             text = s;
                     }
+                    enable_QTBUG_110471_workaround_2: true
+                    selectAllAtInit: true
                 }
             }
 
             BaseCheckBox {
                 id: alwaysConnectOnAppStart
                 text: qsTr("Automatically connect at startup") + App.loc.emptyString
+                xOffset: 0
             }
 
             RowLayout {
@@ -92,6 +94,13 @@ BaseDialog {
     onClosed: appWindow.appWindowStateChanged()
     onOpened: root.forceActiveFocus()
 
+    onAboutToShow: {
+        if (!idField.text)
+            setRemoteId(uiSettingsTools.settings.lastRemoteAppId);
+        idField.selectAll();
+        idField.forceActiveFocus();
+    }
+
     onAccepted: {
         uiSettingsTools.settings.lastRemoteAppId = remoteId;
         App.rc.client.connectToRemoteApp(remoteId, alwaysConnectOnAppStart.checked);
@@ -100,5 +109,6 @@ BaseDialog {
     function setRemoteId(remoteId)
     {
         idField.text = remoteId;
+        idField.selectAll();
     }
 }

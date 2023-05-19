@@ -53,6 +53,7 @@ Page {
 
         BaseLabel
         {
+            anchors.left: parent.left
             text: qsTr("Save to") + App.loc.emptyString
         }
 
@@ -67,6 +68,7 @@ Page {
                 selectByMouse: true
                 inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText | Qt.ImhSensitiveData
                 wrapMode: TextInput.WrapAnywhere
+                horizontalAlignment: Text.AlignLeft
                 onAccepted: root.doOK()
             }
 
@@ -96,6 +98,7 @@ Page {
 
         BaseLabel {
             visible: wrongFilePathWarning
+            anchors.left: parent.left
             text: qsTr("The path contains invalid characters") + App.loc.emptyString
             clip: true
             elide: Text.ElideRight

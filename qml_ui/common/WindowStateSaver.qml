@@ -123,15 +123,18 @@ Item
         let isYinvalid = (window.y < window.screen.virtualY) ||
             (window.y > window.screen.virtualY + window.screen.height - 50);
 
-        /*App.log("Checking window position.");
-        App.log("Window position: (" + window.x + "," + window.y + ")");
-        App.log("Screen.virtualX: " + window.screen.virtualX);
-        App.log("Screen.virtualY: " + window.screen.virtualY);
-        App.log("Screen.width: " + window.screen.width);
-        App.log("Screen.height: " + window.screen.height);
-        App.log("desktopAvailableWidth: " + window.screen.desktopAvailableWidth);
-        App.log("desktopAvailableHeight: " + window.screen.desktopAvailableHeight);
-        App.log("X invalid: " + isXinvalid + ", Y invalid: " + isYinvalid);*/
+        if (isXinvalid || isYinvalid)
+        {
+            App.log("WARNING: Invalid window position detected.");
+            App.log("Window position: (" + window.x + "," + window.y + ")");
+            App.log("Screen.virtualX: " + window.screen.virtualX);
+            App.log("Screen.virtualY: " + window.screen.virtualY);
+            App.log("Screen.width: " + window.screen.width);
+            App.log("Screen.height: " + window.screen.height);
+            App.log("desktopAvailableWidth: " + window.screen.desktopAvailableWidth);
+            App.log("desktopAvailableHeight: " + window.screen.desktopAvailableHeight);
+            App.log("X invalid: " + isXinvalid + ", Y invalid: " + isYinvalid);
+        }
 
         if (isXinvalid)
             window.x = window.screen.virtualX + Math.max(50, (window.screen.width - window.width) / 2);

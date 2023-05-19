@@ -19,19 +19,19 @@ Rectangle {
 
        Label
        {
-            //text: qsTr("Low") + App.loc.emptyString
             text: root.labelText
             font.pixelSize: 16
             padding: 3
+            anchors.left: parent.left
+            horizontalAlignment: Text.AlignLeft
         }
 
        TumSettingTextField
        {
            id: tumSettingTextField
-           //mode: TrafficUsageMode.Low
            mode: root.trafficUsageMode
-           //setting: DmCoreSettings.MaxConnections
            setting: root.maxDownloadSpeedSetting
+           anchors.left: parent.left
        }
     }
 

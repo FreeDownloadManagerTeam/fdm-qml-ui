@@ -8,7 +8,9 @@ Item {
 
     property double currentDownloadId: -1
 
-    property int checkedDownloadsCount: 0
+    property var checkedIds: []
+
+    property int checkedDownloadsCount: checkedIds.length
     property int allDownloadsChecked: App.downloads.model.allCheckState
 
     property bool checkedDownloadsToStartExist: false;
@@ -16,6 +18,9 @@ Item {
 
     property bool downloadsToStartExist: App.downloads.tracker.hasDownloadsToStart
     property bool downloadsToStopExist: App.downloads.tracker.hasDownloadsToStop
+
+    property var draggableCheckedIds: []
+    property var draggableCheckedFilesDragUriList: []
 
     signal modelCheckedChanged(double model_id)
     signal modelRunningChanged(double model_id)
@@ -38,7 +43,7 @@ Item {
 
     Connections {
         target: App.downloads.infos
-        onAdded: {
+        onAdded: function(ids) {
             if (ids.length && ids[0])
                 selectDownloadItemById(ids[0]);
             updateState();
@@ -47,7 +52,7 @@ Item {
 
     Connections {
         target: App.downloads.model
-        onRemovedFromList: {
+        onRemovedFromList: function(ids) {
             if (ids.indexOf(currentDownloadId) >= 0) {
                 resetShiftSelectStartIndex();
                 currentDownloadId = -1;
@@ -80,11 +85,34 @@ Item {
         running: false;
         repeat: false
         onTriggered: {
-            var checked_ids = App.downloads.model.checkedIds();
-            checkedDownloadsCount = checked_ids.length;
+            checkedIds = App.downloads.model.checkedIds();
             checkedDownloadsToStartExist = App.downloads.model.hasCheckedDownloadsToStart();
             checkedDownloadsToStopExist = App.downloads.model.hasCheckedDownloadsToStop();
+            updateDraggableState();
         }
+    }
+
+    function updateDraggableState()
+    {
+        let ids = [];
+        let uriList = [];
+
+        for (let i = 0; i < checkedIds.length; ++i)
+        {
+            let id = checkedIds[i];
+            let info = App.downloads.infos.info(id);
+            if (!info)
+                continue;
+            let list = info.filesDragUriList;
+            if (list && list.length)
+            {
+                ids.push(id);
+                uriList = uriList.concat(list);
+            }
+        }
+
+        draggableCheckedIds = ids;
+        draggableCheckedFilesDragUriList = uriList;
     }
 
     function onComponentReady()
@@ -97,11 +125,6 @@ Item {
     function updateState()
     {
         changedTimer.restart();
-    }
-
-    function checkedIds()
-    {
-        return App.downloads.model.checkedIds();
     }
 
     function startCheckedDownloads() {
@@ -504,7 +527,7 @@ Item {
     {
         var current_ids = [];
         if (checkedDownloadsCount > 0) {
-            current_ids = App.downloads.model.checkedIds();
+            current_ids = checkedIds;
         } else if (currentDownloadId > 0) {
             current_ids = [ currentDownloadId ];
         }

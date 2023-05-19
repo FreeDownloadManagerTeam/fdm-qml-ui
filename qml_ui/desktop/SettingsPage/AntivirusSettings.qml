@@ -1,6 +1,7 @@
 import QtQuick 2.10
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
+import Qt.labs.platform 1.1
 import "../../qt5compat"
 import org.freedownloadmanager.fdm 1.0
 import org.freedownloadmanager.fdm.dmcoresettings 1.0
@@ -22,6 +23,8 @@ Column
     GridLayout {
         id: grid
 
+        anchors.left: parent.left
+
         columns: 2
         width: 548*appWindow.zoom
         rowSpacing: 12*appWindow.zoom
@@ -30,7 +33,8 @@ Column
             Layout.topMargin: 5*appWindow.zoom
             text: qsTr("Select antivirus:") + App.loc.emptyString
             color: appWindow.theme.settingsItem
-            rightPadding: 10*appWindow.zoom
+            rightPadding: qtbug.rightPadding(0, 10*appWindow.zoom)
+            leftPadding: qtbug.leftPadding(0, 10*appWindow.zoom)
         }
 
         RowLayout {
@@ -50,8 +54,8 @@ Column
         BaseLabel {
             text: qsTr("Path:") + App.loc.emptyString
             enabled: customSettingsEnabled
-            leftPadding: 38*appWindow.zoom
-            rightPadding: 10*appWindow.zoom
+            leftPadding: qtbug.leftPadding(38*appWindow.zoom, 10*appWindow.zoom)
+            rightPadding: qtbug.rightPadding(38*appWindow.zoom, 10*appWindow.zoom)
             color: appWindow.theme.settingsItem
         }
 
@@ -100,7 +104,7 @@ Column
                 FileDialog {
                     id: browseDlg
                     onAccepted: {
-                        urlField.text = App.tools.url(fileUrl).toLocalFile();
+                        urlField.text = App.tools.url(file).toLocalFile();
                     }
                 }
             }
@@ -109,8 +113,8 @@ Column
         BaseLabel {
             text: qsTr("Arguments:") + App.loc.emptyString
             enabled: customSettingsEnabled
-            leftPadding: 38*appWindow.zoom
-            rightPadding: 10*appWindow.zoom
+            leftPadding: qtbug.leftPadding(38*appWindow.zoom, 10*appWindow.zoom)
+            rightPadding: qtbug.rightPadding(38*appWindow.zoom, 10*appWindow.zoom)
             color: appWindow.theme.settingsItem
         }
 

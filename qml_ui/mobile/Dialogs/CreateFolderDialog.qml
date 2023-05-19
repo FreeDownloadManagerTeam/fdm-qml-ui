@@ -11,7 +11,7 @@ Dialog {
     property string path
 
     width: Math.round(parent.width * 0.8)
-    parent: appWindow.overlay
+    parent: Overlay.overlay
     anchors.centerIn: parent
     modal: true
 
@@ -21,13 +21,14 @@ Dialog {
         spacing: 5
         width: parent.width
 
-        TextField {
+        BaseTextField {
             id: folderName
             selectByMouse: true
             Layout.preferredWidth: parent.width
             focus: true
             onAccepted: accept()
             inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText | Qt.ImhSensitiveData
+            enable_QTBUG_110471_workaround_2: true
         }
 
         RowLayout {

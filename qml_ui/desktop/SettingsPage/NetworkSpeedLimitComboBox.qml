@@ -29,9 +29,7 @@ Item {
 
         model: ListModel{}
 
-//        displayText: parseInt(currentText) ? currentText + " " + kbps : currentText
         onActivated: {
-            console.error('onActivated', currentValue)
             if (currentText === sCustom)
             {
                 visible = false;
@@ -48,7 +46,9 @@ Item {
             height: 18*appWindow.zoom
             width: root.width
             BaseLabel {
-                leftPadding: 6*appWindow.zoom
+                anchors.left: parent.left
+                leftPadding: qtbug.leftPadding(10*appWindow.zoom,0)
+                rightPadding: qtbug.rightPadding(10*appWindow.zoom,0)
                 anchors.verticalCenter: parent.verticalCenter
                 font.pixelSize: 12*appWindow.fontZoom
                 color: appWindow.theme.settingsItem
@@ -85,7 +85,10 @@ Item {
             color: "transparent"
             clip: true
             BaseLabel {
+                anchors.left: parent.left
                 anchors.verticalCenter: parent.verticalCenter
+                leftPadding: qtbug.leftPadding(5*appWindow.zoom,0)
+                rightPadding: qtbug.rightPadding(5*appWindow.zoom,0)
                 font.pixelSize: 12*appWindow.fontZoom
                 color: appWindow.theme.settingsItem
                 text: parseInt(combo.currentText) ? combo.currentText + " " + kbps : combo.currentText
@@ -93,7 +96,7 @@ Item {
         }
 
         indicator: Rectangle {
-            x: combo.width - width
+            x: LayoutMirroring.enabled ? 0 : combo.width - width
             y: combo.topPadding + (combo.availableHeight - height) / 2
             width: height - 1*appWindow.zoom
             height: combo.height
@@ -126,14 +129,12 @@ Item {
                 border.width: 1*appWindow.zoom
             }
 
-            contentItem: Item {
-                ListView {
-                    clip: true
-                    anchors.fill: parent
-                    model: combo.model
-                    currentIndex: combo.highlightedIndex
-                    delegate: combo.delegate
-                }
+            contentItem: ListView {
+                clip: true
+                anchors.fill: parent
+                model: combo.model
+                currentIndex: combo.highlightedIndex
+                delegate: combo.delegate
             }
         }
     }

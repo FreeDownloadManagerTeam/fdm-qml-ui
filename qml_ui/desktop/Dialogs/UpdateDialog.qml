@@ -10,7 +10,7 @@ Item {
     id: root
     visible: updateTools.showDialog
     height: 100*appWindow.zoom
-    width: 300*appWindow.zoom
+    width: 100*appWindow.zoom + 200*appWindow.fontZoom
 
     property int arrowCenterX: width/2
 

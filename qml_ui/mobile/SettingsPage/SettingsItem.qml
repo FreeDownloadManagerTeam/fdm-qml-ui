@@ -84,7 +84,6 @@ ToolButton {
             text: root.description
             font.pixelSize: textPointSize
             font.weight: textWeight
-//            color: "#4a4a4a"
         }
 
         Image {
@@ -94,6 +93,7 @@ ToolButton {
             anchors.rightMargin: 30
             height: 16
             fillMode: Image.PreserveAspectFit
+            mirror: LayoutMirroring.enabled
         }
     }
 }

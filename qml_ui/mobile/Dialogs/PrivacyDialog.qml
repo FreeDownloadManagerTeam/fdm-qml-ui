@@ -9,8 +9,7 @@ import "../BaseElements"
 CenteredDialog
 {
     id: root
-    width: 320
-    height: 200
+
     modal: true
 
     property int failedId
@@ -24,8 +23,10 @@ CenteredDialog
         Label
         {
             text: qsTr("A bug report will be sent to the server and used to improve %1 performance. We do not collect your personal data and do not share data with third parties.").arg(App.shortDisplayName) + App.loc.emptyString
-            Layout.fillWidth: parent
+            Layout.fillWidth: true
+            Layout.maximumWidth: Math.min(400, appWindow.width*0.9-40)
             wrapMode: Label.WordWrap
+            horizontalAlignment: Text.AlignLeft
         }
 
         BaseCheckBox {

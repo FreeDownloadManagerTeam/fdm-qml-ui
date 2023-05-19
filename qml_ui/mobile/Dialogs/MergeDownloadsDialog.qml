@@ -8,7 +8,7 @@ import "../BaseElements"
 Dialog {
     id: root
 
-    parent: appWindow.overlay
+    parent: Overlay.overlay
 
     x: Math.round((appWindow.width - width) / 2)
     y: Math.round((appWindow.height - height) / 2)
@@ -24,6 +24,7 @@ Dialog {
 
         DialogTitle {
             text: qsTr("The download already exists") + App.loc.emptyString
+            Layout.fillWidth: true
         }
 
         Label {
@@ -32,6 +33,7 @@ Dialog {
             color: "#737373"
             elide: Text.ElideMiddle
             Layout.fillWidth: true
+            horizontalAlignment: Text.AlignLeft
             DownloadsItemTools {
                 id: downloadsItemTools
                 itemId: mergeTools.existingDownloadId

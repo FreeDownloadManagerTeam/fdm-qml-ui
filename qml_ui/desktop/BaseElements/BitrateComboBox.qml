@@ -21,7 +21,7 @@ ComboBox {
 
     property string kbps: qsTr("kbps") + App.loc.emptyString
 
-    Layout.preferredWidth: constantBitrate ? 90*appWindow.zoom : ((fontMetrics.advanceWidth(root.vbrKbpsText(999,999)) + 50*appWindow.zoom) + fontMetrics.font.pixelSize*0)
+    Layout.preferredWidth: constantBitrate ? 90*appWindow.fontZoom : ((fontMetrics.advanceWidth(root.vbrKbpsText(999,999)) + 50*appWindow.zoom) + fontMetrics.font.pixelSize*0)
 
     model: []
 
@@ -34,7 +34,9 @@ ComboBox {
         width: constantBitrate ? popupWidth : root.width
 
         BaseLabel {
-            leftPadding: 6*appWindow.zoom
+            anchors.left: parent.left
+            leftPadding: qtbug.leftPadding(6*appWindow.zoom, 0)
+            rightPadding: qtbug.rightPadding(6*appWindow.zoom, 0)
             anchors.verticalCenter: parent.verticalCenter
             font.pixelSize: 12*appWindow.fontZoom
             color: appWindow.theme.settingsItem
@@ -62,19 +64,19 @@ ComboBox {
         border.width: 1*appWindow.zoom
     }
 
-    contentItem: Rectangle {
-        color: "transparent"
-        BaseLabel {
+    contentItem: BaseLabel {
             id: currentValue
-            leftPadding: 2*appWindow.zoom
-            anchors.verticalCenter: parent.verticalCenter
+            leftPadding: qtbug.leftPadding(2*appWindow.zoom, 0)
+            rightPadding: qtbug.rightPadding(2*appWindow.zoom, 0)
+            topPadding: 2*appWindow.zoom
+            bottomPadding: 2*appWindow.zoom
+            verticalAlignment: Label.AlignVCenter
             font.pixelSize: 12*appWindow.fontZoom
             color: appWindow.theme.settingsItem
-        }
     }
 
     indicator: Rectangle {
-        x: root.width - width
+        x: LayoutMirroring.enabled ? 0 : root.width - width
         y: root.topPadding + (root.availableHeight - height) / 2
         width: height - 1*appWindow.zoom
         height: root.height

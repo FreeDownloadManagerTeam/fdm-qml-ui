@@ -12,8 +12,6 @@ BaseDialog {
     property var downloadIds: []
     property string dialogType: uiSettingsTools.settings.deleteButtonAction == 0 ? "Always ask" : uiSettingsTools.settings.deleteButtonAction == 1 ? "Delete files" : "unknown"
 
-    width: 542*appWindow.zoom
-
     contentItem: BaseDialogItem {
         titleText: qsTr("Delete selected downloads") + App.loc.emptyString
         focus: true
@@ -30,6 +28,7 @@ BaseDialog {
                 clip: true
                 Layout.fillWidth: true
                 Layout.preferredHeight: Math.min(contentHeight, 150*appWindow.zoom)
+                Layout.minimumWidth: 342*appWindow.zoom+200*appWindow.fontZoom
                 ScrollBar.vertical: ScrollBar {
                     active: parent.contentHeight > 150*appWindow.zoom
                 }
@@ -62,7 +61,7 @@ BaseDialog {
 
                 BaseCheckBox {
                     id: rememberChoiceCbx
-                    Layout.leftMargin: -6*appWindow.zoom
+                    xOffset: 0
                     text: qsTr("Remember my choice") + App.loc.emptyString
                     checked: false
                 }

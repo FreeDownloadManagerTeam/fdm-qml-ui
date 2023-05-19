@@ -72,7 +72,8 @@ Item
             spacing: 8*appWindow.zoom
 
             BaseCheckBox {
-                Layout.leftMargin: 8*appWindow.zoom
+                Layout.leftMargin: qtbug.leftMargin(8*appWindow.zoom, 0)
+                Layout.rightMargin: qtbug.rightMargin(8*appWindow.zoom, 0)
                 Layout.alignment: Qt.AlignVCenter
                 xOffset: 0
                 locked: downloadsItemTools.locked
@@ -136,6 +137,40 @@ Item
             DownloadIcon {
                 visible: !appWindow.compactView
                 Layout.alignment: Qt.AlignVCenter
+
+                DragArea {
+                    readonly property bool multiMode: selectedDownloadsTools.draggableCheckedIds.includes(downloadsItemTools.itemId)
+                    readonly property var uriList:  multiMode ? selectedDownloadsTools.draggableCheckedFilesDragUriList :
+                                                    downloadsItemTools.item ? downloadsItemTools.item.filesDragUriList :
+                                                    []
+                    enabled: !App.rc.client.active && uriList.length
+                    anchors.fill: parent
+                    mimeData: {"text/uri-list": uriList.join('\n') }
+                    onTimeToSetDragImageSource: {
+                        if (multiMode)
+                        {
+                            Drag.imageSource = "";
+                        }
+                        else
+                        {
+                            titleLabel.grabToImage(function(result)
+                            {
+                                Drag.imageSource = result.url;
+                            });
+                        }
+                    }
+                    onDragStarted: appWindow.disableDrop = true
+                    onDragFinished: function (dropAction)
+                    {
+                        appWindow.disableDrop = false;
+
+                        if (dropAction == Qt.MoveAction)
+                        {
+                            App.downloads.mgr.forceCheckForMissingFiles(
+                                        multiMode ? selectedDownloadsTools.draggableCheckedIds : [downloadsItemTools.itemId]);
+                        }
+                    }
+                }
             }
 
             Rectangle {
@@ -155,8 +190,8 @@ Item
             width: root.downloadsViewHeader.nameColumnFullWidth
                     + (root.eatStatusItem ? root.downloadsViewHeader.statusColumnFullWidth : 0)
                     + (root.eatSpeedItem ? root.downloadsViewHeader.speedColumnFullWidth : 0)
-            leftPadding: 6
-            rightPadding: itemTags.width ? itemTags.width + 10*appWindow.zoom + 5*appWindow.zoom : 5*appWindow.zoom
+            leftPadding: qtbug.leftPadding(6, itemTags.width ? itemTags.width + 10*appWindow.zoom + 5*appWindow.zoom : 5*appWindow.zoom)
+            rightPadding: qtbug.rightPadding(6, itemTags.width ? itemTags.width + 10*appWindow.zoom + 5*appWindow.zoom : 5*appWindow.zoom)
             font.pixelSize: appWindow.fonts.defaultSize
             opacity: downloadsItemTools.itemOpacity
 
@@ -185,7 +220,7 @@ Item
             DownloadsViewItemTags {
                 id: itemTags
                 anchors.left: parent.left
-                anchors.leftMargin: parent.contentWidth + parent.leftPadding + 10*appWindow.zoom
+                anchors.leftMargin: parent.contentWidth + qtbug.getLeftPadding(parent) + 10*appWindow.zoom
                 anchors.verticalCenter: parent.verticalCenter
             }
 
@@ -382,8 +417,10 @@ Item
                 color: appWindow.theme.foreground
                 text: qsTr("Upload paused") + App.loc.emptyString
                 font.pixelSize: (appWindow.compactView ? 9 : 11)*appWindow.fontZoom
-                x: 7*appWindow.zoom
-                width: parent.width - x - 20*appWindow.zoom
+                anchors.left: parent.left
+                leftPadding: qtbug.leftPadding(7, 0)
+                rightPadding: qtbug.rightPadding(7, 0)
+                width: parent.width - qtbug.getLeftPadding(this) - 20*appWindow.zoom
                 height: parent.height
                 verticalAlignment: Text.AlignVCenter
                 wrapMode: Text.WordWrap
@@ -424,9 +461,10 @@ Item
         BaseLabel {
             visible: root.hasSizeItem
             anchors.verticalCenter: parent.verticalCenter
-            text: JsTools.sizeUtils.byteProgressAsText(downloadsItemTools.selectedBytesDownloaded, downloadsItemTools.selectedSize);
+            text: App.bytesProgressAsText(downloadsItemTools.selectedBytesDownloaded, downloadsItemTools.selectedSize, false) + App.loc.emptyString
             width: root.downloadsViewHeader.sizeColumnFullWidth
-            leftPadding: 6*appWindow.zoom
+            leftPadding: qtbug.leftPadding(6*appWindow.zoom, 0)
+            rightPadding: qtbug.rightPadding(6*appWindow.zoom, 0)
             font.pixelSize: (appWindow.compactView ? 12 : 13)*appWindow.fontZoom
             opacity: downloadsItemTools.itemOpacity
         }

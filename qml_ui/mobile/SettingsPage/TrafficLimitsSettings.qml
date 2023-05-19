@@ -69,8 +69,6 @@ Page {
                 GridLayout {
                     columns: smallScreen ? 1 : 3
 
-                    //anchors.left: parent.left
-                    //anchors.right: parent.right
                     Layout.leftMargin: 20
                     Layout.rightMargin: 20
 
@@ -103,8 +101,6 @@ Page {
                 GridLayout {
                     columns: smallScreen ? 1 : 3
 
-                    //anchors.left: parent.left
-                    //anchors.right: parent.right
                     Layout.leftMargin: 20
                     Layout.rightMargin: 20
 

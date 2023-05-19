@@ -62,7 +62,8 @@ Item {
         RowLayout {
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignLeft
-            Layout.leftMargin: 5*appWindow.zoom
+            Layout.leftMargin: qtbug.leftMargin(5*appWindow.zoom, 0)
+            Layout.rightMargin: qtbug.rightMargin(5*appWindow.zoom, 0)
 
             spacing: 10*appWindow.zoom
 
@@ -80,7 +81,8 @@ Item {
 
             BaseLabel {
                 text: qsTr("To:") + App.loc.emptyString
-                Layout.leftMargin: 10*appWindow.zoom
+                Layout.leftMargin: qtbug.leftMargin(10*appWindow.zoom, 0)
+                Layout.rightMargin: qtbug.rightMargin(10*appWindow.zoom, 0)
             }
 
             SchedulerTimeCombobox {

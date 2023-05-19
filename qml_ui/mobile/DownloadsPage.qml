@@ -40,6 +40,7 @@ Page
 
         MainFiltersBar {
             id: mainFiltersBar
+            visible: appWindow.hasDownloadMgr
         }
 
         SelectModeTopBar {
@@ -74,7 +75,7 @@ Page
             }
             PropertyChanges {
                 target: newDownloadRoundBtn;
-                visible: true;
+                visible: appWindow.hasDownloadMgr;
             }
 //            PropertyChanges {
 //                target: snailBtn;
@@ -92,7 +93,7 @@ Page
             }
             PropertyChanges {
                 target: mainFiltersBar;
-                visible: true;
+                visible: appWindow.hasDownloadMgr;
             }
             PropertyChanges {
                 target: selectModeTopBar;
@@ -179,7 +180,7 @@ Page
             }
             PropertyChanges {
                 target: mainFiltersBar;
-                visible: true;
+                visible: appWindow.hasDownloadMgr;
             }
             PropertyChanges {
                 target: selectModeTopBar;
@@ -274,7 +275,7 @@ Page
         function changeRoundButtonsVisibility(visibility) {
             if (root.state == "mainView") {
 //                snailBtn.visible = visibility;
-                newDownloadRoundBtn.visible = visibility;
+                newDownloadRoundBtn.visible = visibility && appWindow.hasDownloadMgr;
             }
         }
     }
@@ -285,7 +286,7 @@ Page
 
     RowLayout {
         anchors.fill: parent
-        visible: App.downloads.infos.empty
+        visible: appWindow.hasDownloadMgr && App.downloads.infos.empty
 
         BaseLabel {
             text: qsTr("Download list is empty. Add new download URL.") + App.loc.emptyString
@@ -356,6 +357,8 @@ Page
     {
         id: newDownloadRoundBtn
 
+        visible: appWindow.hasDownloadMgr
+
         onClicked: appWindow.createDownloadDialog()
 
         width: 58
@@ -398,6 +401,8 @@ Page
     }
 
     DeleteDownloadsFailedDialog {}
+
+    ConfirmDeleteExtraneousFilesDialog {}
 
     SchedulerDialog {
         id: schedulerDlg
@@ -511,5 +516,10 @@ Page
                 }
             }
         }
+    }
+
+    Connections {
+        target: appWindow
+        onOpenScheduler: (downloadId) => schedulerDlg.setUpSchedulerAction([downloadId])
     }
 }

@@ -18,29 +18,38 @@ Row
         property int textBottomPadding: Qt.platform.os === "osx" ? 1*appWindow.zoom : 0
     }
 
-    WaSvgImage {
-        visible: myDownloadsItemTools.showDownloadSpeed
-        anchors.verticalCenter: parent.verticalCenter
-        source: appWindow.theme.arrowDownListImg
-        zoom: appWindow.zoom
-        fillMode: Image.PreserveAspectFit
-    }
-    BaseLabel {
-        id: labelDown
-        visible: myDownloadsItemTools.showDownloadSpeed
-        anchors.verticalCenter: parent.verticalCenter
-        text: App.speedAsText(myDownloadsItemTools.downloadSpeed) + App.loc.emptyString
-        font.pixelSize: (appWindow.compactView ? 12 : 13)*appWindow.fontZoom
-        leftPadding: 2*appWindow.zoom
-        bottomPadding: d.textBottomPadding
-    }
-
-    Rectangle
+    Item
     {
-        visible: myDownloadsItemTools.showDownloadSpeed && d.showUploadSpeed
-        color: "transparent"
-        width: 15*appWindow.zoom+52*appWindow.fontZoom - labelDown.x - labelDown.width // make a "grid"
-        height: parent.height
+        visible: myDownloadsItemTools.showDownloadSpeed
+
+        implicitWidth: 10*appWindow.zoom+62*appWindow.fontZoom
+        implicitHeight: downSpeedRow.implicitHeight
+
+        anchors.verticalCenter: parent.verticalCenter
+
+        Row
+        {
+            id: downSpeedRow
+
+            anchors.left: parent.left
+            anchors.verticalCenter: parent.verticalCenter
+
+            WaSvgImage {
+                anchors.verticalCenter: parent.verticalCenter
+                source: appWindow.theme.arrowDownListImg
+                zoom: appWindow.zoom
+                fillMode: Image.PreserveAspectFit
+            }
+            BaseLabel {
+                id: labelDown
+                anchors.verticalCenter: parent.verticalCenter
+                text: App.speedAsText(myDownloadsItemTools.downloadSpeed) + App.loc.emptyString
+                font.pixelSize: (appWindow.compactView ? 12 : 13)*appWindow.fontZoom
+                leftPadding: qtbug.leftPadding(2*appWindow.zoom,0)
+                rightPadding: qtbug.rightPadding(2*appWindow.zoom,0)
+                bottomPadding: d.textBottomPadding
+            }
+        }
     }
 
     WaSvgImage {
@@ -55,7 +64,8 @@ Row
         anchors.verticalCenter: parent.verticalCenter
         text: App.speedAsText(myDownloadsItemTools.uploadSpeed) + App.loc.emptyString
         font.pixelSize: (appWindow.compactView ? 12 : 13)*appWindow.fontZoom
-        leftPadding: 2*appWindow.zoom
+        leftPadding: qtbug.leftPadding(2*appWindow.zoom,0)
+        rightPadding: qtbug.rightPadding(2*appWindow.zoom,0)
         bottomPadding: d.textBottomPadding
     }
 }

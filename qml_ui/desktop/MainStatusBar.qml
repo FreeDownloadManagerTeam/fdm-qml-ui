@@ -33,7 +33,8 @@ Rectangle {
             id: snailBtn
             property int prevTum: TrafficUsageMode.High
             property bool checked: root.currentTumMode == TrafficUsageMode.Snail
-            Layout.leftMargin: 5*appWindow.zoom
+            Layout.leftMargin: qtbug.leftMargin(5*appWindow.zoom, 0)
+            Layout.rightMargin: qtbug.rightMargin(5*appWindow.zoom, 0)
             Layout.alignment: Qt.AlignVCenter
             width: 32*appWindow.zoom
             height: 23*appWindow.zoom
@@ -84,17 +85,21 @@ Rectangle {
         }
 
         Rectangle {
-            Layout.leftMargin: 5*appWindow.zoom
+            Layout.leftMargin: qtbug.leftMargin(5*appWindow.zoom, 0)
+            Layout.rightMargin: qtbug.rightMargin(5*appWindow.zoom, 0)
             color: "transparent"
             width: 50*appWindow.zoom+150*appWindow.fontZoom
             height: root.height
             TumComboBox {
                 visible: root.currentTumMode != TrafficUsageMode.Snail
+                anchors.left: parent.left
             }
             BaseLabel {
                 visible: root.currentTumMode == TrafficUsageMode.Snail
+                anchors.left: parent.left
                 anchors.verticalCenter: parent.verticalCenter
-                leftPadding: 5*appWindow.zoom
+                leftPadding: qtbug.leftPadding(5*appWindow.zoom, 0)
+                rightPadding: qtbug.rightPadding(5*appWindow.zoom, 0)
                 text: qsTr("Snail mode") + App.loc.emptyString
             }
         }
@@ -102,7 +107,8 @@ Rectangle {
         Item {
             height: root.height
             Layout.fillWidth: true
-            Layout.leftMargin: (Qt.platform.os === "osx" ? 3 : 0)*appWindow.zoom
+            Layout.leftMargin: qtbug.leftMargin((Qt.platform.os === "osx" ? 3 : 0)*appWindow.zoom, 0)
+            Layout.rightMargin: qtbug.rightMargin((Qt.platform.os === "osx" ? 3 : 0)*appWindow.zoom, 0)
             clip: true
 
             BaseLabel {
@@ -167,14 +173,13 @@ Rectangle {
                     function updateStatusBarTitle()
                     {
                         if (selectedDownloadsTools.checkedDownloadsCount > 0) {
-                            var ids = selectedDownloadsTools.checkedIds();
+                            var ids = selectedDownloadsTools.checkedIds;
                             var total_size = 0;
                             for (var i = 0; i < ids.length; i++) {
                                 total_size = total_size + App.downloads.infos.info(ids[i]).selectedBytesDownloaded;
                             }
-                            var txt = qsTr("%n downloads selected.", "", ids.length);
-                            txt = txt + " " + qsTr("Total size:") + " " + JsTools.sizeUtils.bytesAsText(total_size);
-                            statusBarTitle.myText = txt;
+                            statusBarTitle.myText = qsTr("%n downloads selected.", "", ids.length) + ' ' +
+                                        qsTr("Total size:") + App.bytesAsText(total_size);
 
                         } else if (selectedDownloadsTools.currentDownloadId > 0) {
                             statusBarTitle.myText = Qt.binding(function(){return App.downloads.infos.info(selectedDownloadsTools.currentDownloadId).title;});

@@ -40,7 +40,7 @@ Item {
             TablesHeaderItem {
                 id: hostItem
                 text: qsTr("Host") + App.loc.emptyString
-                Layout.preferredWidth: Math.max(200*appWindow.zoom, headerMinimumWidth, parent.width / 2)
+                Layout.preferredWidth: Math.max(200*appWindow.fontZoom, headerMinimumWidth, parent.width / 2)
                 Layout.fillHeight: true
                 color: appWindow.theme.background
                 onWidthChanged: hostItemWidth = width
@@ -49,7 +49,7 @@ Item {
             TablesHeaderItem {
                 id: portItem
                 text: qsTr("Port") + App.loc.emptyString
-                Layout.preferredWidth: Math.max(50*appWindow.zoom, headerMinimumWidth)
+                Layout.preferredWidth: Math.max(70*appWindow.fontZoom, headerMinimumWidth)
                 Layout.fillHeight: true
                 color: appWindow.theme.background
                 onWidthChanged: portItemWidth = width
@@ -81,7 +81,8 @@ Item {
                 Layout.preferredWidth: hostItemWidth
                 Layout.minimumWidth: Layout.preferredWidth
                 Layout.fillHeight: true
-                leftPadding: 6*appWindow.zoom
+                leftPadding: qtbug.leftPadding(6*appWindow.zoom,0)
+                rightPadding: qtbug.rightPadding(6*appWindow.zoom,0)
             }
 
             BaseLabel {
@@ -89,14 +90,16 @@ Item {
                 Layout.preferredWidth: portItemWidth
                 Layout.minimumWidth: Layout.preferredWidth
                 Layout.fillHeight: true
-                leftPadding: 6*appWindow.zoom
+                leftPadding: qtbug.leftPadding(6*appWindow.zoom,0)
+                rightPadding: qtbug.rightPadding(6*appWindow.zoom,0)
             }
 
             BaseLabel {
                 text: model.connectionCount
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                leftPadding: 6*appWindow.zoom
+                leftPadding: qtbug.leftPadding(6*appWindow.zoom,0)
+                rightPadding: qtbug.rightPadding(6*appWindow.zoom,0)
             }
         }
     }

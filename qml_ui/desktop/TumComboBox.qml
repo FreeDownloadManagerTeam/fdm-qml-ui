@@ -35,7 +35,7 @@ ComboBox {
         color: "transparent"
 
         Rectangle {
-            width: parent.width
+            width: parent.width-2
             height: 30*appWindow.zoom
             color: "transparent"
 
@@ -50,37 +50,38 @@ ComboBox {
                 opacity: 0.2
             }
 
-            Rectangle {
-                width: 4*appWindow.zoom
-                height: parent.height
-                color: modelData.mode === TrafficUsageMode.High ? appWindow.theme.highMode :
-                       modelData.mode === TrafficUsageMode.Medium ? appWindow.theme.mediumMode :
-                       modelData.mode === TrafficUsageMode.Low ? appWindow.theme.lowMode : "transparent"
-            }
-
-            Rectangle {
-                color: "transparent"
-                visible: root.currentTumMode == modelData.mode
-                anchors.left: parent.left
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.leftMargin: 12*appWindow.zoom
-                clip: true
-                width: 12*appWindow.zoom
-                height: 10*appWindow.zoom
-                WaSvgImage {
-                    source: appWindow.theme.elementsIcons
-                    zoom: appWindow.zoom
-                    x: 0
-                    y: -123*zoom
-                }
-            }
-
             RowLayout {
+                anchors.left: parent.left
+                height: parent.height
                 anchors.verticalCenter: parent.verticalCenter
                 spacing: 5*appWindow.zoom
+
+                Rectangle {
+                    Layout.preferredWidth: 4*appWindow.zoom
+                    Layout.fillHeight: true
+                    color: modelData.mode === TrafficUsageMode.High ? appWindow.theme.highMode :
+                           modelData.mode === TrafficUsageMode.Medium ? appWindow.theme.mediumMode :
+                           modelData.mode === TrafficUsageMode.Low ? appWindow.theme.lowMode : "transparent"
+                }
+
+                Rectangle {
+                    color: "transparent"
+                    Layout.alignment: Qt.AlignVCenter
+                    Layout.preferredWidth: 12*appWindow.zoom
+                    Layout.preferredHeight: 10*appWindow.zoom
+                    clip: true
+                    WaSvgImage {
+                        visible: root.currentTumMode == modelData.mode
+                        source: appWindow.theme.elementsIcons
+                        zoom: appWindow.zoom
+                        x: 0
+                        y: -123*zoom
+                    }
+                }
+
                 BaseLabel {
-                    leftPadding: 30*appWindow.zoom
                     text: modelData.text
+                    Layout.alignment: Qt.AlignVCenter
                 }
             }
 
@@ -151,6 +152,7 @@ ComboBox {
             width: 1*appWindow.zoom
             height: parent.height
             color: appWindow.theme.border
+            anchors.left: parent.left
         }
 
         Rectangle {
@@ -182,7 +184,9 @@ ComboBox {
                 }
 
                 BaseLabel {
-                    leftPadding: 20*appWindow.zoom
+                    leftPadding: qtbug.leftPadding(20*appWindow.zoom, 0)
+                    rightPadding: qtbug.rightPadding(20*appWindow.zoom, 0)
+                    anchors.left: parent.left
                     anchors.verticalCenter: parent.verticalCenter
                     text: App.speedAsText(root.totalDownloadSpeed) + App.loc.emptyString
                 }
@@ -201,7 +205,9 @@ ComboBox {
                 }
 
                 BaseLabel {
-                    leftPadding: 20*appWindow.zoom
+                    leftPadding: qtbug.leftPadding(20*appWindow.zoom, 0)
+                    rightPadding: qtbug.rightPadding(20*appWindow.zoom, 0)
+                    anchors.left: parent.left
                     anchors.verticalCenter: parent.verticalCenter
                     text: App.speedAsText(root.totalUploadSpeed) + App.loc.emptyString
                 }

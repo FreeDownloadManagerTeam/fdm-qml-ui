@@ -37,16 +37,15 @@ BaseToolBar {
     }
 
     Rectangle {
-        width: modeCol.width
-        height: modeCol.height
+        implicitWidth: modeCol.implicitWidth
+        implicitHeight: modeCol.implicitHeight
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.top: parent.top
-        anchors.topMargin: 16
+        anchors.verticalCenter: parent.verticalCenter
         color: "transparent"
 
         Column {
             id: modeCol
-            spacing: 6
+            spacing: root.width - mainToolbarStatus.width < 100 ? 16 : 6 // don't mess with left and right buttons
 
             //App name
             Label {
@@ -60,7 +59,10 @@ BaseToolBar {
                 color: appWindow.theme.toolbarTextColor
             }
 
-            MainToolbarStatus { id: mainToolbarStatus }
+            MainToolbarStatus {
+                id: mainToolbarStatus
+                visible: appWindow.hasDownloadMgr
+            }
         }
 
         MouseArea {
@@ -73,6 +75,9 @@ BaseToolBar {
     // Search button
     ToolbarButton {
         id: searchBtn
+
+        visible: appWindow.hasDownloadMgr
+
         anchors.right: parent.right
         anchors.rightMargin: 11
         anchors.verticalCenter: parent.verticalCenter

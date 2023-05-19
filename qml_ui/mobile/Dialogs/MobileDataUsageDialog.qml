@@ -21,6 +21,7 @@ CenteredDialog
 
         DialogTitle {
             text: qsTr("Mobile data usage") + App.loc.emptyString
+            Layout.fillWidth: true
         }
 
         Label
@@ -29,6 +30,8 @@ CenteredDialog
             topPadding: 10
             width: parent.width
             wrapMode: Label.WordWrap
+            anchors.left: parent.left
+            horizontalAlignment: Text.AlignLeft
         }
 
         Label
@@ -36,11 +39,14 @@ CenteredDialog
             text: qsTr("Would you like to enable usage of mobile data? *") + App.loc.emptyString
             width: parent.width
             wrapMode: Label.WordWrap
+            anchors.left: parent.left
+            horizontalAlignment: Text.AlignLeft
         }
 
         BaseCheckBox {
             id: dontAsk
             text: qsTr("Don't ask again") + App.loc.emptyString
+            anchors.left: parent.left
         }
 
         Row {

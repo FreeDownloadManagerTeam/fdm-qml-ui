@@ -10,6 +10,11 @@ RowLayout
 {
     id: root
 
+    property bool checkUpdateThisLaunchedByUser: false
+    property string updateResult
+    property bool updateFailed: false
+    readonly property bool checkUpdateLaunchedByUser: checkUpdateThisLaunchedByUser || checkUpdateAllLaunchedByUser
+
     WaSvgImage
     {
         id: img
@@ -58,7 +63,12 @@ RowLayout
                     BaseContextMenuItem {
                         enabled: model.supportsAutoUpdate
                         text: qsTr("Check for Updates") + App.loc.emptyString
-                        onTriggered: App.plugins.updateMgr.update(model.uuid)
+                        onTriggered: {
+                            root.checkUpdateThisLaunchedByUser = true;
+                            root.updateResult = "";
+                            root.updateFailed = false;
+                            App.plugins.updateMgr.update(model.uuid);
+                        }
                     }
 
                     BaseContextMenuSeparator {}
@@ -72,7 +82,7 @@ RowLayout
 
             RowLayout
             {
-                visible: model.updating
+                visible: root.checkUpdateLaunchedByUser && model.updating
 
                 BaseLabel
                 {
@@ -85,6 +95,13 @@ RowLayout
                     Layout.preferredHeight: (smallPage ? 6 : 10)*appWindow.zoom
                     Layout.preferredWidth: 150*appWindow.zoom
                 }
+            }
+
+            BaseLabel
+            {
+                visible: text && text !== updateAllResult
+                text: root.updateResult
+                color: root.updateFailed ? appWindow.theme.errorMessage : appWindow.theme.foreground
             }
         }
 
@@ -121,6 +138,12 @@ RowLayout
         }
     }
 
+    Item
+    {
+        Layout.fillHeight: true
+        Layout.fillWidth: true
+    }
+
     MessageDialog
     {
         id: okToRemoveMsg
@@ -137,5 +160,19 @@ RowLayout
     function removePluginWithoutConfirmation()
     {
         App.plugins.mgr.uninstallPlugin(model.uuid);
+    }
+
+    Connections {
+        target: App.plugins.updateMgr
+        onUpdatePluginResult: (uuid, error, isNoUpdatesFound) => {
+            if (model.uuid !== uuid)
+                return;
+            if (root.checkUpdateLaunchedByUser)
+            {
+                root.checkUpdateThisLaunchedByUser = false;
+                root.updateResult = pluginUpdateResultText(error, isNoUpdatesFound);
+                root.updateFailed = error;
+            }
+        }
     }
 }

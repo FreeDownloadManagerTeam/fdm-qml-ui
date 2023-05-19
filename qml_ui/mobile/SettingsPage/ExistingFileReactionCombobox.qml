@@ -42,25 +42,30 @@ Item
         contentItem: Text {
             text: combo.displayText
             color: appWindow.theme.foreground
-            leftPadding: 10
+            leftPadding: qtbug.leftPadding(10, 0)
+            rightPadding: qtbug.rightPadding(10, 0)
             font: combo.font
             elide: Text.ElideRight
             verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignLeft
             opacity: enabled ? 1 : 0.5
         }
         delegate: Rectangle {
             height: 35
-            width: parent.width
+            width: combo.width
             color: appWindow.theme.background
             Label {
                 id: label
-                leftPadding: 10
+                leftPadding: qtbug.leftPadding(10, 0)
+                rightPadding: qtbug.rightPadding(10, 0)
+                anchors.left: parent.left
                 anchors.verticalCenter: parent.verticalCenter
                 text: modelData.text
                 font.pixelSize: 16
                 width: parent.width
                 elide: Text.ElideRight
                 color: appWindow.theme.foreground
+                horizontalAlignment: Text.AlignLeft
             }
             MouseArea {
                 anchors.fill: parent

@@ -53,28 +53,28 @@ BaseDialog
 
                 CustomButton
                 {
-                    text: qsTr("Overwrite All")
+                    text: qsTr("Overwrite All") + App.loc.emptyString
                     blueBtn: true
                     onClicked: doRespond(Array(files.length).fill(AbstractDownloadsUi.ExistingFileOverwrite))
                 }
 
                 CustomButton
                 {
-                    text: qsTr("Rename All")
+                    text: qsTr("Rename All") + App.loc.emptyString
                     blueBtn: true
                     onClicked: doRespond(Array(files.length).fill(AbstractDownloadsUi.ExistingFileRename))
                 }
 
                 CustomButton
                 {
-                    text: qsTr("Skip All")
+                    text: qsTr("Skip All") + App.loc.emptyString
                     blueBtn: true
                     onClicked: doRespond(Array(files.length).fill(AbstractDownloadsUi.ExistingFileSkip))
                 }
 
                 CustomButton
                 {
-                    text: qsTr("Abort")
+                    text: qsTr("Abort") + App.loc.emptyString
                     onClicked: root.doAbort()
                 }
             }

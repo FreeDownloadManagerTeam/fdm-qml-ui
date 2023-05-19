@@ -8,7 +8,7 @@ Rectangle {
     property int textWeight: Font.Bold
     color: "transparent"
 
-    height: headerText.height + 30
+    implicitHeight: headerText.height + 30
 
     BaseLabel {
         id: headerText

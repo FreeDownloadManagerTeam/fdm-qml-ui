@@ -18,6 +18,7 @@ CheckBox {
     indicator: Rectangle {
         implicitWidth: size
         implicitHeight: size
+        anchors.left: parent.left
         anchors.horizontalCenter: vertical ? parent.horizontalCenter : undefined
         anchors.bottom: vertical ? parent.bottom : undefined
         anchors.verticalCenter: vertical ? undefined : parent.verticalCenter
@@ -52,7 +53,8 @@ CheckBox {
     }
 
     contentItem: BaseLabel {
-        leftPadding: vertical ? 0 : 20
+        leftPadding: qtbug.leftPadding(vertical ? 0 : 20, 0)
+        rightPadding: qtbug.rightPadding(vertical ? 0 : 20, 0)
         text: parent.text
         anchors.horizontalCenter: vertical ? parent.horizontalCenter : undefined
         anchors.top: vertical ? parent.top : undefined

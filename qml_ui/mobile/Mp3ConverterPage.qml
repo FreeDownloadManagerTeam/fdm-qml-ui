@@ -37,7 +37,8 @@ Page {
             DialogButton {
                 text: qsTr("OK") + App.loc.emptyString
                 enabled: !d.accepting && destinationDir.displayText.length > 0
-                Layout.rightMargin: 10
+                Layout.rightMargin: qtbug.rightMargin(0, 10)
+                Layout.leftMargin: qtbug.leftMargin(0, 10)
                 textColor: appWindow.theme.toolbarTextColor
                 onClicked: doOK()
             }
@@ -53,6 +54,7 @@ Page {
 
         BaseLabel
         {
+            anchors.left: parent.left
             text: qsTr("Save to") + App.loc.emptyString
         }
 
@@ -66,6 +68,7 @@ Page {
                 Layout.fillWidth: true
                 selectByMouse: true
                 inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText | Qt.ImhSensitiveData
+                horizontalAlignment: Text.AlignLeft
                 wrapMode: TextInput.WrapAnywhere
                 onAccepted: root.doOK()
             }
@@ -115,6 +118,22 @@ Page {
             ComboBox {
                 id: quality
 
+                BaseLabel {
+                    id: l
+                    visible: false
+                    font.pixelSize: 13
+                }
+                FontMetrics {
+                    id: fm
+                    font: l.font
+                }
+                implicitWidth: {
+                    let h = 0;
+                    for (let i = 0; i < model.length; ++i)
+                        h = Math.max(h, fm.advanceWidth(model[i].text));
+                    return h + 40;
+                }
+
                 model: [
                     {text: qsTr("Constant bitrate of value") + App.loc.emptyString, value: true},
                     {text: qsTr("Variable bitrate (VBR)") + App.loc.emptyString, value: false}]
@@ -123,10 +142,12 @@ Page {
 
                 delegate: Rectangle {
                     height: 35
-                    width: parent.width
+                    width: quality.width
                     color: appWindow.theme.background
                     BaseLabel {
-                        leftPadding: 6
+                        leftPadding: qtbug.leftPadding(6, 0)
+                        rightPadding: qtbug.rightPadding(6, 0)
+                        anchors.left: parent.left
                         anchors.verticalCenter: parent.verticalCenter
                         text: modelData.text
                         font.pixelSize: 13
@@ -145,15 +166,20 @@ Page {
                     id: contentItemText
                     text: quality.displayText
                     verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignLeft
                     color: theme.foreground
                     font.pixelSize: 13
-                    leftPadding: 10
+                    leftPadding: qtbug.leftPadding(10, 0)
+                    rightPadding: qtbug.rightPadding(10, 0)
                 }
 
                 indicator: Image {
                     id: img2
                     anchors.verticalCenter: parent.verticalCenter
-                    x: contentItemText.implicitWidth
+                    anchors.right: parent.right
+                    x: LayoutMirroring.enabled ?
+                           parent.width - width - contentItemText.implicitWidth :
+                           contentItemText.implicitWidth
                     source: Qt.resolvedUrl("../images/arrow_drop_down.svg")
                     sourceSize.width: 24
                     sourceSize.height: 24
@@ -174,6 +200,7 @@ Page {
                 onLinkActivated: Qt.openUrlExternally(link)
                 Material.accent: appWindow.theme.link
                 anchors.verticalCenter: parent.verticalCenter
+                horizontalAlignment: Text.AlignLeft
             }
         }
 
@@ -182,6 +209,7 @@ Page {
             visible: constantBitrateChecked
             constantBitrate: true
             maxComboWidth: destinationDir.width
+            anchors.left: parent.left
         }
 
         BitrateComboBox {
@@ -189,6 +217,7 @@ Page {
             visible: !constantBitrateChecked
             constantBitrate: false
             maxComboWidth: destinationDir.width
+            anchors.left: parent.left
         }
     }
 

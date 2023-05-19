@@ -25,6 +25,9 @@ ApplicationWindow
     readonly property color warningStateColor: "#777700"
     //////////////////////////////////////////////////////////////////
 
+    LayoutMirroring.enabled: appWindow.LayoutMirroring.enabled
+    LayoutMirroring.childrenInherit: appWindow.LayoutMirroring.childrenInherit
+
     width:  content.prefWidth
     height: content.prefHeight
 
@@ -38,7 +41,10 @@ ApplicationWindow
 
     //flags: Qt.Window | Qt.WindowTitleHint | Qt.WindowMinMaxButtonsHint | Qt.WindowCloseButtonHint
 
-    title: downloadsItemTools.progress !== -1 ? "[" + downloadsItemTools.progress + "%] - " + downloadsItemTools.title : downloadsItemTools.title
+    //: [50%] - myfile.txt
+    title: downloadsItemTools.progress !== -1 ?
+               qsTr("[%1%] - %2").arg(downloadsItemTools.progress).arg(downloadsItemTools.title) + App.loc.emptyString :
+               downloadsItemTools.title
 
     Component.onCompleted: {
         setX(Screen.width / 2 - width / 2);
@@ -77,11 +83,12 @@ ApplicationWindow
         GridLayout
         {
             columns: 2
-            Layout.leftMargin: 6*appWindow.zoom
+            Layout.leftMargin: qtbug.leftMargin(6*appWindow.zoom, 0)
+            Layout.rightMargin: qtbug.rightMargin(6*appWindow.zoom, 0)
 
             BaseLabel {
                 visible: downloadsItemTools.needToShowWebPageUrl
-                text: "Web page:"
+                text: qsTr("Web page:") + App.loc.emptyString
             }
             BaseLabel {
                 id: webPageUrl
@@ -107,7 +114,7 @@ ApplicationWindow
 
             BaseLabel {
                 visible: downloadsItemTools.needToShowResourceUrl
-                text: "Resource URL:"
+                text: qsTr("Resource URL:") + App.loc.emptyString
             }
             BaseLabel {
                 id: resourceUrl
@@ -131,16 +138,17 @@ ApplicationWindow
                 }
             }
 
-            BaseLabel { text: qsTr("Saved in") + ":" + App.loc.emptyString }
+            BaseLabel { text: qsTr("Saved in") + ':' + App.loc.emptyString }
             Row {
                 Layout.fillWidth: true
 
                 Rectangle {
                     visible: downloadsItemTools.destinationPath
-                    width: 18*appWindow.zoom
+                    width: 14*appWindow.zoom
                     height: 18*appWindow.zoom
                     clip: true
                     color: "transparent"
+                    anchors.verticalCenter: parent.verticalCenter
                     WaSvgImage {
                         source: appWindow.theme.elementsIcons
                         zoom: appWindow.zoom
@@ -155,6 +163,11 @@ ApplicationWindow
                     }
                 }
 
+                Item {
+                    width: 2*appWindow.zoom
+                    height: 1
+                }
+
                 ElidedLabelWithTooltip {
                     id: savedIn
                     sourceText: downloadsItemTools.tplPathAndTitle2
@@ -164,14 +177,14 @@ ApplicationWindow
 
             BaseLabel {
                 visible: !downloadsItemTools.unknownFileSize
-                text: qsTr("File size") + ":" + App.loc.emptyString
+                text: qsTr("File size") + ':' + App.loc.emptyString
             }
             BaseLabel {
                 visible: !downloadsItemTools.unknownFileSize
-                text: JsTools.sizeUtils.bytesAsText(downloadsItemTools.selectedSize)
+                text: App.bytesAsText(downloadsItemTools.selectedSize) + App.loc.emptyString
             }
 
-            BaseLabel { id: widest1stColumnItem; text: qsTr("Resume support") + ":" + App.loc.emptyString }
+            BaseLabel { id: widest1stColumnItem; text: qsTr("Resume support") + ':' + App.loc.emptyString }
             BaseLabel {
                 text: {
                     d.isResumeSupported ?
@@ -203,20 +216,21 @@ ApplicationWindow
         GridLayout
         {
             columns: 2
-            Layout.leftMargin: 6*appWindow.zoom
+            Layout.leftMargin: qtbug.leftMargin(6*appWindow.zoom, 0)
+            Layout.rightMargin: qtbug.rightMargin(6*appWindow.zoom, 0)
 
-            BaseLabel { text: qsTr("Downloaded") + ":" + App.loc.emptyString; Layout.preferredWidth: widest1stColumnItem.width }
+            BaseLabel { text: qsTr("Downloaded") + ':' + App.loc.emptyString; Layout.preferredWidth: widest1stColumnItem.width }
             BaseLabel {
                 text: {
-                    downloadsItemTools.progress !== -1 ?
-                                downloadsItemTools.progress.toString() + "%" + " [" +
-                                JsTools.sizeUtils.bytesAsText(downloadsItemTools.selectedBytesDownloaded) + "]" :
-                                (downloadsItemTools.finalDownload ? JsTools.sizeUtils.bytesAsText(downloadsItemTools.selectedBytesDownloaded) : "")
+                    (downloadsItemTools.progress !== -1 ?
+                                //: 50% [200 MB]
+                                qsTr("%1% [%2]").arg(downloadsItemTools.progress.toString()).arg(App.bytesAsText(downloadsItemTools.selectedBytesDownloaded)) + App.loc.emptyString :
+                                (downloadsItemTools.finalDownload ? App.bytesAsText(downloadsItemTools.selectedBytesDownloaded) : "")) + App.loc.emptyString
                 }
             }
 
             BaseLabel {
-                text: qsTr("Speed") + ":" + App.loc.emptyString
+                text: qsTr("Speed") + ':' + App.loc.emptyString
                 visible: !downloadsItemTools.finished
             }
             BaseLabel {
@@ -225,7 +239,7 @@ ApplicationWindow
             }
 
             BaseLabel {
-                text: qsTr("Time remaining") + ":" + App.loc.emptyString
+                text: qsTr("Time remaining") + ':' + App.loc.emptyString
                 visible: !downloadsItemTools.finished && !downloadsItemTools.unknownFileSize
             }
             BaseLabel {

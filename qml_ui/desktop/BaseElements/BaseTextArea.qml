@@ -13,6 +13,8 @@ Rectangle {
     property alias wrapMode: textArea.wrapMode
     signal selectAll
 
+    property bool enable_QTBUG_110471_workaround: true
+
     border.width: 1*appWindow.zoom
     border.color: appWindow.theme.border
 
@@ -35,7 +37,7 @@ Rectangle {
 
         TextArea.flickable: TextArea {
             id: textArea
-
+            horizontalAlignment: TextArea.AlignLeft
             focus: true
             wrapMode: TextArea.WordWrap
             font.pixelSize: 14*appWindow.fontZoom
@@ -45,6 +47,16 @@ Rectangle {
 
             background: Rectangle {
                 color: appWindow.theme.background
+            }
+
+            Component.onCompleted: {
+                // https://bugreports.qt.io/browse/QTBUG-110471
+                if (enable_QTBUG_110471_workaround &&
+                        appWindow.LayoutMirroring.enabled &&
+                        !LayoutMirroring.enabled)
+                {
+                    LayoutMirroring.enabled = Qt.binding(() => appWindow.LayoutMirroring.enabled);
+                }
             }
         }
     }

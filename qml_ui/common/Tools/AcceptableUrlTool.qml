@@ -20,7 +20,7 @@ Item {
     Connections
     {
         target: App.downloads.creator
-        onAcceptableUrl: {
+        onAcceptableUrl: (text, acceptable, modulesUids, urlDescriptions, downloadsTypes) => {
             //console.log("[onAcceptableUrl] modulesUids: ", modulesUids, "; urlDescriptions: ", urlDescriptions, "; types: ", downloadsTypes);
             if (typeof callbacks[text] === "object") {
                 var arr = callbacks[text];

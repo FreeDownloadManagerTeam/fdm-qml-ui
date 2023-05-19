@@ -81,7 +81,7 @@ Item {
             delegate: Item {
                 property int rowHeight: appWindow.smallScreen ? 60 : 30
                 property var fileModel: model
-                width: parent.width
+                width: listView.width
                 height: contentItem.height
 
                 MouseArea {
@@ -131,7 +131,8 @@ Item {
 
                         //left padding by levels
                         Rectangle {
-                            Layout.leftMargin: 5
+                            Layout.leftMargin: qtbug.leftMargin(5, 0)
+                            Layout.rightMargin: qtbug.rightMargin(5, 0)
                             width: (model.level + (model.folder ? 0 : 1)) * 15
                             height: 30
                             color: "transparent"
@@ -157,7 +158,8 @@ Item {
                         Column {
                             Layout.alignment: Qt.AlignTop
                             Layout.fillWidth: true
-                            Layout.rightMargin: 5
+                            Layout.rightMargin: qtbug.rightMargin(0, 5)
+                            Layout.leftMargin: qtbug.leftMargin(0, 5)
                             Layout.topMargin: 6
                             spacing: 0
 
@@ -203,9 +205,10 @@ Item {
                                 //file size - small screen
                                 BaseLabel {
                                     visible: appWindow.smallScreen
-                                    text: JsTools.sizeUtils.bytesAsText(model.selectedSize)
+                                    text: App.bytesAsText(model.selectedSize) + App.loc.emptyString
                                     bottomPadding: 6
-                                    rightPadding: 5
+                                    rightPadding: qtbug.rightPadding(0, 5)
+                                    leftPadding: qtbug.leftPadding(0, 5)
                                 }
 
                                 //progress - small screen
@@ -234,7 +237,7 @@ Item {
                             BaseLabel {
                                 anchors.verticalCenter: parent.verticalCenter
                                 anchors.right: parent.right
-                                text: JsTools.sizeUtils.bytesAsText(model.selectedSize)
+                                text: App.bytesAsText(model.selectedSize) + App.loc.emptyString
                             }
                         }
                     }
@@ -283,7 +286,8 @@ Item {
                             delegate: ItemDelegate {
                                 width: priorityCombo.width
                                 padding: 0
-                                leftPadding: 5
+                                leftPadding: qtbug.leftPadding(5, 0)
+                                rightPadding: qtbug.rightPadding(5, 0)
                                 contentItem: BaseLabel {
                                     text: modelData.text
                                     verticalAlignment: Text.AlignVCenter

@@ -13,7 +13,7 @@ Dialog
     property int recommendedWidth: 0
     property int recommendedHeight: 0
 
-    parent: appWindow.overlay
+    parent: Overlay.overlay
 
     x: Math.round((appWindow.width - width) / 2)
     y: Math.round((appWindow.height - height) / 2)

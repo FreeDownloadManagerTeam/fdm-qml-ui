@@ -26,7 +26,9 @@ ComboBox {
         width: 100*appWindow.zoom
 
         BaseLabel {
-            leftPadding: 6*appWindow.zoom
+            anchors.left: parent.left
+            leftPadding: qtbug.leftPadding(5*appWindow.zoom, 0)
+            rightPadding: qtbug.rightPadding(5*appWindow.zoom, 0)
             anchors.verticalCenter: parent.verticalCenter
             text: modelData
         }
@@ -50,10 +52,11 @@ ComboBox {
         border.width: 1*appWindow.zoom
     }
 
-    contentItem: TextField {
+    contentItem: BaseTextField {
         text: root.editText
         font.pixelSize: 14*appWindow.fontZoom
-        rightPadding: 30*appWindow.zoom
+        leftPadding: qtbug.leftPadding(0, 30*appWindow.zoom)
+        rightPadding: qtbug.rightPadding(0, 30*appWindow.zoom)
         selectByMouse: true
         background: Rectangle {
             color: "transparent"
@@ -74,7 +77,7 @@ ComboBox {
 
     indicator: Rectangle {
         z: 1
-        x: root.width - width
+        x: LayoutMirroring.enabled ? 0 : root.width - width
         y: root.topPadding + (root.availableHeight - height) / 2
         width: height - 1*appWindow.zoom
         height: root.height

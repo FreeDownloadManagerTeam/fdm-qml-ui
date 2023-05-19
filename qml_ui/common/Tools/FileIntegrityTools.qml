@@ -80,7 +80,7 @@ Item {
     Connections
     {
         target: App.downloads.filesHash
-        onFinished: {
+        onFinished: (downloadId, fileIndex, hash, error) => {
             if (downloadId == downloadModel.id && fileIndex == root.fileIndex) {
                 if (hash != "") {
                     currentHash.text = hash;

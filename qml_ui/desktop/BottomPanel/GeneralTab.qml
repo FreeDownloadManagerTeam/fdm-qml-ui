@@ -96,17 +96,21 @@ Flickable {
 
                 GridLayout
                 {
+                    readonly property int horizSpacing: 30*appWindow.zoom
+
+                    anchors.left: parent.left
+                    anchors.leftMargin: -horizSpacing
+
                     columns: (parent.width > (300+200*appWindow.fontZoom)) ? 4 : 2
                     rowSpacing: topColumn.spacing
-
-                    readonly property int horizSpacing: 30*appWindow.zoom
 
                     BaseLabel {
                         visible: downloadsItemTools.finished
                         font.pixelSize: appWindow.fonts.defaultSize
                         color: appWindow.theme.generalTabKey
-                        text: qsTr("Status") + ":" + App.loc.emptyString
-                        leftPadding: Math.abs(x - parent.x) < 5 ? 0 : parent.horizSpacing
+                        text: qsTr("Status") + ':' + App.loc.emptyString
+                        leftPadding: qtbug.leftPadding(parent.horizSpacing, 0)
+                        rightPadding: qtbug.rightPadding(parent.horizSpacing, 0)
                     }
                     BaseLabel {
                         visible: downloadsItemTools.finished
@@ -119,8 +123,9 @@ Flickable {
                         visible: downloadsItemTools.state.length > 0
                         font.pixelSize: appWindow.fonts.defaultSize
                         color: appWindow.theme.generalTabKey
-                        text: qsTr("State") + ":" + App.loc.emptyString
-                        leftPadding: Math.abs(x - parent.x) < 5 ? 0 : parent.horizSpacing
+                        text: qsTr("State") + ':' + App.loc.emptyString
+                        leftPadding: qtbug.leftPadding(parent.horizSpacing, 0)
+                        rightPadding: qtbug.rightPadding(parent.horizSpacing, 0)
                     }
                     BaseLabel {
                         visible: downloadsItemTools.state.length > 0
@@ -129,16 +134,17 @@ Flickable {
                         text: downloadsItemTools.state
                     }
 
+                    readonly property bool showSpeed: downloadsItemTools.showDownloadSpeed || downloadsItemTools.showUploadSpeed
                     BaseLabel {
-                        id: speed
-                        visible: downloadsItemTools.showDownloadSpeed || downloadsItemTools.showUploadSpeed
+                        visible: parent.showSpeed
                         font.pixelSize: appWindow.fonts.defaultSize
                         color: appWindow.theme.generalTabKey
-                        text: qsTr("Speed") + ":" + App.loc.emptyString
-                        leftPadding: Math.abs(x - parent.x) < 5 ? 0 : parent.horizSpacing
+                        text: qsTr("Speed") + ':' + App.loc.emptyString
+                        leftPadding: qtbug.leftPadding(parent.horizSpacing, 0)
+                        rightPadding: qtbug.rightPadding(parent.horizSpacing, 0)
                     }
                     DownloadSpeed {
-                        visible: speed.visible
+                        visible: parent.showSpeed
                         myDownloadsItemTools: downloadsItemTools
                     }
 
@@ -146,21 +152,23 @@ Flickable {
                         font.pixelSize: appWindow.fonts.defaultSize
                         color: appWindow.theme.generalTabKey
                         text: (downloadsItemTools.finished ? qsTr("Total size:") : qsTr("Downloaded:")) + App.loc.emptyString
-                        leftPadding: Math.abs(x - parent.x) < 5 ? 0 : parent.horizSpacing
+                        leftPadding: qtbug.leftPadding(parent.horizSpacing, 0)
+                        rightPadding: qtbug.rightPadding(parent.horizSpacing, 0)
                     }
                     BaseLabel {
                         font.pixelSize: appWindow.fonts.defaultSize
                         color: appWindow.theme.generalTabValue
-                        text: downloadsItemTools.finished || downloadsItemTools.unknownFileSize ? JsTools.sizeUtils.bytesAsText(downloadsItemTools.selectedBytesDownloaded) :
-                                                                                                  qsTr("%1 of %2").arg(JsTools.sizeUtils.bytesAsText(downloadsItemTools.selectedBytesDownloaded)).arg(JsTools.sizeUtils.bytesAsText(downloadsItemTools.selectedSize)) + App.loc.emptyString
+                        text: (downloadsItemTools.finished || downloadsItemTools.unknownFileSize ? App.bytesAsText(downloadsItemTools.selectedBytesDownloaded) :
+                                                                                                  qsTr("%1 of %2").arg(App.bytesAsText(downloadsItemTools.selectedBytesDownloaded)).arg(App.bytesAsText(downloadsItemTools.selectedSize))) + App.loc.emptyString
                     }
 
                     BaseLabel {
                         visible: downloadsItemTools.canUpload
                         font.pixelSize: appWindow.fonts.defaultSize
                         color: appWindow.theme.generalTabKey
-                        text: qsTr("Uploaded") + ":" + App.loc.emptyString
-                        leftPadding: Math.abs(x - parent.x) < 5 ? 0 : parent.horizSpacing
+                        text: qsTr("Uploaded") + ':' + App.loc.emptyString
+                        leftPadding: qtbug.leftPadding(parent.horizSpacing, 0)
+                        rightPadding: qtbug.rightPadding(parent.horizSpacing, 0)
                     }
                     BaseLabel {
                         visible: downloadsItemTools.canUpload
@@ -176,7 +184,8 @@ Flickable {
                         font.pixelSize: appWindow.fonts.defaultSize
                         color: appWindow.theme.generalTabKey
                         text: qsTr("Added at:") + App.loc.emptyString
-                        leftPadding: Math.abs(x - parent.x) < 5 ? 0 : parent.horizSpacing
+                        leftPadding: qtbug.leftPadding(parent.horizSpacing, 0)
+                        rightPadding: qtbug.rightPadding(parent.horizSpacing, 0)
                     }
                     BaseLabel {
                         visible: downloadsItemTools.added
@@ -202,10 +211,11 @@ Flickable {
                     width: parent.width
 
                     Rectangle {
-                        width: 18*appWindow.zoom
+                        width: 14*appWindow.zoom
                         height: 18*appWindow.zoom
                         clip: true
                         color: "transparent"
+                        anchors.verticalCenter: parent.verticalCenter
                         WaSvgImage {
                             source: appWindow.theme.elementsIcons
                             zoom: appWindow.zoom
@@ -220,6 +230,11 @@ Flickable {
                         }
                     }
 
+                    Item {
+                        width: 2*appWindow.zoom
+                        height: 1
+                    }
+
                     BaseSelectableLabel {
                         font.pixelSize: appWindow.fonts.defaultSize
                         color: appWindow.theme.generalTabValue
@@ -227,6 +242,7 @@ Flickable {
                         width: parent.width - 18
                         wrapMode: Text.WrapAnywhere
                         text: App.toNativeSeparators(downloadsItemTools.destinationPath)
+                        anchors.verticalCenter: parent.verticalCenter
                     }
                 }
 
@@ -249,11 +265,10 @@ Flickable {
             }
         }
 
-        Rectangle {
+        Item {
             visible: flickable.height < (topSpacingRect.height + myContent2.height)
             height: topSpacingRect.height
             width: 1
-            color: "transparent"
         }
     }
 }

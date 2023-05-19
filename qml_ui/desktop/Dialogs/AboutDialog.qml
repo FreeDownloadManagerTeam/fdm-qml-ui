@@ -3,6 +3,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.3
 import org.freedownloadmanager.fdm 1.0
 import "../BaseElements"
+import "../../common/Tools"
 
 BaseDialog {
     id: root
@@ -25,6 +26,7 @@ BaseDialog {
             spacing: 5*appWindow.zoom
 
             BaseLabel {
+                anchors.left: parent.left
                 text: App.displayName + App.loc.emptyString
                 font.bold: true
                 MouseArea {
@@ -35,16 +37,19 @@ BaseDialog {
 
             BaseHandCursorLabel
             {
+                anchors.left: parent.left
                 visible: App.testVersion
                 text: "Test mode is active <a href='#'>turn off</a>"
                 onLinkActivated: {App.testVersion = false;}
             }
 
             BaseSelectableLabel {
+                anchors.left: parent.left
                 text: qsTr("Version: %1 (%2)").arg(App.version).arg(App.versionHash) + App.loc.emptyString
             }
 
             BaseLabel {
+                anchors.left: parent.left
                 text: qsTr("Build date: %1").arg(App.loc.dateToString(App.buildDateTime, true)) + App.loc.emptyString
             }
 
@@ -58,7 +63,10 @@ BaseDialog {
             {
                 model: App.thirdPartyLibsInfos.size()
                 BaseHyperLabel {
-                    text: "<a href='%1'>%2</a> ".arg(App.thirdPartyLibsInfos.url(index)).arg(App.thirdPartyLibsInfos.displayName(index)) + App.thirdPartyLibsInfos.displayVersion(index) + App.loc.emptyString
+                    anchors.left: parent.left
+                    text: "<a href='%1'>%2</a>".arg(App.thirdPartyLibsInfos.url(index)).arg(App.thirdPartyLibsInfos.displayName(index))
+                              + ' ' + App.thirdPartyLibsInfos.displayVersion(index)
+                              + App.loc.emptyString
                 }
             }
 
@@ -69,7 +77,10 @@ BaseDialog {
             }
 
             BaseHyperLabel {
-                text: "© <a href='https://www.freedownloadmanager.org'>FreeDownloadManager.org</a>, " + App.copyrightYears()
+                anchors.left: parent.left
+                //: © FreeDownloadManager.org, 2004-2023
+                text: qsTr("© %1, %2-%3").arg("<a href='https://www.freedownloadmanager.org'>FreeDownloadManager.org</a>")
+                      .arg(App.copytightFirstYear()).arg(App.copytightLastYear()) + App.loc.emptyString
             }
 
             Rectangle {

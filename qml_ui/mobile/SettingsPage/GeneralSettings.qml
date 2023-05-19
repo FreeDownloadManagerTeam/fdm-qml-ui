@@ -150,7 +150,8 @@ Column {
             BaseLabel {
                 visible: App.features.hasFeature(AppFeatures.AllowedNetworkTypesList)
                 text: qsTr("Using mobile data while roaming may result in additional charges.") + App.loc.emptyString
-                leftPadding: switchSetting6.textMargins + 5
+                leftPadding: qtbug.leftPadding(switchSetting6.textMargins + 5, 0)
+                rightPadding: qtbug.rightPadding(switchSetting6.textMargins + 5, 0)
                 bottomPadding: switchSetting6.padding + 3
                 wrapMode: Text.WordWrap
                 width: clmn.width - leftPadding

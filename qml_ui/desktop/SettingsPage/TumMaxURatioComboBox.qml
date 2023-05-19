@@ -62,7 +62,9 @@ Item {
             height: 18*appWindow.zoom
             width: root.width
             BaseLabel {
-                leftPadding: 6*appWindow.zoom
+                anchors.left: parent.left
+                leftPadding: qtbug.leftPadding(7*appWindow.zoom, 0)
+                rightPadding: qtbug.rightPadding(7*appWindow.zoom, 0)
                 anchors.verticalCenter: parent.verticalCenter
                 font.pixelSize: 12*appWindow.fontZoom
                 color: appWindow.theme.settingsItem
@@ -98,7 +100,10 @@ Item {
         contentItem: Rectangle {
             color: "transparent"
             BaseLabel {
+                anchors.left: parent.left
                 anchors.verticalCenter: parent.verticalCenter
+                leftPadding: qtbug.leftPadding(2*appWindow.zoom, 0)
+                rightPadding: qtbug.rightPadding(2*appWindow.zoom, 0)
                 font.pixelSize: 12*appWindow.fontZoom
                 color: appWindow.theme.settingsItem
                 text: parseFloat(combo.currentText) ? +parseFloat(combo.currentText).toFixed(2) : combo.currentText
@@ -106,7 +111,7 @@ Item {
         }
 
         indicator: Rectangle {
-            x: combo.width - width
+            x: LayoutMirroring.enabled ? 0 : combo.width - width
             y: combo.topPadding + (combo.availableHeight - height) / 2
             width: height - 1*appWindow.zoom
             height: combo.height

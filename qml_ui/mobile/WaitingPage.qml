@@ -38,6 +38,7 @@ Page {
         BaseLabel
         {
             visible: App.asyncLoadMgr.status
+            anchors.horizontalCenter: parent.horizontalCenter
 
             text: App.asyncLoadMgr.status +
                   (App.asyncLoadMgr.error ? " " + qsTr("Error: %1").arg(App.asyncLoadMgr.error) : "") +
@@ -48,6 +49,7 @@ Page {
         {
             visible: !App.asyncLoadMgr.loading
             spacing: 10
+            anchors.horizontalCenter: parent.horizontalCenter
 
             DialogButton
             {

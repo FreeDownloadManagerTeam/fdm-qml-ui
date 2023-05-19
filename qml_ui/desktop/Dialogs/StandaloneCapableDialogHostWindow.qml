@@ -23,6 +23,9 @@ ApplicationWindow
     palette.base: theme.background
     palette.text: theme.foreground
 
+    LayoutMirroring.enabled: appWindow.LayoutMirroring.enabled
+    LayoutMirroring.childrenInherit: appWindow.LayoutMirroring.childrenInherit
+
     Component.onCompleted: {
         x = Qt.binding(() => Screen.width / 2 - width / 2);
         y = Qt.binding(() => Screen.height / 2 - height / 2);

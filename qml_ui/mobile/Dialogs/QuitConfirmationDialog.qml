@@ -9,7 +9,8 @@ import "../BaseElements"
 CenteredDialog
 {
     id: root
-    width: 320
+
+    width: Math.min(Math.round(Overlay.overlay.width * 0.8), 300)
 
     property string message: ""
 
@@ -21,7 +22,8 @@ CenteredDialog
     {
         text: root.message
         wrapMode: Label.WordWrap
-        width: root.width - 20
+        width: root.width-40
+        horizontalAlignment: Text.AlignLeft
     }
 
     standardButtons: Dialog.Ok | Dialog.Cancel

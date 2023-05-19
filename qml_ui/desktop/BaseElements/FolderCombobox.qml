@@ -24,7 +24,9 @@ ComboBox {
         height: 30*appWindow.zoom
         width: parent.width
         BaseLabel {
-            leftPadding: 6*appWindow.zoom
+            leftPadding: qtbug.leftPadding(6*appWindow.zoom, 0)
+            rightPadding: qtbug.rightPadding(6*appWindow.zoom, 0)
+            anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
             text: App.toNativeSeparators(folder)
         }
@@ -50,7 +52,9 @@ ComboBox {
 
     contentItem: BaseTextField {
         text: root.editText
-        rightPadding: 30*appWindow.zoom
+        anchors.left: parent.left
+        leftPadding: qtbug.leftPadding(6*appWindow.zoom, 30*appWindow.zoom)
+        rightPadding: qtbug.rightPadding(6*appWindow.zoom, 30*appWindow.zoom)
         background: Rectangle {
             color: "transparent"
             border.color: "transparent"
@@ -59,7 +63,7 @@ ComboBox {
 
     indicator: Rectangle {
         z: 1
-        x: root.width - width
+        x: LayoutMirroring.enabled ? 0 : root.width - width
         y: root.topPadding + (root.availableHeight - height) / 2
         width: height - 1*appWindow.zoom
         height: root.height
@@ -108,17 +112,15 @@ ComboBox {
             border.width: 1*appWindow.zoom
         }
 
-        contentItem: Item {
-            ListView {
-                clip: true
-                flickableDirection: Flickable.VerticalFlick
-                ScrollBar.vertical: ScrollBar{ visible: root.model.count > visibleRowsCount; policy: ScrollBar.AlwaysOn; }
-                boundsBehavior: Flickable.StopAtBounds
-                anchors.fill: parent
-                model: root.model
-                currentIndex: root.highlightedIndex
-                delegate: root.delegate
-            }
+        contentItem: ListView {
+            clip: true
+            flickableDirection: Flickable.VerticalFlick
+            ScrollBar.vertical: ScrollBar{ visible: root.model.count > visibleRowsCount; policy: ScrollBar.AlwaysOn; }
+            boundsBehavior: Flickable.StopAtBounds
+            anchors.fill: parent
+            model: root.model
+            currentIndex: root.highlightedIndex
+            delegate: root.delegate
         }
     }
 

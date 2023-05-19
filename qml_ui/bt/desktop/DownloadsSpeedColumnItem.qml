@@ -23,7 +23,7 @@ Item
         id: rl
 
         anchors.verticalCenter: parent.verticalCenter
-        Layout.fillWidth: true
+        width: parent.width
 
         Image
         {
@@ -74,6 +74,7 @@ Item
         {
             id: text
             Layout.alignment: Qt.AlignVCenter
+            Layout.fillWidth: true
             color: appWindow.theme.foreground
             font.pixelSize: (appWindow.compactView ? 9 : 11)*appWindow.fontZoom
             text: appWindow.btS.speedHoverText(

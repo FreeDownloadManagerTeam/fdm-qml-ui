@@ -11,19 +11,15 @@ Dialog
 
     closePolicy: Popup.NoAutoClose
 
+    readonly property int availWidth: appWindow.width*0.95
+
     property int taskId
     property var files: []
 
-    property int recommendedWidth: 0
-    property int recommendedHeight: 0
-
-    parent: appWindow.overlay
+    parent: Overlay.overlay
 
     x: Math.round((appWindow.width - width) / 2)
     y: Math.round((appWindow.height - height) / 2)
-
-    width: Math.min(Math.round(appWindow.width * 0.8), recommendedWidth)
-    height: Math.min(Math.round(appWindow.height * 0.8), recommendedHeight)
 
     modal: true
 
@@ -43,6 +39,9 @@ Dialog
             contentWidth: filesLabel.contentWidth
             contentHeight: filesLabel.contentHeight
 
+            implicitHeight: filesLabel.implicitHeight
+            implicitWidth: filesLabel.implicitWidth
+
             BaseLabel
             {
                 id: filesLabel
@@ -57,67 +56,49 @@ Dialog
         {
             id: buttons
 
-            Layout.alignment: Qt.AlignRight
+            Layout.alignment: Qt.AlignLeft
 
-            readonly property bool hasSpace: b1.implicitWidth + b2.implicitWidth + b3.implicitWidth + b4.implicitWidth + 30 <= root.width
+            rowSpacing: 0
+            columnSpacing: 0
 
-            columns: hasSpace ?  -1 : 2
-            rows: hasSpace ? 1 : -1
+            readonly property bool hasSpace4: b1.implicitWidth + b2.implicitWidth + b3.implicitWidth + b4.implicitWidth + 30 <= root.availWidth
+            readonly property bool hasSpace2: b1.implicitWidth + b2.implicitWidth + 30 <= root.availWidth &&
+                                              b3.implicitWidth + b4.implicitWidth + 30 <= root.availWidth
+
+            columns: hasSpace4 ?  -1 : hasSpace2 ? 2 : 1
+            rows: hasSpace4 ? 1 : -1
 
             DialogButton
             {
                 id: b1
-                text: qsTr("Overwrite All")
+                text: qsTr("Overwrite All") + App.loc.emptyString
                 onClicked: doRespond(Array(files.length).fill(AbstractDownloadsUi.ExistingFileOverwrite))
             }
 
             DialogButton
             {
                 id: b2
-                text: qsTr("Rename All")
+                text: qsTr("Rename All") + App.loc.emptyString
                 onClicked: doRespond(Array(files.length).fill(AbstractDownloadsUi.ExistingFileRename))
             }
 
             DialogButton
             {
                 id: b3
-                text: qsTr("Skip All")
+                text: qsTr("Skip All") + App.loc.emptyString
                 onClicked: doRespond(Array(files.length).fill(AbstractDownloadsUi.ExistingFileSkip))
             }
 
             DialogButton
             {
                 id: b4
-                text: qsTr("Abort")
+                text: qsTr("Abort") + App.loc.emptyString
                 onClicked: {
                     App.downloads.mgr.sumbitConvertFilesExistsReaction(taskId, [], true);
                     root.close();
                 }
             }
         }
-    }
-
-    BaseLabel {id: label; visible: false}
-
-    FontMetrics
-    {
-        id: fm
-        font: label.font
-    }
-
-    onFilesChanged:
-    {
-        var w = Math.max(200, b1.width + b2.width + b3.width + b4.width + 5*3 + 35);
-        var h = Math.max(180, 90 + buttons.height + 35);
-
-        for (var i = 0; i < files.length; ++i)
-        {
-            w = Math.max(w, fm.advanceWidth(files[i]) + 90);
-            h += fm.font.pixelSize + 2;
-        }
-
-        root.recommendedWidth = w;
-        root.recommendedHeight = h;
     }
 
     function doRespond(of)

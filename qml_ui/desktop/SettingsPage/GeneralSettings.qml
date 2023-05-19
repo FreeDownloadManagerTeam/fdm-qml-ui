@@ -1,6 +1,6 @@
-import QtQuick 2.10
-import QtQuick.Controls 2.3
-import QtQuick.Layouts 1.3
+import QtQuick 2.12
+import QtQuick.Controls 2.12
+import QtQuick.Layouts 1.12
 import "../../qt5compat"
 import "../../common"
 import org.freedownloadmanager.fdm 1.0
@@ -9,7 +9,7 @@ import org.freedownloadmanager.fdm.appsettings 1.0
 import org.freedownloadmanager.fdm.appfeatures 1.0
 import "../BaseElements"
 
-import Qt.labs.platform 1.0 as QtLabs
+import Qt.labs.platform 1.1 as QtLabs
 
 Column {
     spacing: 0
@@ -20,7 +20,10 @@ Column {
 
     SettingsGroupColumn {
 
+        anchors.left: parent.left
+
         SettingsSubgroupHeader{
+            anchors.left: parent.left
             text: qsTr("Choose theme") + App.loc.emptyString
         }
 
@@ -40,23 +43,44 @@ Column {
 
     SettingsGroupColumn {
 
+        anchors.left: parent.left
+
         SettingsSubgroupHeader{
+            anchors.left: parent.left
             text: qsTr("Language") + App.loc.emptyString
         }
 
-        LanguageComboBox {}
-
-        BaseHyperLabel {
-            text: qsTr("Your language is not listed or the translation isn't complete?") + " <a href='https://github.com/FreeDownloadManagerTeam/FDM6-localization'>" + qsTr("Let's fix it!") + "</a>" + App.loc.emptyString
+        Column {
             anchors.left: parent.left
             anchors.leftMargin: 16*appWindow.zoom
-            font.pixelSize: 12*appWindow.fontZoom
+            spacing: parent.spacing
+
+            Row {
+                anchors.left: parent.left
+                spacing: 30*appWindow.zoom
+
+                LanguageComboBox {}
+
+                RestartRequiredLabel {
+                    visible: App.loc.needRestart
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+            }
+
+            BaseHyperLabel {
+                anchors.left: parent.left
+                text: qsTr("Your language is not listed or the translation isn't complete?") + " <a href='https://github.com/FreeDownloadManagerTeam/FDM6-localization'>" + qsTr("Let's fix it!") + "</a>" + App.loc.emptyString
+                font.pixelSize: 12*appWindow.fontZoom
+            }
         }
     }
 
     SettingsGroupColumn {
 
+        anchors.left: parent.left
+
         SettingsSubgroupHeader {
+            anchors.left: parent.left
             text: qsTr("Default download folder") + App.loc.emptyString
         }
 
@@ -147,7 +171,10 @@ Column {
 
     SettingsGroupColumn {
 
+        anchors.left: parent.left
+
         SettingsSubgroupHeader {
+            anchors.left: parent.left
             text: qsTr("Downloads") + App.loc.emptyString
         }
 
@@ -170,6 +197,7 @@ Column {
         }
 
         SettingsCheckBox {
+            id: removeFinished
             text: qsTr("Automatically remove completed downloads from download list") + App.loc.emptyString
             checked: App.settings.toBool(App.settings.dmcore.value(DmCoreSettings.AutoRemoveFinishedDownloads))
             onClicked: {
@@ -179,12 +207,96 @@ Column {
             }
         }
 
+        Row {
+            visible: removeFinished.checked
+            anchors.left: parent.left
+            leftPadding: qtbug.leftPadding(40*appWindow.zoom,0)
+            rightPadding: qtbug.rightPadding(40*appWindow.zoom,0)
+            spacing: 3*appWindow.fontZoom
+
+            BaseRadioButton {
+                id: removeFinishedImmediately
+                text: qsTr("Immediately") + App.loc.emptyString
+                textColor: appWindow.theme.settingsItem
+                checked: !parseInt(App.settings.dmcore.value(DmCoreSettings.AutoRemoveFinishedDownloads_KeepDays))
+                anchors.verticalCenter: parent.verticalCenter
+                onClicked: {
+                    App.settings.dmcore.setValue(
+                                DmCoreSettings.AutoRemoveFinishedDownloads_KeepDays,
+                                "0");
+                }
+            }
+
+            Item {
+                implicitWidth: 15*appWindow.fontZoom
+                implicitHeight: 1
+            }
+
+            BaseRadioButton {
+                id: removeFinishedIn
+                checked: !removeFinishedImmediately.checked
+                //: Automatically remove finished downloads In N days
+                text: qsTr("In") + App.loc.emptyString
+                textColor: appWindow.theme.settingsItem
+                anchors.verticalCenter: parent.verticalCenter
+                onClicked: {
+                    if (removeFinishedInDays.text)
+                    {
+                        App.settings.dmcore.setValue(
+                                    DmCoreSettings.AutoRemoveFinishedDownloads_KeepDays,
+                                    removeFinishedInDays.text);
+                    }
+                    else
+                    {
+                        removeFinishedInDays.forceActiveFocus();
+                    }
+                }
+            }
+
+            SettingsTextField {
+                id: removeFinishedInDays
+                enabled: removeFinishedIn.checked
+                text: parseInt(App.settings.dmcore.value(DmCoreSettings.AutoRemoveFinishedDownloads_KeepDays)) ?
+                          App.settings.dmcore.value(DmCoreSettings.AutoRemoveFinishedDownloads_KeepDays) :
+                          ""
+                implicitWidth: 40*appWindow.fontZoom
+                inputMethodHints: Qt.ImhDigitsOnly
+                validator: QtRegExpValidator { regExp: /[1-9]\d*/ }
+                anchors.verticalCenter: parent.verticalCenter
+                onActiveFocusChanged: {
+                    if (!activeFocus && removeFinishedIn.checked && text)
+                    {
+                        App.settings.dmcore.setValue(
+                                    DmCoreSettings.AutoRemoveFinishedDownloads_KeepDays,
+                                    text);
+                    }
+                }
+            }
+
+            SettingsGridLabel {
+                enabled: removeFinishedIn.checked
+                //: Automatically remove finished downloads In N days
+                text: qsTr("days") + App.loc.emptyString
+                anchors.verticalCenter: parent.verticalCenter
+            }
+        }
+
         SettingsCheckBox {
             text: qsTr("Automatically retry failed downloads") + App.loc.emptyString
             checked: App.settings.toBool(App.settings.dmcore.value(DmCoreSettings.AutoRetryFailedDownloads))
             onClicked: {
                 App.settings.dmcore.setValue(
                             DmCoreSettings.AutoRetryFailedDownloads,
+                            App.settings.fromBool(checked));
+            }
+        }
+
+        SettingsCheckBox {
+            text: qsTr("Detect unwanted behavior errors") + App.loc.emptyString
+            checked: App.settings.toBool(App.settings.dmcore.value(DmCoreSettings.DetectUnwantedDownloadErrors))
+            onClicked: {
+                App.settings.dmcore.setValue(
+                            DmCoreSettings.DetectUnwantedDownloadErrors,
                             App.settings.fromBool(checked));
             }
         }
@@ -206,31 +318,30 @@ Column {
                 App.settings.dmcore.setValue(
                             DmCoreSettings.TakeLastModifiedDateFromServer,
                             App.settings.fromBool(checked));
-            }
+           }
         }
 
-
-    }
-
-    SettingsGroupColumn {
         Row {
+            anchors.left: parent.left
+            anchors.leftMargin: 17*appWindow.zoom
+
             spacing: 5*appWindow.zoom
 
-            SettingsSubgroupHeader {
+            SettingsGridLabel {
                 id: batchDownloadLimit
                 text: qsTr("Maximum urls count in batch download") + App.loc.emptyString
                 anchors.verticalCenter: parent.verticalCenter
             }
 
             SettingsTextField {
-                implicitWidth: 60*appWindow.zoom
+                implicitWidth: 60*appWindow.fontZoom
                 inputMethodHints: Qt.ImhDigitsOnly
                 validator: QtRegExpValidator { regExp: /[1-9]\d*/ }
                 text: uiSettingsTools.settings.batchDownloadMaxUrlsCount
                 onTextChanged: {
-                    if (parseInt(text) > 0) {
-                        uiSettingsTools.settings.batchDownloadMaxUrlsCount = parseInt(text);
-                    }
+                    let val = parseInt(text) || 0;
+                    if (val > 0 && val < 1000000)
+                        uiSettingsTools.settings.batchDownloadMaxUrlsCount = val;
                 }
             }
         }
@@ -238,8 +349,10 @@ Column {
 
     SettingsGroupColumn {
         visible: App.features.hasFeature(AppFeatures.Updates)
+        anchors.left: parent.left
 
         SettingsSubgroupHeader {
+            anchors.left: parent.left
             text: qsTr("Update") + App.loc.emptyString
             visible: App.features.hasFeature(AppFeatures.Updates)
         }

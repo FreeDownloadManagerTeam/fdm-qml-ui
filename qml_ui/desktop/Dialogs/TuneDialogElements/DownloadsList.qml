@@ -10,7 +10,7 @@ ColumnLayout {
     visible: downloadTools.batchDownload
     Layout.topMargin: 8*appWindow.zoom
     Layout.fillWidth: true
-    Layout.preferredHeight: Math.min(list.count * 26*appWindow.zoom + 35*appWindow.zoom, Math.max(130*appWindow.zoom, ((appWindow.height <= 680*appWindow.zoom) ? appWindow.height - 480*appWindow.zoom : (appWindow.height > 680*appWindow.zoom && appWindow.height < 810*appWindow.zoom ? 200*appWindow.zoom : appWindow.height - 610*appWindow.zoom))))
+    Layout.preferredHeight: Math.min(list.count * 26*appWindow.fontZoom + 35*appWindow.zoom, Math.max(130*appWindow.fontZoom, ((appWindow.height <= 680*appWindow.zoom) ? appWindow.height - 480*appWindow.zoom : (appWindow.height > 680*appWindow.zoom && appWindow.height < 810*appWindow.zoom ? 200*appWindow.zoom : appWindow.height - 610*appWindow.zoom))))
     spacing: 5*appWindow.zoom
 
     property bool showAgeCol

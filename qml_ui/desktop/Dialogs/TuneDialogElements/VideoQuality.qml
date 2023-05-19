@@ -31,7 +31,7 @@ ColumnLayout {
                         + downloadTools.versionSelector.quality(i);
                 var size = downloadTools.versionSelector.size(i);
                 if (size > 0)
-                    v += ' ' + JsTools.sizeUtils.bytesAsText(downloadTools.versionSelector.size(i));
+                    v += ' ' + App.bytesAsText(downloadTools.versionSelector.size(i));
                 combo.model.insert(i, {'version': v});
             }
             downloadTools.fileSizeValueChanged(downloadTools.versionSelector.size(index));

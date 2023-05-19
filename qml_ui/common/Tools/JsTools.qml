@@ -248,133 +248,13 @@ QtObject {
     }
 
     property var sizeUtils: QtObject {
-        property var decimalPoint: Qt.locale().decimalPoint
 
-        function getSizeText (bytes, sizePow){
-
-            var sizeValue = bytes/Math.pow(AppConstants.BytesInKB, sizePow);
-
-            if (sizeValue < 0.01)
-                sizeValue = 0;
-            // round to 3 significant digits
-            //http://www.quora.com/Google-Sheets/How-can-I-round-to-x-significant-digits
-            var sizeText = fileUtils.fileSizeIECUnitless(sizeValue);
-
-            if (sizePow !== 0){
-
-                if (sizeText >= 1000)
-                    sizeText = sizeText.toPrecision(4);
-                else{
-                    sizeText = mathUtils.roundPrecision(sizeText, 3);
-                    sizeText = sizeText.toPrecision(3);
-                }
-            }
-            return sizeText;
-
-        }
-        function bytesAsText(bytes) {
-
-            var sizePow = Math.log(bytes)/Math.log(AppConstants.BytesInKB) | 0;
-            var sizeText = sizeUtils.getSizeText(bytes, sizePow);
-
-            if (sizeText >= AppConstants.BytesInKB){
-                sizeText = 1;
-                sizePow++;
-            }
-
-            sizeText = sizeUtils.formatByLocale(sizeText);
-            var units = fileUtils.unitNameByPow(sizePow);
-
-            return sizeText + " " + units;
-            // return __('%1 ' + units, sizeText);
-        }
         function formatByLocale(sizeText) {
+            let decimalPoint = Qt.locale().decimalPoint;
             sizeText = sizeText.toString();
             if (decimalPoint != '.')
                 sizeText = sizeText.replace('.', decimalPoint);
             return sizeText;
-        }
-        function bytesAsTextObj(bytes) {
-
-            var sizePow = Math.log(bytes)/Math.log(AppConstants.BytesInKB) | 0;
-            var sizeText = sizeUtils.getSizeText(bytes, sizePow);
-
-            if (sizeText >= AppConstants.BytesInKB){
-                sizeText = 1;
-                sizePow++;
-            }
-
-            var units = fileUtils.unitNameByPow(sizePow);
-
-            return {
-                size: sizeText,
-                units: units
-            };
-        }
-        function allBytesAsText(done, all) {
-
-            var d = this.bytesAsTextObj(done);
-
-            if (all < 0)
-                return d.size + " " + d.units;
-
-            var a = this.bytesAsTextObj(all);
-
-            if (d.units === a.units && d.size === a.size)
-                return d.size + " " + d.units;
-
-            if (d.units === a.units)
-                return __('%1 of %2', [d.size, a.size + " " + d.units]);
-
-            return __('%1 of %2', [ d.size + " " + d.units, a.size + " " + a.units ]);
-        }
-        function byteProgressAsText(done, all){
-
-            if (!all)
-                all = 0;
-
-            if (done === 0 && all === 0)
-                return "0 B";
-
-            // If total size is unknown, then show downloaded bytes without total size.
-            if (all < 0 || (!all && done > 0))
-                return bytesAsText(done) + " / \u2014";// \u2014 long dash code symbol;
-
-            var ln=Math.log, d = AppConstants.BytesInKB;
-            var maxPow = ln(all)/ln(d)|0;
-            var base = Math.pow(d, maxPow);
-            var resultDone = parseFloat(sizeUtils.getSizeText(done, maxPow));
-            var resultAll = parseFloat(sizeUtils.getSizeText(all, maxPow));
-
-            if (resultAll >= d){
-                maxPow++;
-                base = Math.pow(d, maxPow);
-                resultDone = parseFloat(sizeUtils.getSizeText(done, maxPow));
-                resultAll = parseFloat(sizeUtils.getSizeText(all, maxPow));
-            }
-
-            var decimalPlaces = mathUtils.decimalPlaces(resultAll, 3);
-            var resultDoneText = "";
-            if(resultDone === 0 || maxPow === 0){
-                resultDoneText = resultDone + "";
-            }
-            else if(resultDone < 0.01){
-                resultDoneText = "0";
-            }
-            else{
-                resultDoneText = resultDone.toFixed(decimalPlaces)
-            }
-
-            var resultText = '';
-
-            resultDoneText = sizeUtils.formatByLocale(resultDoneText);
-            var resultAllText = sizeUtils.formatByLocale(resultAll.toFixed(decimalPlaces));
-
-            resultText = ((resultDone < resultAll) ? resultDoneText + " / " : "") +
-                resultAllText +
-                " " + fileUtils.unitNameByPow(maxPow);
-
-            return resultText;
         }
     }
 }

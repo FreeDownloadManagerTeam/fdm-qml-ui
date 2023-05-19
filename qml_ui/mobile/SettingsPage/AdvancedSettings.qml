@@ -39,20 +39,25 @@ Page {
 
 //-- contentColumn content - BEGIN -------------------------------------------------------------------
                 Label {
+                    anchors.left: parent.left
                     text: qsTr("Choose theme") + App.loc.emptyString
                     font.pixelSize: 16
-                    leftPadding: 20
+                    leftPadding: qtbug.leftPadding(20, 0)
+                    rightPadding: qtbug.rightPadding(20, 0)
                     bottomPadding: 10
                 }
 
-                ThemeComboBox {}
+                ThemeComboBox {
+                    anchors.left: parent.left
+                }
 
                 Label {
+                    anchors.left: parent.left
                     text: qsTr("A light theme will be used, if the system theme is unknown.") + App.loc.emptyString
-                    leftPadding: 20
+                    leftPadding: qtbug.leftPadding(20, 20)
+                    rightPadding: qtbug.rightPadding(20, 20)
                     bottomPadding: 10
                     topPadding: 10
-                    rightPadding: 20
                     font.pixelSize: 14
                     width: parent.width
                     wrapMode: Label.WordWrap
@@ -79,7 +84,7 @@ Page {
                 SwitchSetting {
                     id: switchSetting3
                     description: qsTr("Do not allow downloads to perform post finished tasks when running on battery") + App.loc.emptyString
-                    visible: App.features.hasFeature(AppFeatures.Battery)
+                    visible: App.features.hasFeature(AppFeatures.Battery) && appWindow.hasDownloadMgr
                     switchChecked: App.settings.dmcore.value(DmCoreSettings.DisablePostFinishedTasksOnBattery)
                     onClicked: {
                         switchChecked = !switchChecked;
@@ -96,7 +101,7 @@ Page {
                 SwitchSetting {
                     id: switchSetting4
                     description: qsTr("Do not allow downloads if battery level drops below") + App.loc.emptyString
-                    visible: App.features.hasFeature(AppFeatures.Battery)
+                    visible: App.features.hasFeature(AppFeatures.Battery) && appWindow.hasDownloadMgr
                     switchChecked: App.settings.dmcore.value(DmCoreSettings.BatteryMinimumPowerLevelToRunDownloads) > 0
                     onClicked: {
                         switchChecked = !switchChecked;
@@ -110,8 +115,9 @@ Page {
 
                 BatteryComboBox {
                     id: batteryCombo
-                    visible: App.features.hasFeature(AppFeatures.Battery)
+                    visible: App.features.hasFeature(AppFeatures.Battery) && appWindow.hasDownloadMgr
                     enabled: switchSetting4.switchChecked
+                    anchors.left: parent.left
                 }
 
                 SettingsSeparator{
@@ -120,6 +126,7 @@ Page {
 
                 SwitchSetting {
                     id: switchSetting2
+                    visible: appWindow.hasDownloadMgr
                     description: qsTr("Backup the list of downloads every") + App.loc.emptyString + " <b>" + backupSlider.currentText + "</b>"
                     switchChecked: App.settings.dbBackupMinInterval() != -1
                     onClicked: {
@@ -134,7 +141,9 @@ Page {
 
                 BackupSlider {
                     id: backupSlider
+                    visible: switchSetting2.visible
                     enabled: switchSetting2.switchChecked
+                    anchors.left: parent.left
                 }
 
                 SettingsSeparator{
@@ -142,16 +151,26 @@ Page {
                 }
 
                 Label {
+                    id: fileExistsReactionLabel
+                    visible: appWindow.hasDownloadMgr
                     text: qsTr("File exists reaction") + App.loc.emptyString
                     font.pixelSize: 16
-                    leftPadding: 20
+                    leftPadding: qtbug.leftPadding(20, 0)
+                    rightPadding: qtbug.rightPadding(20, 0)
                     bottomPadding: 10
                     topPadding: 15
+                    anchors.left: parent.left
+                    horizontalAlignment: Text.AlignLeft
                 }
 
-                ExistingFileReactionCombobox {}
+                ExistingFileReactionCombobox {
+                    visible: fileExistsReactionLabel.visible
+                    anchors.left: parent.left
+                }
 
-                SettingsSeparator{}
+                SettingsSeparator{
+                    visible: fileExistsReactionLabel.visible
+                }
 
 //-- contentColumn content - END ---------------------------------------------------------------------
             }

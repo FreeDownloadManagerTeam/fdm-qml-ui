@@ -14,6 +14,7 @@ RowLayout {
         text: qsTr("Download subtitles") + App.loc.emptyString
         checked: downloadTools.needDownloadSubtitles
         checkBoxStyle: "gray"
+        xOffset: 0
         onCheckedChanged: {
             downloadTools.needDownloadSubtitles = checked;
             downloadTools.needDownloadSubtitlesChangedByUser = true;

@@ -27,7 +27,7 @@ Item {
 
     property string lastError: ""
     property bool allowedToReportLastError: false
-    property int lastFailedRequestId: -1
+    property double lastFailedRequestId: -1
     property string urlText
     property bool disableAcceptableUrlCheck: false
 
@@ -35,8 +35,8 @@ Item {
     property string fileName
     property bool forceOverwriteFile: false
     property int filesCount
-    property var fileSize
-    property var freeDiskSpace
+    property double fileSize
+    property double freeDiskSpace
     property bool hasWriteAccess: true
     property string previewUrl
 
@@ -461,8 +461,7 @@ Item {
     Connections
     {
         target: App.downloads.creator
-        onBuilt:
-        {
+        onBuilt: (id) => {
             if (id === requestId)
             {
                 buildingDownload = false;
@@ -470,8 +469,7 @@ Item {
                 root.createRequestSuccess(requestId);
             }
         }
-        onFailed:
-        {
+        onFailed: (id, error, allowedToReport) => {
             if (id === requestId)
             {
                 buildingDownload = false;

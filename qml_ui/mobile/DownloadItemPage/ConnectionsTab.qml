@@ -95,21 +95,24 @@ Rectangle {
                     Layout.preferredWidth: hostColWidth
                     elide: Text.ElideRight
                     height: rowHeigth
-                    leftPadding: 6
+                    leftPadding: qtbug.leftPadding(6, 0)
+                    rightPadding: qtbug.rightPadding(6, 0)
                 }
 
                 BaseLabel {
                     text: model.port
                     Layout.preferredWidth: portColWidth
                     height: rowHeigth
-                    leftPadding: 6
+                    leftPadding: qtbug.leftPadding(6, 0)
+                    rightPadding: qtbug.rightPadding(6, 0)
                 }
 
                 BaseLabel {
                     text: model.connectionCount
                     Layout.preferredWidth: countColWidth
                     height: rowHeigth
-                    leftPadding: 6
+                    leftPadding: qtbug.leftPadding(6, 0)
+                    rightPadding: qtbug.rightPadding(6, 0)
                 }
             }
         }

@@ -42,6 +42,10 @@ Rectangle {
         //infinity indicator
         Rectangle {
             visible: infinityIndicator
+
+            LayoutMirroring.enabled: false
+            LayoutMirroring.childrenInherit: true
+
             width: parent.width - 2
             height: parent.height - 2
             anchors.left: parent.left
@@ -76,6 +80,7 @@ Rectangle {
 
         //progressbar
         Rectangle {
+            LayoutMirroring.enabled: false
             visible: !infinityIndicator
             height: parent.height - 2
             anchors.left: parent.left

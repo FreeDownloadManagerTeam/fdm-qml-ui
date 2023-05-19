@@ -43,8 +43,7 @@ Item {
         currentPointsComponent = component.createObject(progressWraper, {
                                               "downloadId": downloadsItemTools.itemId,
                                               "downloadModel": downloadsItemTools.item,
-                                              "forceMapLoading": true,
-                                              "alignCenter": true
+                                              "zoom": appWindow.zoom
                                           });
     }
 

@@ -40,7 +40,8 @@ Row {
         id: lbl
         text: browser.title
         color: browser.installed ? linkColor : appWindow.theme.settingsItem
-        leftPadding: 8*appWindow.zoom
+        leftPadding: qtbug.leftPadding(8*appWindow.zoom,0)
+        rightPadding: qtbug.rightPadding(8*appWindow.zoom,0)
         MouseArea {
             enabled: browser.installed
             anchors.fill: parent
@@ -56,6 +57,7 @@ Row {
         visible: !browser.installed
         text: qsTr("(browser is not installed)") + App.loc.emptyString
         color: "#999"
-        leftPadding: 3*appWindow.zoom
+        leftPadding: qtbug.leftPadding(3*appWindow.zoom,0)
+        rightPadding: qtbug.rightPadding(3*appWindow.zoom,0)
     }
 }

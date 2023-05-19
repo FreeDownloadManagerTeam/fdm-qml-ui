@@ -127,8 +127,12 @@ ListView {
     ScrollBar.vertical: ScrollBar {}
 
     DropArea {
+        enabled: !appWindow.disableDrop
         anchors.fill: parent
-        onDropped: App.onDropped(drop)
+        onDropped: {
+            if (!drag.source)
+                App.onDropped(drop)
+        }
     }
 
     onHeightChanged:  {

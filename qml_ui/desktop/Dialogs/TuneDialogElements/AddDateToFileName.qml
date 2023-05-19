@@ -9,5 +9,6 @@ BaseCheckBox {
     checked: App.settings.downloadOptions.value(AbstractDownloadOption.AddDateToFileName) || false
     text: qsTr("Add dates to files names") + App.loc.emptyString
     checkBoxStyle: "gray"
+    xOffset: 0
     onClicked: changedByUser = true
 }

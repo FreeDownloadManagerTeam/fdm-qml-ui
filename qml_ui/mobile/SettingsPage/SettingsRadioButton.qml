@@ -6,11 +6,14 @@ RadioButton
 {
     id: control
     leftPadding: 0
+    rightPadding: 0
 
     indicator: Rectangle {
         implicitWidth: 18
         implicitHeight: 18
-        x: control.leftPadding
+        x: LayoutMirroring.enabled ?
+               parent.width - width - qtbug.getLeftPadding(control) :
+               qtbug.getLeftPadding(control)
         y: parent.height / 2 - height / 2
         radius: 9
         color: control.checked ? appWindow.theme.toolbarBackground : "transparent"
@@ -33,7 +36,8 @@ RadioButton
         font: control.font
         horizontalAlignment: Text.AlignLeft
         verticalAlignment: Text.AlignVCenter
-        leftPadding: control.indicator.width + control.spacing
+        leftPadding: qtbug.leftPadding(control.indicator.width + control.spacing, 0)
+        rightPadding: qtbug.rightPadding(control.indicator.width + control.spacing, 0)
         wrapMode: Label.WordWrap
     }
 }

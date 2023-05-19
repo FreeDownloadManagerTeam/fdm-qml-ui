@@ -17,11 +17,13 @@ Rectangle {
 
     BaseLabel {
         id: title
+        anchors.left: parent.left
         text: root.text
         font.bold: false
         font.pixelSize: 13
         padding: 6
-        leftPadding: 9
+        leftPadding: qtbug.leftPadding(9, 0)
+        rightPadding: qtbug.rightPadding(9, 0)
         wrapMode: Label.Wrap
         width: parent.width - 13
         anchors.verticalCenter: parent.verticalCenter
@@ -29,7 +31,7 @@ Rectangle {
 
     Rectangle {
         anchors.left: parent.left
-        anchors.leftMargin: title.contentWidth + title.leftPadding + 5
+        anchors.leftMargin: title.contentWidth + qtbug.getLeftPadding(title) + 5
         anchors.verticalCenter: parent.verticalCenter
         visible: showSortIndicator
         width: 7

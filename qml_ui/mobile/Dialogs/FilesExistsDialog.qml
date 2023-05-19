@@ -17,7 +17,11 @@ Dialog {
     property int timeout: AppConstants.FileExistsActionTimeout
     property int countdown: root.timeout
 
-    parent: appWindow.overlay
+    readonly property int availWidth: appWindow.width*0.95
+
+    closePolicy: Popup.NoAutoClose
+
+    parent: Overlay.overlay
 
     x: Math.round((appWindow.width - width) / 2)
     y: Math.round((appWindow.height - height) / 2)
@@ -25,30 +29,23 @@ Dialog {
     modal: true
 
     title: qsTr("Warning: file exists already") + App.loc.emptyString
-    width: Math.round(appWindow.width * 0.8)
 
     contentItem: ColumnLayout {
-        width: parent.width
 
         ListView {
             clip: true
             Layout.fillWidth: true
             Layout.preferredHeight: Math.min(contentHeight, 150)
+            Layout.maximumWidth: root.availWidth
             ScrollBar.vertical: ScrollBar {
                 active: parent.contentHeight > 150
             }
             model: root.files
-            delegate: Rectangle {
+            delegate: BaseLabel {
+                id: lbl
                 width: parent.width
-                height: lbl.height
-                color: 'transparent'
-
-                BaseLabel {
-                    id: lbl
-                    width: parent.width
-                    elide: Text.ElideMiddle
-                    text: modelData
-                }
+                elide: Text.ElideMiddle
+                text: modelData
             }
         }
 
@@ -57,24 +54,33 @@ Dialog {
             text: qsTr("Remember my choice for all downloads") + App.loc.emptyString
         }
 
-        RowLayout {
+        GridLayout {
             Layout.topMargin: 10
             Layout.bottomMargin: 10
             Layout.alignment: Qt.AlignRight
+            Layout.maximumWidth: root.availWidth
 
-            spacing: 5
+            rowSpacing: 0
+            columnSpacing: 0
+
+            readonly property bool hasSpace: b1.implicitWidth + b2.implicitWidth + b3.implicitWidth + 30 <= root.availWidth
+            columns: hasSpace ? -1 : 1
+            rows: hasSpace ? 1 : -1
 
             DialogButton {
+                id: b1
                 text: qsTr("Rename (%1)").arg(root.countdown) + App.loc.emptyString
                 onClicked: root.actionSelected(AbstractDownloadsUi.DfeaRename)
             }
 
             DialogButton {
+                id: b2
                 text: qsTr("Overwrite") + App.loc.emptyString
                 onClicked: root.actionSelected(AbstractDownloadsUi.DfeaOverwrite)
             }
 
             DialogButton {
+                id: b3
                 text: qsTr("Abort") + App.loc.emptyString
                 onClicked: root.actionSelected(AbstractDownloadsUi.DfeaAbort)
             }

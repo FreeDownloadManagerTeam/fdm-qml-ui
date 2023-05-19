@@ -24,6 +24,7 @@ Menu
     property bool supportsSequentialDownload: selectedDownloadsTools.sequentialDownloadAllowed()
     property bool supportsDisablePostFinishedTasks: false
     property bool supportsAddT: false
+    property bool supportsForceReann: false
     property bool supportsIgnoreURatioLimit: false
     property bool locked: selectedDownloadsTools.selectedDownloadsIsLocked()
     readonly property var info: modelIds.length === 1 ? App.downloads.infos.info(modelIds[0]) : null
@@ -42,6 +43,16 @@ Menu
     }
 
     transformOrigin: Menu.TopRight
+
+    readonly property bool abortVisible: downloadsItemTools.performingLo && downloadsItemTools.loAbortable
+    BaseMenuItem {
+        visible: abortVisible
+        text: qsTr("Abort") + App.loc.emptyString
+        onTriggered: downloadsItemTools.abortLo()
+    }
+    BaseMenuSeparator {
+        visible: abortVisible
+    }
 
     ActionGroup {
         id: priorityGroup
@@ -190,7 +201,7 @@ Menu
         }
     }
     BaseMenuSeparator {
-        visible: supportsSequentialDownload || supportsDisablePostFinishedTasks || supportsAddT || supportsIgnoreURatioLimit
+        visible: supportsSequentialDownload || supportsDisablePostFinishedTasks || supportsAddT || supportsIgnoreURatioLimit || supportsForceReann
     }
 
     BaseMenuItem {
@@ -259,7 +270,7 @@ Menu
 
     Component.onCompleted: {
         if (appWindow.btSupported) {
-            var index = 20;
+            var index = 23;
             if (btTools.item.addTAllowed()) {
                 supportsAddT = true;
                 root.insertItem(index++, Qt.createQmlObject('import "../bt/mobile"; AddTMenuItem {}', root));
@@ -271,6 +282,10 @@ Menu
             if (btTools.item.ignoreURatioLimitAllowed()) {
                 supportsIgnoreURatioLimit = true;
                 root.insertItem(index++, Qt.createQmlObject('import "../bt/mobile"; IgnoreURatioMenuItem {}', root));
+            }
+            if (btTools.item.forceReannounceAllowed()) {
+                supportsForceReann = true;
+                root.insertItem(index++, Qt.createQmlObject('import "../bt/mobile"; ForceReannMenuItem {}', root));
             }
         }
     }

@@ -11,7 +11,7 @@ Dialog {
     property int downloadId
     property string errorMessage
 
-    parent: appWindow.overlay
+    parent: Overlay.overlay
 
     x: Math.round((appWindow.width - width) / 2)
     y: Math.round((appWindow.height - height) / 2)
@@ -31,6 +31,7 @@ Dialog {
             Layout.fillWidth: true
             text: qsTr("Error: %1").arg(errorMessage) + App.loc.emptyString
             Layout.bottomMargin: 7
+            horizontalAlignment: Text.AlignLeft
         }
 
         Label {
@@ -44,6 +45,7 @@ Dialog {
                 itemId: root.downloadId
             }
             text: qsTr("Unable to move: %1").arg(downloadsItemTools.hasChildDownloads ? downloadsItemTools.destinationPath : downloadsItemTools.tplPathAndTitle) + App.loc.emptyString
+            horizontalAlignment: Text.AlignLeft
         }
 
         RowLayout {

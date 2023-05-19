@@ -45,13 +45,15 @@ Page {
                 ToolbarLabel {
                     text: (onlyFolders ? qsTr("Select folder") : qsTr("Select file")) + App.loc.emptyString
                     Layout.fillWidth: true
-                    Layout.rightMargin: onlyFolders ? 0 : 60
+                    Layout.rightMargin: qtbug.rightMargin(0, onlyFolders ? 0 : 60)
+                    Layout.leftMargin: qtbug.leftMargin(0, onlyFolders ? 0 : 60)
                 }
 
                 DialogButton {
                     text: qsTr("OK") + App.loc.emptyString
                     visible: onlyFolders
-                    Layout.rightMargin: 10
+                    Layout.rightMargin: qtbug.rightMargin(0, 10)
+                    Layout.leftMargin: qtbug.leftMargin(0, 10)
                     textColor: appWindow.theme.toolbarTextColor
                     onClicked: doOK()
                 }
@@ -84,7 +86,8 @@ Page {
                     }
 
                     contentItem: Label {
-                        leftPadding: control.indicator.width + control.spacing
+                        leftPadding: qtbug.leftPadding(control.indicator.width + control.spacing, 0)
+                        rightPadding: qtbug.rightPadding(control.indicator.width + control.spacing, 0)
                         text: control.text
                         elide: Text.ElideRight
                         verticalAlignment: Text.AlignVCenter
@@ -93,7 +96,7 @@ Page {
                     indicator: Rectangle {
                         implicitWidth: 18
                         implicitHeight: 18
-                        x: control.leftPadding
+                        x: LayoutMirroring.enabled ? control.width - width - qtbug.getLeftPadding(control) : qtbug.getLeftPadding(control)
                         y: parent.height / 2 - height / 2
                         radius: 9
                         color: control.checked ? "#FFFFFF" : "transparent"
@@ -130,7 +133,7 @@ Page {
         showDirsFirst: picker.showDirsFirst
         folder: picker.folder
         nameFilters: picker.nameFilters
-        showFiles: true//!onlyFolders
+        showFiles: !onlyFolders
         sortField: uiSettingsTools.settings.filePickerSortField
         sortReversed: uiSettingsTools.settings.filePickerSortReversed
         rootFolder: picker.rootFolder
@@ -150,7 +153,9 @@ Page {
         property var folders: []
 
         Flickable {
-            anchors.fill: parent
+            width: Math.min(parent.width, foldersBarRow.width)
+            height: parent.height
+            anchors.left: parent.left
             anchors.leftMargin: 15
             anchors.rightMargin: 10
             contentWidth: foldersBarRow.width
@@ -175,6 +180,7 @@ Page {
                             source: Qt.resolvedUrl("../../images/mobile/arrow_right.svg")
                             sourceSize.width: 7
                             sourceSize.height: 8
+                            mirror: LayoutMirroring.enabled
                             layer {
                                 effect: ColorOverlay {
                                     color: appWindow.theme.foreground
@@ -230,7 +236,7 @@ Page {
                 Image {
                     id: folderIcon
                     height: 20
-                    width: visible ? 20 : 0//11
+                    width: visible ? 20 : 0
                     anchors.left: parent.left
                     anchors.verticalCenter: parent.verticalCenter
                     source: Qt.resolvedUrl("../../images/mobile/folder.svg")
@@ -263,10 +269,11 @@ Page {
                         anchors.left: parent.left
                     }
                     BaseLabel {
-                        leftPadding: fileMarker.width + 10
-                        rightPadding: 5
+                        leftPadding: qtbug.leftPadding(fileMarker.width + 10, 5)
+                        rightPadding: qtbug.rightPadding(fileMarker.width + 10, 5)
                         width: parent.width - arrowRight.width - 20
                         anchors.verticalCenter: parent.verticalCenter
+                        anchors.left: parent.left
                         text: fileName
                         elide: Label.ElideMiddle
                     }
@@ -280,6 +287,7 @@ Page {
                         sourceSize.width: 7
                         sourceSize.height: 8
                         visible: folderListModel.isFolder(index)
+                        mirror: LayoutMirroring.enabled
                         layer {
                             effect: ColorOverlay {
                                 color: appWindow.theme.foreground

@@ -41,7 +41,8 @@ Page
 
                 DialogButton {
                     text: qsTr("OK") + App.loc.emptyString
-                    Layout.rightMargin: 10
+                    Layout.rightMargin: qtbug.rightMargin(0, 10)
+                    Layout.leftMargin: qtbug.leftMargin(0, 10)
                     textColor: appWindow.theme.toolbarTextColor
                     enabled: !tools.renaming && (tools.canBeRenamed || !tools.hasChanges)
                     onClicked: tools.doOK()
@@ -63,7 +64,7 @@ Page
             text: qsTr("Enter new name") + ':' + App.loc.emptyString
         }
 
-        TextField {
+        BaseTextField {
             id: newNameField
             selectByMouse: true
             inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText | Qt.ImhSensitiveData

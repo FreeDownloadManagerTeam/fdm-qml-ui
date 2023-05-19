@@ -31,14 +31,15 @@ BaseDialog {
                 Layout.fillWidth: true
                 text: qsTr("Error: %1").arg(errorMessage) + App.loc.emptyString
                 Layout.bottomMargin: 7*appWindow.zoom
+                wrapMode: Label.WordWrap
             }
 
             BaseLabel {
                 id: lbl
                 Layout.fillWidth: true
-                elide: Text.ElideMiddle
                 color: "#737373"
                 text: filePath
+                wrapMode: Label.Wrap
             }
 
             CustomButton {

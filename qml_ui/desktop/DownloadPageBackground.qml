@@ -9,7 +9,7 @@ Item {
 
     Image {
         visible: App.settings.tum.currentMode == TrafficUsageMode.Snail
-        source: App.settings.tum.currentMode == TrafficUsageMode.Snail ? Qt.resolvedUrl("../images/desktop/mode_snail.svg") : Qt.resolvedUrl("../images/desktop/mode_high.svg")
+        source: Qt.resolvedUrl("../images/desktop/mode_snail.svg")
         anchors.fill: parent
         anchors.margins: 50*appWindow.zoom
         fillMode: Image.PreserveAspectFit
@@ -20,11 +20,8 @@ Item {
     Image {
         visible: App.settings.tum.currentMode == TrafficUsageMode.Medium || App.settings.tum.currentMode == TrafficUsageMode.Low
         source: App.settings.tum.currentMode == TrafficUsageMode.Medium ? Qt.resolvedUrl("../images/desktop/mode_medium.svg") : Qt.resolvedUrl("../images/desktop/mode_low.svg")
-        width: parent.width
-        height: width
+        anchors.fill: parent
         fillMode: Image.PreserveAspectFit
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.horizontalCenter: parent.horizontalCenter
         opacity: appWindow.theme.modeBackgroundOpacity
     }
 }

@@ -11,10 +11,10 @@ Dialog
 {
     id: root
     modal: true
-    parent: appWindow.overlay
+    parent: Overlay.overlay
     x: Math.round((appWindow.width - width) / 2)
     y: 48
-    height: parent.height < 550 ? parent.height - 60 : 490
+    height: Math.min(parent.height - 60, 520)
     width: 320
 
     property int prevTum: TrafficUsageMode.High

@@ -16,9 +16,12 @@ ComboBox
     property int popupWidth: 300
     property int maxComboWidth: 300
 
-    width: (constantBitrate ? 70 + fontMetrics.boundingRect(root.kbpsText(999, "")).width : 30 + fontMetrics.boundingRect(root.vbrKbpsText(999,999)).width)
+    width: 70 + fontMetrics.boundingRect(
+               constantBitrate ?
+                   root.kbpsText(999, "") :
+                   root.vbrKbpsText(999,999)).width
 
-    FontMetrics {id: fontMetrics}
+    FontMetrics {id: fontMetrics; font.pixelSize: 14}
 
     onMaxComboWidthChanged: root.setPopupWidth()
 
@@ -34,6 +37,7 @@ ComboBox
             id: label
             leftPadding: 6
             rightPadding: 6
+            anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
             text: modelData.text
             font.pixelSize: 14
@@ -68,16 +72,21 @@ ComboBox
         id: currentValue
         text: root.displayText
         color: appWindow.theme.foreground
-        leftPadding: 10
-        rightPadding: root.indicator.width + root.spacing
+        leftPadding: qtbug.leftPadding(10, root.indicator.width + root.spacing)
+        rightPadding: qtbug.rightPadding(10, root.indicator.width + root.spacing)
         font: root.font
         elide: Text.ElideRight
         verticalAlignment: Text.AlignVCenter
+        horizontalAlignment: Text.AlignLeft
     }
     popup: Popup {
         width: constantBitrate ? popupWidth : root.width
         height: 18 * root.model.length + 2
         padding: 1
+
+        x: appWindow.LayoutMirroring.enabled ?
+               root.width - width:
+               0
 
         contentItem: Item {
             ListView {
@@ -177,10 +186,10 @@ ComboBox
             var currentVal = 0;
             for (var index in model) {
                 currentVal = checkTextSize(model[index].text);
-                maxVal = maxVal < currentVal ? currentVal : maxVal;
+                maxVal = Math.max(maxVal, currentVal);
             }
 
-            popupWidth = maxComboWidth < maxVal + 20 ? maxComboWidth : maxVal + 20;
+            popupWidth = Math.min(maxComboWidth, maxVal + 20);
         } else {
             popupWidth = 300;
         }

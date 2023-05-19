@@ -31,7 +31,9 @@ ComboBox {
         width: root.width
 
         BaseLabel {
-            leftPadding: 6*appWindow.zoom
+            anchors.left: parent.left
+            leftPadding: qtbug.leftPadding(7*appWindow.zoom, 0)
+            rightPadding: qtbug.rightPadding(7*appWindow.zoom, 0)
             anchors.verticalCenter: parent.verticalCenter
             font.pixelSize: 12*appWindow.fontZoom
             color: appWindow.theme.settingsItem
@@ -61,8 +63,10 @@ ComboBox {
     contentItem: Rectangle {
         color: "transparent"
         BaseLabel {
-            leftPadding: 2*appWindow.zoom
+            anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
+            leftPadding: qtbug.leftPadding(2*appWindow.zoom, 0)
+            rightPadding: qtbug.rightPadding(2*appWindow.zoom, 0)
             font.pixelSize: 12*appWindow.fontZoom
             color: appWindow.theme.settingsItem
             text: root.model.length ? root.model[currentIndex].text : ""
@@ -70,7 +74,7 @@ ComboBox {
     }
 
     indicator: Rectangle {
-        x: root.width - width
+        x: LayoutMirroring.enabled ? 0 : root.width - width
         y: root.topPadding + (root.availableHeight - height) / 2
         width: height - 1*appWindow.zoom
         height: root.height

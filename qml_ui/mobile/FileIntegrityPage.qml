@@ -46,7 +46,7 @@ Page {
                 anchors.rightMargin: 20
 
                 BaseLabel {
-                    text: fileIntegrityTools.title + " (" + JsTools.sizeUtils.bytesAsText(fileIntegrityTools.size) + ")"
+                    text: fileIntegrityTools.title + " (" + App.bytesAsText(fileIntegrityTools.size) + ")" + App.loc.emptyString
                     width: parent.width
                     anchors.verticalCenter: parent.verticalCenter
                     elide: Text.ElideMiddle
@@ -80,6 +80,7 @@ Page {
                         id: hashCombo
                         flat: true
                         antialiasing: true
+                        anchors.left: parent.left
 
                         model: [
                             {text: qsTr("MD5") + App.loc.emptyString, algorithm: AbstractDownloadsUi.Md5, hash: ""},
@@ -92,6 +93,7 @@ Page {
                             id: contentItemText
                             text: hashCombo.displayText
                             verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignLeft
                             color: theme.foreground
                             font.pixelSize: 13
                         }
@@ -99,7 +101,9 @@ Page {
                         indicator: Image {
                             id: img2
                             anchors.verticalCenter: parent.verticalCenter
-                            x: contentItemText.implicitWidth
+                            x: LayoutMirroring.enabled ?
+                                   parent.width - contentItemText.implicitWidth - width :
+                                   contentItemText.implicitWidth
                             source: Qt.resolvedUrl("../images/arrow_drop_down.svg")
                             sourceSize.width: 24
                             sourceSize.height: 24
@@ -130,12 +134,14 @@ Page {
 
                 BaseLabel
                 {
+                    anchors.left: parent.left
                     text: qsTr("Hash") + App.loc.emptyString
                 }
 
                 BaseLabel {
                     id: perscentText
                     visible: fileIntegrityTools.calculatingInProgress
+                    anchors.left: parent.left
                     anchors.topMargin: 20
                     text: qsTr("Calculating %1\%").arg(Math.round(fileIntegrityTools.calculatingProgress)) + App.loc.emptyString
                 }
@@ -166,6 +172,7 @@ Page {
                                 to: 100
                                 value: fileIntegrityTools.calculatingProgress
                                 anchors.fill: parent
+                                LayoutMirroring.enabled: false
 
                                 background: Rectangle {
                                     anchors.fill: parent
@@ -197,6 +204,7 @@ Page {
                     }
                     selectByMouse: true
                     readOnly: true
+                    horizontalAlignment: Text.AlignLeft
                 }
 
             }
@@ -214,6 +222,7 @@ Page {
 
                 BaseLabel
                 {
+                    anchors.left: parent.left
                     text: qsTr("Compare with") + App.loc.emptyString
                 }
 
@@ -232,6 +241,7 @@ Page {
                         selectByMouse: true
                         focus: true
                         inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText | Qt.ImhSensitiveData
+                        horizontalAlignment: Text.AlignLeft
                     }
                 }
 
@@ -240,6 +250,7 @@ Page {
                     visible: verificationEnabled
                     color: verificationOK ? "#299100" : "#bc3737"
                     text: (verificationOK ? qsTr("Verification OK") : qsTr("Verification failed")) + App.loc.emptyString
+                    anchors.left: parent.left
                 }
             }
         }

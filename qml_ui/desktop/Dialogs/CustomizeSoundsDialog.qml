@@ -1,6 +1,7 @@
 import QtQuick 2.10
 import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.3
+import Qt.labs.platform 1.1
 import "../../qt5compat"
 import "../BaseElements"
 import org.freedownloadmanager.fdm 1.0
@@ -209,7 +210,7 @@ BaseDialog {
     FileDialog {
         id: setSoundDlg
         onAccepted: {
-            App.soundNotifMgr.setSoundFile(soundsList.model[soundsList.currentIndex].setting, App.tools.url(fileUrl).toLocalFile());
+            App.soundNotifMgr.setSoundFile(soundsList.model[soundsList.currentIndex].setting, App.tools.url(file).toLocalFile());
             soundsList.reloadModel()
         }
         function openDialog() {

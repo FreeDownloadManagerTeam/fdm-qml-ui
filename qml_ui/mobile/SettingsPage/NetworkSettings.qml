@@ -47,50 +47,64 @@ Page {
             //contentWidth: contentColumn.width
             contentHeight: contentColumn.height
 
-            Column {
+            Item {
                 id: contentColumn
-                anchors.left: parent.left
-                anchors.right: parent.right
-                topPadding: 20
-                bottomPadding: 20
 
-                anchors.leftMargin: appWindow.showBordersInDownloadsList ? settingsWraper.width * 0.1 : 0
-                anchors.rightMargin: appWindow.showBordersInDownloadsList ? settingsWraper.width * 0.1 : 0
+                readonly property int myPadding: 20
+
+                anchors {
+                    left: parent.left
+                    right: parent.right
+                    leftMargin: myPadding + (appWindow.showBordersInDownloadsList ? settingsWraper.width * 0.1 : 0)
+                    rightMargin: myPadding + (appWindow.showBordersInDownloadsList ? settingsWraper.width * 0.1 : 0)
+                }
+
+                implicitWidth: proxysettings.implicitWidth
+                implicitHeight: proxysettings.implicitHeight
 
 //-- contentColumn content - BEGIN -------------------------------------------------------------------
                 Column
                 {
                     id: proxysettings
-                    property int proxyMode: parseInt(App.settings.dmcore.value(DmCoreSettings.NetworkProxyMode)) || 0
+                    property int proxyMode: parseInt(App.settings.app.value(AppSettings.NetworkProxyMode)) || 0
+
+                    width: parent.width
 
                     spacing: 10
 
+                    Item {
+                        width: 1
+                        height: Math.max(contentColumn.myPadding - parent.spacing, 0)
+                    }
+
                     Column
                     {
-                        leftPadding: 20
-                        rightPadding: 20
+                        anchors.left: parent.left
 
                         SettingsRadioButton
                         {
                             id: systemProxy
+                            anchors.left: parent.left
                             text: qsTr("System proxy") + App.loc.emptyString
-                            checked: proxysettings.proxyMode === DmCoreSettings.SystemProxy
+                            checked: proxysettings.proxyMode === AppSettings.SystemProxy
                             onClicked: proxysettings.tryApplyProxySettings()
                         }
 
                         SettingsRadioButton
                         {
                             id: noProxy
+                            anchors.left: parent.left
                             text: qsTr("No proxy") + App.loc.emptyString
-                            checked: proxysettings.proxyMode === DmCoreSettings.NoProxy
+                            checked: proxysettings.proxyMode === AppSettings.NoProxy
                             onClicked: proxysettings.tryApplyProxySettings()
                         }
 
                         SettingsRadioButton
                         {
                             id: manualProxy
+                            anchors.left: parent.left
                             text: qsTr("Configure manually:") + App.loc.emptyString
-                            checked: proxysettings.proxyMode === DmCoreSettings.ManualProxy
+                            checked: proxysettings.proxyMode === AppSettings.ManualProxy
                             onClicked: proxysettings.tryApplyProxySettings()
                         }
 
@@ -100,38 +114,47 @@ Page {
 
                             opacity: manualProxy.checked ? 1 : 0.5
 
+                            anchors.left: parent.left
+
                             Label
                             {
+                                anchors.left: parent.left
                                 font.bold: true
                                 font.pixelSize: 13
                                 text: qsTr("HTTP") + App.loc.emptyString
                                 bottomPadding: 10
                                 topPadding: 30
                                 color: appWindow.theme.foreground
+                                horizontalAlignment: Text.AlignLeft
                             }
 
                             Column
                             {
+                                anchors.left: parent.left
 
                                 TextField
                                 {
                                     id: httpHost
-                                    text: App.settings.dmcore.value(DmCoreSettings.Http_ProxyHost)
+                                    text: App.settings.app.value(AppSettings.Http_ProxyHost)
                                     width: 200
                                     onDisplayTextChanged: tryApplyProxySettingsTimer.restart()
                                     placeholderText: qsTr("Address") + App.loc.emptyString
                                     placeholderTextColor: appWindow.theme.settingsPlaceholder
                                     inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText | Qt.ImhSensitiveData
+                                    anchors.left: parent.left
+                                    horizontalAlignment: Text.AlignLeft
                                 }
                                 TextField
                                 {
                                     id: httpPort
-                                    text: App.settings.dmcore.value(DmCoreSettings.Http_ProxyPort)
+                                    text: App.settings.app.value(AppSettings.Http_ProxyPort)
                                     width: 200
                                     inputMethodHints: Qt.ImhDigitsOnly | Qt.ImhNoPredictiveText | Qt.ImhSensitiveData
                                     onDisplayTextChanged: tryApplyProxySettingsTimer.restart()
                                     placeholderText: qsTr("Port") + App.loc.emptyString
                                     placeholderTextColor: appWindow.theme.settingsPlaceholder
+                                    anchors.left: parent.left
+                                    horizontalAlignment: Text.AlignLeft
 
                                 }
                             }
@@ -144,29 +167,37 @@ Page {
                                 bottomPadding: 10
                                 topPadding: 20
                                 color: appWindow.theme.foreground
+                                anchors.left: parent.left
+                                horizontalAlignment: Text.AlignLeft
                             }
 
                             Column
                             {
+                                anchors.left: parent.left
+
                                 TextField
                                 {
                                     id: httpsHost
-                                    text: App.settings.dmcore.value(DmCoreSettings.Https_ProxyHost)
+                                    text: App.settings.app.value(AppSettings.Https_ProxyHost)
                                     width: 200
                                     onDisplayTextChanged: tryApplyProxySettingsTimer.restart()
                                     placeholderText: qsTr("Address") + App.loc.emptyString
                                     placeholderTextColor: appWindow.theme.settingsPlaceholder
                                     inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText | Qt.ImhSensitiveData
+                                    anchors.left: parent.left
+                                    horizontalAlignment: Text.AlignLeft
                                 }
                                 TextField
                                 {
                                     id: httpsPort
-                                    text: App.settings.dmcore.value(DmCoreSettings.Https_ProxyPort)
+                                    text: App.settings.app.value(AppSettings.Https_ProxyPort)
                                     width: 200
                                     inputMethodHints: Qt.ImhDigitsOnly | Qt.ImhNoPredictiveText | Qt.ImhSensitiveData
                                     onDisplayTextChanged: tryApplyProxySettingsTimer.restart()
                                     placeholderText: qsTr("Port") + App.loc.emptyString
                                     placeholderTextColor: appWindow.theme.settingsPlaceholder
+                                    anchors.left: parent.left
+                                    horizontalAlignment: Text.AlignLeft
                                 }
                             }
                             Label
@@ -177,28 +208,34 @@ Page {
                                 bottomPadding: 10
                                 topPadding: 20
                                 color: appWindow.theme.foreground
+                                anchors.left: parent.left
+                                horizontalAlignment: Text.AlignLeft
                             }
                             Column
                             {
                                 TextField
                                 {
                                     id: ftpHost
-                                    text: App.settings.dmcore.value(DmCoreSettings.Ftp_ProxyHost)
+                                    text: App.settings.app.value(AppSettings.Ftp_ProxyHost)
                                     width: 200
                                     onDisplayTextChanged: tryApplyProxySettingsTimer.restart()
                                     placeholderText: qsTr("Address") + App.loc.emptyString
                                     placeholderTextColor: appWindow.theme.settingsPlaceholder
                                     inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText | Qt.ImhSensitiveData
+                                    anchors.left: parent.left
+                                    horizontalAlignment: Text.AlignLeft
                                 }
                                 TextField
                                 {
                                     id: ftpPort
-                                    text: App.settings.dmcore.value(DmCoreSettings.Ftp_ProxyPort)
+                                    text: App.settings.app.value(AppSettings.Ftp_ProxyPort)
                                     width: 200
                                     inputMethodHints: Qt.ImhDigitsOnly | Qt.ImhNoPredictiveText | Qt.ImhSensitiveData
                                     onDisplayTextChanged: tryApplyProxySettingsTimer.restart()
                                     placeholderText: qsTr("Port") + App.loc.emptyString
                                     placeholderTextColor: appWindow.theme.settingsPlaceholder
+                                    anchors.left: parent.left
+                                    horizontalAlignment: Text.AlignLeft
                                 }
                             }
                             Label
@@ -209,32 +246,37 @@ Page {
                                 bottomPadding: 10
                                 topPadding: 20
                                 color: appWindow.theme.foreground
+                                anchors.left: parent.left
+                                horizontalAlignment: Text.AlignLeft
                             }
                             Column
                             {
                                 TextField
                                 {
                                     id: socks5Host
-                                    text: App.settings.dmcore.value(DmCoreSettings.Socks5_ProxyHost)
+                                    text: App.settings.app.value(AppSettings.Socks5_ProxyHost)
                                     width: 200
                                     onDisplayTextChanged: tryApplyProxySettingsTimer.restart()
                                     placeholderText: qsTr("Address") + App.loc.emptyString
                                     placeholderTextColor: appWindow.theme.settingsPlaceholder
                                     inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText | Qt.ImhSensitiveData
+                                    anchors.left: parent.left
+                                    horizontalAlignment: Text.AlignLeft
                                 }
                                 TextField
                                 {
                                     id: socks5Port
-                                    text: App.settings.dmcore.value(DmCoreSettings.Socks5_ProxyPort)
+                                    text: App.settings.app.value(AppSettings.Socks5_ProxyPort)
                                     width: 200
                                     inputMethodHints: Qt.ImhDigitsOnly | Qt.ImhNoPredictiveText | Qt.ImhSensitiveData
                                     onDisplayTextChanged: tryApplyProxySettingsTimer.restart()
                                     placeholderText: qsTr("Port") + App.loc.emptyString
                                     placeholderTextColor: appWindow.theme.settingsPlaceholder
+                                    anchors.left: parent.left
+                                    horizontalAlignment: Text.AlignLeft
                                 }
                             }
                         }
-
 
                         Timer
                         {
@@ -243,6 +285,11 @@ Page {
                             repeat: false
                             onTriggered: proxysettings.tryApplyProxySettings()
                         }
+                    }
+
+                    Item {
+                        width: 1
+                        height: contentColumn.myPadding
                     }
 
                     function protocolProxySettingsValid(
@@ -279,18 +326,18 @@ Page {
 
                         if (systemProxy.checked)
                         {
-                            App.settings.dmcore.setValue(DmCoreSettings.NetworkProxyMode,
-                                                         DmCoreSettings.SystemProxy);
+                            App.settings.app.setValue(AppSettings.NetworkProxyMode,
+                                                      AppSettings.SystemProxy);
 
                         }
                         else if (noProxy.checked)
                         {
-                            App.settings.dmcore.setValue(DmCoreSettings.NetworkProxyMode,
-                                                         DmCoreSettings.NoProxy);
+                            App.settings.app.setValue(AppSettings.NetworkProxyMode,
+                                                      AppSettings.NoProxy);
                         }
                         else if (manualProxy.checked)
                         {
-                            App.settings.dmcore.setManualProxy(
+                            App.settings.app.setManualProxy(
                                         httpHost.text, httpHost.text ? httpPort.text : "", "", "",
                                         httpsHost.text, httpsHost.text ? httpsPort.text : "", "", "",
                                         ftpHost.text, ftpHost.text ? ftpPort.text : "", "", "",

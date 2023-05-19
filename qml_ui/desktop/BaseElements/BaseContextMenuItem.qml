@@ -11,8 +11,8 @@ MenuItem {
         height: visible ? undefined : 0
         topPadding: visible ? 1 : 0
         bottomPadding: visible ? 1 : 0
-        leftPadding: 20*appWindow.zoom
-        rightPadding: 10*appWindow.zoom
+        leftPadding: qtbug.leftPadding(20*appWindow.zoom, 10*appWindow.zoom)
+        rightPadding: qtbug.rightPadding(20*appWindow.zoom, 10*appWindow.zoom)
 
         property bool arrow_down: false
         property bool arrow_up: false
@@ -65,6 +65,7 @@ MenuItem {
         indicator: Item {
             implicitWidth: 20*appWindow.zoom
             implicitHeight: 20*appWindow.zoom
+            anchors.left: parent.left
             anchors.verticalCenter: menuItem.offerIndicator && !menuItem.checkable ? parent.verticalCenter : undefined
 
             Rectangle {
