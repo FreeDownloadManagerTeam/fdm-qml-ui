@@ -86,9 +86,9 @@ Item {
                     currentHash.text = hash;
                     saveHash(currentAlg, hash);
                 }
-                if (error != "") {
+                if (error.hasError) {
                     currentHash.text = "";
-                    errorLabel.text = error;
+                    errorLabel.text = error.displayTextShort;
                 }
                 if (nextAlg !== -1) {
                     calculateHash(nextAlg, "");

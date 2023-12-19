@@ -8,6 +8,7 @@ import org.freedownloadmanager.fdm.dmcoresettings 1.0
 import org.freedownloadmanager.fdm.appsettings 1.0
 import org.freedownloadmanager.fdm.tum 1.0
 import "../BaseElements/"
+import "../../common"
 
 Page
 {
@@ -18,6 +19,7 @@ Page
     header: PageHeaderWithBackArrow {
         pageTitle: qsTr("Settings") + App.loc.emptyString
         onPopPage: root.StackView.view.pop()
+        onClickedNtimes: uiSettingsTools.settings.showTroubleshootingUi = true
     }
 
 //----------- Settings content - BEGIN ----------------
@@ -55,9 +57,9 @@ Rectangle {
 
                 //General settings
                 GeneralSettings {
-                    id: generalSettings
                     Layout.fillWidth: true
                 }
+                Item {implicitHeight: 7; implicitWidth: 1}
 
                 Rectangle {
                     id: contentColumnRect
@@ -66,19 +68,13 @@ Rectangle {
                     color: appWindow.theme.background
                     radius: 26
 
-                    Rectangle {
-                        width: parent.width
-                        anchors.top: parent.top
-                        anchors.bottomMargin: 20
-                        anchors.bottom: parent.bottom
-                        color: parent.color
-                    }
-
                     Column {
                         id: contentColumn
 
                         anchors.left: parent.left
                         anchors.right: parent.right
+
+                        GeneralSettings2 {}
 
                         //Downloads settings
                         SettingsItem {
@@ -109,7 +105,9 @@ Rectangle {
                             textWeight: Font.Bold
                         }
 
-                        SettingsSeparator{}
+                        SettingsSeparator{
+                            visible: appWindow.hasDownloadMgr
+                        }
 
                         SettingsItem {
                             visible: appWindow.hasDownloadMgr
@@ -146,28 +144,23 @@ Rectangle {
                             onClicked: stackView.waPush(Qt.resolvedUrl("AdvancedSettings.qml"))
                             textWeight: Font.Bold
                         }
+
+                        SettingsSeparator{
+                            visible: uiSettingsTools.settings.showTroubleshootingUi
+                        }
+                        SettingsItem {
+                            visible: uiSettingsTools.settings.showTroubleshootingUi
+                            description: qsTr("Troubleshooting") + App.loc.emptyString
+                            onClicked: stackView.waPush(Qt.resolvedUrl("TroubleshootingSettings.qml"))
+                            textWeight: Font.Bold
+                        }
                     }
-                }
-
-                Rectangle {
-                    color: appWindow.theme.background
-                    height: 20
-                    width: parent.width
-                }
-
-                BaseLabel
-                {
-                    Layout.leftMargin: qtbug.leftMargin(20, 0)
-                    Layout.rightMargin: qtbug.rightMargin(20, 0)
-                    font.pixelSize: 14
-                    font.bold: true
-                    text: qsTr("Go back to default settings") + App.loc.emptyString
                 }
 
                 DialogButton
                 {
-                    Layout.leftMargin: qtbug.leftMargin(30, 0)
-                    Layout.rightMargin: qtbug.rightMargin(30, 0)
+                    Layout.leftMargin: qtbug.leftMargin(10, 0)
+                    Layout.rightMargin: qtbug.rightMargin(10, 0)
                     enabled: App.settings.hasNonDefaultValues || uiSettingsTools.hasNonDefaultValues
                     text: qsTr("Reset settings") + App.loc.emptyString
                     onClicked: okToResetMsg.open()
@@ -186,14 +179,6 @@ Rectangle {
                     }
                 }
             }
-
-            /*Rectangle {
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.top: all.bottom
-                height: parent.height - contentHeight
-                color: appWindow.theme.background
-            }*/
         }
 
 

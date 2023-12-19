@@ -130,7 +130,7 @@ Item {
     Connections
     {
         target: App.downloads.moveFilesMgr
-        onMoveFinished: if (downloadId && error) hasMovingFailedDownloads(downloadId, error)
+        onMoveFinished: if (downloadId && error.hasError) hasMovingFailedDownloads(downloadId, error.displayTextShort)
     }
 
     Connections {

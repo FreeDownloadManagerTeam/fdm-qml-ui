@@ -10,10 +10,9 @@ Item {
     property bool stopping: !item ? false : !!item.stopping
     property bool autoStartAllowed: !item ? false : item.autoStartAllowed
     property bool postFinishedTasksAllowed: !item ? false : (autoStartAllowed && !item.disablePostFinishedTasks)
-    property bool error: !item ? false : item.error.hasError
+    property var downloadError: (item && item.error && item.error.hasError) ? item.error : null
     property bool missingFiles: !item ? false : item.missingFiles
     property bool missingStorage: !item ? false : item.missingStorage
-    property string downloadErrorMessage: !item ? "" : item.error.errorString
     property bool finalDownload: !item ? false : item.finalDownload
     property bool hasPostFinishedTasks: !item ? false : item.hasPostFinishedTasks
     property int flags: !item ? 0 : item.flags
@@ -118,7 +117,9 @@ Item {
 
     property bool infinityIndicator: progress < 0 //inWaitingForMetadata || unknownFileSize
 
-    property string errorMessage: ((missingStorage ? (qsTr("Disk is missing") + App.loc.emptyString) : missingFiles ? (qsTr("File is missing") + App.loc.emptyString) : downloadErrorMessage))
+    property var error: missingStorage ? App.tools.createUnknownError(qsTr("Disk is missing") + App.loc.emptyString) :
+                        missingFiles ? App.tools.createUnknownError(qsTr("File is missing") + App.loc.emptyString) :
+                        downloadError
 
     property bool needToShowWebPageUrl: webPageUrl.length > 0
     property bool needToShowResourceUrl: resourceUrl.length > 0 &&
@@ -140,7 +141,7 @@ Item {
     onRunningChanged: updateState()
     onStoppingChanged: updateState()
     onAutoStartAllowedChanged: updateState()
-    onErrorChanged: updateState()
+    onDownloadErrorChanged: updateState()
     onMissingFilesChanged: updateState()
     onMissingStorageChanged: updateState()
     onFinalDownloadChanged: updateState()
@@ -198,10 +199,10 @@ Item {
         } else if (finished) {
             showProgressIndicator = false;
             indicatorInProgress = false;
-            if (error)
+            if (downloadError)
                 new_in_error_status = true;
         }
-        else if (error) {
+        else if (downloadError) {
             showProgressIndicator = false;
             indicatorInProgress = false;
             new_in_error_status = true;
@@ -305,7 +306,7 @@ Item {
                 App.downloads.mgr.openDownloadFolder(itemId, -1);
             break;
         case buttonTypes.restart:
-            if (!finished && (error || missingFiles) && (flags & AbstractDownloadsUi.SupportsRestart) != 0) {
+            if (!finished && (downloadError || missingFiles) && (flags & AbstractDownloadsUi.SupportsRestart) != 0) {
                 App.downloads.mgr.restartDownload(itemId);
                 appWindow.startDownload();
             }

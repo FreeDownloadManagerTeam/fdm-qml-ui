@@ -204,7 +204,7 @@ Page {
 
     //file size
     Rectangle {
-        visible: downloadTools.fileSize >= 0 || !downloadTools.hasWriteAccess
+        visible: downloadTools.fileSize >= 0 || downloadTools.freeDiskSpace >= 0 || !downloadTools.hasWriteAccess
         color: appWindow.theme.background
         anchors.bottom: parent.bottom
         width: parent.width
@@ -214,8 +214,10 @@ Page {
             anchors.centerIn: parent
             color: !downloadTools.hasWriteAccess || downloadTools.notEnoughSpaceWarning ? appWindow.theme.errorMessage : appWindow.theme.foreground
             text: (!downloadTools.hasWriteAccess ? qsTr("No write access to the selected directory") :
-                   downloadTools.freeDiskSpace != -1 ? qsTr("Size: %1 (Disk space: %2)").arg(App.bytesAsText(downloadTools.fileSize)).arg(App.bytesAsText(downloadTools.freeDiskSpace < 0 ? 0 : downloadTools.freeDiskSpace)) :
-                   qsTr("Size: %1").arg(App.bytesAsText(downloadTools.fileSize))) + App.loc.emptyString
+                   (downloadTools.freeDiskSpace >= 0 && downloadTools.fileSize >= 0) ? qsTr("Size: %1 (Disk space: %2)").arg(App.bytesAsText(downloadTools.fileSize)).arg(App.bytesAsText(downloadTools.freeDiskSpace)) :
+                   downloadTools.freeDiskSpace >= 0 ? qsTr("Disk space: %1").arg(App.bytesAsText(downloadTools.freeDiskSpace)) :
+                   downloadTools.fileSize >= 0 ? qsTr("Size: %1").arg(App.bytesAsText(downloadTools.fileSize)) :
+                   "") + App.loc.emptyString
             font.pixelSize: 14
         }
     }

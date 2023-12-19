@@ -59,13 +59,25 @@ Drawer {
                 anchors.leftMargin: 20
             }
 
-            Label {
+            Column {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.left: logo.right
                 anchors.leftMargin: 10
-                text: App.displayName
-                color: appWindow.theme.toolbarTextColor
-                font.pixelSize: 16
+
+                Label {
+                    text: App.displayName
+                    color: appWindow.theme.toolbarTextColor
+                    font.pixelSize: 16
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
+
+                Label {
+                    visible: !appWindow.hasDownloadMgr
+                    text: qsTr("remote control") + App.loc.emptyString
+                    color: appWindow.theme.toolbarTextColor
+                    font.pixelSize: 16
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
             }
         }
 
@@ -125,6 +137,7 @@ Drawer {
             "browser": function(){ root.browserBtnClicked()},
             "settings": function(){ stackView.waPush(Qt.resolvedUrl("SettingsPage/SettingsPage.qml")) },
             "support": function(){ Qt.openUrlExternally('https://www.freedownloadmanager.org/support.htm?origin=menu&' + App.serverCommonGetParameters); },
+            "bugReport": function() {bugReportDlg.open();},
             "connectToRemoteApp": function() {connectToRemoteAppDlg.open();},
             "disconnectFromRemoteApp": function() {App.rc.client.disconnectFromRemoteApp();},
             "about": function(){ aboutDlg.open(); },
@@ -164,6 +177,9 @@ Drawer {
                 append({"text": qsTr("Settings"), "actionLabel": "settings", "enabled": true, "icon": Qt.resolvedUrl("../images/mobile/settings.svg")});
 
             append({"text": qsTr("Contact support"), 'actionLabel': "support", "enabled": true, "icon": Qt.resolvedUrl("../images/mobile/support.svg")});
+
+            if (App.features.hasFeature(AppFeatures.SubmitBugReport))
+                append({"text": qsTr("Submit a bug report"), 'actionLabel': "bugReport", "enabled": true, "icon": Qt.resolvedUrl("../images/mobile/bug_report.svg")});
 
             if (App.features.hasFeature(AppFeatures.RemoteControlClient))
             {

@@ -210,6 +210,7 @@ Item {
                                     model.selectedForDownload = AbstractDownloadsUi.IsNotSelectedForDownload;
                                 } else {
                                     model.selectedForDownload = AbstractDownloadsUi.FullySelectedForDownload;
+                                    downloadInfo.autoStartAllowed = true;
                                 }
                             }
                         }

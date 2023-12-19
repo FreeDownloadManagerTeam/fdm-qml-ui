@@ -104,7 +104,7 @@ Column
                 FileDialog {
                     id: browseDlg
                     onAccepted: {
-                        urlField.text = App.tools.url(file).toLocalFile();
+                        urlField.text = App.tools.url(selectedFile).toLocalFile();
                     }
                 }
             }

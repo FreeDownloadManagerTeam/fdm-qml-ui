@@ -82,29 +82,10 @@ Item
                 }
             }
 
-            RowLayout {
+            BaseErrorLabel {
                 visible: downloadsItemTools.inError
-                width: parent.width
-                spacing: 3*appWindow.zoom
-                Rectangle {
-                    clip: true
-                    width: 17*appWindow.zoom
-                    height: 15*appWindow.zoom
-                    color: "transparent"
-                    WaSvgImage {
-                        zoom: appWindow.zoom
-                        x: -41*zoom
-                        y: -269*zoom
-                        source: appWindow.theme.elementsIcons
-                    }
-                }
-                BaseLabel {
-                    Layout.fillWidth: true
-                    elide: Text.ElideRight
-                    text: downloadsItemTools.errorMessage
-                    color: appWindow.theme.errorMessage
-                    verticalAlignment: Text.AlignVCenter
-                }
+                error: downloadsItemTools.error
+                shortVersion: false
             }
         }
     }

@@ -67,12 +67,16 @@ BaseDialog {
                 }
 
                 RowLayout {
+                    Layout.alignment: Qt.AlignRight
                     Layout.fillWidth: true
                     spacing: 5*appWindow.zoom
 
+                    Item {
+                        Layout.fillWidth: true
+                    }
+
                     CustomButton {
                         id: btn1
-                        Layout.alignment: Qt.AlignLeft
                         text: qsTr("Delete files") + App.loc.emptyString
                         blueBtn: true
                         alternateBtnPressed: cnclBtn.isPressed
@@ -80,18 +84,14 @@ BaseDialog {
                     }
 
                     CustomButton {
-                        Layout.alignment: Qt.AlignLeft
                         text: qsTr("Remove from list") + App.loc.emptyString
                         blueBtn: true
                         alternateBtnPressed: cnclBtn.isPressed
                         onClicked: root.removeFromList()
                     }
-                    Item {
-                        Layout.fillWidth: true
-                    }
+
                     CustomButton {
                         id: cnclBtn
-                        Layout.alignment: Qt.AlignRight
                         text: qsTr("Cancel") + App.loc.emptyString
                         onClicked: root.close()
                     }

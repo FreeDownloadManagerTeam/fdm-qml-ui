@@ -157,7 +157,7 @@ Item
             if (d.renaming && root.downloadId == downloadId)
             {
                 d.renaming = false;
-                d.error = error;
+                d.error = error.displayTextLong;
                 if (!error)
                     finished();
             }

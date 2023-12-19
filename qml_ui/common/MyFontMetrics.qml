@@ -11,9 +11,14 @@ FontMetrics
         var l = 0;
         var r = str.length;
         var n = r;
+        var prevS = str;
         for (;;)
         {
             var s = myElidedTextN(str, n);
+            if (!s)
+                return prevS;
+            prevS = s;
+
             var isOk = Math.round(fm.advanceWidth(s)) <= width;
 
             if (isOk)

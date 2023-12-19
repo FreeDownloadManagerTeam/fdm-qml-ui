@@ -52,7 +52,10 @@ Item {
         property double scheduledZoom: 0.0 // 0 means no change is scheduled
         property double scheduledZoom2: 0.0
         property bool enableStandaloneCreateDownloadsWindows: false
+        property bool closeStandaloneDownloadWindowWhenStopped: true
         property var hideTags: ({})
+        property bool showTroubleshootingUi: false
+        property bool dontShowOsPermissionsDialog: false
     }
 
     readonly property bool hasNonDefaultValues:
@@ -71,6 +74,8 @@ Item {
         settings.zoom !== 1.0 ||
         settings.zoom2 !== 1.0 ||
         settings.enableStandaloneCreateDownloadsWindows !== false ||
+        settings.closeStandaloneDownloadWindowWhenStopped !== true ||
+        settings.dontShowOsPermissionsDialog !== false ||
         Object.keys(settings.hideTags).length
 
     function resetToDefaults()
@@ -90,7 +95,9 @@ Item {
         settings.scheduledZoom = 1.0;
         settings.scheduledZoom2 = 1.0;
         settings.enableStandaloneCreateDownloadsWindows = false;
+        settings.closeStandaloneDownloadWindowWhenStopped = true;
         settings.hideTags = {};
+        settings.dontShowOsPermissionsDialog = false;
         wasReset();
     }
 
@@ -139,7 +146,9 @@ Item {
         uiSettingsTools.settings.zoom = s.settings.zoom;
         uiSettingsTools.settings.zoom2 = s.settings.zoom2;
         uiSettingsTools.settings.enableStandaloneCreateDownloadsWindows = s.settings.enableStandaloneCreateDownloadsWindows;
+        uiSettingsTools.settings.closeStandaloneDownloadWindowWhenStopped = s.settings.closeStandaloneDownloadWindowWhenStopped;
         uiSettingsTools.settings.hideTags = s.settings.hideTags;
+        uiSettingsTools.settings.dontShowOsPermissionsDialog = s.settings.dontShowOsPermissionsDialog;
         s.destroy();
     }
 }

@@ -110,33 +110,12 @@ Flickable {
                 }
             }
 
-            RowLayout {
+            BaseErrorLabel {
                 visible: downloadsItemTools.inError
                 width: parent.width
                 anchors.left: parent.left
-                spacing: 3
-                Image {
-                    id: img
-                    sourceSize.width: 16
-                    sourceSize.height: 16
-                    source: Qt.resolvedUrl("../../images/mobile/error.svg")
-                    layer {
-                        effect: ColorOverlay {
-                            color: appWindow.theme.errorMessage
-                        }
-                        enabled: true
-                    }
-                }
-                BaseLabel {
-                    Layout.fillWidth: true
-                    clip: true
-                    elide: Text.ElideRight
-                    text: downloadsItemTools.errorMessage
-                    color: appWindow.theme.errorMessage
-                    verticalAlignment: Text.AlignVCenter
-                    font.pixelSize: 14
-                    font.weight: Font.Light
-                }
+                error: downloadsItemTools.error
+                shortVersion: false
             }
 
             Column {

@@ -182,6 +182,38 @@ Column {
         }
     }
 
+    Row {
+        anchors.left: parent.left
+
+        spacing: 7*appWindow.fontZoom
+
+        BaseLabel {
+            text: qsTr("Maximum number of additional querying info downloads:") + App.loc.emptyString
+            anchors.verticalCenter: parent.verticalCenter
+        }
+
+        BaseComboBox {
+            anchors.verticalCenter: parent.verticalCenter
+            model: [
+                {text: "0", value: 0},
+                {text: "1", value: 1},
+                {text: "2", value: 2},
+                {text: "3", value: 3},
+                {text: "4", value: 4},
+                {text: "5", value: 5},
+                {text: "6", value: 6},
+                {text: "7", value: 7}
+            ]
+            currentIndex: {
+                let v = parseInt(App.settings.dmcore.value(DmCoreSettings.MaxAdditionalQueryInfoDownloads));
+                if (v < 0 || v > 7)
+                    v = 3;
+                return v;
+            }
+            onActivated: (index) => App.settings.dmcore.setValue(DmCoreSettings.MaxAdditionalQueryInfoDownloads, model[index].value)
+        }
+    }
+
     function invalidSettingsMessage()
     {
         if (!tumStg1.isValid() ||

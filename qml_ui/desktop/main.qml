@@ -48,6 +48,8 @@ ApplicationWindow {
                                     || customizeSoundsDlg.opened || editTagDlg.opened
                                     || mp4ConverterDlg.opened || privacyDlg.opened || reportSentDlg.opened
                                     || remoteBannerMgr.bannerOpened || renameDownloadFileDlg.opened
+                                    || submitBugReportDlg.opened || pluginBannerDlg.opened
+
     readonly property bool modalDialogOpened: createDownloadDialogOpened || nonCreateDownloadDialogOpened
     property bool supportComputerShutdown: App.features.hasFeature(AppFeatures.ComputerShutdown) &&
                                            !App.rc.client.active
@@ -277,6 +279,8 @@ ApplicationWindow {
     function openSettings(forceAntivirusBlock = false)
     {
         if (canShowSettingsPage()) {
+            if (isCurrentPagePlugins())
+                stackView.pop();
             stackView.waPush(Qt.resolvedUrl("./SettingsPage/SettingsPage.qml"), {forceAntivirusBlock: forceAntivirusBlock});
         }
     }
@@ -289,8 +293,30 @@ ApplicationWindow {
     function openPlugins()
     {
         if (canShowPage("PluginsPage")) {
+            if (isCurrentPageSettings())
+                stackView.pop();
             stackView.waPush(Qt.resolvedUrl("./PluginsPage/PluginsPage.qml"));
         }
+    }
+
+    function currentPageName()
+    {
+        if (stackView.empty)
+            return "";
+
+        return stackView.currentItem ?
+                    stackView.currentItem.pageName :
+                    "";
+    }
+
+    function isCurrentPageSettings()
+    {
+        return currentPageName() === "SettingsPage";
+    }
+
+    function isCurrentPagePlugins()
+    {
+        return currentPageName() === "PluginsPage";
     }
 
     function canShowPage(name)
@@ -494,6 +520,15 @@ ApplicationWindow {
     ExportDownloadsDialog {
         id: exportDownloadsDlg
     }
+
+    SubmitBugReportDialog {
+        id: submitBugReportDlg
+    }
+
+    PluginBannerDialog {
+        id: pluginBannerDlg
+    }    
+    PluginsBannersManager {}
 
     ShutdownTools {
         id: shutdownTools
@@ -776,7 +811,7 @@ ApplicationWindow {
     }
 
     function getDownloadMovingError(downloadId) {
-        return App.downloads.infos.info(downloadId).loError.errorString;
+        return App.downloads.infos.info(downloadId).loError.displayTextShort;
     }
 
     function updateMacVersionWorkaround()
@@ -865,7 +900,7 @@ ApplicationWindow {
     Connections
     {
         target: App.downloads.errorsReportsMgr
-        onReportFinished: reportSentDlg.open(error)
+        onReportFinished: reportSentDlg.open(error.displayTextLong)
     }
 
     property double currentTime: 0

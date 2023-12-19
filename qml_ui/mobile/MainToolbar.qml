@@ -58,6 +58,16 @@ BaseToolBar {
                 opacity: enabled ? 1 : 0.3
                 color: appWindow.theme.toolbarTextColor
             }
+            Label {
+                visible: !appWindow.hasDownloadMgr
+                text: qsTr("remote control") + App.loc.emptyString
+                anchors.horizontalCenter: parent.horizontalCenter
+                font.pixelSize: 14
+                font.family: "Roboto"
+                font.weight: Font.DemiBold
+                opacity: enabled ? 1 : 0.3
+                color: appWindow.theme.toolbarTextColor
+            }
 
             MainToolbarStatus {
                 id: mainToolbarStatus

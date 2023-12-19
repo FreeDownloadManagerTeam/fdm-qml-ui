@@ -23,17 +23,17 @@ Menu {
     }
 
     BaseMenuItem {
-        text: qsTr("High Priority") + App.loc.emptyString
+        text: qsTr("High priority") + App.loc.emptyString
         onTriggered: model.priority = AbstractDownloadsUi.DownloadPriorityHigh;
         ActionGroup.group: filePriorityGroup
     }
     BaseMenuItem {
-        text: qsTr("Normal Priority") + App.loc.emptyString
+        text: qsTr("Normal priority") + App.loc.emptyString
         onTriggered: model.priority = AbstractDownloadsUi.DownloadPriorityNormal;
         ActionGroup.group: filePriorityGroup
     }
     BaseMenuItem {
-        text: qsTr("Low Priority") + App.loc.emptyString
+        text: qsTr("Low priority") + App.loc.emptyString
         onTriggered: model.priority = AbstractDownloadsUi.DownloadPriorityLow;
         ActionGroup.group: filePriorityGroup
     }
@@ -61,13 +61,13 @@ Menu {
 
     BaseMenuItem {
         id: showFolder
-        text: qsTr("Show in Folder") + App.loc.emptyString
+        text: qsTr("Show in folder") + App.loc.emptyString
         visible: downloadItemId && canBeShownInFolder
         onTriggered: App.downloads.mgr.openDownloadFolder(downloadItemId, model.fileIndex)
     }
 
     BaseMenuItem {
-        text: qsTr("File Integrity") + App.loc.emptyString
+        text: qsTr("File integrity") + App.loc.emptyString
         visible: downloadItemId && finished
         enabled: !locked
         onTriggered: {

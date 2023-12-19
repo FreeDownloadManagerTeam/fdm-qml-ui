@@ -146,22 +146,79 @@ Column
         }
 
         SettingsCheckBox {
-            text: qsTr("Don't put your computer to sleep if there is an active download") + App.loc.emptyString
+            id: preventSleepBox
+            text: qsTr("Avoid sleep mode if there is an active download") + App.loc.emptyString
             checked: App.settings.toBool(App.settings.dmcore.value(DmCoreSettings.PreventOsAutoSleepIfDownloadsRunning))
-            onClicked: {
-                App.settings.dmcore.setValue(
-                            DmCoreSettings.PreventOsAutoSleepIfDownloadsRunning,
-                            App.settings.fromBool(checked));
+            onClicked: App.settings.dmcore.setValue(
+                           DmCoreSettings.PreventOsAutoSleepIfDownloadsRunning,
+                           App.settings.fromBool(checked))
+        }
+
+        SettingsCheckBox {
+            enabled: preventSleepBox.checked
+            anchors.leftMargin: 35*appWindow.zoom
+            text: qsTr("Avoid sleep mode if there is a scheduled download") + App.loc.emptyString
+            checked: App.settings.toBool(App.settings.dmcore.value(DmCoreSettings.PreventOsAutoSleepIfDownloadsRunning_IncludingScheduled))
+            onClicked: App.settings.dmcore.setValue(
+                           DmCoreSettings.PreventOsAutoSleepIfDownloadsRunning_IncludingScheduled,
+                           App.settings.fromBool(checked))
+        }
+
+        SettingsCheckBox {
+            enabled: preventSleepBox.checked
+            anchors.leftMargin: 35*appWindow.zoom
+            text: qsTr("Allow sleep mode if downloads can be resumed later") + App.loc.emptyString
+            checked: App.settings.toBool(App.settings.dmcore.value(DmCoreSettings.PreventOsAutoSleepIfDownloadsRunning_IgnoreDownloadsWithResumeSupport))
+            onClicked: App.settings.dmcore.setValue(
+                           DmCoreSettings.PreventOsAutoSleepIfDownloadsRunning_IgnoreDownloadsWithResumeSupport,
+                           App.settings.fromBool(checked))
+        }
+
+        SettingsCheckBox {
+            enabled: preventSleepBox.checked
+            anchors.leftMargin: 35*appWindow.zoom
+            text: qsTr("Allow sleep mode while sharing files") + App.loc.emptyString
+            checked: App.settings.toBool(App.settings.dmcore.value(DmCoreSettings.PreventOsAutoSleepIfDownloadsRunning_IgnoreFinished))
+            onClicked: App.settings.dmcore.setValue(
+                           DmCoreSettings.PreventOsAutoSleepIfDownloadsRunning_IgnoreFinished,
+                           App.settings.fromBool(checked))
+        }
+
+        Rectangle {
+            visible: App.features.hasFeature(AppFeatures.Battery)
+            width: parent.width
+            height: batteryCheckbox.height
+            color: "transparent"
+
+            SettingsCheckBox {
+                id: batteryCheckbox
+                text: qsTr("Do not allow downloads if battery level drops below") + App.loc.emptyString
+                checked: App.settings.dmcore.value(DmCoreSettings.BatteryMinimumPowerLevelToRunDownloads) > 0
+                onClicked: {
+                    if (checked) {
+                        batteryCombo.saveBatteryMinimumPowerLevelToRunDownloads(batteryCombo.currentText);
+                    } else {
+                        batteryCombo.saveBatteryMinimumPowerLevelToRunDownloads(0);
+                    }
+                }
+            }
+
+            BatteryComboBox {
+                id: batteryCombo
+                enabled: batteryCheckbox.checked
+                anchors.left: batteryCheckbox.right
+                anchors.leftMargin: 5*appWindow.zoom
+                anchors.verticalCenter: parent.verticalCenter
             }
         }
 
         SettingsCheckBox {
-            text: qsTr("Enable sleep mode while running finished downloads") + App.loc.emptyString
-            checked: App.settings.toBool(App.settings.dmcore.value(DmCoreSettings.PreventOsAutoSleepIfDownloadsRunning_IgnoreFinished))
-            onClicked: {
-                App.settings.dmcore.setValue(
-                            DmCoreSettings.PreventOsAutoSleepIfDownloadsRunning_IgnoreFinished,
-                            App.settings.fromBool(checked));
+            text: qsTr("Do not share files when running on battery") + App.loc.emptyString
+            visible: App.features.hasFeature(AppFeatures.Battery)
+            checked: App.settings.toBool(App.settings.dmcore.value(DmCoreSettings.DisablePostFinishedTasksOnBattery))
+            onClicked: { App.settings.dmcore.setValue(
+                             DmCoreSettings.DisablePostFinishedTasksOnBattery,
+                             App.settings.fromBool(checked));
             }
         }
     }
@@ -205,44 +262,6 @@ Column
                 id: backupCombo
                 enabled: backupCheckbox.checked
                 anchors.left: backupCheckbox.right
-                anchors.leftMargin: 5*appWindow.zoom
-                anchors.verticalCenter: parent.verticalCenter
-            }
-        }
-
-        SettingsCheckBox {
-            text: qsTr("Do not allow downloads to perform post finished tasks when running on battery") + App.loc.emptyString
-            visible: App.features.hasFeature(AppFeatures.Battery)
-            checked: App.settings.dmcore.value(DmCoreSettings.DisablePostFinishedTasksOnBattery)
-            onClicked: { App.settings.dmcore.setValue(
-                             DmCoreSettings.DisablePostFinishedTasksOnBattery,
-                             App.settings.fromBool(checked));
-            }
-        }
-
-        Rectangle {
-            visible: App.features.hasFeature(AppFeatures.Battery)
-            width: parent.width
-            height: batteryCheckbox.height
-            color: "transparent"
-
-            SettingsCheckBox {
-                id: batteryCheckbox
-                text: qsTr("Do not allow downloads if battery level drops below") + App.loc.emptyString
-                checked: App.settings.dmcore.value(DmCoreSettings.BatteryMinimumPowerLevelToRunDownloads) > 0
-                onClicked: {
-                    if (checked) {
-                        batteryCombo.saveBatteryMinimumPowerLevelToRunDownloads(batteryCombo.currentText);
-                    } else {
-                        batteryCombo.saveBatteryMinimumPowerLevelToRunDownloads(0);
-                    }
-                }
-            }
-
-            BatteryComboBox {
-                id: batteryCombo
-                enabled: batteryCheckbox.checked
-                anchors.left: batteryCheckbox.right
                 anchors.leftMargin: 5*appWindow.zoom
                 anchors.verticalCenter: parent.verticalCenter
             }
@@ -472,7 +491,7 @@ Column
                     }
 
                     function updatState() {
-                        urlField.inError = text && !App.tools.localFileExists2(text, true, true);
+                        urlField.inError = text && !App.tools.localFileExists2(text, true);
                         if (!urlField.inError)
                             automationGroup.applyLaunchExternalAppSettings();
                     }
@@ -492,7 +511,7 @@ Column
                     FileDialog {
                         id: browseDlg
                         onAccepted: {
-                            urlField.text = App.tools.fixExternalApplicationPath(App.tools.url(file).toLocalFile());
+                            urlField.text = App.tools.fixExternalApplicationPath(App.tools.url(selectedFile).toLocalFile());
                         }
                     }
                 }

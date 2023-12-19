@@ -32,11 +32,18 @@ CenteredDialog
         }
 
         BaseLabel {
-            text: qsTr("Please enter ID, or <a href='#'>scan QR code</a>") + App.loc.emptyString
+            text: qsTr("Please enter %1, or <a href='#'>scan QR code</a>").arg("ID") + App.loc.emptyString
             Layout.preferredWidth: root.maxWidth
             //Layout.preferredHeight: 40 // QTBUG-66826 workaround
             wrapMode: Text.WordWrap
             onLinkActivated: App.scanQrCodeWithAppUrlCall()
+        }
+
+        BaseLabel {
+            text: qsTr("Both %1 and QR code are located inside of Preferences page of %2 you're going to connect to.").arg("ID").arg(App.shortDisplayName) + App.loc.emptyString
+            Layout.preferredWidth: root.maxWidth
+            //Layout.preferredHeight: 40 // QTBUG-66826 workaround
+            wrapMode: Text.WordWrap
         }
 
         RowLayout {
@@ -45,7 +52,7 @@ CenteredDialog
             Layout.maximumWidth: root.maxWidth
 
             Label {
-                text: qsTr("ID:") + App.loc.emptyString
+                text: "ID:"
                 horizontalAlignment: Text.AlignLeft
             }
 

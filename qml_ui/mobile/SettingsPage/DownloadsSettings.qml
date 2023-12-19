@@ -163,7 +163,7 @@ Page {
                 SettingsSeparator{}
 
                 SwitchSetting {
-                    description: qsTr("Detect unwanted behavior errors") + App.loc.emptyString
+                    description: qsTr("Do not download web pages") + App.loc.emptyString
                     switchChecked: App.settings.toBool(App.settings.dmcore.value(DmCoreSettings.DetectUnwantedDownloadErrors))
                     onClicked: {
                         switchChecked = !switchChecked;

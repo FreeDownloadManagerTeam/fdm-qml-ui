@@ -14,6 +14,7 @@ Rectangle {
     signal selectAll
 
     property bool enable_QTBUG_110471_workaround: true
+    property bool tabChangesFocus: false
 
     border.width: 1*appWindow.zoom
     border.color: appWindow.theme.border
@@ -44,6 +45,12 @@ Rectangle {
             color: appWindow.theme.foreground
             selectByMouse: true
             Keys.onEscapePressed: root.close()
+            Keys.onTabPressed: {
+                if (root.tabChangesFocus)
+                    nextItemInFocusChain().forceActiveFocus(Qt.TabFocusReason)
+                else
+                    event.accepted = false
+            }
 
             background: Rectangle {
                 color: appWindow.theme.background

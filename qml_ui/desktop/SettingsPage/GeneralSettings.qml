@@ -292,7 +292,7 @@ Column {
         }
 
         SettingsCheckBox {
-            text: qsTr("Detect unwanted behavior errors") + App.loc.emptyString
+            text: qsTr("Do not download web pages") + App.loc.emptyString
             checked: App.settings.toBool(App.settings.dmcore.value(DmCoreSettings.DetectUnwantedDownloadErrors))
             onClicked: {
                 App.settings.dmcore.setValue(

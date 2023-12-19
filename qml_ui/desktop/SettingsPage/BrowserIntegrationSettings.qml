@@ -71,7 +71,7 @@ Column {
             width: parent.width
             implicitHeight: browserButtonsRow.visible ? browserButtonsRow.implicitHeight : browserButtonsCol.implicitHeight
 
-            readonly property bool hasEnoughWidth: browserButtonsRow.implicitWidth - 10 <= width
+            readonly property bool hasEnoughWidth: browserButtonsRow.implicitWidth - 5*appWindow.zoom <= width
 
             Row {
                 id: browserButtonsRow
@@ -86,6 +86,8 @@ Column {
 
                     BrowserButton {
                         browser: modelData
+                        height: implicitHeight + 10*appWindow.zoom
+                        width: implicitWidth + 10*appWindow.zoom
                     }
                 }
             }
@@ -104,6 +106,8 @@ Column {
                     BrowserButton {
                         anchors.left: parent.left
                         browser: modelData
+                        height: implicitHeight + 10*appWindow.zoom
+                        width: implicitWidth + 10*appWindow.zoom
                     }
                 }
             }

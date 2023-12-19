@@ -210,7 +210,7 @@ BaseDialog {
     FileDialog {
         id: setSoundDlg
         onAccepted: {
-            App.soundNotifMgr.setSoundFile(soundsList.model[soundsList.currentIndex].setting, App.tools.url(file).toLocalFile());
+            App.soundNotifMgr.setSoundFile(soundsList.model[soundsList.currentIndex].setting, App.tools.url(selectedFile).toLocalFile());
             soundsList.reloadModel()
         }
         function openDialog() {

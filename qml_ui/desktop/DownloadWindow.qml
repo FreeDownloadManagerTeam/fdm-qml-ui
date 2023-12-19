@@ -259,7 +259,28 @@ ApplicationWindow
         {
             id: closeWhenStopped
             text: qsTr("Close this window when the download is completed or stopped") + App.loc.emptyString
-            checked: true
+            checked: uiSettingsTools.settings.closeStandaloneDownloadWindowWhenStopped
+        }
+
+        RowLayout
+        {
+            spacing: 0
+
+            Item {
+                implicitWidth: (6+12+8)*appWindow.zoom // BaseCheckBox'es default alignment
+                implicitHeight: 1
+            }
+
+            BaseHandCursorLabel {
+                visible: uiSettingsTools.settings.closeStandaloneDownloadWindowWhenStopped !== closeWhenStopped.checked
+                text: "<a href='#'>" +
+                      (closeWhenStopped.checked ?
+                          qsTr("Remember to always close by default") :
+                          qsTr("Remember to never close by default")) +
+                      "</a>" + App.loc.emptyString
+                font.pixelSize: 12*appWindow.fontZoom
+                onLinkActivated: uiSettingsTools.settings.closeStandaloneDownloadWindowWhenStopped = closeWhenStopped.checked
+            }
         }
 
         RowLayout
@@ -277,7 +298,7 @@ ApplicationWindow
             CustomButton
             {
                 visible: !App.rc.client.active
-                text: qsTr("Show In Folder") + App.loc.emptyString
+                text: qsTr("Show in folder") + App.loc.emptyString
                 onClicked: App.downloads.mgr.openDownloadFolder(downloadId, -1)
             }
 

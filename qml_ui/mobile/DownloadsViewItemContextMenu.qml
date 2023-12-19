@@ -26,6 +26,7 @@ Menu
     property bool supportsAddT: false
     property bool supportsForceReann: false
     property bool supportsIgnoreURatioLimit: false
+    property bool endlessStream: modelIds.length === 1 && downloadModel && (downloadModel.flags & AbstractDownloadsUi.EndlessStream) != 0
     property bool locked: selectedDownloadsTools.selectedDownloadsIsLocked()
     readonly property var info: modelIds.length === 1 ? App.downloads.infos.info(modelIds[0]) : null
     readonly property var error: info ? info.error : null
@@ -43,6 +44,14 @@ Menu
     }
 
     transformOrigin: Menu.TopRight
+
+    BaseMenuItem {
+        text: qsTr("Save and complete") + App.loc.emptyString
+        visible: endlessStream
+        enabled: !locked
+        onTriggered: selectedDownloadsTools.finalizeDownloads()
+    }
+    BaseMenuSeparator {visible: endlessStream}
 
     readonly property bool abortVisible: downloadsItemTools.performingLo && downloadsItemTools.loAbortable
     BaseMenuItem {

@@ -1,12 +1,12 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.3
-import Qt.labs.platform 1.1
 import org.freedownloadmanager.fdm 1.0
 import org.freedownloadmanager.fdm.appsettings 1.0
 import "../"
 import "../BaseElements"
 import "../../common"
+import "../../qt5compat"
 
 Page {
     id: root
@@ -201,11 +201,11 @@ Page {
 
         nameFilters: [ qsTr("%1 add-ons files").arg(App.shortDisplayName) + " (" + "*.fda" + ")" + App.loc.emptyString ]
 
-        folder: App.tools.urlFromLocalFile(uiSettingsTools.settings.pluginsDistribsPath).url
+        currentFolder: App.tools.urlFromLocalFile(uiSettingsTools.settings.pluginsDistribsPath).url
 
         onAccepted: {
-            uiSettingsTools.settings.pluginsDistribsPath = App.tools.url(folder).toLocalFile();
-            var path = App.tools.url(file).toLocalFile();
+            uiSettingsTools.settings.pluginsDistribsPath = App.tools.url(currentFolder).toLocalFile();
+            var path = App.tools.url(selectedFile).toLocalFile();
             App.plugins.mgr.installPlugin(path);
         }
     }

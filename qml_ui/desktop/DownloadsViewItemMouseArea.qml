@@ -122,7 +122,8 @@ MouseArea {
                                               "filesCount": item.filesCount,
                                               "canChangeUrl": (item.flags & AbstractDownloadsUi.AllowChangeSourceUrl) != 0,
                                               "supportsMirror": (item.flags & AbstractDownloadsUi.SupportsMirrors) != 0,
-                                              "batchDownload": downloadModel.hasChildDownloads
+                                              "batchDownload": downloadModel.hasChildDownloads,
+                                              "endlessStream": (item.flags & AbstractDownloadsUi.EndlessStream) != 0
                                           });
         menu.x = Math.round(mouse.x);
         menu.y = Math.round(mouse.y);

@@ -6,7 +6,7 @@ BaseLabel
     id: label
 
     property string sourceText: ""
-    readonly property int sourceTextWidth: Math.ceil(fm.advanceWidth(sourceText))
+    readonly property int sourceTextWidth: Math.ceil(fm.advanceWidth(sourceText)) + fm.font.pixelSize*0
 
     MyFontMetrics {
         id: fm
@@ -15,7 +15,7 @@ BaseLabel
 
     text: fm.myElidedText(
               sourceText,
-              width - leftPadding - rightPadding)
+              width - leftPadding - rightPadding + fm.font.pixelSize*0)
 
     MouseArea {
         enabled: label.text != label.sourceText

@@ -145,36 +145,6 @@ Page {
                 }
             }
         }
-
-        Rectangle {
-            width: parent.width
-            height: infoRow.height
-            color: "transparent"
-
-            Row
-            {
-                id: infoRow
-                width: parent.width
-                height: 40
-                BusyIndicator
-                {
-                    visible: downloadTools.buildingDownload
-                    running: downloadTools.buildingDownload
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.left: parent.left
-                }
-
-                Label
-                {
-                    id: status
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: downloadTools.statusText
-                    color: downloadTools.statusWarning ? appWindow.theme.errorMessage : appWindow.theme.successMessage
-                    anchors.left: parent.left
-                    horizontalAlignment: Text.AlignLeft
-                }
-            }
-        }
     }
 
     function accept() {

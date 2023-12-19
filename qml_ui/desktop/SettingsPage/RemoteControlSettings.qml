@@ -61,7 +61,7 @@ Item
                     columnSpacing: 30*appWindow.zoom
 
                     BaseLabel {
-                        text: qsTr("ID") + App.loc.emptyString
+                        text: "ID"
                     }
 
                     BaseSelectableLabel {

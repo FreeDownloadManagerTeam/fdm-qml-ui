@@ -5,6 +5,7 @@ import "../../qt5compat"
 import org.freedownloadmanager.fdm 1.0
 import ".."
 import "../BaseElements"
+import "../../common"
 
 Page {
     id: root
@@ -78,6 +79,10 @@ Page {
                 Layout.leftMargin: qtbug.leftMargin((smallSettingsPage ? 18 : 22)*appWindow.zoom, 0)
                 Layout.rightMargin: qtbug.rightMargin((smallSettingsPage ? 18 : 22)*appWindow.zoom, 0)
                 Layout.bottomMargin: (smallSettingsPage ? 6 : 18)*appWindow.zoom
+                NClicksTrigger {
+                    anchors.fill: parent
+                    onTriggered: uiSettingsTools.settings.showTroubleshootingUi = true
+                }
             }
 
             RightItemLabel {
@@ -154,6 +159,14 @@ Page {
                     onTriggered: flick.contentY = advanced.y
                 }
             }
+
+            RightItemLabel {
+                visible: troubleshooting.visible
+                text: qsTr("Troubleshooting") + App.loc.emptyString
+                onClicked: flick.contentY = troubleshooting.y
+                current: flick.currentTab === troubleshooting
+                Layout.fillWidth: true
+            }
         }
 
         Flickable
@@ -203,6 +216,7 @@ Page {
                 }
                 RemoteControlSettings {id: rc; Layout.fillWidth: true}
                 AdvancedSettings {id: advanced; Layout.fillWidth: true}
+                TroubleshootingSettings {id: troubleshooting; Layout.fillWidth: true}
             }
 
             onContentYChanged: updateCurrentTab()

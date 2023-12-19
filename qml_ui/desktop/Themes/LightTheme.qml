@@ -16,7 +16,7 @@ QtObject {
     readonly property color downloadItemsBorder: "#d7e8ed"
     readonly property color selectedBorder: "#8bd0fb"
     readonly property color selectedBackground: "#66b7e8fc"//"#e6f7fe"
-    readonly property color errorMessage: "#F86061"
+    readonly property color errorMessage: "#bc3737"
     readonly property color successMessage: "#5AC981"
     readonly property color tableHeaderItem: "#000"
     readonly property color menuHighlight: "#e6f7fe"

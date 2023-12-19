@@ -85,7 +85,11 @@ Item
     {
         var index = findWindowIndex(downloadId);
         if (index !== -1)
+        {
+            if (!downloadsWindows[index].visible)
+                downloadsWindows[index].visible = true;
             return;
+        }
         var window = downloadWindowC.createObject(
                     null,
                     {downloadId: downloadId});

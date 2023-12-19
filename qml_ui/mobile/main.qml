@@ -1,6 +1,6 @@
-import QtQuick 2.10
-import QtQuick.Window 2.10
-import QtQuick.Controls 2.3
+import QtQuick 2.15
+import QtQuick.Window 2.15
+import QtQuick.Controls 2.15
 import QtQuick.Controls.Material 2.4
 import "../qt5compat"
 import "../common"
@@ -58,9 +58,14 @@ ApplicationWindow
 //    visibility: Window.FullScreen
     title: App.displayName
 
+    SystemPalette {id: sp; colorGroup: SystemPalette.Active}
+    readonly property bool systemlightMode: sp.text.r < 0.2 && sp.text.g < 0.2 && sp.text.b < 0.2
+
     DarkTheme {id: darkTheme}
     LightTheme {id: lightTheme}
-    property var theme: defineTheme()
+    readonly property var theme: (uiSettingsTools.settings.theme === 'dark' ||
+                             (uiSettingsTools.settings.theme === 'system' && !systemlightMode)) ?
+                                darkTheme : lightTheme
 
     Material.theme: Material.Light
     Material.background: theme.background
@@ -69,9 +74,6 @@ ApplicationWindow
     Material.accent: theme.accent
 
     onOpenBrowser: App.launchBuiltInWebBrowser()
-    onActiveChanged: {
-        theme = defineTheme()
-    }
 
     UiReadyTools {
         id: uiReadyTools
@@ -182,7 +184,7 @@ ApplicationWindow
     {
         target: App.downloads.errorsReportsMgr
         onReportFinished: (downloadId, error) => {
-            reportSentDlg.errorMessage = error;
+            reportSentDlg.errorMessage = error.displayTextLong;
             reportSentDlg.open();
         }
     }
@@ -247,6 +249,10 @@ ApplicationWindow
 
     FileManagerSupportDialog {
         id: fileManagerSupportDlg
+    }
+
+    OsPermissionsDialog {
+        id: osPermissionsDlg
     }
 
     SortTools {
@@ -414,18 +420,7 @@ ApplicationWindow
     }
 
     function getDownloadMovingError(downloadId) {
-        return App.downloads.infos.info(downloadId).loError.errorString;
-    }
-
-    Connections {
-        target: uiSettingsTools.settings
-        onThemeChanged: {
-            theme = defineTheme()
-        }
-    }
-
-    function defineTheme() {
-        return uiSettingsTools.settings.theme === 'dark' || uiSettingsTools.settings.theme === 'system' && App.systemTheme == QtSystemTheme.Dark ? darkTheme : lightTheme
+        return App.downloads.infos.info(downloadId).loError.displayTextShort;
     }
 
     Loader {
@@ -527,6 +522,18 @@ ApplicationWindow
         }
     }
 
+    Loader {
+        id: bugReportDlg
+        active: App.features.hasFeature(AppFeatures.SubmitBugReport)
+        source: "Dialogs/SubmitBugReportDialog.qml"
+        anchors.centerIn: parent
+        property bool opened: active && item.opened
+        function open() {
+            active = true;
+            item.open();
+        }
+    }
+
     Connections
     {
         target: App.commands
@@ -548,6 +555,16 @@ ApplicationWindow
             let r = App.downloads.filesExistsActionsMgr.pendingRequest();
             if (r)
                 filesExistsDlg.open(r.downloadId, r.fileIndex, r.files);
+
+            if (App.osPermissionsMgr && App.osPermissionsMgr.hasNonGrantedPermissions())
+            {
+                osPermissionsDlg.requiredPermissions = App.osPermissionsMgr.nonGrantedRequiredPermissions();
+                if (osPermissionsDlg.requiredPermissions.length || !uiSettingsTools.settings.dontShowOsPermissionsDialog)
+                {
+                    osPermissionsDlg.optionalPermissions = App.osPermissionsMgr.nonGrantedOptionalPermissions();
+                    osPermissionsDlg.open();
+                }
+            }
         });
     }
 }

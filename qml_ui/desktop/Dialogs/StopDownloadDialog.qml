@@ -55,7 +55,7 @@ BaseDialog {
                             id: downloadsItemTools
                             itemId: root.downloadIds[index]
                         }
-                        text: downloadsItemTools.hasChildDownloads ? downloadsItemTools.destinationPath : downloadsItemTools.tplPathAndTitle
+                        text: App.toNativeSeparators(downloadsItemTools.hasChildDownloads ? downloadsItemTools.destinationPath : downloadsItemTools.tplPathAndTitle)
                     }
                 }
             }

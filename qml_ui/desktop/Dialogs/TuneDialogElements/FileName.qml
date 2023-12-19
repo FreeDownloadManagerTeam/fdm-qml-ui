@@ -1,6 +1,5 @@
 import QtQuick 2.12
 import QtQuick.Layouts 1.3
-import Qt.labs.platform 1.1
 import "../../../qt5compat"
 import org.freedownloadmanager.fdm 1.0
 import "../../BaseElements"
@@ -45,8 +44,8 @@ ColumnLayout {
                 nameFilters: currentFileSuffix ? [qsTr("%1 files (*.%2)").arg(currentFileSuffix.toUpperCase()).arg(currentFileSuffix) + App.loc.emptyString] :
                                                  [qsTr("All files") + " (*)" + App.loc.emptyString]
                 onAccepted: {
-                    saveToControl.setPath(App.tools.url(folder).toLocalFile());
-                    var str = file.toString();
+                    saveToControl.setPath(App.tools.url(currentFolder).toLocalFile());
+                    var str = selectedFile.toString();
                     fileName.text = str.substring(str.lastIndexOf('/')+1);
                     downloadTools.forceOverwriteFile = true;
                 }
@@ -57,6 +56,6 @@ ColumnLayout {
     function init()
     {
         fileName.text = downloadTools.fileName;
-        browseDlg.folder = Qt.binding(function() {return App.tools.urlFromLocalFile(saveToControl.path).url;});
+        browseDlg.currentFolder = Qt.binding(function() {return App.tools.urlFromLocalFile(saveToControl.path).url;});
     }
 }

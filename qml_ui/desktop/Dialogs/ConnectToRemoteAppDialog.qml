@@ -35,7 +35,7 @@ BaseDialog {
                 Layout.fillWidth: true
 
                 BaseLabel {
-                    text: qsTr("ID:") + App.loc.emptyString
+                    text: "ID:"
                 }
 
                 BaseTextField {

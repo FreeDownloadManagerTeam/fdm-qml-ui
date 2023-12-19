@@ -30,7 +30,7 @@ Item {
     }
 
     implicitHeight: custom.visible ? custom.implicitHeight : combo.height
-    implicitWidth: 123*appWindow.zoom
+    implicitWidth: 123*appWindow.fontZoom
 
     ComboBox {
         id: combo

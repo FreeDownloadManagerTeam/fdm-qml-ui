@@ -83,9 +83,9 @@ Page {
 
                 SwitchSetting {
                     id: switchSetting3
-                    description: qsTr("Do not allow downloads to perform post finished tasks when running on battery") + App.loc.emptyString
+                    description: qsTr("Do not share files when running on battery") + App.loc.emptyString
                     visible: App.features.hasFeature(AppFeatures.Battery) && appWindow.hasDownloadMgr
-                    switchChecked: App.settings.dmcore.value(DmCoreSettings.DisablePostFinishedTasksOnBattery)
+                    switchChecked: App.settings.toBool(App.settings.dmcore.value(DmCoreSettings.DisablePostFinishedTasksOnBattery))
                     onClicked: {
                         switchChecked = !switchChecked;
                         App.settings.dmcore.setValue(

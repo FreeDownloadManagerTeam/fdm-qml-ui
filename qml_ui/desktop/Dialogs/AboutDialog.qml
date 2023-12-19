@@ -3,6 +3,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.3
 import org.freedownloadmanager.fdm 1.0
 import "../BaseElements"
+import "../../common"
 import "../../common/Tools"
 
 BaseDialog {
@@ -29,9 +30,9 @@ BaseDialog {
                 anchors.left: parent.left
                 text: App.displayName + App.loc.emptyString
                 font.bold: true
-                MouseArea {
+                NClicksTrigger {
                     anchors.fill: parent
-                    onClicked: timer.targetClicked()
+                    onTriggered: App.testVersion = true
                 }
             }
 
@@ -94,30 +95,6 @@ BaseDialog {
                 text: qsTr("OK") + App.loc.emptyString
                 blueBtn: true
                 onClicked: root.close()
-            }
-        }
-
-        Timer{
-            id:timer
-            onTriggered: resetClickCounter()
-            property int clickCounter: 0
-            property int maxClickCount: 10
-            function resetClickCounter() {
-                clickCounter = 0;
-            }
-            function targetClicked() {
-                if (!App.testVersion) {
-                    timer.clickCounter++;
-
-                    if (timer.running && timer.clickCounter == timer.maxClickCount)
-                    {
-                        App.testVersion = true;
-                        timer.resetClickCounter();
-                        timer.stop();
-                    } else {
-                        timer.restart();
-                    }
-                }
             }
         }
     }

@@ -16,12 +16,12 @@ BaseContextMenu {
     property var mosaicStat: {'greenMenuMarker': false, 'mosaicClick': false}
 
     BaseContextMenuItem {
-        text: qsTr("Paste Urls from Clipboard") + App.loc.emptyString
+        text: qsTr("Paste urls from clipboard") + App.loc.emptyString
         onTriggered: App.pasteUrlsFromClipboard()
     }
 
     BaseContextMenuItem {
-        text: qsTr("Paste Urls from File") + App.loc.emptyString
+        text: qsTr("Paste urls from file") + App.loc.emptyString
         onTriggered: importDlg.openDialog('importListOfUrlsFromFile')
     }
 
@@ -60,7 +60,7 @@ BaseContextMenu {
         visible: App.features.hasFeature(AppFeatures.Plugins) &&
                  !App.rc.client.active
         text: qsTr("Add-ons...") + App.loc.emptyString
-        enabled: !pageId
+        enabled: pageId !== "plugins"
         onTriggered: appWindow.openPlugins()
     }    
     BaseContextMenuSeparator {
@@ -71,7 +71,7 @@ BaseContextMenu {
     BaseContextMenuItem {
         visible: !App.rc.client.active
         text: qsTr("Preferences...") + App.loc.emptyString
-        enabled: !pageId
+        enabled: pageId !== "settings"
         onTriggered: appWindow.openSettings()
     }
     BaseContextMenuSeparator {
@@ -79,14 +79,19 @@ BaseContextMenu {
     }
 
     BaseContextMenuItem {
-        text: qsTr("Contact Support") + App.loc.emptyString
+        text: qsTr("Contact support") + App.loc.emptyString
         onTriggered: Qt.openUrlExternally('https://www.freedownloadmanager.org/support.htm?' + App.serverCommonGetParameters)
     }    
+    BaseContextMenuItem {
+        visible: App.features.hasFeature(AppFeatures.SubmitBugReport)
+        text: qsTr("Submit a bug report") + App.loc.emptyString
+        onTriggered: submitBugReportDlg.open()
+    }
     BaseContextMenuSeparator {}
 
     BaseContextMenuItem {
         visible: appWindow.supportComputerShutdown
-        text: qsTr("Auto Shutdown") + App.loc.emptyString
+        text: qsTr("Auto shutdown") + App.loc.emptyString
         enabled: shutdownTools.powerManagement &&
                  (App.downloads.tracker.nonFinishedDownloadsRunning || shutdownTools.powerManagement.shutdownComputerWhenDownloadsFinished)
         arrow_down: enabled && !root.shutdownGroupOpened
@@ -163,7 +168,7 @@ BaseContextMenu {
 
     BaseContextMenuItem {
         visible: appWindow.updateSupported
-        text: qsTr("Check for Updates...") + App.loc.emptyString
+        text: qsTr("Check for updates...") + App.loc.emptyString
         onTriggered: {
             if (pageId) {
                 stackView.pop();
@@ -199,7 +204,7 @@ BaseContextMenu {
 
     BaseContextMenuItem {
         visible: App.isSelfTestAvail
-        text: "Self Test"
+        text: "Self test"
         onTriggered: App.launchSelfTest();
     }
 

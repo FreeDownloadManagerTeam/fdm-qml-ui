@@ -31,7 +31,7 @@ Page {
                 Layout.rightMargin: qtbug.rightMargin(0, 10)
                 Layout.leftMargin: qtbug.leftMargin(0, 10)
                 textColor: appWindow.theme.toolbarTextColor
-                enabled: url.text.length > 0 && !downloadTools.failed()
+                enabled: url.text.length > 0 && (!downloadTools.failed() || downloadTools.canIgnoreError())
                 onClicked: url.accepted()
             }
         }
@@ -110,17 +110,29 @@ Page {
 
             Label
             {
+                visible: !downloadTools.lastError
                 text: downloadTools.statusText
                 color: downloadTools.statusWarning ? appWindow.theme.errorMessage : appWindow.theme.successMessage
                 Layout.alignment: Qt.AlignVCenter
                 Layout.fillWidth: true
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
             }
+
+            BaseErrorLabel
+            {
+                visible: downloadTools.lastError
+                error: downloadTools.lastError
+                shortVersion: false
+                showIcon: false
+                resourceUrl: App.tools.urlFromUserInput(downloadTools.urlText)
+                Layout.alignment: Qt.AlignVCenter
+                Layout.fillWidth: true
+            }
         }
 
         RoundButton {
             text: qsTr("Report problem") + App.loc.emptyString
-            visible: downloadTools.lastFailedRequestId !== -1 && downloadTools.statusWarning && downloadTools.allowedToReportLastError
+            visible: downloadTools.lastFailedRequestId !== -1 && (downloadTools.statusWarning || downloadTools.lastError) && downloadTools.allowedToReportLastError
             icon.source: Qt.resolvedUrl("../images/mobile/bug_report.svg")
             icon.color: appWindow.theme.toolbarTextColor
             icon.width: 14

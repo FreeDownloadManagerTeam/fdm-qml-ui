@@ -19,9 +19,23 @@ CenteredDialog
         spacing: 10
         anchors.margins: 20
 
-        DialogTitle {
-            text: App.displayName
-            Layout.fillWidth: true
+        ColumnLayout {
+            spacing: 0
+
+            DialogTitle {
+                text: App.displayName
+                Layout.fillWidth: true
+                NClicksTrigger {
+                    anchors.fill: parent
+                    onTriggered: App.testVersion = true
+                }
+            }
+
+            DialogTitle {
+                visible: !appWindow.hasDownloadMgr
+                text: qsTr("remote control") + App.loc.emptyString
+                Layout.fillWidth: true
+            }
         }
 
         Label
@@ -32,11 +46,6 @@ CenteredDialog
             Layout.fillWidth: true
             elide: Text.ElideRight
             horizontalAlignment: Text.AlignLeft
-
-            MouseArea {
-                anchors.fill: parent
-                onClicked: timer.targetClicked()
-            }
         }
 
         Label
@@ -69,30 +78,6 @@ CenteredDialog
                     .arg(App.copytightFirstYear()).arg(App.copytightLastYear()) + App.loc.emptyString
             onLinkActivated: Qt.openUrlExternally(link)
             Material.accent: appWindow.theme.link
-        }
-
-        Timer{
-            id:timer
-            onTriggered: resetClickCounter()
-            property int clickCounter: 0
-            property int maxClickCount: 10
-            function resetClickCounter() {
-                clickCounter = 0;
-            }
-            function targetClicked() {
-                if (!App.testVersion) {
-                    timer.clickCounter++;
-
-                    if (timer.running && timer.clickCounter == timer.maxClickCount)
-                    {
-                        App.testVersion = true;
-                        timer.resetClickCounter();
-                        timer.stop();
-                    } else {
-                        timer.restart();
-                    }
-                }
-            }
         }
     }
 }

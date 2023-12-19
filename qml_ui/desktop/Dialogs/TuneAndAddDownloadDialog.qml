@@ -10,9 +10,8 @@ import "TuneDialogElements"
 BaseStandaloneCapableDialog {
     id: tuneDialog
 
-    property int preferredWidth: Math.max(dlgContent.implicitWidth+20*appWindow.zoom, ((downloadTools.batchDownload || filesTree.visible) ? 685 : 542)*appWindow.zoom)
-    property int dialogMargins: 20*appWindow.zoom
-    property int dialogTitleHeight: 36*appWindow.zoom
+    readonly property int preferredWidth: Math.max(dlgContent.implicitWidth+20*appWindow.zoom,
+                                                   ((downloadTools.batchDownload || filesTree.visible) ? 685 : 542)*appWindow.zoom)
 
     topMargin: 20*appWindow.zoom
 
@@ -46,8 +45,8 @@ BaseStandaloneCapableDialog {
             Layout.fillWidth: true
             Layout.fillHeight: true
             flickableDirection: Flickable.VerticalFlick
-            implicitHeight: mainLayout.implicitHeight
-            implicitWidth: mainLayout.implicitWidth
+            implicitHeight: mainLayout.implicitHeight + mainLayout.anchors.topMargin + mainLayout.anchors.bottomMargin
+            implicitWidth: mainLayout.implicitWidth + mainLayout.anchors.leftMargin + mainLayout.anchors.rightMargin
             contentHeight: implicitHeight
             clip: true
             boundsBehavior: Flickable.StopAtBounds
@@ -127,6 +126,11 @@ BaseStandaloneCapableDialog {
                     Layout.preferredHeight: visible ? 84*appWindow.zoom : 0
                 }
 
+                NoResumeSupportBlock {
+                    id: noResumeSupportBlock
+                    Layout.topMargin: 10*appWindow.zoom
+                }
+
                 ButtonsBlock {forceDisableOK: d.accepting}
             }
         }
@@ -163,12 +167,14 @@ BaseStandaloneCapableDialog {
         requestId = id;
         downloadTools.resetTuneParams();
         downloadTools.batchDownload = downloadTools.isBatchDownload(requestId);
+        downloadTools.resumeSupport = downloadTools.getResumeSupport(requestId);
         var downloadId = downloadTools.getNameAndPath();
         saveTo.initialization();
         videoQuality.initialization();
         schedulerTools.buildScheduler([downloadId]);
         schedulerBlock.initialization();
         filesTree.initialization(requestId);
+        noResumeSupportBlock.initialization();
 
         if (downloadTools.batchDownload) {
             downloadTools.setPreviewUrl();
@@ -184,6 +190,7 @@ BaseStandaloneCapableDialog {
         if (d.accepting)
             return;
         d.accepting = true;
+        noResumeSupportBlock.apply();
         downloadTools.onFilePathTextChanged(App.fromNativeSeparators(saveTo.path));
         downloadTools.checkFilePathAsync();
     }

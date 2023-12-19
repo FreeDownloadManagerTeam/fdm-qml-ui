@@ -137,46 +137,13 @@ Item {
         }
     }
 
-    RowLayout {
+    BaseErrorLabel {
         id: errorBlock
+
         anchors.verticalCenter: parent.verticalCenter
-        visible: downloadsItemTools.inError
         width: root.width
-        spacing: 3*appWindow.zoom
-        Rectangle {
-            clip: true
-            width: 17*appWindow.zoom
-            height: 15*appWindow.zoom
-            color: "transparent"
-            WaSvgImage {
-                zoom: appWindow.zoom
-                x: -41*zoom
-                y: -269*zoom
-                source: appWindow.theme.elementsIcons
-            }
-        }
-        BaseLabel {
-            Layout.fillWidth: true
-            clip: true
-            elide: Text.ElideRight
-            text: downloadsItemTools.errorMessage
-            color: "#bc3737"
-            verticalAlignment: Text.AlignVCenter
-            font.pixelSize: (appWindow.compactView ? 12 : 13)*appWindow.fontZoom
+        visible: downloadsItemTools.inError
 
-            MouseArea {
-                enabled: parent.truncated
-                propagateComposedEvents: true
-                anchors.fill: parent
-                hoverEnabled: true
-                onClicked : function (mouse) {mouse.accepted = false;}
-                onPressed: function (mouse) {mouse.accepted = false;}
-
-                BaseToolTip {
-                    text: downloadsItemTools.errorMessage
-                    visible: parent.containsMouse
-                }
-            }
-        }
+        error: downloadsItemTools.error
     }
 }

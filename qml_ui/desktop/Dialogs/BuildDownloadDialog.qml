@@ -60,7 +60,7 @@ BaseStandaloneCapableDialog {
                         id: browseDlg
                         nameFilters: [ "Files (" + App.cfg.cdOpenFileDlgNameFilters + ')' ]
                         onAccepted: {
-                            downloadTools.onUrlTextChanged(file);
+                            downloadTools.onUrlTextChanged(selectedFile);
                             downloadTools.doOK();
                         }
                     }
@@ -73,10 +73,22 @@ BaseStandaloneCapableDialog {
             }
 
             BaseLabel {
+                visible: !downloadTools.lastError
                 text: downloadTools.statusText
                 color: downloadTools.statusWarning ? appWindow.theme.errorMessage : appWindow.theme.successMessage
                 wrapMode: Text.Wrap
                 font.pixelSize: 13*appWindow.fontZoom
+                Layout.fillWidth: true
+                Layout.topMargin: 10*appWindow.zoom
+                Layout.bottomMargin: 10*appWindow.zoom
+            }
+
+            BaseErrorLabel {
+                visible: downloadTools.lastError
+                error: downloadTools.lastError
+                shortVersion: false
+                showIcon: false
+                resourceUrl: App.tools.urlFromUserInput(downloadTools.urlText)
                 Layout.fillWidth: true
                 Layout.topMargin: 10*appWindow.zoom
                 Layout.bottomMargin: 10*appWindow.zoom
@@ -102,7 +114,7 @@ BaseStandaloneCapableDialog {
 
                 CustomButton {
                     Layout.alignment: Qt.AlignRight
-                    visible: downloadTools.statusWarning && downloadTools.allowedToReportLastError
+                    visible: (downloadTools.statusWarning || downloadTools.lastError) && downloadTools.allowedToReportLastError
                     text: qsTr("Report problem") + App.loc.emptyString
                     onClicked: privacyDlg.open(downloadTools.lastFailedRequestId)
                 }

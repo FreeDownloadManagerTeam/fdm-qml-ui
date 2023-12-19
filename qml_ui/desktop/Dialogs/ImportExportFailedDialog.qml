@@ -89,18 +89,18 @@ BaseDialog {
     Connections {
         target: App.exportImport
         onExportFinished: {
-            if (!root.opened && error.length > 0) {
+            if (!root.opened && error.hasError) {
                 dialogTitle = qsTr("Failure to export") + App.loc.emptyString;
                 filePath = qsTr("Unable to export to the file: %1").arg(file) + App.loc.emptyString
-                errorMessage = error;
+                errorMessage = error.displayTextLong;
                 root.open();
             }
         }
         onImportFinished: {
-            if (!root.opened && error.length > 0) {
+            if (!root.opened && error.hasError) {
                 dialogTitle = qsTr("Failure to import") + App.loc.emptyString;
                 filePath = qsTr("Unable to import from the file: %1").arg(file) + App.loc.emptyString
-                errorMessage = error;
+                errorMessage = error.displayTextLong;
                 root.open();
             }
         }

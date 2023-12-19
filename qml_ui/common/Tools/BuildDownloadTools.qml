@@ -25,7 +25,7 @@ Item {
     property string statusText: ""
     property bool statusWarning: false
 
-    property string lastError: ""
+    property var lastError: null
     property bool allowedToReportLastError: false
     property double lastFailedRequestId: -1
     property string urlText
@@ -71,6 +71,8 @@ Item {
     property bool batchDownload: false
     property int batchDownloadMaxUrlsCount: uiSettingsTools.settings.batchDownloadMaxUrlsCount
     property bool batchDownloadLimitWarning
+
+    property int resumeSupport: AbstractDownloadsUi.DownloadResumeSupportUnknown
 
     property bool subtitlesEnabled: false
     property int subtitlesCount: 0
@@ -273,7 +275,7 @@ Item {
         checkingIfAcceptableUrl = false;
         buildingDownload = false;
         buildingDownloadFinished = false;
-        lastError = "";
+        lastError = null;
         urlText = "";
         modulesUrl = "";
         modulesSelectedUid = "";
@@ -301,7 +303,7 @@ Item {
 
     function getUrlFromClipboard()
     {
-        var text = App.clipboard.text;
+        var text = App.clipboard.text.trim();
 
         if (checkIfAcceptableUrl(text, function(acceptable, modulesUids, urlDescriptions, downloadsTypes){
             if (acceptable) {
@@ -360,10 +362,6 @@ Item {
             statusText = qsTr("Querying info. Please wait...");
             statusWarning = false;
         }
-        else if (failed()) {
-            statusText = lastError;
-            statusWarning = true;
-        }
         else {
             statusText = "";
             statusWarning = false;
@@ -372,14 +370,17 @@ Item {
 
     function failed()
     {
-        return lastError !== "";
+        return lastError !== null;
+    }
+
+    function canIgnoreError()
+    {
+        return lastError.isUnwantedBehaviorError;
     }
 
     function cleanUpLastError()
     {
-        if (failed()) {
-            lastError = "";
-        }
+        lastError = null;
     }
 
     function onUrlTextChanged(new_text)
@@ -436,10 +437,24 @@ Item {
 
     function doOK()
     {
+        let unhbeherr = lastError && lastError.isUnwantedBehaviorError;
+
         cleanUpLastError();
-        if (downloadTools.buildingDownload && requestId !== -1) {
+
+        if (unhbeherr)
+        {
+            requestId = lastFailedRequestId;
+            lastFailedRequestId = -1;
+            buildingDownload = true;
+            updateState();
+            App.downloads.creator.ignoreUnwantedBehErrorAndContinueToBuild(requestId);
+        }
+        else if (downloadTools.buildingDownload && requestId !== -1)
+        {
             addDownloadBeforeRequest();
-        } else {
+        }
+        else
+        {
             createRequest();
         }
     }
@@ -474,7 +489,7 @@ Item {
             {
                 buildingDownload = false;
                 buildingDownloadFinished = false;
-                lastError = error;
+                lastError = error.clone();
                 allowedToReportLastError = allowedToReport;
                 lastFailedRequestId = requestId;
                 requestId = -1;
@@ -549,6 +564,12 @@ Item {
 
     function isBatchDownload(id) {
         return App.downloads.creator.downloadCount(id) > 1;
+    }
+
+    function getResumeSupport(id) {
+
+        let info = App.downloads.creator.downloadInfo(id, 0);
+        return info ? info.resumeSupport : AbstractDownloadsUi.DownloadResumeSupportUnknown;
     }
 
     function addDownloadFromDialog()

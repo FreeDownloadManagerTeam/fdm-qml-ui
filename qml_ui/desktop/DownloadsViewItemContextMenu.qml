@@ -18,6 +18,7 @@ BaseContextMenu {
     property bool supportsAddT: false
     property bool supportsForceReann: false
     property bool supportsIgnoreURatioLimit: false
+    readonly property bool endlessStream: false
     property int filesCount: 0
     property bool fileIntegrityVisible: root.finished === true && root.filesCount == 1
     property bool locked: selectedDownloadsTools.selectedDownloadsIsLocked()
@@ -36,6 +37,17 @@ BaseContextMenu {
     transformOrigin: Menu.TopRight
 
     BaseContextMenuItem {
+        id: finishDownloadingItem
+        text: qsTr("Save and complete") + App.loc.emptyString
+        visible: selectedDownloadsTools.canBeFinalized()
+        enabled: !locked
+        onTriggered: selectedDownloadsTools.finalizeDownloads()
+    }
+    BaseContextMenuSeparator {
+        visible: finishDownloadingItem.visible
+    }
+
+    BaseContextMenuItem {
         id: restartItem
         text: qsTr("Restart") + App.loc.emptyString
         visible: selectedDownloadsTools.canBeRestarted()
@@ -52,7 +64,7 @@ BaseContextMenu {
     BaseContextMenuItem {
         id: showInFolderItem
         enabled: modelIds.length === 1 && contextMenuTools.canBeShownInFolder
-        text: qsTr("Show In Folder") + App.loc.emptyString
+        text: qsTr("Show in folder") + App.loc.emptyString
         visible: !App.rc.client.active
         onTriggered: contextMenuTools.showInFolderClick()
     }
@@ -84,7 +96,7 @@ BaseContextMenu {
     }
 
     BaseContextMenuItem {
-        text: qsTr("Show Downloads") + App.loc.emptyString
+        text: qsTr("Show downloads") + App.loc.emptyString
         visible: modelIds.length === 1 && batchDownload
         onTriggered: downloadsViewTools.setParentDownloadIdFilter(contextMenuTools.modelId)
     }
@@ -93,7 +105,7 @@ BaseContextMenu {
     }
 
     BaseContextMenuItem {
-        text: qsTr("Choose Files...") + App.loc.emptyString
+        text: qsTr("Choose files...") + App.loc.emptyString
         visible: modelIds.length === 1 && filesCount > 1
         onTriggered: bottomPanelTools.openFilesTab()
     }
@@ -102,7 +114,7 @@ BaseContextMenu {
     }
 
     BaseContextMenu {
-        title: qsTr("Set Priority") + App.loc.emptyString
+        title: qsTr("Set priority") + App.loc.emptyString
         enabled: selectedDownloadsTools.changePriorityAllowed()
 
         ActionGroup {
@@ -200,7 +212,7 @@ BaseContextMenu {
     }
     BaseContextMenuSeparator {}
     BaseContextMenu {
-        title: qsTr("Add Tag") + App.loc.emptyString
+        title: qsTr("Add tag") + App.loc.emptyString
         enabled: tagsTools.customTags.length > 0
 
         Repeater {

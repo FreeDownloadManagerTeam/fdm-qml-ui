@@ -298,6 +298,15 @@ Page
         }
     }
 
+    Label
+    {
+        visible: !appWindow.hasDownloadMgr && !App.rc.client.active
+        text: "<a href='#'>" + qsTr("Connect to remote %1").arg(App.shortDisplayName) + "</a>" + App.loc.emptyString
+        onLinkActivated: connectToRemoteAppDlg.open()
+        Material.accent: appWindow.theme.link
+        anchors.centerIn: parent
+    }
+
     //empty search results
     Rectangle {
         anchors.fill: parent

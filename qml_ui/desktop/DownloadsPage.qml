@@ -52,24 +52,42 @@ Page {
             if (event.key === 16777219 || event.key === Qt.Key_Back) {
                 selectedDownloadsTools.removeCurrentDownloads();
             }
-            if (event.key === Qt.Key_PageUp) {
+            else if (event.key === Qt.Key_PageUp) {
                 selectedDownloadsTools.navigateToNearbyPage(-1, (event.modifiers & Qt.ShiftModifier));
             }
-            if (event.key === Qt.Key_PageDown) {
+            else if (event.key === Qt.Key_PageDown) {
                 selectedDownloadsTools.navigateToNearbyPage(1, (event.modifiers & Qt.ShiftModifier));
             }
-            if (event.key === Qt.Key_End) {
+            else if (event.key === Qt.Key_End) {
                 selectedDownloadsTools.navigateToEnd((event.modifiers & Qt.ShiftModifier));
             }
-            if (event.key === Qt.Key_Home) {
+            else if (event.key === Qt.Key_Home) {
                 selectedDownloadsTools.navigateToHome((event.modifiers & Qt.ShiftModifier));
             }
-            if (event.key === Qt.Key_F2 && selectedDownloadsTools.checkRenameAllowed(true) &&
-                    selectedDownloadsTools.currentDownloadId)
+            else if (event.key === Qt.Key_F2)
             {
-                renameDownloadFileDlg.initialize(selectedDownloadsTools.currentDownloadId, 0);
-                renameDownloadFileDlg.open();
-                return;
+                if (selectedDownloadsTools.checkRenameAllowed(true) &&
+                        selectedDownloadsTools.currentDownloadId)
+                {
+                    renameDownloadFileDlg.initialize(selectedDownloadsTools.currentDownloadId, 0);
+                    renameDownloadFileDlg.open();
+                }
+            }
+        }
+
+        Keys.onShortcutOverride: {
+            // https://bugreports.qt.io/browse/QTBUG-79493
+            if (Qt.platform.os == "osx")
+            {
+                if (event.matches(StandardKey.Paste) || event.matches(StandardKey.New))
+                {
+                    if (!buildDownloadDlg.opened)
+                        buildDownloadDlg.newDownload();
+                }
+                else if (event.matches(StandardKey.SelectAll))
+                {
+                    selectedDownloadsTools.checkAll(true);
+                }
             }
         }
 

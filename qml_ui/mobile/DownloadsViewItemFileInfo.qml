@@ -244,37 +244,16 @@ Rectangle {
         }
 
         // Error message
-        Row {
+        BaseErrorLabel
+        {
             id: error_message
             visible: downloadsItemTools.inError
             anchors.left: parent.left
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 20
-            width: parent.width - progressbar_rect.width - 5
+            width: parent.width
             height: 21
-            spacing: 4
-            Image {
-                id: img
-                sourceSize.width: 16
-                sourceSize.height: 16
-                source: Qt.resolvedUrl("../images/mobile/error.svg")
-                layer {
-                    effect: ColorOverlay {
-                        color: appWindow.theme.errorMessage
-                    }
-                    enabled: true
-                }
-            }
-            Label
-            {
-                text: downloadsItemTools.errorMessage
-                horizontalAlignment: Text.AlignLeft
-                color: appWindow.theme.errorMessage
-                font.pixelSize: 12
-                font.weight: Font.Light
-                elide: Text.ElideRight
-                clip: true
-            }
+            error: downloadsItemTools.error
         }
 
         // Download size

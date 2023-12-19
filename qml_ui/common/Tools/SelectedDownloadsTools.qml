@@ -351,6 +351,37 @@ Item {
         }
     }
 
+    function canBeFinalized()
+    {
+        var allowed = true;
+        var ids = getCurrentDownloadIds();
+        var download = null;
+        if (ids.length > 0)
+        {
+            for (var i = 0; i < ids.length; i++)
+            {
+                download = App.downloads.infos.info(ids[i]);
+                if (download.finished || !(download.flags & AbstractDownloadsUi.EndlessStream) ||
+                        download.lockReason || download.stopping)
+                {
+                    allowed = false;
+                    break;
+                }
+            }
+        }
+        return allowed;
+    }
+
+    function finalizeDownloads()
+    {
+        var ids = getCurrentDownloadIds();
+        if (ids.length > 0) {
+            for (var i = 0; i < ids.length; i++) {
+                App.downloads.mgr.finalizeDownload(ids[i]);
+            }
+        }
+    }
+
     function canCheckForUpdate()
     {
         var allowed = true;
