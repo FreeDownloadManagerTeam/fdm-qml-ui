@@ -56,6 +56,7 @@ Item {
         property var hideTags: ({})
         property bool showTroubleshootingUi: false
         property bool dontShowOsPermissionsDialog: false
+        property bool closeButtonHidesApp: true
     }
 
     readonly property bool hasNonDefaultValues:
@@ -76,6 +77,7 @@ Item {
         settings.enableStandaloneCreateDownloadsWindows !== false ||
         settings.closeStandaloneDownloadWindowWhenStopped !== true ||
         settings.dontShowOsPermissionsDialog !== false ||
+        settings.closeButtonHidesApp !== true ||
         Object.keys(settings.hideTags).length
 
     function resetToDefaults()
@@ -98,6 +100,7 @@ Item {
         settings.closeStandaloneDownloadWindowWhenStopped = true;
         settings.hideTags = {};
         settings.dontShowOsPermissionsDialog = false;
+        settings.closeButtonHidesApp = true;
         wasReset();
     }
 
@@ -149,6 +152,7 @@ Item {
         uiSettingsTools.settings.closeStandaloneDownloadWindowWhenStopped = s.settings.closeStandaloneDownloadWindowWhenStopped;
         uiSettingsTools.settings.hideTags = s.settings.hideTags;
         uiSettingsTools.settings.dontShowOsPermissionsDialog = s.settings.dontShowOsPermissionsDialog;
+        uiSettingsTools.settings.closeButtonHidesApp = s.settings.closeButtonHidesApp;
         s.destroy();
     }
 }

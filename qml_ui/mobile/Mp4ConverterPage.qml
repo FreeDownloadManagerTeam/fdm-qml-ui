@@ -60,7 +60,7 @@ Page {
         RowLayout{
             width: parent.width
 
-            TextField
+            BaseTextField
             {
                 id: destinationDir
                 enabled: !d.accepting

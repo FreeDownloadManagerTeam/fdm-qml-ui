@@ -42,13 +42,13 @@ Page {
             itemId: selectedDownloadsTools.currentDownloadId
         }
 
-        Keys.onDownPressed: selectedDownloadsTools.navigateToNearbyItem(1, (event.modifiers & Qt.ShiftModifier))
-        Keys.onUpPressed: selectedDownloadsTools.navigateToNearbyItem(-1, (event.modifiers & Qt.ShiftModifier))
+        Keys.onDownPressed: (event) => selectedDownloadsTools.navigateToNearbyItem(1, (event.modifiers & Qt.ShiftModifier))
+        Keys.onUpPressed: (event) =>  selectedDownloadsTools.navigateToNearbyItem(-1, (event.modifiers & Qt.ShiftModifier))
         Keys.onSpacePressed: App.features.hasFeature(AppFeatures.FilesQuickLook) ? selectedDownloadsTools.quickLookFile() : downloadsItemTools.changeChecked()
         Keys.onEscapePressed: selectedDownloadsTools.checkAll(false)
 
         Keys.onDeletePressed: selectedDownloadsTools.removeCurrentDownloads()
-        Keys.onPressed: {
+        Keys.onPressed: (event) => {
             if (event.key === 16777219 || event.key === Qt.Key_Back) {
                 selectedDownloadsTools.removeCurrentDownloads();
             }

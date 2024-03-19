@@ -8,7 +8,7 @@ Rectangle {
     property bool inProgress: true
     property bool small: true
 
-    height: (small ? 6 : 10)*appWindow.zoom
+    implicitHeight: (small ? 6 : 10)*appWindow.zoom
     color: parent.inProgress ? appWindow.theme.progressRunningBackground : appWindow.theme.progressPausedBackground
     clip: true
 

@@ -49,6 +49,8 @@ Page {
 
                 ThemeComboBox {
                     anchors.left: parent.left
+                    anchors.leftMargin: 20
+                    comboMinimumWidth: 200
                 }
 
                 Label {
@@ -118,6 +120,8 @@ Page {
                     visible: App.features.hasFeature(AppFeatures.Battery) && appWindow.hasDownloadMgr
                     enabled: switchSetting4.switchChecked
                     anchors.left: parent.left
+                    anchors.leftMargin: 20
+                    comboMinimumWidth: 100
                 }
 
                 SettingsSeparator{
@@ -166,6 +170,7 @@ Page {
                 ExistingFileReactionCombobox {
                     visible: fileExistsReactionLabel.visible
                     anchors.left: parent.left
+                    anchors.leftMargin: 20
                 }
 
                 SettingsSeparator{

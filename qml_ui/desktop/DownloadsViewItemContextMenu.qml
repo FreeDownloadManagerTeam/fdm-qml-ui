@@ -14,6 +14,7 @@ BaseContextMenu {
     property bool supportsMirror
     property bool batchDownload
     property bool supportsSequentialDownload: selectedDownloadsTools.sequentialDownloadAllowed()
+    property bool supportsPlayAsap: selectedDownloadsTools.playAsapAllowed()
     property bool supportsDisablePostFinishedTasks: false
     property bool supportsAddT: false
     property bool supportsForceReann: false
@@ -32,6 +33,7 @@ BaseContextMenu {
         id: contextMenuTools
         modelId: root.modelIds[0]
         finished: root.finished
+        singleDownload: modelIds.length === 1
     }
 
     transformOrigin: Menu.TopRight
@@ -58,7 +60,7 @@ BaseContextMenu {
         id: openItem
         text: qsTr("Open") + App.loc.emptyString
         visible: !App.rc.client.active
-        enabled: !locked && modelIds.length === 1 && contextMenuTools.canBeOpened
+        enabled: !locked && contextMenuTools.canBeOpened
         onTriggered: contextMenuTools.openClick()
     }
     BaseContextMenuItem {
@@ -171,6 +173,7 @@ BaseContextMenu {
         onTriggered: selectedDownloadsTools.removeFromList(modelIds)
     }
     readonly property bool showSequentialDownload: supportsSequentialDownload
+    readonly property bool showPlayAsap: supportsPlayAsap
     readonly property bool showAddMirror: modelIds.length === 1 && supportsMirror
     BaseContextMenuSeparator {
         visible: showSequentialDownload || showAddMirror || supportsAddT || supportsIgnoreURatioLimit || supportsForceReann
@@ -178,10 +181,18 @@ BaseContextMenu {
     BaseContextMenuItem {
         visible: showSequentialDownload
         enabled: !locked
-        text: qsTr("Sequential Download") + App.loc.emptyString
+        text: qsTr("Sequential download") + App.loc.emptyString
         checkable: true
         checked: selectedDownloadsTools.sequentialDownloadChecked()
         onTriggered: selectedDownloadsTools.setSequentialDownload(checked)
+    }
+    BaseContextMenuItem {
+        visible: showPlayAsap
+        enabled: !locked
+        text: qsTr("Play file while it is still downloading") + App.loc.emptyString
+        checkable: true
+        checked: selectedDownloadsTools.playAsapChecked()
+        onTriggered: selectedDownloadsTools.setPlayAsap(checked)
     }
     BaseContextMenuItem {
         visible: showAddMirror

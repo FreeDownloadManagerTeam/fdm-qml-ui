@@ -32,6 +32,7 @@ ApplicationWindow
     height: content.prefHeight
 
     visible: true
+    visibility: Window.Minimized
 
     palette.highlight: theme.textHighlight
     palette.windowText: theme.foreground

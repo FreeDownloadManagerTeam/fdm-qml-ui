@@ -114,7 +114,7 @@ Item {
 
     Connections {
         target: downloadTools
-        onModulesChanged: initialization(modulesUids, urlDescriptions)
+        onModulesChanged: (modulesUids, urlDescriptions) => initialization(modulesUids, urlDescriptions)
     }
 
     function initialization(modulesUids, urlDescriptions) {

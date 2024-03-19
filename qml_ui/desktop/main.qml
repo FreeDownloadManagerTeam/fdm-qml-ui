@@ -49,6 +49,7 @@ ApplicationWindow {
                                     || mp4ConverterDlg.opened || privacyDlg.opened || reportSentDlg.opened
                                     || remoteBannerMgr.bannerOpened || renameDownloadFileDlg.opened
                                     || submitBugReportDlg.opened || pluginBannerDlg.opened
+                                    || mediaFileReadyToPlayDlg.opened
 
     readonly property bool modalDialogOpened: createDownloadDialogOpened || nonCreateDownloadDialogOpened
     property bool supportComputerShutdown: App.features.hasFeature(AppFeatures.ComputerShutdown) &&
@@ -207,10 +208,11 @@ ApplicationWindow {
         z: 10
     }
 
-    onClosing:
-    {
+    onClosing: (close) => {
         waSetVisibility(Window.Hidden);
         close.accepted = false;
+        if (!uiSettingsTools.settings.closeButtonHidesApp)
+            App.quit();
     }
 
     onVisibilityChanged:
@@ -541,6 +543,18 @@ ApplicationWindow {
     RenameDownloadFileDialog {
         id: renameDownloadFileDlg
         onClosed: appWindowStateChanged()
+    }
+
+    MediaFileReadyToPlayDialog {
+        id: mediaFileReadyToPlayDlg
+        onClosed: appWindowStateChanged()
+        MediaFileReadyToPlayTools {
+            dlg: mediaFileReadyToPlayDlg
+            onReadyToShowDialog: {
+                openDialog();
+                showWindow(true);
+            }
+        }
     }
 
     Loader {
@@ -887,6 +901,10 @@ ApplicationWindow {
                 item.open();
             }
         }
+        function closeFor(downloadId, fileIndex) {
+            if (item.opened && item.downloadId === downloadId && item.fileIndex === fileIndex)
+                item.close();
+        }
     }
 
     Connections {
@@ -894,6 +912,9 @@ ApplicationWindow {
         onActionRequired: (downloadId, fileIndex, files) => {
             filesExistsDlg.open(downloadId, fileIndex, files);
             showWindow(true);
+        }
+        onActionApplied: (downloadId, fileIndex) => {
+            filesExistsDlg.closeFor(downloadId, fileIndex);
         }
     }
 

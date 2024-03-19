@@ -158,7 +158,7 @@ Item
             {
                 d.renaming = false;
                 d.error = error.displayTextLong;
-                if (!error)
+                if (!error.hasError)
                     finished();
             }
         }

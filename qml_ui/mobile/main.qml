@@ -462,12 +462,19 @@ ApplicationWindow
                 item.open();
             }
         }
+        function closeFor(downloadId, fileIndex) {
+            if (item.opened && item.downloadId === downloadId && item.fileIndex === fileIndex)
+                item.close();
+        }
     }
 
     Connections {
         target: App.downloads.filesExistsActionsMgr
         onActionRequired: (downloadId, fileIndex, files) => {
             filesExistsDlg.open(downloadId, fileIndex, files);
+        }
+        onActionApplied: (downloadId, fileIndex) => {
+            filesExistsDlg.closeFor(downloadId, fileIndex);
         }
     }
 

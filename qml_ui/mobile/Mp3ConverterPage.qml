@@ -61,7 +61,7 @@ Page {
         RowLayout{
             width: parent.width
 
-            TextField
+            BaseTextField
             {
                 id: destinationDir
                 enabled: !d.accepting
@@ -115,83 +115,16 @@ Page {
             width: parent.width
             spacing: 20
 
-            ComboBox {
+            BaseComboBox {
                 id: quality
-
-                BaseLabel {
-                    id: l
-                    visible: false
-                    font.pixelSize: 13
-                }
-                FontMetrics {
-                    id: fm
-                    font: l.font
-                }
-                implicitWidth: {
-                    let h = 0;
-                    for (let i = 0; i < model.length; ++i)
-                        h = Math.max(h, fm.advanceWidth(model[i].text));
-                    return h + 40;
-                }
 
                 model: [
                     {text: qsTr("Constant bitrate of value") + App.loc.emptyString, value: true},
                     {text: qsTr("Variable bitrate (VBR)") + App.loc.emptyString, value: false}]
 
-                textRole: "text"
-
-                delegate: Rectangle {
-                    height: 35
-                    width: quality.width
-                    color: appWindow.theme.background
-                    BaseLabel {
-                        leftPadding: qtbug.leftPadding(6, 0)
-                        rightPadding: qtbug.rightPadding(6, 0)
-                        anchors.left: parent.left
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: modelData.text
-                        font.pixelSize: 13
-                    }
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked: {
-                            quality.currentIndex = index;
-                            quality.popup.close();
-                            constantBitrateChecked = modelData.value
-                        }
-                    }
-                }
-
-                contentItem: Text {
-                    id: contentItemText
-                    text: quality.displayText
-                    verticalAlignment: Text.AlignVCenter
-                    horizontalAlignment: Text.AlignLeft
-                    color: theme.foreground
-                    font.pixelSize: 13
-                    leftPadding: qtbug.leftPadding(10, 0)
-                    rightPadding: qtbug.rightPadding(10, 0)
-                }
-
-                indicator: Image {
-                    id: img2
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.right: parent.right
-                    x: LayoutMirroring.enabled ?
-                           parent.width - width - contentItemText.implicitWidth :
-                           contentItemText.implicitWidth
-                    source: Qt.resolvedUrl("../images/arrow_drop_down.svg")
-                    sourceSize.width: 24
-                    sourceSize.height: 24
-                    layer {
-                        effect: ColorOverlay {
-                            color: appWindow.theme.foreground
-                        }
-                        enabled: true
-                    }
-                }
-
                 Component.onCompleted: { currentIndex = model.findIndex(e => e.value == constantBitrateChecked); }
+
+                onActivated: index => constantBitrateChecked = model[index].value
             }
 
             Label

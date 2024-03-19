@@ -54,7 +54,7 @@ Page {
             }
 
             RowLayout{
-                TextField
+                BaseTextField
                 {
                     id: url
                     Layout.fillWidth: true

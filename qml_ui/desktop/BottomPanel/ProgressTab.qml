@@ -42,7 +42,6 @@ Item {
         var component = Qt.createComponent("../../common/ProgressMap.qml");
         currentPointsComponent = component.createObject(progressWraper, {
                                               "downloadId": downloadsItemTools.itemId,
-                                              "downloadModel": downloadsItemTools.item,
                                               "zoom": appWindow.zoom
                                           });
     }

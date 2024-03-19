@@ -7,79 +7,42 @@ import "../BaseElements"
 
 Item
 {
-    property double currentValue: 0 // unlimited
-    property string sUnlimited: qsTr("Unlimited") + App.loc.emptyString
-    property string sCustom: qsTr("Custom...") + App.loc.emptyString
+    id: root
+
+    property double currentValue: 0
+
+    readonly property string sUnlimited: qsTr("Unlimited") + App.loc.emptyString
+    readonly property string sCustom: qsTr("Custom...") + App.loc.emptyString
 
     implicitHeight: combo.implicitHeight
     implicitWidth: combo.implicitWidth
 
-
-    ComboBox
+    BaseComboBox
     {
         id: combo
         anchors.fill: parent
-        model: ["1", "2", "3", "4", sUnlimited, sCustom]
-        displayText: parseFloat(currentText) ? +parseFloat(currentText).toFixed(2) : currentText
-        font.pixelSize: 14
-        implicitWidth: 160
-        indicator: Image {
-            id: img2
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.right: parent.right
-            source: Qt.resolvedUrl("../../images/arrow_drop_down.svg")
-            sourceSize.width: 24
-            sourceSize.height: 24
-            layer {
-                effect: ColorOverlay {
-                    color: appWindow.theme.foreground
-                }
-                enabled: true
-            }
-        }
-        contentItem: Text {
-            text: combo.displayText
-            color: appWindow.theme.foreground
-            leftPadding: qtbug.leftPadding(10, 0)
-            rightPadding: qtbug.rightPadding(10, 0)
-            font: combo.font
-            elide: Text.ElideRight
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignLeft
-        }
-        delegate: Rectangle {
-            height: 35
-            width: parent.width
-            color: appWindow.theme.background
-            Label {
-                id: label
-                leftPadding: qtbug.leftPadding(10, 0)
-                rightPadding: qtbug.rightPadding(10, 0)
-                anchors.left: parent.left
-                anchors.verticalCenter: parent.verticalCenter
-                text: parseFloat(modelData) ? +parseFloat(modelData).toFixed(2) : modelData
-                font.pixelSize: 16
-                width: parent.width
-                elide: Text.ElideRight
-                color: appWindow.theme.foreground
-                horizontalAlignment: Text.AlignLeft
-            }
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    combo.currentIndex = index;
-                    combo.popup.close();
-                    if (combo.currentText === sCustom)
-                    {
-                        custom.open();
-                        value.forceActiveFocus()
-                        return;
-                    }
-                    currentValue = combo.currentText == sUnlimited ?
-                        0 : +parseFloat(combo.currentText).toFixed(2);
-                }
-            }
-        }
+        model: [
+            {text: "1", value: 1},
+            {text: "2", value: 2},
+            {text: "3", value: 3},
+            {text: "4", value: 4},
+            {text: sUnlimited, value: 0},
+            {text: sCustom, value: -1}
+        ]
+
+        fontSize: 14
+
+        onActivated: index => {
+                         if (model[index].value === -1)
+                         {
+                             custom.open();
+                             value.forceActiveFocus()
+                         }
+                         else
+                         {
+                            root.currentValue =  model[index].value;
+                         }
+                     }
     }
 
     Dialog {
@@ -95,17 +58,15 @@ Item
         title: qsTr("Custom value") + App.loc.emptyString
 
         contentItem: RowLayout {
-            //anchors.fill: parent
             anchors.horizontalCenter: parent.horizontalCenter
             spacing: 5
 
-            TextField
+            BaseTextField
             {
                 id: value
                 Layout.fillWidth: true
                 inputMethodHints: Qt.ImhDigitsOnly | Qt.ImhNoPredictiveText | Qt.ImhSensitiveData
                 onAccepted: custom.tryAcceptValue()
-                //Keys.onEscapePressed: custom.reject()
                 font.pixelSize: 13
                 implicitWidth: 30
                 maximumLength: 6
@@ -147,7 +108,6 @@ Item
         function closeCustom()
         {
             applyCurrentValueToCombo();
-            //combo.visible = true;
             custom.close();
             value.text = "";
         }
@@ -168,22 +128,17 @@ Item
 
     function applyCurrentValueToCombo()
     {
-        var cvstr = currentValue ?
-                    parseFloat(currentValue).toString() :
-                    sUnlimited;
-
-        var m = combo.model
-
-        for (var i = 0; i < m.length; i++)
+        for (var i = 0; i < combo.model.length; i++)
         {
-            if (m[i] === cvstr)
+            if (combo.model[i].value === currentValue)
             {
                 combo.currentIndex = i;
                 return;
             }
         }
 
-        m.splice(0,0,cvstr);
+        let m = combo.model;
+        m.unshift({text: String(currentValue), value: currentValue});
         combo.model = m;
     }
 

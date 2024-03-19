@@ -164,7 +164,7 @@ BaseStandaloneCapableDialog {
             appWindow.newDownloadAdded();
             root.close();
         }
-        onCreateRequestSuccess: {
+        onCreateRequestSuccess: (id) => {
             tuneAddDownloadDlg.showRequestData(id);
             if (opened) {
                 root.close();

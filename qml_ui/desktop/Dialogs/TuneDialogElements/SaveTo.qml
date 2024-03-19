@@ -7,54 +7,66 @@ import "../../../common"
 
 import Qt.labs.platform 1.0 as QtLabs
 
-ColumnLayout {
+FocusScope
+{
     property alias path: combo.editText
 
-    RowLayout {
-        Layout.fillWidth: true
+    implicitWidth: contentRoot.implicitWidth
+    implicitHeight: contentRoot.implicitHeight
 
-        BaseLabel {
-            text: qsTr("Save to") + App.loc.emptyString
+    ColumnLayout {
+        id: contentRoot
+
+        anchors.fill: parent
+
+        RowLayout {
             Layout.fillWidth: true
-        }
 
-        TagLabel {
-            visible: downloadTools.relatedTag ? true : false
-            tag: downloadTools.relatedTag
-            Layout.preferredWidth: width
-        }
-    }
+            BaseLabel {
+                text: qsTr("Save to") + App.loc.emptyString
+                Layout.fillWidth: true
+            }
 
-    RowLayout {
-        Layout.fillWidth: true
-
-        FolderCombobox {
-            id: combo
-            Layout.fillWidth: true
-            onAccepted: tuneDialog.doOK()
-            onEditTextChanged: {
-                downloadTools.wrongFilePathWarning = false;
+            TagLabel {
+                visible: downloadTools.relatedTag ? true : false
+                tag: downloadTools.relatedTag
+                Layout.preferredWidth: width
             }
         }
 
-        PickFileButton {
-            visible: !App.rc.client.active
-            id: folderBtn
-            Layout.alignment: Qt.AlignRight
-            Layout.fillHeight: true
-            onClicked: browseDlg.open()
-            QtLabs.FolderDialog {
-                id: browseDlg
-                folder: App.tools.urlFromLocalFile(downloadTools.filePath).url
-                acceptLabel: qsTr("Open") + App.loc.emptyString
-                rejectLabel: qsTr("Cancel") + App.loc.emptyString
-                onAccepted: setPath(App.tools.url(folder).toLocalFile())
+        RowLayout {
+            Layout.fillWidth: true
+
+            FolderCombobox {
+                id: combo
+                focus: true
+                Layout.fillWidth: true
+                onAccepted: tuneDialog.doOK()
+                onEditTextChanged: {
+                    downloadTools.wrongFilePathWarning = false;
+                }
+                onFolderRemoved: path => App.recentFolders.removeFolder(path)
+            }
+
+            PickFileButton {
+                visible: !App.rc.client.active
+                id: folderBtn
+                Layout.alignment: Qt.AlignRight
+                Layout.fillHeight: true
+                onClicked: browseDlg.open()
+                QtLabs.FolderDialog {
+                    id: browseDlg
+                    folder: App.tools.urlFromLocalFile(downloadTools.filePath).url
+                    acceptLabel: qsTr("Open") + App.loc.emptyString
+                    rejectLabel: qsTr("Cancel") + App.loc.emptyString
+                    onAccepted: setPath(App.tools.url(folder).toLocalFile())
+                }
             }
         }
     }
 
     function initialization() {
-        var folderList = App.recentFolders;
+        var folderList = App.recentFolders.list;
         combo.model.clear();
 
         if (!folderList.length) {
@@ -71,10 +83,5 @@ ColumnLayout {
 
     function setPath(folder) {
         combo.editText = App.toNativeSeparators(folder);
-    }
-
-    Connections {
-        target: tuneDialog
-        onActiveFocusChanged: { if (tuneDialog.activeFocus) { combo.forceActiveFocus() } }
     }
 }

@@ -66,22 +66,15 @@ Page {
             text: qsTr("Enter new URL") + App.loc.emptyString
         }
 
-        Rectangle {
-            width: parent.width
-            height: newUrl.height
-            color: "transparent"
-
-            BaseTextField {
-                id: newUrl
-                anchors {
-                    left: parent.left
-                    right: parent.right
-                }
-                selectByMouse: true
-                inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText | Qt.ImhSensitiveData
-                onAccepted: doOK()
-                focus: true
-            }
+        BaseTextField {
+            id: newUrl
+            selectByMouse: true
+            inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText | Qt.ImhSensitiveData
+            onAccepted: doOK()
+            focus: true
+            wrapMode: TextInput.WrapAnywhere
+            Layout.fillWidth: true
+            Layout.maximumHeight: appWindow.height/2
         }
 
         BaseLabel

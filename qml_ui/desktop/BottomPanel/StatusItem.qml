@@ -18,7 +18,7 @@ Item
 
         GridLayout
         {
-            property bool smallWidth: parent.width < 400/appWindow.zoom
+            property bool smallWidth: parent.width < 400*appWindow.zoom
 
             width: parent.width
             visible: downloadsItemTools.showProgressIndicator

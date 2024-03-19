@@ -12,7 +12,7 @@ CenteredDialog
     focus: true
 
     readonly property string remoteId: idField.text.trim()
-    readonly property int maxWidth: Math.round(appWindow.width * 0.8) - 40
+    readonly property int maxWidth: Math.round(appWindow.width * 0.9) - 40
 
     modal: true
 
@@ -105,6 +105,9 @@ CenteredDialog
     onAboutToShow: {
         if (!idField.text)
             setRemoteId(uiSettingsTools.settings.lastRemoteAppId);
+    }
+
+    onOpened: {
         idField.selectAll();
         idField.forceActiveFocus();
     }
@@ -117,6 +120,5 @@ CenteredDialog
     function setRemoteId(remoteId)
     {
         idField.text = remoteId.toUpperCase();
-        idField.selectAll();
     }
 }

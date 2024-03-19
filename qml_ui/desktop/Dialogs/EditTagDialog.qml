@@ -162,6 +162,7 @@ BaseDialog {
                         tagsTools.editedTagDownloadFolder = editText;
                     }
                     onAccepted: save()
+                    onFolderRemoved: path => App.recentFolders.removeFolder(path)
                 }
 
                 PickFileButton {
@@ -228,7 +229,7 @@ BaseDialog {
     }
 
     function downloadFolderInitialization() {
-        var folderList = App.recentFolders;
+        var folderList = App.recentFolders.list;
         var currentFolder = tagsTools.editedTagDownloadFolder;
         downloadFolder.model.clear();
 
@@ -241,7 +242,7 @@ BaseDialog {
             downloadFolder.model.insert(i, {'folder': folderList[i]});
         }
 
-        downloadFolder.editText = currentFolder;
+        downloadFolder.editText = App.toNativeSeparators(currentFolder);
         downloadFolder.setPopupWidth();
     }
 }

@@ -76,44 +76,18 @@ Page {
                     height: hashCombo.height
                     color: "transparent"
 
-                    ComboBox {
+                    BaseComboBox {
                         id: hashCombo
                         flat: true
                         antialiasing: true
                         anchors.left: parent.left
+                        fontSize: 13
 
                         model: [
                             {text: qsTr("MD5") + App.loc.emptyString, algorithm: AbstractDownloadsUi.Md5, hash: ""},
                             {text: qsTr("SHA-1") + App.loc.emptyString, algorithm: AbstractDownloadsUi.Sha1, hash: ""},
                             {text: qsTr("SHA-256") + App.loc.emptyString, algorithm: AbstractDownloadsUi.Sha256, hash: ""},
                             {text: qsTr("SHA-512") + App.loc.emptyString, algorithm: AbstractDownloadsUi.Sha512, hash: ""}]
-                        textRole: "text"
-
-                        contentItem: Text {
-                            id: contentItemText
-                            text: hashCombo.displayText
-                            verticalAlignment: Text.AlignVCenter
-                            horizontalAlignment: Text.AlignLeft
-                            color: theme.foreground
-                            font.pixelSize: 13
-                        }
-
-                        indicator: Image {
-                            id: img2
-                            anchors.verticalCenter: parent.verticalCenter
-                            x: LayoutMirroring.enabled ?
-                                   parent.width - contentItemText.implicitWidth - width :
-                                   contentItemText.implicitWidth
-                            source: Qt.resolvedUrl("../images/arrow_drop_down.svg")
-                            sourceSize.width: 24
-                            sourceSize.height: 24
-                            layer {
-                                effect: ColorOverlay {
-                                    color: appWindow.theme.foreground
-                                }
-                                enabled: true
-                            }
-                        }
 
                         onActivated: fileIntegrityTools.calculateHash(model[index].algorithm, model[index].hash)
                         Component.onCompleted: fileIntegrityTools.calculateHash(model[currentIndex].algorithm, "")
@@ -194,7 +168,7 @@ Page {
                     }
                 }
 
-                TextField
+                BaseTextField
                 {
                     id: currentHash
                     visible: !fileIntegrityTools.calculatingInProgress
@@ -231,7 +205,7 @@ Page {
                     height: hashCombo.height
                     color: "transparent"
 
-                    TextField
+                    BaseTextField
                     {
                         id: userHash
                         anchors {

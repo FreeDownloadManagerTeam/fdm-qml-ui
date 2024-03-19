@@ -38,7 +38,7 @@ Rectangle {
         }
     }
 
-    TextField
+    BaseTextField
     {
         id: searchText
         width: parent.width - backbtn.width - 40

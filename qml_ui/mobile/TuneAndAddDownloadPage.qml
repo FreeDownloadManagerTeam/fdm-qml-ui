@@ -3,6 +3,7 @@ import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
 import Qt.labs.platform 1.0 as QtLabs
 import org.freedownloadmanager.fdm 1.0
+import org.freedownloadmanager.fdm.abstractdownloadsui 1.0
 import QtQuick.Controls.Material 2.4
 import "../qt5compat"
 import "../common"
@@ -64,55 +65,60 @@ Page {
             RowLayout {
                 width: parent.width
 
-                ComboBox {
+                BaseComboBox {
                     id: saveTo
-                    model: ListModel {}
-                    textRole: "label"
                     Layout.fillWidth: true
+                    fontSize: 13
                     onAccepted: accept()
                     onCurrentTextChanged: queryBytesAvailable()
                     delegate: Rectangle {
                         height: 30
                         width: saveTo.width
                         color: appWindow.theme.background
-                        BaseLabel {
-                            leftPadding: qtbug.leftPadding(6, 0)
-                            rightPadding: qtbug.rightPadding(6, 0)
-                            anchors.left: parent.left
-                            anchors.verticalCenter: parent.verticalCenter
-                            text: label
-                            font.pixelSize: 13
-                            horizontalAlignment: Text.AlignLeft
-                        }
-                        MouseArea {
+                        RowLayout {
                             anchors.fill: parent
-                            onClicked: {
-                                saveTo.currentIndex = index;
-                                saveTo.popup.close();
+                            anchors.leftMargin: 6
+                            anchors.rightMargin: 6
+                            BaseLabel {
+                                Layout.fillWidth: true
+                                Layout.alignment: Qt.AlignVCenter
+                                text: modelData.text
+                                font.pixelSize: saveTo.fontSize
+                                horizontalAlignment: Text.AlignLeft
+                                elide: Text.ElideRight
+                                MouseArea {
+                                    anchors.fill: parent
+                                    onClicked: {
+                                        saveTo.currentIndex = index;
+                                        saveTo.popup.close();
+                                    }
+                                }
                             }
-                        }
-                    }
-                    contentItem: Text {
-                        text: saveTo.currentText
-                        verticalAlignment: Text.AlignVCenter
-                        horizontalAlignment: Text.AlignLeft
-                        color: theme.foreground
-                        font.pixelSize: 13
-                        leftPadding: qtbug.leftPadding(6, 0)
-                        rightPadding: qtbug.rightPadding(6, 0)
-                        elide: Text.ElideRight
-                    }
-                    indicator: Image {
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.right: parent.right
-                        source: Qt.resolvedUrl("../images/arrow_drop_down.svg")
-                        sourceSize.width: 24
-                        sourceSize.height: 24
-                        layer {
-                            effect: ColorOverlay {
-                                color: appWindow.theme.foreground
+                            Image {
+                                visible: saveTo.model.length > 1
+                                Layout.alignment: Qt.AlignVCenter
+                                source: Qt.resolvedUrl("../images/desktop/clean.svg")
+                                layer {
+                                    effect: ColorOverlay {
+                                        color: appWindow.theme.foreground
+                                    }
+                                    enabled: true
+                                }
+                                MouseArea {
+                                    anchors.fill: parent
+                                    cursorShape: Qt.PointingHandCursor
+                                    onClicked: {
+                                        let etext = saveTo.editText;
+                                        let p = modelData.path;
+                                        let newIndex = index < saveTo.model.length - 1 ? index : 0;
+                                        let m = saveTo.model;
+                                        m.splice(index, 1);
+                                        saveTo.currentIndex = newIndex;
+                                        saveTo.model = m;
+                                        App.recentFolders.removeFolder(p);
+                                    }
+                                }
                             }
-                            enabled: true
                         }
                     }
                     Connections {
@@ -134,7 +140,7 @@ Page {
                     icon.width: 18
                     icon.height: 18
                     onClicked: {
-                        stackView.waPush(filePicker.filePickerPageComponent, {folder: saveTo.model.get(saveTo.currentIndex).path, initiator: "addDownload", downloadId: -1});
+                        stackView.waPush(filePicker.filePickerPageComponent, {folder: saveTo.model[saveTo.currentIndex].path, initiator: "addDownload", downloadId: -1});
                     }
                 }
             }
@@ -153,7 +159,7 @@ Page {
                 text: qsTr("File name") + App.loc.emptyString
             }
 
-            TextField {
+            BaseTextField {
                 id: fileName
                 visible: downloadTools.filesCount === 1 || downloadTools.batchDownload
                 width: parent.width
@@ -163,6 +169,27 @@ Page {
                 text: downloadTools.fileName
                 horizontalAlignment: Text.AlignLeft
                 onAccepted: accept()
+            }
+        }
+
+        BaseCheckBox {
+            visible: !App.rc.client.active &&
+                    !downloadTools.batchDownload &&
+                    App.downloads.creator.downloadInfo(downloadTools.requestId, 0).hasLargeEnoughPreviewableMediaFile(40*1024*1024)
+
+            text: qsTr("Play file while it is still downloading") + App.loc.emptyString
+
+            Layout.leftMargin: 20
+
+            onClicked: {
+                let info = App.downloads.creator.downloadInfo(downloadTools.requestId, 0);
+
+                if (info)
+                {
+                    info.flags = checked ?
+                                info.flags | AbstractDownloadsUi.EnableMediaDownloadToPlayAsap :
+                                info.flags & ~AbstractDownloadsUi.EnableMediaDownloadToPlayAsap;
+                }
             }
         }
 
@@ -259,11 +286,6 @@ Page {
 //        }
     }
 
-    function find(model, criteria) {
-        for(var i = 0; i < model.count; ++i) if (criteria(model.get(i))) return i;
-        return -1;
-    }
-
     function defineStorages() {
         for (var i = 0; i < App.storages.storagesCount(); ++i) {
             storages[i] = App.storages.storageInfo(i);
@@ -278,49 +300,51 @@ Page {
     }
 
     function defineFolderList() {
-        var folderList = App.recentFolders;
-        saveTo.model.clear();
-        for (var i = 0; i < folderList.length; i++) {
-            saveTo.model.insert(i, {'label': shortUrl(folderList[i]), 'path': folderList[i]});
-        }
+        var folderList = App.recentFolders.list;
+        let m = [];
+        for (var i = 0; i < folderList.length; i++)
+            m.push({'text': shortUrl(folderList[i]), 'path': folderList[i]});
+        saveTo.model = m;
         updateCurrentFolder(downloadTools.filePath);
     }
 
     function updateCurrentFolder(folderName) {
-        var index = find(saveTo.model, function(item) { return item.path == folderName });
+        var index = saveTo.model.findIndex(item => App.toNativeSeparators(item.path) === App.toNativeSeparators(folderName));
 
         if (index >= 0) {
             saveTo.currentIndex = index;
          } else {
-            index = saveTo.model.count;
-            saveTo.model.insert(index, {'label': shortUrl(folderName), 'path': folderName});
+            index = saveTo.model.length;
+            let m = saveTo.model;
+            m.push({'text': shortUrl(folderName), 'path': folderName});
+            saveTo.model = m;
             saveTo.currentIndex = index;
         }
     }
 
     function accept() {
         downloadTools.onFileNameTextChanged(fileName.displayText);
-        downloadTools.onFilePathTextChanged(saveTo.model.get(saveTo.currentIndex).path);
+        downloadTools.onFilePathTextChanged(saveTo.model[saveTo.currentIndex].path);
         downloadTools.addDownloadFromDialog();
         schedulerTools.doOK();
     }
 
     function queryBytesAvailable() {
-        if (saveTo.model.get(saveTo.currentIndex)) {
-            App.storages.queryBytesAvailable(saveTo.model.get(saveTo.currentIndex).path)
-            App.storages.queryIfHasWriteAccess(saveTo.model.get(saveTo.currentIndex).path);
+        if (saveTo.currentIndex >= 0 && saveTo.currentIndex < saveTo.model.length) {
+            App.storages.queryBytesAvailable(saveTo.model[saveTo.currentIndex].path)
+            App.storages.queryIfHasWriteAccess(saveTo.model[saveTo.currentIndex].path);
         }
     }
 
     Connections {
         target: App.storages
         onBytesAvailableResult: (path, available) => {
-            if (path == saveTo.model.get(saveTo.currentIndex).path) {
+            if (path == saveTo.model[saveTo.currentIndex].path) {
                 downloadTools.freeDiskSpace = available;
             }
         }
         onHasWriteAccessResult: (path, result) => {
-            if (path == saveTo.model.get(saveTo.currentIndex).path) {
+            if (path == saveTo.model[saveTo.currentIndex].path) {
                 downloadTools.hasWriteAccess = result;
             }
         }

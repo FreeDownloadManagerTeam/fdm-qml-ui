@@ -133,8 +133,8 @@ Item {
                         Rectangle {
                             Layout.leftMargin: qtbug.leftMargin(5, 0)
                             Layout.rightMargin: qtbug.rightMargin(5, 0)
-                            width: (model.level + (model.folder ? 0 : 1)) * 15
-                            height: 30
+                            Layout.preferredWidth: (model.level + (model.folder ? 0 : 1)) * 15
+                            Layout.preferredHeight: 30
                             color: "transparent"
                         }
 
@@ -223,7 +223,7 @@ Item {
                     //file size - wide screen
                     Rectangle {
                         visible: !appWindow.smallScreen
-                        height: 30
+                        Layout.preferredHeight: 30
                         Layout.preferredWidth: sizeItem.width
                         Layout.alignment: Qt.AlignTop
                         clip: true
@@ -248,14 +248,14 @@ Item {
                         progress: model.progress
                         Layout.preferredWidth: progressItem.width
                         Layout.alignment: Qt.AlignTop
-                        height: 30
+                        Layout.preferredHeight: 30
                     }
 
                     //priority
                     Rectangle {
                         Layout.preferredWidth: priorityItem.width
                         Layout.alignment: Qt.AlignTop
-                        height: 30
+                        Layout.preferredHeight: 30
                         color: 'transparent'
 
                         ComboBox {
@@ -292,25 +292,13 @@ Item {
                                     text: modelData.text
                                     verticalAlignment: Text.AlignVCenter
                                     horizontalAlignment: Text.AlignLeft
+                                    font.weight: index === priorityCombo.currentIndex ? Font.DemiBold : Font.Normal
                                 }
                             }
 
-//                            indicator: Image {
-//                                id: img2
-//                                anchors.verticalCenter: parent.verticalCenter
-//                                source: Qt.resolvedUrl("../../images/arrow_drop_down.svg")
-//                                layer {
-//                                    effect: ColorOverlay {
-//                                        color: appWindow.theme.foreground
-//                                    }
-//                                    enabled: true
-//                                }
-//                            }
-
-                            indicator: Rectangle {
+                            indicator: Item {
                                 width: 1
                                 height: 1
-                                color: "transparent"
                             }
 
                             onActivated: {

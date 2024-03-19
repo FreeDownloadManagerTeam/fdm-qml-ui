@@ -288,6 +288,12 @@ Column
         }
 
         SettingsCheckBox {
+            text: qsTr("Click on the Close button to hide %1 and keep it running in the background").arg(App.shortDisplayName) + App.loc.emptyString
+            checked: uiSettingsTools.settings.closeButtonHidesApp
+            onClicked: { uiSettingsTools.settings.closeButtonHidesApp = !uiSettingsTools.settings.closeButtonHidesApp }
+        }
+
+        SettingsCheckBox {
             text: qsTr("Open/hide the bottom panel by clicking on the download") + App.loc.emptyString
             checked: uiSettingsTools.settings.toggleBottomPanelByClickingOnDownload
             onClicked: { uiSettingsTools.settings.toggleBottomPanelByClickingOnDownload = !uiSettingsTools.settings.toggleBottomPanelByClickingOnDownload }

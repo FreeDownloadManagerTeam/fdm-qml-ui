@@ -46,7 +46,7 @@ ListView {
             }
         }
 
-        onShowingCompleteMessage: {
+        onShowingCompleteMessage: isShowing => {
             if (isShowing)
                 ++listView.showingCompleteMsg;
             else

@@ -74,7 +74,7 @@ Item {
                                      destinationPath + '/' + tplTitle
     property string tplPathAndTitle2: filesCount !== 1 ? destinationPath : tplPathAndTitle
 
-    property string added: !item ? "" : item.added
+    property var added: item ? item.added : null
     property bool unknownFileSize: size === -1 || !finalDownload
     property int resumeSupport: item ? item.resumeSupport : -1
 
@@ -349,7 +349,7 @@ Item {
     function updateEstimatedTimeSec()
     {
         var remaining_bytes = selectedSize - selectedBytesDownloaded;
-        var download_speed_bytes = downloadSpeed;
+        var download_speed_bytes = App.downloads.speedTracker.averageDownloadSpeed(itemId);
 
         var current_timestamp = parseInt( + new Date() / 1000 );
 

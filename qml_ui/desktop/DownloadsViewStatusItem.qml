@@ -108,7 +108,7 @@ Item {
         }
         Connections {
             target: App.downloads.tracker
-            onDownloadFinished: {
+            onDownloadFinished: id => {
                 if (id == downloadsItemTools.itemId) {
                     completeMsg.opacity = 1;
                     completeAnimation.restart();

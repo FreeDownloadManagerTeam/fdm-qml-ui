@@ -14,14 +14,11 @@ Dialog {
     signal downloadsRemoved()
 
     parent: Overlay.overlay
-
-    x: Math.round((appWindow.width - width) / 2)
-    y: Math.round((appWindow.height - height) / 2)
+    anchors.centerIn: parent
 
     modal: true
 
     title: (singleMode ? qsTr("Delete this file?") : qsTr("Delete selected files?")) + App.loc.emptyString
-    width: Math.round(appWindow.width * 0.8)
 
     contentItem: GridLayout {
         width: parent.width

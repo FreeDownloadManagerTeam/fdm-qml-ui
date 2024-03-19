@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.3
+import QtQuick.Layouts
 import "../BaseElements"
 
 ToolButton {
@@ -15,7 +16,8 @@ ToolButton {
     anchors.left: parent.left
     anchors.right: parent.right
 
-    height: switch1Rect.height
+    implicitHeight: switch1Rect.implicitHeight
+    implicitWidth: switch1Rect.implicitWidth
 
     contentItem: Rectangle {
         anchors.fill: switch1Rect
@@ -44,7 +46,8 @@ ToolButton {
         anchors.right: parent.right
         color: "transparent"
 
-        height: labelText.height + textHeighIncrement
+        implicitHeight: labelText.implicitHeight + textHeighIncrement
+        implicitWidth: labelText.implicitWidth + switch1.implicitWidth + 20
 
         clip: true
 

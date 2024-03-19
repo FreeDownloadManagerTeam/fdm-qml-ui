@@ -91,7 +91,7 @@ Page {
                         horizontalAlignment: Text.AlignLeft
                     }
 
-                    TextField
+                    BaseTextField
                     {
                         id: usernameField
                         anchors {
@@ -114,7 +114,7 @@ Page {
                         horizontalAlignment: Text.AlignLeft
                     }
 
-                    TextField
+                    BaseTextField
                     {
                         id: passField
                         anchors {

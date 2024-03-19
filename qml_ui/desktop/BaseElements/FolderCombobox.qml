@@ -3,6 +3,7 @@ import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
 import org.freedownloadmanager.fdm 1.0
 import "../../common"
+import "../../qt5compat"
 
 ComboBox {
     id: root
@@ -16,30 +17,71 @@ ComboBox {
     property int popupWidth: 120*appWindow.zoom
     property int visibleRowsCount: 5
 
+    signal folderRemoved(var path)
+
     model: ListModel {}
 
     delegate: Rectangle {
         property bool hover: false
         color: hover ? appWindow.theme.menuHighlight : "transparent"
         height: 30*appWindow.zoom
-        width: parent.width
-        BaseLabel {
-            leftPadding: qtbug.leftPadding(6*appWindow.zoom, 0)
-            rightPadding: qtbug.rightPadding(6*appWindow.zoom, 0)
-            anchors.left: parent.left
-            anchors.verticalCenter: parent.verticalCenter
-            text: App.toNativeSeparators(folder)
-        }
+        width: parent ? parent.width : 0
 
-        MouseArea {
+        RowLayout {
             anchors.fill: parent
-            hoverEnabled: true
-            onEntered: parent.hover = true
-            onExited: parent.hover = false
-            onClicked: {
-                root.currentIndex = index;
-                root.editText = App.toNativeSeparators(folder);
-                root.popup.close();
+            anchors.leftMargin: 6*appWindow.zoom
+            anchors.rightMargin: 6*appWindow.zoom
+
+            BaseLabel {
+                Layout.fillWidth: true
+                Layout.alignment: Qt.AlignVCenter
+                text: App.toNativeSeparators(folder)
+                elide: Text.ElideRight
+
+                MouseArea {
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    onEntered: parent.hover = true
+                    onExited: parent.hover = false
+                    onClicked: {
+                        root.currentIndex = index;
+                        root.editText = App.toNativeSeparators(folder);
+                        root.popup.close();
+                    }
+                }
+            }
+
+            WaSvgImage {
+                visible: root.model.count > 1
+                Layout.alignment: Qt.AlignVCenter
+
+                zoom: appWindow.zoom
+                source: appWindow.macVersion ? Qt.resolvedUrl("../../images/desktop/search_clear_mac.svg") :
+                                               Qt.resolvedUrl("../../images/desktop/clean.svg")
+
+                layer {
+                    effect: ColorOverlay {
+                        color: appWindow.theme.foreground
+                    }
+                    enabled: true
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked: {
+                        let etext = root.editText;
+                        let path = folder;
+                        root.model.remove(index, 1);
+                        if (App.toNativeSeparators(etext) === App.toNativeSeparators(path) &&
+                                root.model.count)
+                        {
+                            etext = App.toNativeSeparators(root.model.get(0).folder);
+                        }
+                        root.editText = etext;
+                        root.folderRemoved(path);
+                    }
+                }
             }
         }
     }
@@ -59,6 +101,7 @@ ComboBox {
             color: "transparent"
             border.color: "transparent"
         }
+        focus: true
     }
 
     indicator: Rectangle {

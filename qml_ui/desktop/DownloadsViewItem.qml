@@ -49,7 +49,7 @@ Item
     onModelFinishedChanged: selectedDownloadsTools.modelFinishedChanged(model.id)
     onModelErrorChanged: selectedDownloadsTools.modelErrorChanged(model.id)
 
-    width: parent.width
+    width: parent ? parent.width : 0
 
     Component.onDestruction: {
         speedColumnHovered = 0;
@@ -270,7 +270,7 @@ Item
                 DownloadsViewStatusItem {
                     id: statusItem
                     anchors.fill: parent
-                    onShowingCompleteMessage: root.showingCompleteMessage(isShowing)
+                    onShowingCompleteMessage: isShowing => root.showingCompleteMessage(isShowing)
                 }
             }
         }

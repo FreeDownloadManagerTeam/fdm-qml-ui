@@ -322,7 +322,7 @@ Item {
         }
     }
 
-    function canBeRestarted()
+    function playAsapAllowed()
     {
         var allowed = true;
         var ids = getCurrentDownloadIds();
@@ -330,15 +330,61 @@ Item {
         if (ids.length > 0) {
             for (var i = 0; i < ids.length; i++) {
                 download = App.downloads.infos.info(ids[i]);
-                if (!(!download.finished && (download.error.hasError || download.missingFiles)
-                        && (download.flags & AbstractDownloadsUi.SupportsRestart) != 0
-                        && download.lockReason == "" && !download.stopping)) {
+                if (download.finished || !(download.flags & AbstractDownloadsUi.SupportsMediaDownloadToPlayAsap)) {
                     allowed = false;
                     break;
                 }
             }
         }
         return allowed;
+    }
+
+    function playAsapChecked()
+    {
+        var checked = true;
+        var ids = getCurrentDownloadIds();
+        var download = null;
+        if (ids.length > 0) {
+            for (var i = 0; i < ids.length; i++) {
+                download = App.downloads.infos.info(ids[i]);
+                if (!(download.flags & AbstractDownloadsUi.EnableMediaDownloadToPlayAsap)) {
+                    checked = false;
+                    break;
+                }
+            }
+        }
+        return checked;
+    }
+
+    function setPlayAsap(checked)
+    {
+        var ids = getCurrentDownloadIds();
+        if (ids.length > 0) {
+            for (var i = 0; i < ids.length; i++) {
+                let info = App.downloads.infos.info(ids[i]);
+                info.flags = checked ?
+                            info.flags | AbstractDownloadsUi.EnableMediaDownloadToPlayAsap :
+                            info.flags & ~AbstractDownloadsUi.EnableMediaDownloadToPlayAsap;
+            }
+        }
+    }
+
+    function canBeRestarted()
+    {
+        var ids = getCurrentDownloadIds();
+        var download = null;
+        if (ids.length > 0) {
+            for (var i = 0; i < ids.length; i++) {
+                download = App.downloads.infos.info(ids[i]);
+                const can = (download.flags & AbstractDownloadsUi.SupportsRestart) != 0 &&
+                          (download.missingFiles || (!download.finished && download.error.hasError)) &&
+                          download.lockReason == "" &&
+                          !download.stopping;
+                if (!can)
+                    return false;
+            }
+        }
+        return true;
     }
 
     function restartDownloads()

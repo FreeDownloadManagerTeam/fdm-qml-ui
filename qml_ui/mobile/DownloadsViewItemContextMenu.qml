@@ -22,6 +22,7 @@ Menu
     property bool canChangeUrl: modelIds.length === 1 && downloadModel && (downloadModel.flags & AbstractDownloadsUi.AllowChangeSourceUrl) != 0
     property bool supportsMirror: modelIds.length === 1 && downloadModel && (downloadModel.flags & AbstractDownloadsUi.SupportsMirrors) != 0
     property bool supportsSequentialDownload: selectedDownloadsTools.sequentialDownloadAllowed()
+    property bool supportsPlayAsap: selectedDownloadsTools.playAsapAllowed()
     property bool supportsDisablePostFinishedTasks: false
     property bool supportsAddT: false
     property bool supportsForceReann: false
@@ -40,6 +41,7 @@ Menu
     DownloadsItemContextMenuTools {
         id: contextMenuTools
         modelId: modelIds[0]
+        singleDownload: modelIds.length === 1
         finished: root.finished
     }
 
@@ -107,8 +109,7 @@ Menu
         enabled: !locked
         onTriggered: selectedDownloadsTools.restartDownloads()
     }
-    readonly property bool openVisible: !App.rc.client.active &&
-                                        (modelIds.length === 1 && contextMenuTools.canBeOpened)
+    readonly property bool openVisible: !App.rc.client.active && contextMenuTools.canBeOpened
     BaseMenuItem {
         id: open
         text: qsTr("Open") + App.loc.emptyString
@@ -202,6 +203,14 @@ Menu
         onTriggered: selectedDownloadsTools.setSequentialDownload(checked)
     }
     BaseMenuItem {
+        visible: supportsPlayAsap
+        enabled: !locked
+        text: qsTr("Play file while it is still downloading") + App.loc.emptyString
+        checkable: true
+        checked: selectedDownloadsTools.playAsapChecked()
+        onTriggered: selectedDownloadsTools.setPlayAsap(checked)
+    }
+    BaseMenuItem {
         text: qsTr("Add mirror") + App.loc.emptyString
         visible: supportsMirror
         enabled: !locked
@@ -210,7 +219,7 @@ Menu
         }
     }
     BaseMenuSeparator {
-        visible: supportsSequentialDownload || supportsDisablePostFinishedTasks || supportsAddT || supportsIgnoreURatioLimit || supportsForceReann
+        visible: supportsSequentialDownload || supportsPlayAsap || supportsDisablePostFinishedTasks || supportsAddT || supportsIgnoreURatioLimit || supportsForceReann
     }
 
     BaseMenuItem {

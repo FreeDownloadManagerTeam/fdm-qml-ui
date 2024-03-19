@@ -9,7 +9,7 @@ import "../BaseElements"
 Item {
     id: root
     property var myStr
-    property var myModel: myStr.length > 0 ? myStr.split(' ') : null
+    property var myModel: myStr.length > 0 ? myStr.split(' ').sort() : null
     width: parent.width
     height: 170*appWindow.zoom
     property string clear_btn_img: appWindow.macVersion ? Qt.resolvedUrl("../../images/desktop/search_clear_mac.svg") : Qt.resolvedUrl("../../images/desktop/clean.svg")

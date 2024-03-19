@@ -64,6 +64,8 @@ BaseStandaloneCapableDialog {
                 SaveTo {
                     id: saveTo
                     enabled: !d.accepting
+                    Layout.fillWidth: true
+                    focus: true
                 }
 
                 FileName {
@@ -131,6 +133,10 @@ BaseStandaloneCapableDialog {
                     Layout.topMargin: 10*appWindow.zoom
                 }
 
+                PlayAsap {
+                    id: playAsap
+                }
+
                 ButtonsBlock {forceDisableOK: d.accepting}
             }
         }
@@ -175,6 +181,7 @@ BaseStandaloneCapableDialog {
         schedulerBlock.initialization();
         filesTree.initialization(requestId);
         noResumeSupportBlock.initialization();
+        playAsap.initialization();
 
         if (downloadTools.batchDownload) {
             downloadTools.setPreviewUrl();
@@ -191,6 +198,7 @@ BaseStandaloneCapableDialog {
             return;
         d.accepting = true;
         noResumeSupportBlock.apply();
+        playAsap.apply();
         downloadTools.onFilePathTextChanged(App.fromNativeSeparators(saveTo.path));
         downloadTools.checkFilePathAsync();
     }

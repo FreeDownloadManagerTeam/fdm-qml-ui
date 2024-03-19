@@ -97,7 +97,9 @@ BaseDialog {
                     id: date
                     visible: mergeTools.dialogEnabled
                     font.pixelSize: 13*appWindow.fontZoom
-                    text: App.loc.dateOrTimeToString(downloadsItemTools.added, false) + App.loc.emptyString
+                    text: downloadsItemTools.added ?
+                              App.loc.dateOrTimeToString(downloadsItemTools.added, false) + App.loc.emptyString :
+                              ""
                 }
             }
             RowLayout {

@@ -5,7 +5,7 @@ import "../../qt5compat"
 import org.freedownloadmanager.fdm 1.0
 import "../BaseElements"
 
-ComboBox
+BaseComboBox
 {
     id: root
 
@@ -16,18 +16,14 @@ ComboBox
     property int popupWidth: 300
     property int maxComboWidth: 300
 
-    width: 70 + fontMetrics.boundingRect(
+    implicitWidth: 70 + fontMetrics.boundingRect(
                constantBitrate ?
                    root.kbpsText(999, "") :
                    root.vbrKbpsText(999,999)).width
 
-    FontMetrics {id: fontMetrics; font.pixelSize: 14}
+    FontMetrics {id: fontMetrics; font.pixelSize: root.fontSize}
 
     onMaxComboWidthChanged: root.setPopupWidth()
-
-    model: []
-    textRole: "text"
-    font.pixelSize: 14
 
     delegate: Rectangle {
         height: label.contentHeight > 30 ? 50 : 35
@@ -40,7 +36,8 @@ ComboBox
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
             text: modelData.text
-            font.pixelSize: 14
+            font.pixelSize: root.fontSize
+            font.weight: index === currentIndex ? Font.DemiBold : Font.Normal
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
             width: parent.width
         }
@@ -54,31 +51,7 @@ ComboBox
             }
         }
     }
-    indicator: Image {
-        id: img2
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.right: parent.right
-        source: Qt.resolvedUrl("../../images/arrow_drop_down.svg")
-        sourceSize.width: 24
-        sourceSize.height: 24
-        layer {
-            effect: ColorOverlay {
-                color: appWindow.theme.foreground
-            }
-            enabled: true
-        }
-    }
-    contentItem: Text {
-        id: currentValue
-        text: root.displayText
-        color: appWindow.theme.foreground
-        leftPadding: qtbug.leftPadding(10, root.indicator.width + root.spacing)
-        rightPadding: qtbug.rightPadding(10, root.indicator.width + root.spacing)
-        font: root.font
-        elide: Text.ElideRight
-        verticalAlignment: Text.AlignVCenter
-        horizontalAlignment: Text.AlignLeft
-    }
+
     popup: Popup {
         width: constantBitrate ? popupWidth : root.width
         height: 18 * root.model.length + 2
@@ -177,7 +150,7 @@ ComboBox
     }
 
     function setCurrentValue() {
-        currentValue.text = constantBitrate ? root.model[currentIndex].value + ' ' + kbps : root.model[currentIndex].text
+        contentItem.text = constantBitrate ? root.model[currentIndex].value + ' ' + kbps : root.model[currentIndex].text
     }
 
     function setPopupWidth() {
@@ -203,7 +176,7 @@ ComboBox
 
     TextMetrics {
         id: textMetrics
-        font.pixelSize: 14
+        font.pixelSize: root.fontSize
     }
 
     Connections {

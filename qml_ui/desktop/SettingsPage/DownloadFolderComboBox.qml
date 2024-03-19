@@ -190,7 +190,7 @@ ComboBox {
     }
 
     Component.onCompleted: {
-        var folderList = App.recentFolders;
+        var folderList = App.recentFolders.list;
         var currentFolder = initialPath;
 
         if (!folderList.length) {

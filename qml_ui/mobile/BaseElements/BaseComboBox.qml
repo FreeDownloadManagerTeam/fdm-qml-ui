@@ -6,26 +6,29 @@ ComboBox
 {
     id: combo
 
-    readonly property int fontSize: 16
+    property int fontSize: 16
+    property int comboMinimumWidth: 0
 
     FontMetrics {
         id: fm
         font.pixelSize: combo.fontSize
     }
 
+    model: []
     textRole: "text"
 
-    implicitHeight: Math.max(fm.height, img.implicitHeight) + 16
+    implicitHeight: Math.max(fm.height, img.implicitHeight) + 24
 
     implicitWidth: {
         let h = 0;
         for (let i = 0; i < model.length; ++i)
             h = Math.max(h, fm.advanceWidth(model[i].text));
-        return h + 40 + fm.font.pixelSize*0;
+        return Math.max(comboMinimumWidth, h + 40 + fm.font.pixelSize*0);
     }
 
     indicator: Image {
         id: img
+        opacity: enabled ? 1 : 0.5
         anchors.verticalCenter: parent.verticalCenter
         anchors.right: parent.right
         source: Qt.resolvedUrl("../../images/arrow_drop_down.svg")
@@ -59,6 +62,7 @@ ComboBox
         bottomPadding: topPadding
         text: modelData.text
         font.pixelSize: combo.fontSize
+        font.weight: index === currentIndex ? Font.DemiBold : Font.Normal
         elide: Text.ElideRight
         color: appWindow.theme.foreground
 

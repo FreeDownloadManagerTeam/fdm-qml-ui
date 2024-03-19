@@ -1,8 +1,9 @@
-import QtQuick 2.0
+import QtQuick
+import QtQuick.Layouts
 
 Rectangle {
-    anchors.left: parent.left
-    anchors.right: parent.right
-    height: 1
+    width: parent.width
+    Layout.fillWidth: true
+    implicitHeight: 1
     color: appWindow.theme.generalSettingsBorder
 }

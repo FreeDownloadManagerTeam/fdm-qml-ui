@@ -25,6 +25,13 @@ MouseArea {
         property bool toggleBottomPanelAllowed: false
     }
 
+    DownloadsItemContextMenuTools {
+        id: cmtools
+        modelId: downloadModel.id
+        finished: downloadModel.finished
+        singleDownload: true
+    }
+
     onMouseYChanged: {
         if (pressedButtons == Qt.LeftButton && Math.abs(pressY - mouseY) > 1) {
             var newIndex = listView.indexAt(10, parent.y + mouseY);
@@ -94,7 +101,7 @@ MouseArea {
     function dblClick(mouse) {
         if (downloadModel.hasChildDownloads) {
             downloadsViewTools.setParentDownloadIdFilter(downloadModel.id)
-        } else if (downloadModel.finished) {
+        } else if (cmtools.canBeOpened) {
             if (!App.rc.client.active)
                 App.downloads.mgr.openDownload(downloadModel.id, -1)
         }

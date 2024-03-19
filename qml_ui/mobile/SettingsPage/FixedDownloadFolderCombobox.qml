@@ -9,7 +9,7 @@ import "../BaseElements"
 Rectangle {
     id: root
     width: parent.width
-    height: Math.max(folderBtn.height + 20, downloadFolder.implicitHeight)
+    implicitHeight: Math.max(folderBtn.height + 20, downloadFolder.implicitHeight)
     color: "transparent"
 
     QtObject {
@@ -43,48 +43,20 @@ Rectangle {
         }
     }
 
-    ComboBox {
+    BaseComboBox {
         id: downloadFolder
         enabled: root.enabled
-        model: ListModel {}
-        textRole: "label"
         editable: true
-        implicitHeight: contentItem.implicitHeight + 10
+        implicitHeight: contentItem.implicitHeight
         anchors.left: parent.left
         anchors.leftMargin: 20
         anchors.right: folderBtn.left
         anchors.rightMargin: 10
         anchors.verticalCenter: parent.verticalCenter
-        font.pixelSize: 13
+        fontSize: 13
         onEditTextChanged: root.apply()
-        delegate: Rectangle {
-            height: lbl.implicitHeight + 10
-            width: downloadFolder.width
-            color: appWindow.theme.background
-            Label {
-                id: lbl
-                leftPadding: 10
-                rightPadding: 10
-                anchors.left: parent.left
-                anchors.verticalCenter: parent.verticalCenter
-                text: label
-                font: downloadFolder.font
-                width: parent.width
-                wrapMode: Text.WrapAnywhere
-                color: appWindow.theme.foreground
-                horizontalAlignment: Label.AlignLeft
-            }
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    downloadFolder.currentIndex = index;
-                    downloadFolder.popup.close();
-                    downloadFolder.editText = label;
-                }
-            }
-        }
-        contentItem: TextField {
-            text: downloadFolder.currentText
+        contentItem: BaseTextField {
+            text: downloadFolder.displayText
             color: (!d.isCurrentPathInvalid || d.checkingPath) ? appWindow.theme.foreground : appWindow.theme.errorMessage
             leftPadding: qtbug.leftPadding(10, 0)
             rightPadding: qtbug.rightPadding(10, 0)
@@ -97,20 +69,6 @@ Rectangle {
         }
         background: Rectangle {
             color: appWindow.theme.background
-        }
-        indicator: Image {
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.right: parent.right
-            source: Qt.resolvedUrl("../../images/arrow_drop_down.svg")
-            sourceSize.width: 24
-            sourceSize.height: 24
-            opacity: enabled ? 1 : 0.5
-            layer {
-                effect: ColorOverlay {
-                    color: appWindow.theme.foreground
-                }
-                enabled: true
-            }
         }
         Connections {
             target: filePicker
@@ -192,22 +150,28 @@ Rectangle {
     }
 
     function defineFolderList() {
-        var folderList = App.recentFolders;
-        downloadFolder.model.clear();
+        let m = [];
+        var folderList = App.recentFolders.list;
         for (var i = 0; i < folderList.length; i++) {
-            downloadFolder.model.insert(i, {'label': shortUrl(folderList[i]), 'path': folderList[i]});
+            m.push({'text': shortUrl(folderList[i]), 'path': folderList[i]});
         }
+        downloadFolder.model = m;
         updateCurrentFolder(App.localDecodePath(App.settings.dmcore.value(DmCoreSettings.FixedDownloadPath)));
     }
 
     function updateCurrentFolder(folderName) {
-        var index = find(downloadFolder.model, function(item) { return item.path == folderName });
-
+        if (!folderName) {
+            downloadFolder.currentIndex = -1;
+            return;
+        }
+        let index = downloadFolder.model.findIndex(item => item.path == folderName);
         if (index >= 0) {
             downloadFolder.currentIndex = index;
          } else {
-            index = downloadFolder.model.count;
-            downloadFolder.model.insert(index, {'label': shortUrl(folderName), 'path': folderName});
+            let m = downloadFolder.model;
+            index = m.length;
+            m.push({'text': shortUrl(folderName), 'path': folderName});
+            downloadFolder.model = m;
             downloadFolder.currentIndex = index;
         }
     }

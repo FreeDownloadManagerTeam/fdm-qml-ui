@@ -214,6 +214,23 @@ Column {
         }
     }
 
+    SettingsCheckBox {
+        text: qsTr("Enable additional downloads to optimize speed") + App.loc.emptyString
+        checked: parseInt(App.settings.dmcore.value(DmCoreSettings.MaxAdditionalSmallDownloads)) > 0 ||
+                 parseInt(App.settings.dmcore.value(DmCoreSettings.MaxAdditionalDownloadsIfTotalSpeedIsTooSlow)) > 0
+        anchors.left: parent.left
+        anchors.leftMargin: 0*appWindow.zoom
+        xOffset: 0
+        onClicked: {
+            App.settings.dmcore.setValue(
+                        DmCoreSettings.MaxAdditionalSmallDownloads,
+                        checked ? "1" : "0");
+            App.settings.dmcore.setValue(
+                        DmCoreSettings.MaxAdditionalDownloadsIfTotalSpeedIsTooSlow,
+                        checked ? "1" : "0");
+        }
+    }
+
     function invalidSettingsMessage()
     {
         if (!tumStg1.isValid() ||

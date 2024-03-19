@@ -166,7 +166,7 @@ Item {
                     spacing: 0
 
                     RowLayout {
-                        height: rowHeigth
+                        Layout.preferredHeight: rowHeigth
                         Layout.preferredWidth: nameItem.width
                         Layout.minimumWidth: Layout.preferredWidth
                         spacing: 0
@@ -174,16 +174,16 @@ Item {
                         Rectangle {
                             Layout.leftMargin: qtbug.leftMargin(5*appWindow.zoom, 0)
                             Layout.rightMargin: qtbug.rightMargin(5*appWindow.zoom, 0)
-                            width: ((model.level + (model.folder ? 0 : 1)) * 15)*appWindow.zoom
-                            height: rowHeigth
+                            Layout.preferredWidth: ((model.level + (model.folder ? 0 : 1)) * 15)*appWindow.zoom
+                            Layout.preferredHeight: rowHeigth
                             color: "transparent"
                         }
 
                         Rectangle {
                             visible: model.folder
                             Layout.alignment: Qt.AlignVCenter
-                            width: 15*appWindow.zoom
-                            height: 15*appWindow.zoom
+                            Layout.preferredWidth: 15*appWindow.zoom
+                            Layout.preferredHeight: 15*appWindow.zoom
                             color: "transparent"
                             clip: true
                             WaSvgImage {
@@ -219,7 +219,7 @@ Item {
                             Layout.fillWidth: true
                             Layout.leftMargin: 5*appWindow.zoom
                             Layout.rightMargin: 5*appWindow.zoom
-                            height: rowHeigth
+                            Layout.preferredHeight: rowHeigth
                             color: "transparent"
                             clip: true
                             BaseLabel {
@@ -249,7 +249,7 @@ Item {
                     }
 
                     Rectangle {
-                        height: rowHeigth
+                        Layout.preferredHeight: rowHeigth
                         Layout.preferredWidth: sizeItem.width
                         Layout.minimumWidth: Layout.preferredWidth
                         clip: true
@@ -279,7 +279,7 @@ Item {
                         Rectangle {
                             Layout.leftMargin: qtbug.leftMargin(5*appWindow.zoom, 0)
                             Layout.rightMargin: qtbug.rightMargin(5*appWindow.zoom, 0)
-                            height: 6*appWindow.zoom
+                            Layout.preferredHeight: 6*appWindow.zoom
                             Layout.fillWidth: true
                             Layout.alignment: Qt.AlignVCenter
                             color: appWindow.theme.progressRunningBackground
@@ -293,7 +293,7 @@ Item {
 
                         Rectangle {
                             Layout.alignment: Qt.AlignVCenter
-                            width: 45*appWindow.zoom
+                            Layout.preferredWidth: 45*appWindow.zoom
 
                             BaseLabel {
                                 anchors.left: parent.left
@@ -312,7 +312,7 @@ Item {
                         // also, changing priorityColWidth at startup causes the same bug.
                         Layout.preferredWidth: priorityColWidth
                         Layout.minimumWidth: Layout.preferredWidth
-                        height: rowHeigth
+                        Layout.preferredHeight: rowHeigth
                         color: "transparent"
 
                         property bool showControls: mouseAreaRow.containsMouse || mouseAreaUp.containsMouse
@@ -327,7 +327,7 @@ Item {
                             clip: true
 
                             Rectangle {
-                                height: rowHeigth
+                                Layout.preferredHeight: rowHeigth
                                 Layout.fillWidth: true
                                 Layout.leftMargin: qtbug.leftMargin(5*appWindow.zoom, 0)
                                 Layout.rightMargin: qtbug.rightMargin(5*appWindow.zoom, 0)
@@ -363,9 +363,9 @@ Item {
                             }
 
                             Rectangle {
-                                height: rowHeigth
+                                Layout.preferredHeight: rowHeigth
                                 color: "transparent"
-                                width: 16*appWindow.zoom
+                                Layout.preferredWidth: 16*appWindow.zoom
                                 enabled: model.priority != AbstractDownloadsUi.DownloadPriorityHigh
 
                                 Rectangle {
@@ -407,9 +407,9 @@ Item {
                             }
 
                             Rectangle {
-                                height: rowHeigth
+                                Layout.preferredHeight: rowHeigth
                                 color: "transparent"
-                                width: 16*appWindow.zoom
+                                Layout.preferredWidth: 16*appWindow.zoom
                                 Layout.rightMargin: qtbug.rightMargin(0, 10*appWindow.zoom)
                                 Layout.leftMargin: qtbug.leftMargin(0, 10*appWindow.zoom)
                                 enabled: model.priority != AbstractDownloadsUi.DownloadPriorityLow

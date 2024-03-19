@@ -269,9 +269,33 @@ Page {
                     }
                 }
     //--- MaxURatio - END ------------------------
+
+                Item {implicitHeight: 20; implicitWidth: 10}
+                SettingsSeparator{}
+
+                Item {
+                    Layout.fillWidth: true
+                    implicitWidth: childrenRect.width
+                    implicitHeight: childrenRect.height
+
+                    SwitchSetting {
+                        description: qsTr("Enable additional downloads to optimize speed") + App.loc.emptyString
+                        switchChecked: parseInt(App.settings.dmcore.value(DmCoreSettings.MaxAdditionalSmallDownloads)) > 0 ||
+                                       parseInt(App.settings.dmcore.value(DmCoreSettings.MaxAdditionalDownloadsIfTotalSpeedIsTooSlow)) > 0
+                        onClicked: {
+                            switchChecked = !switchChecked;
+                            App.settings.dmcore.setValue(
+                                        DmCoreSettings.MaxAdditionalSmallDownloads,
+                                        switchChecked ? "1" : "0");
+                            App.settings.dmcore.setValue(
+                                        DmCoreSettings.MaxAdditionalDownloadsIfTotalSpeedIsTooSlow,
+                                        switchChecked ? "1" : "0");
+                        }
+                    }
+                }
+
 //-- contentColumn content - END ---------------------------------------------------------------------
             }
-
         }
     }
 

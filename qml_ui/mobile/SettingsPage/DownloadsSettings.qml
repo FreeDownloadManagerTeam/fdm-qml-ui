@@ -261,6 +261,8 @@ Page {
                     enabled: fixedFolderRadioBtn.checked
                 }
 
+                Item {implicitHeight: 20; implicitWidth: 1}
+
 //-- contentColumn content - END ---------------------------------------------------------------------
             }
         }

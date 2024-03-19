@@ -131,8 +131,9 @@ Page {
                             Column
                             {
                                 anchors.left: parent.left
+                                spacing: 10
 
-                                TextField
+                                BaseTextField
                                 {
                                     id: httpHost
                                     text: App.settings.app.value(AppSettings.Http_ProxyHost)
@@ -144,7 +145,7 @@ Page {
                                     anchors.left: parent.left
                                     horizontalAlignment: Text.AlignLeft
                                 }
-                                TextField
+                                BaseTextField
                                 {
                                     id: httpPort
                                     text: App.settings.app.value(AppSettings.Http_ProxyPort)
@@ -174,8 +175,9 @@ Page {
                             Column
                             {
                                 anchors.left: parent.left
+                                spacing: 10
 
-                                TextField
+                                BaseTextField
                                 {
                                     id: httpsHost
                                     text: App.settings.app.value(AppSettings.Https_ProxyHost)
@@ -187,7 +189,7 @@ Page {
                                     anchors.left: parent.left
                                     horizontalAlignment: Text.AlignLeft
                                 }
-                                TextField
+                                BaseTextField
                                 {
                                     id: httpsPort
                                     text: App.settings.app.value(AppSettings.Https_ProxyPort)
@@ -213,7 +215,10 @@ Page {
                             }
                             Column
                             {
-                                TextField
+                                anchors.left: parent.left
+                                spacing: 10
+
+                                BaseTextField
                                 {
                                     id: ftpHost
                                     text: App.settings.app.value(AppSettings.Ftp_ProxyHost)
@@ -225,7 +230,7 @@ Page {
                                     anchors.left: parent.left
                                     horizontalAlignment: Text.AlignLeft
                                 }
-                                TextField
+                                BaseTextField
                                 {
                                     id: ftpPort
                                     text: App.settings.app.value(AppSettings.Ftp_ProxyPort)
@@ -251,7 +256,10 @@ Page {
                             }
                             Column
                             {
-                                TextField
+                                anchors.left: parent.left
+                                spacing: 10
+
+                                BaseTextField
                                 {
                                     id: socks5Host
                                     text: App.settings.app.value(AppSettings.Socks5_ProxyHost)
@@ -263,7 +271,7 @@ Page {
                                     anchors.left: parent.left
                                     horizontalAlignment: Text.AlignLeft
                                 }
-                                TextField
+                                BaseTextField
                                 {
                                     id: socks5Port
                                     text: App.settings.app.value(AppSettings.Socks5_ProxyPort)

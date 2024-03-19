@@ -5,6 +5,7 @@ TextField {
     property bool enable_QTBUG_110471_workaround: true
     property bool enable_QTBUG_110471_workaround_2: false
     property bool selectAllAtInit: false
+    property bool overrideImplicitHeight: true // https://bugreports.qt.io/browse/QTBUG-120505
 
     horizontalAlignment: Text.AlignLeft
 
@@ -22,6 +23,12 @@ TextField {
                 text = t;
             }
         }
+
+        if (overrideImplicitHeight)
+        {
+            implicitHeight = Qt.binding(() => contentHeight + 24);
+        }
+
         if (selectAllAtInit)
             selectAll();
     }

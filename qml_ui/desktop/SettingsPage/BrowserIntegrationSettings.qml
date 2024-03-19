@@ -406,6 +406,17 @@ Column {
                             App.settings.fromBool(checked));
             }
         }
+
+        SettingsCheckBox {
+            visible: App.features.hasFeature(AppFeatures.DontInterceptDownloadsIfKeyIsPressed)
+            text: qsTr("Don't intercept if INSERT key is pressed") + App.loc.emptyString
+            checked: App.settings.toBool(App.settings.app.value(AppSettings.WbDontInterceptDownloadsIfKeyIsPressed))
+            onClicked: {
+                App.settings.app.setValue(
+                            AppSettings.WbDontInterceptDownloadsIfKeyIsPressed,
+                            App.settings.fromBool(checked));
+            }
+        }
     }
 
     Timer {

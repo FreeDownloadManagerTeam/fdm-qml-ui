@@ -23,12 +23,12 @@ BaseLabel {
 
     Connections {
         target: App.storages
-        onBytesAvailableResult: {
+        onBytesAvailableResult: (path, available) => {
             if (path == saveToPath) {
                 downloadTools.freeDiskSpace = available;
             }
         }
-        onHasWriteAccessResult: {
+        onHasWriteAccessResult: (path, result) => {
             if (path == saveToPath) {
                 downloadTools.hasWriteAccess = result;
             }

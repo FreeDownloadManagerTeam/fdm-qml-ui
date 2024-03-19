@@ -10,7 +10,7 @@ CenteredDialog
     id: root
 
     readonly property bool isOkToSend: !App.bugReporter.sending &&
-                                       title.text && description.text && isEmailOk(email.text)
+                                       title.text.trim() && description.text.trim() && isEmailOk(email.text.trim())
 
     title: qsTr("Submit a bug report") + App.loc.emptyString
 
@@ -77,9 +77,18 @@ CenteredDialog
             Layout.fillWidth: true
         }
 
-        BaseLabel {
+        RowLayout {
             Layout.topMargin: 10
-            text: qsTr("E-mail") + App.loc.emptyString
+            BaseLabel {
+                text: qsTr("E-mail") + App.loc.emptyString
+            }
+            BaseLabel {
+                text: "*"
+                color: "red"
+                font.pixelSize: 14
+                font.bold: true
+                Layout.alignment: Qt.AlignTop
+            }
         }
 
         BaseTextField {
@@ -152,7 +161,7 @@ CenteredDialog
         if (!root.isOkToSend)
             return;
 
-        App.bugReporter.send(title.text, description.text, name.text, email.text, sendLogs.checked)
+        App.bugReporter.send(title.text.trim(), description.text.trim(), name.text.trim(), email.text.trim(), sendLogs.checked)
     }
 
     function clear()
@@ -164,8 +173,7 @@ CenteredDialog
 
     function isEmailOk(str)
     {
-        return !str ||
-                /\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/.test(str);
+        return /\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/.test(str);
     }
 
     Connections {
