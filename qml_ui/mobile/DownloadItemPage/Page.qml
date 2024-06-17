@@ -19,7 +19,7 @@ Page {
     DownloadsItemTools {
         id: downloadsItemTools
         itemId: downloadItemId
-//        onFinishedChanged: bottomPanelTools.updateState()
+        onHasDetailsChanged: updateCurrentTabsModel()
 
         property bool locked: downloadsItemTools.lockReason != ""
         property var itemOpacity: downloadsItemTools.locked ? 0.4 : 1
@@ -43,7 +43,7 @@ Page {
 
                 height: parent.height
                 anchors.horizontalCenter: parent.horizontalCenter
-                spacing: 30
+                spacing: tabs.count > 3 ? 10 : 30
 
                 Repeater {
                     id: tabs
@@ -60,6 +60,10 @@ Page {
 
     GeneralTab {
         visible: filtersBar.filter === 0
+    }
+
+    DetailsTab {
+        visible: filtersBar.filter === 3
     }
 
     Files {
@@ -100,6 +104,11 @@ Page {
         var tabs = [{id: 0, name: qsTr("Info") + App.loc.emptyString}];
 
         var downloadInfo = App.downloads.infos.info(downloadItemId);
+
+        if (downloadInfo.details) {
+            tabs.push({id: 3, name: qsTr("Details") + App.loc.emptyString});
+            ids.push("details");
+        }
 
         if (downloadInfo.filesCount > 1) {
             tabs.push({id: 1, name: qsTr("Files") + App.loc.emptyString});

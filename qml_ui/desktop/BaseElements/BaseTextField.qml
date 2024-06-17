@@ -16,6 +16,7 @@ TextField {
     selectedTextColor: appWindow.theme.foreground
     font.pixelSize: 14*appWindow.fontZoom
     color: appWindow.theme.foreground
+    placeholderTextColor: appWindow.theme.placeholder
     opacity: enabled ? 1 : 0.5
     horizontalAlignment: TextInput.AlignLeft
 

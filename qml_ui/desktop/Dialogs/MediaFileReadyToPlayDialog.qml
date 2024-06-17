@@ -17,7 +17,7 @@ BaseDialog {
 
     contentItem: BaseDialogItem {
         titleText: qsTr("Ready to play") + App.loc.emptyString
-
+        focus: true
         Keys.onEscapePressed: root.close()
         Keys.onReturnPressed: root.playAndClose()
         onCloseClick: root.close()

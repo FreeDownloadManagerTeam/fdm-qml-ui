@@ -125,6 +125,10 @@ Item {
         if ( selectedDownloadsTools.currentDownloadId >= 0 ) {
             var downloadInfo = App.downloads.infos.info(selectedDownloadsTools.currentDownloadId);
 
+            if (downloadInfo.details) {
+                tabs.push({id: "details", name: qsTr("Details") + App.loc.emptyString});
+            }
+
             if (!downloadInfo.hasChildDownloads) {
                 tabs.push({id: "progress", name: qsTr("Progress") + App.loc.emptyString});
             }

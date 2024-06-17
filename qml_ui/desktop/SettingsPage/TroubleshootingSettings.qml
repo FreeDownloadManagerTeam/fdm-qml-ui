@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 import org.freedownloadmanager.fdm 1.0
 import "../../qt5compat"
 import "../BaseElements"
+import "../../common"
 
 Column
 {
@@ -115,6 +116,46 @@ Column
         }
         BaseLabel {
             text: qsTr("Restart is required") + App.loc.emptyString
+        }
+    }
+
+    BaseHandCursorLabel {
+        anchors.left: parent.left
+        text: "<a href='#'>" + "Show elements image" + "</a>"
+        onLinkActivated: {
+            visible = false;
+            elementsIconsStatus.visible = true;
+        }
+    }
+
+    RowLayout {
+        id: elementsIconsStatus
+        visible: false
+
+        WaSvgImage {
+            id: elementsIconsImg
+            source: appWindow.theme.elementsIcons
+            zoom: appWindow.zoom
+            Rectangle {
+                anchors.fill: parent
+                color: "transparent"
+                border.color: appWindow.theme.border
+                border.width: 1
+            }
+        }
+
+        GridLayout {
+            columns: 2
+            BaseLabel {text: "width:"}
+            BaseLabel {text: elementsIconsImg.width}
+            BaseLabel {text: "height:"}
+            BaseLabel {text: elementsIconsImg.height}
+            BaseLabel {text: "preferred width:"}
+            BaseLabel {text: elementsIconsImg.preferredWidth}
+            BaseLabel {text: "preferred height:"}
+            BaseLabel {text: elementsIconsImg.preferredHeight}
+            BaseLabel {text: "zoom:"}
+            BaseLabel {text: elementsIconsImg.zoom}
         }
     }
 

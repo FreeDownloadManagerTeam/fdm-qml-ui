@@ -7,6 +7,8 @@ Row
 {
     property var myDownloadsItemTools
 
+    property color textColor: appWindow.theme.foreground
+
     QtObject
     {
         id: d
@@ -48,6 +50,7 @@ Row
                 leftPadding: qtbug.leftPadding(2*appWindow.zoom,0)
                 rightPadding: qtbug.rightPadding(2*appWindow.zoom,0)
                 bottomPadding: d.textBottomPadding
+                color: textColor
             }
         }
     }
@@ -67,5 +70,6 @@ Row
         leftPadding: qtbug.leftPadding(2*appWindow.zoom,0)
         rightPadding: qtbug.rightPadding(2*appWindow.zoom,0)
         bottomPadding: d.textBottomPadding
+        color: textColor
     }
 }

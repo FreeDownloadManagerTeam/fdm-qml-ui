@@ -53,6 +53,8 @@ Page {
                         font.pixelSize: 16
                     }
 
+                    Item {implicitWidth: 1; implicitHeight: 1; Layout.fillWidth: true}
+
                     BaseComboBox {
                         Layout.alignment: Qt.AlignVCenter
                         Layout.fillWidth: true
@@ -74,8 +76,10 @@ Page {
                         onActivated: (index) => App.settings.dmcore.setValue(DmCoreSettings.BtEncryptionPolicy, model[index].value.toString())
                     }
 
-                    Item {implicitWidth: 1; implicitHeight: 1; Layout.fillWidth: true}
+                    Item {implicitWidth: 20; implicitHeight: 1}
                 }
+
+                Item {implicitHeight: 10; implicitWidth: 1}
 
                 SettingsSeparator{}
 

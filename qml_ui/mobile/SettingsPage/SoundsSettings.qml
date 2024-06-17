@@ -90,7 +90,7 @@ Page {
                                     icon.source: Qt.resolvedUrl("../../images/mobile/music_note.svg")
                                     icon.color: appWindow.theme.foreground
 
-                                    enabled: modelData.soundFile
+                                    enabled: modelData.soundSource.toString()
                                     onClicked: App.soundNotifMgr.playSound(modelData.setting)
                                 }
 
@@ -98,10 +98,10 @@ Page {
                                     icon.source: Qt.resolvedUrl("../../images/mobile/music_off.svg")
                                     icon.color: appWindow.theme.foreground
 
-                                    enabled: modelData.soundFile
+                                    enabled: modelData.soundSource.toString()
                                     onClicked: {
                                         soundsList.currentSetting = modelData.setting;
-                                        App.soundNotifMgr.setSoundFile(soundsList.currentSetting, '');
+                                        App.soundNotifMgr.setSoundSource(soundsList.currentSetting, '');
                                         soundsList.reloadModel();
                                     }
                                 }
@@ -112,7 +112,7 @@ Page {
 
                                     onClicked: {
                                         soundsList.currentSetting = modelData.setting;
-                                        stackView.waPush(filePicker.filePickerPageComponent, {initiator: "soundsSettings", downloadId: -1, onlyFolders: false});
+                                        openFileDlg.open();
                                     }
                                 }
                             }
@@ -121,10 +121,10 @@ Page {
                         Component.onCompleted: soundsList.reloadModel()
 
                         function reloadModel() {
-                            soundsList.model = [{ text: qsTr("Downloads added"), setting: AppNotificationEvent.DownloadsAdded, soundFile: App.soundNotifMgr.soundFile(AppNotificationEvent.DownloadsAdded) },
-                                              { text: qsTr("Downloads completed"), setting: AppNotificationEvent.DownloadsCompleted, soundFile: App.soundNotifMgr.soundFile(AppNotificationEvent.DownloadsCompleted) },
-                                              { text: qsTr("Downloads failed"), setting: AppNotificationEvent.DownloadsFailed, soundFile: App.soundNotifMgr.soundFile(AppNotificationEvent.DownloadsFailed) },
-                                              { text: qsTr("No active downloads"), setting: AppNotificationEvent.NoActiveDownloads, soundFile: App.soundNotifMgr.soundFile(AppNotificationEvent.NoActiveDownloads) }];
+                            soundsList.model = [{ text: qsTr("Downloads added"), setting: AppNotificationEvent.DownloadsAdded, soundSource: App.soundNotifMgr.soundSource(AppNotificationEvent.DownloadsAdded) },
+                                              { text: qsTr("Downloads completed"), setting: AppNotificationEvent.DownloadsCompleted, soundSource: App.soundNotifMgr.soundSource(AppNotificationEvent.DownloadsCompleted) },
+                                              { text: qsTr("Downloads failed"), setting: AppNotificationEvent.DownloadsFailed, soundSource: App.soundNotifMgr.soundSource(AppNotificationEvent.DownloadsFailed) },
+                                              { text: qsTr("No active downloads"), setting: AppNotificationEvent.NoActiveDownloads, soundSource: App.soundNotifMgr.soundSource(AppNotificationEvent.NoActiveDownloads) }];
                         }
                     }
                 }
@@ -134,13 +134,15 @@ Page {
         }
     }
 
-    Connections {
-        target: filePicker
-        onFileSelected: {
-            onFileSelected: {
-                App.soundNotifMgr.setSoundFile(soundsList.currentSetting, App.tools.url(fileName).toLocalFile());
-                soundsList.reloadModel()
-            }
+    FileDialog
+    {
+        id: openFileDlg
+        nameFilters: ["*"]
+        fileMode: FileDialog.OpenFile
+        flags: FileDialog.ReadOnly
+        onAccepted: {
+            App.soundNotifMgr.setSoundSource(soundsList.currentSetting, selectedFile);
+            soundsList.reloadModel();
         }
     }
 

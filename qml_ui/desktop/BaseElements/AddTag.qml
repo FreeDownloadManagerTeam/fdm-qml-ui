@@ -56,6 +56,7 @@ Item {
         BaseTextField {
             id: textInput
             placeholderText: qsTr("Add tag") + App.loc.emptyString
+            placeholderTextColor: appWindow.theme.filterBtnPlaceholder
             width: 150*appWindow.zoom
             implicitHeight: 20*appWindow.zoom
             font.pixelSize: 13*appWindow.fontZoom

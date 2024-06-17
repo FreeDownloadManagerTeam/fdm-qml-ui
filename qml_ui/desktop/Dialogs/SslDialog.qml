@@ -55,7 +55,9 @@ BaseDialog {
                 BaseLabel {
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignVCenter
-                    text: qsTr("SSL Certificate is not valid.") + App.loc.emptyString
+                    text: downloadTools.sslHostIsUnknownErr ?
+                              qsTr("The authenticity of the host can't be established.") + App.loc.emptyString :
+                              qsTr("SSL Certificate is not valid.") + App.loc.emptyString
                     wrapMode: Text.Wrap
                 }
             }
@@ -63,7 +65,9 @@ BaseDialog {
             BaseLabel {
                 Layout.fillWidth: true
                 Layout.topMargin: 10*appWindow.zoom
-                text: qsTr("Certificate fingerprints") + App.loc.emptyString
+                text: downloadTools.sslHostIsUnknownErr ?
+                          qsTr("%1 key fingerprints").arg(downloadTools.sslAlg) + App.loc.emptyString :
+                          qsTr("Certificate fingerprints") + App.loc.emptyString
             }
 
             GridLayout {
@@ -97,6 +101,13 @@ BaseDialog {
                 }
             }
 
+            BaseLabel {
+                visible: downloadTools.sslHostIsUnknownErr
+                Layout.fillWidth: true
+                Layout.topMargin: 10*appWindow.zoom
+                text: qsTr("If you trust this host, select Accept to remember the key and carry on connecting.") + App.loc.emptyString
+            }
+
             RowLayout {
                 Layout.topMargin: 10*appWindow.zoom
                 Layout.bottomMargin: 10*appWindow.zoom
@@ -106,7 +117,9 @@ BaseDialog {
 
                 CustomButton {
                     id: cnclBtn
-                    text: qsTr("Accept the risk and download") + App.loc.emptyString
+                    text: downloadTools.sslHostIsUnknownErr ?
+                              qsTr("Accept") + App.loc.emptyString :
+                              qsTr("Accept the risk and download") + App.loc.emptyString
                     onClicked: {
                         downloadTools.acceptSsl();
                         root.close();

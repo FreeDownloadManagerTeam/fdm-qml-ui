@@ -182,7 +182,7 @@ BaseStandaloneCapableDialog {
 
     Connections {
         target: appWindow
-        onReportError: {
+        onReportError: failedId => {
             if (failedId == downloadTools.lastFailedRequestId) {
                 downloadTools.doReject();
             }

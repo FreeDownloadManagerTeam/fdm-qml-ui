@@ -143,10 +143,12 @@ BaseDialog {
         if (!path.text)
             return;
         let p = App.fromNativeSeparators(path.text);
-        p = App.tools.filePathPart(p) + "/" +
-                App.tools.fileTitlePart(p) + "." +
+        let pp = App.tools.filePathPart(p);
+        if (!pp.endsWith('/'))
+            pp += '/';
+        pp += App.tools.fileTitlePart(p) + "." +
                 typeCombo.extension;
-        path.text = App.toNativeSeparators(p);
+        path.text = App.toNativeSeparators(pp);
     }
 
     function doOK() {

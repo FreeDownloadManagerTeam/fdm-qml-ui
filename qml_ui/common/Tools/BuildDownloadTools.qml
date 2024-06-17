@@ -63,9 +63,11 @@ Item {
     property var authRequest: null
 
     property string sslHost
+    property string sslAlg
     property string sslSha1Fingerprint
     property string sslSha256Fingerprint
     property var sslErrorsStrings: null
+    property bool sslHostIsUnknownErr: false
     property var sslRequest: null
 
     property bool batchDownload: false
@@ -118,10 +120,24 @@ Item {
     {
         if (request) {
             sslRequest = request;
-            sslSha1Fingerprint = sslRequest.cert.sha1Fingerprint();
-            sslSha256Fingerprint = sslRequest.cert.sha256Fingerprint();
-            sslErrorsStrings = sslRequest.errorsStrings;
-            sslHost = sslRequest.url.url;
+            if (sslRequest.cert)
+            {
+                sslSha1Fingerprint = sslRequest.cert.sha1Fingerprint();
+                sslSha256Fingerprint = sslRequest.cert.sha256Fingerprint();
+                sslErrorsStrings = sslRequest.errorsStrings;
+                sslHost = sslRequest.url.url;
+                sslHostIsUnknownErr = false;
+                sslAlg = "";
+            }
+            else
+            {
+                sslSha1Fingerprint = sslRequest.sslHost.sha1Fingerprint();
+                sslSha256Fingerprint = sslRequest.sslHost.sha256Fingerprint();
+                sslErrorsStrings = null;
+                sslHost = sslRequest.sslHost.hostAndPort();
+                sslHostIsUnknownErr = true;
+                sslAlg = sslRequest.sslHost.algorithm();
+            }
         }
     }
 
@@ -629,7 +645,7 @@ Item {
 
     Connections {
         target: App.downloads.creator
-        onTagIdChanged: {
+        onTagIdChanged: id => {
             var tagId = App.downloads.creator.tagId(id);
             relatedTag = tagId > 0 ? App.downloads.tags.tag(tagId) : null;
         }

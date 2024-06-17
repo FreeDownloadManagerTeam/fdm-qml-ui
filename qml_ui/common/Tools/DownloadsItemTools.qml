@@ -18,6 +18,7 @@ Item {
     property int flags: !item ? 0 : item.flags
     property string moduleUid: !item ? "" : item.moduleUid
     property string state: !item ? "" : item.state
+    property bool hasDetails: !!item && item.details !== undefined
 
     property bool checkingFiles: (!item || !item.checkingFiles) ? false : item.checkingFiles
     property int checkingFilesProgress: !item ? -1 : parseInt(item.checkingFilesProgress)
@@ -153,6 +154,11 @@ Item {
     onLoRunningChanged: updateState()
 
     onSizeChanged: {
+        estimatedSecTimer.start();
+        updateDownloadProgress();
+    }
+
+    onSelectedSizeChanged: {
         estimatedSecTimer.start();
         updateDownloadProgress();
     }

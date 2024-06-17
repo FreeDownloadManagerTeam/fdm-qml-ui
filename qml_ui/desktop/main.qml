@@ -106,7 +106,7 @@ ApplicationWindow {
     palette.text: appWindow.theme.foreground
 
     onShowAbout: aboutDlg.open()
-    onStopDownload: {
+    onStopDownload: downloadIds => {
         setForegroundWindow();
         stopDownloadDlg.show(downloadIds)
     }

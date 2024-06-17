@@ -56,6 +56,7 @@ Item {
                 }
 
                 implicitWidth: contentItem.childrenRect.width+30*appWindow.zoom
+                implicitHeight: contentItem.childrenRect.height
             }
         }
 

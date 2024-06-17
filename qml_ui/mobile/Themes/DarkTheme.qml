@@ -45,6 +45,7 @@ QtObject {
     readonly property color progressBorder: "#707070"
     readonly property color errorMessage: "#D9F86061"
     readonly property color successMessage: "#58936D"
+    readonly property color warningMessage: "#5960AF"
     readonly property color previewOverlay: "#1A000000"
     readonly property color highPriority: "#3C4F68"
     readonly property color lowPriority: "#BFCECECE"

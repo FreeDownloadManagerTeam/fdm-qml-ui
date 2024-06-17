@@ -146,6 +146,7 @@ Flickable {
                     DownloadSpeed {
                         visible: parent.showSpeed
                         myDownloadsItemTools: downloadsItemTools
+                        textColor: appWindow.theme.generalTabKey
                     }
 
                     BaseLabel {
@@ -191,7 +192,9 @@ Flickable {
                         visible: downloadsItemTools.added
                         font.pixelSize: appWindow.fonts.defaultSize
                         color: appWindow.theme.generalTabValue
-                        text: App.loc.dateOrTimeToString(downloadsItemTools.added, false) + App.loc.emptyString
+                        text: downloadsItemTools.added ?
+                                  App.loc.dateOrTimeToString(downloadsItemTools.added, false) + App.loc.emptyString :
+                                  ""
                         MouseArea {
                             propagateComposedEvents: true
                             anchors.fill: parent
@@ -199,7 +202,9 @@ Flickable {
                             onClicked : function (mouse) {mouse.accepted = false;}
                             onPressed: function (mouse) {mouse.accepted = false;}
                             BaseToolTip {
-                                text: App.loc.dateTimeToString(downloadsItemTools.added, true) + App.loc.emptyString
+                                text: downloadsItemTools.added ?
+                                          App.loc.dateTimeToString(downloadsItemTools.added, true) + App.loc.emptyString :
+                                          ""
                                 visible: parent.containsMouse
                             }
                         }
@@ -253,6 +258,7 @@ Flickable {
                     title: qsTr("Web page") + App.loc.emptyString
                     url: downloadsItemTools.webPageUrl
                     downloadModuleUid: downloadsItemTools.moduleUid
+                    titleColor: appWindow.theme.generalTabValue
                 }
 
                 LinkWithIcon {
@@ -261,6 +267,7 @@ Flickable {
                     title: qsTr("File") + App.loc.emptyString
                     url: downloadsItemTools.resourceUrl
                     downloadModuleUid: downloadsItemTools.moduleUid
+                    titleColor: appWindow.theme.generalTabValue
                 }
             }
         }

@@ -137,7 +137,7 @@ BaseStandaloneCapableDialog {
                     id: playAsap
                 }
 
-                ButtonsBlock {forceDisableOK: d.accepting}
+                ButtonsBlock {id: bb; forceDisableOK: d.accepting}
             }
         }
     }
@@ -194,7 +194,7 @@ BaseStandaloneCapableDialog {
     }
 
     function accept() {
-        if (d.accepting)
+        if (d.accepting || !bb.downloadBtnEnabled)
             return;
         d.accepting = true;
         noResumeSupportBlock.apply();

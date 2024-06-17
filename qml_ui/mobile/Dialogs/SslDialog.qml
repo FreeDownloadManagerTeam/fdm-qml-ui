@@ -19,7 +19,7 @@ Dialog {
 
     contentItem: ColumnLayout {
 
-        spacing: 20
+        spacing: 10
         clip: true
 
         DialogTitle {
@@ -27,7 +27,7 @@ Dialog {
             text: qsTr("Security risk") + App.loc.emptyString
         }
 
-        Label {
+        BaseLabel {
             text: downloadTools.sslHost
             color: "#737373"
             wrapMode: Text.Wrap
@@ -36,8 +36,10 @@ Dialog {
             horizontalAlignment: Text.AlignLeft
         }
 
-        Label {
-            text: qsTr("SSL Certificate is not valid.") + App.loc.emptyString
+        BaseLabel {
+            text: downloadTools.sslHostIsUnknownErr ?
+                      qsTr("The authenticity of the host can't be established.") + App.loc.emptyString :
+                      qsTr("SSL Certificate is not valid.") + App.loc.emptyString
             color: "#737373"
             wrapMode: Text.Wrap
             Layout.fillWidth: true
@@ -49,8 +51,9 @@ Dialog {
             spacing: 10
             BaseLabel {
                 Layout.fillWidth: true
-                Layout.topMargin: 10
-                text: qsTr("Certificate fingerprints") + App.loc.emptyString
+                text: downloadTools.sslHostIsUnknownErr ?
+                          qsTr("%1 key fingerprints").arg(downloadTools.sslAlg) + App.loc.emptyString :
+                          qsTr("Certificate fingerprints") + App.loc.emptyString
             }
 
             ColumnLayout {
@@ -85,12 +88,21 @@ Dialog {
             }
         }
 
+        BaseLabel {
+            visible: downloadTools.sslHostIsUnknownErr
+            Layout.fillWidth: true
+            text: qsTr("If you trust this host, select Accept to remember the key and carry on connecting.") + App.loc.emptyString
+            wrapMode: Text.Wrap
+        }
+
         RowLayout {
             spacing: 5
             Layout.alignment: Qt.AlignHCenter
 
             DialogButton {
-                text: qsTr("Continue") + App.loc.emptyString
+                text: downloadTools.sslHostIsUnknownErr ?
+                          qsTr("Accept") + App.loc.emptyString :
+                          qsTr("Continue") + App.loc.emptyString
                 onClicked: {
                     downloadTools.acceptSsl();
                     root.close();

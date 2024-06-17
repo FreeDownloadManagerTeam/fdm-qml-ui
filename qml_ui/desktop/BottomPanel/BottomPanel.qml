@@ -22,6 +22,7 @@ Rectangle {
         itemId: selectedDownloadsTools.currentDownloadId
         onFinishedChanged: bottomPanelTools.updateState()
         onFilesCountChanged: bottomPanelTools.updateState()
+        onHasDetailsChanged: bottomPanelTools.updateState()
     }
 
     ColumnLayout {
@@ -114,6 +115,10 @@ Rectangle {
             GeneralTab {
                 visible: bottomPanelTools.currentTab === "general"
                 bottomPanelHeight: parent.height - 30*appWindow.zoom
+            }
+
+            DetailsTab {
+                visible: bottomPanelTools.currentTab === "details"
             }
 
             FilesTab {

@@ -18,6 +18,7 @@ QtObject {
     readonly property color selectedBackground: "#384555"//"#353B43"//"#665D84B7"//
     readonly property color errorMessage: "#D9F86061"//bc3737
     readonly property color successMessage: "#58936D"
+    readonly property color warningMessage: "#ffc000"
     readonly property color tableHeaderItem: "#8f9295"
     readonly property color menuHighlight: "#3A3939"
     readonly property color insideMainMenuBackground: "#3A3939"
@@ -41,10 +42,12 @@ QtObject {
     readonly property color filterBtnBackground: "#20262a"
     readonly property color filterBtnSelectedText: "#eaeaea"
     readonly property color filterBtnText: "#8f9295"
+    readonly property color filterBtnPlaceholder: placeholder
     readonly property color highMode: "#7ed350"
     readonly property color mediumMode: "#ffc000"
     readonly property color lowMode: "#d54744"
     readonly property color shadow: "#80ffffff"
+    readonly property color placeholder: "#808080"
     readonly property color progressRunningBackground: "#777"
     readonly property color progressPausedBackground: "#777"
     readonly property color progressRunning: "#007dc2"

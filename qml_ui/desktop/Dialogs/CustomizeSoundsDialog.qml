@@ -91,7 +91,9 @@ BaseDialog {
 
                             BaseLabel {
                                 id: label
-                                text: modelData.soundFile.length ? modelData.soundFile : qsTr("No sound") + App.loc.emptyString
+                                text: modelData.soundSource.toString() ?
+                                          App.toNativeSeparators(App.tools.url(modelData.soundSource).toLocalFile()) :
+                                          qsTr("No sound") + App.loc.emptyString
                                 Layout.preferredWidth: 250*appWindow.zoom
                                 Layout.fillHeight: true
                                 verticalAlignment: Text.AlignVCenter
@@ -155,10 +157,10 @@ BaseDialog {
 
                     function reloadModel() {
                         var index = soundsList.currentIndex;
-                        soundsList.model = [{ text: qsTr("Downloads added"), setting: AppNotificationEvent.DownloadsAdded, soundFile: App.soundNotifMgr.soundFile(AppNotificationEvent.DownloadsAdded) },
-                                          { text: qsTr("Downloads completed"), setting: AppNotificationEvent.DownloadsCompleted, soundFile: App.soundNotifMgr.soundFile(AppNotificationEvent.DownloadsCompleted) },
-                                          { text: qsTr("Downloads failed"), setting: AppNotificationEvent.DownloadsFailed, soundFile: App.soundNotifMgr.soundFile(AppNotificationEvent.DownloadsFailed) },
-                                          { text: qsTr("No active downloads"), setting: AppNotificationEvent.NoActiveDownloads, soundFile: App.soundNotifMgr.soundFile(AppNotificationEvent.NoActiveDownloads) }];
+                        soundsList.model = [{ text: qsTr("Downloads added"), setting: AppNotificationEvent.DownloadsAdded, soundSource: App.soundNotifMgr.soundSource(AppNotificationEvent.DownloadsAdded) },
+                                          { text: qsTr("Downloads completed"), setting: AppNotificationEvent.DownloadsCompleted, soundSource: App.soundNotifMgr.soundSource(AppNotificationEvent.DownloadsCompleted) },
+                                          { text: qsTr("Downloads failed"), setting: AppNotificationEvent.DownloadsFailed, soundSource: App.soundNotifMgr.soundSource(AppNotificationEvent.DownloadsFailed) },
+                                          { text: qsTr("No active downloads"), setting: AppNotificationEvent.NoActiveDownloads, soundSource: App.soundNotifMgr.soundSource(AppNotificationEvent.NoActiveDownloads) }];
                         soundsList.currentIndex = index;
                     }
                 }
@@ -181,9 +183,9 @@ BaseDialog {
 
                 CustomButton {
                     text: qsTr("Remove") + App.loc.emptyString
-                    enabled: soundsList.currentIndex >= 0 && soundsList.model[soundsList.currentIndex].soundFile
+                    enabled: soundsList.currentIndex >= 0 && soundsList.model[soundsList.currentIndex].soundSource.toString()
                     onClicked: {
-                        App.soundNotifMgr.setSoundFile(soundsList.model[soundsList.currentIndex].setting, '')
+                        App.soundNotifMgr.setSoundSource(soundsList.model[soundsList.currentIndex].setting, '')
                         soundsList.reloadModel()
                     }
                     Layout.alignment: Qt.AlignRight
@@ -191,7 +193,7 @@ BaseDialog {
 
                 CustomButton {
                     text: qsTr("Test") + App.loc.emptyString
-                    enabled: soundsList.currentIndex >= 0 && soundsList.model[soundsList.currentIndex].soundFile
+                    enabled: soundsList.currentIndex >= 0 && soundsList.model[soundsList.currentIndex].soundSource.toString()
                     onClicked: App.soundNotifMgr.playSound(soundsList.model[soundsList.currentIndex].setting)
                     Layout.alignment: Qt.AlignRight
                 }
@@ -210,12 +212,12 @@ BaseDialog {
     FileDialog {
         id: setSoundDlg
         onAccepted: {
-            App.soundNotifMgr.setSoundFile(soundsList.model[soundsList.currentIndex].setting, App.tools.url(selectedFile).toLocalFile());
+            App.soundNotifMgr.setSoundSource(soundsList.model[soundsList.currentIndex].setting, selectedFile);
             soundsList.reloadModel()
         }
         function openDialog() {
-            if (soundsList.model[soundsList.currentIndex].soundFile.length > 0) {
-                setSoundDlg.folder = App.tools.urlFromLocalFile(soundsList.model[soundsList.currentIndex].soundFile).url;
+            if (soundsList.model[soundsList.currentIndex].soundSource.toString()) {
+                setSoundDlg.currentFolder = soundsList.model[soundsList.currentIndex].soundSource;
             }
             setSoundDlg.open()
         }

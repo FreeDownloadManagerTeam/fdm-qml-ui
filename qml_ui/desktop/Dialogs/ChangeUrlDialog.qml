@@ -40,7 +40,7 @@ BaseDialog {
             BaseLabel
             {
                 visible: destinationPath
-                text: qsTr("File location: %1").arg(destinationPath)
+                text: qsTr("File location: %1").arg(App.toNativeSeparators(destinationPath))
                 width: parent.width
                 elide: Text.ElideMiddle
             }

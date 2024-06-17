@@ -11,6 +11,7 @@ Item
     property string title: ""
     property string url: ""
     property string downloadModuleUid: ""
+    property color titleColor: appWindow.theme.foreground
 
     visible: url.length > 0
 
@@ -50,6 +51,7 @@ Item
             Layout.alignment: Qt.AlignVCenter
             font.pixelSize: appWindow.fonts.defaultSize
             Layout.fillHeight: true
+            color: titleColor
         }
 
         BaseLabel

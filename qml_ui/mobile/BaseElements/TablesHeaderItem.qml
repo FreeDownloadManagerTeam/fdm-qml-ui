@@ -12,7 +12,7 @@ Rectangle {
 
     signal clicked
 
-    height: appWindow.smallScreen ? 48 : 24
+    implicitHeight: appWindow.smallScreen ? 48 : 24
     color: "transparent"
 
     BaseLabel {

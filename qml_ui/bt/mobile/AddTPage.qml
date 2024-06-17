@@ -28,7 +28,8 @@ Page {
 
                 DialogButton {
                     text: qsTr("OK") + App.loc.emptyString
-                    Layout.rightMargin: 10
+                    Layout.leftMargin: qtbug.leftMargin(0, 10)
+                    Layout.rightMargin: qtbug.rightMargin(0, 10)
                     textColor: appWindow.theme.toolbarTextColor
                     enabled: trackers.text.trim() != ''
                     onClicked: doOK()

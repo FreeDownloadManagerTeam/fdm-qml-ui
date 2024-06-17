@@ -5,6 +5,7 @@ import QtQuick.Controls.Material 2.4
 import org.freedownloadmanager.fdm 1.0
 import "../common/Tools"
 import "BaseElements"
+import "../qt5compat"
 
 
 Page {
@@ -75,21 +76,21 @@ Page {
                     width: 40
                     height: 40
                     flat: true
-                    onClicked: {
-                        stackView.waPush(filePicker.filePickerPageComponent, {initiator: "addDownload", downloadId: -1, onlyFolders: false});
-                    }
+                    onClicked: openFileDlg.open()
                     Layout.alignment: Qt.AlignTop
                     icon.source: Qt.resolvedUrl("../images/download-item/folder.svg")
                     icon.color: appWindow.theme.foreground
                     icon.width: 18
                     icon.height: 18
-                }
 
-                Connections {
-                    target: filePicker
-                    onFileSelected: {
-                        onFileSelected: {
-                            url.text = fileName;
+                    FileDialog
+                    {
+                        id: openFileDlg
+                        nameFilters: App.cfg.cdOpenFileDlgNameFilters ? App.cfg.cdOpenFileDlgNameFilters : ["*"]
+                        fileMode: FileDialog.OpenFile
+                        flags: FileDialog.ReadOnly
+                        onAccepted: {
+                            url.text = selectedFile;
                             url.accepted();
                         }
                     }

@@ -88,7 +88,7 @@ BaseDialog {
 
     Connections {
         target: App.exportImport
-        onExportFinished: {
+        onExportFinished: (file, error) => {
             if (!root.opened && error.hasError) {
                 dialogTitle = qsTr("Failure to export") + App.loc.emptyString;
                 filePath = qsTr("Unable to export to the file: %1").arg(file) + App.loc.emptyString
@@ -96,7 +96,7 @@ BaseDialog {
                 root.open();
             }
         }
-        onImportFinished: {
+        onImportFinished: (file, error) => {
             if (!root.opened && error.hasError) {
                 dialogTitle = qsTr("Failure to import") + App.loc.emptyString;
                 filePath = qsTr("Unable to import from the file: %1").arg(file) + App.loc.emptyString

@@ -238,7 +238,12 @@ Page {
                     flick.currentTab = bt;
                 } else if (rc.visible && isCurrentTab(rc)) {
                     flick.currentTab = rc;
-                }else {
+                }else if (isCurrentTab(advanced)) {
+                    flick.currentTab = advanced;
+                } else if (troubleshooting.visible && isCurrentTab(troubleshooting)) {
+                    flick.currentTab = troubleshooting;
+                }
+                else {
                     flick.currentTab = advanced;
                 }
             }

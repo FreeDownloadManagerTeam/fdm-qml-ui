@@ -22,6 +22,8 @@ ComboBox {
     model: ListModel {}
 
     delegate: Rectangle {
+        id: delegateRoot
+
         property bool hover: false
         color: hover ? appWindow.theme.menuHighlight : "transparent"
         height: 30*appWindow.zoom
@@ -41,19 +43,27 @@ ComboBox {
                 MouseArea {
                     anchors.fill: parent
                     hoverEnabled: true
-                    onEntered: parent.hover = true
-                    onExited: parent.hover = false
+                    onEntered: delegateRoot.hover = true
+                    onExited: delegateRoot.hover = false
                     onClicked: {
                         root.currentIndex = index;
                         root.editText = App.toNativeSeparators(folder);
                         root.popup.close();
                     }
                 }
+
+                BaseToolTip
+                {
+                    text: parent.text
+                    visible: delegateRoot.hover && parent.truncated
+                }
             }
 
             WaSvgImage {
                 visible: root.model.count > 1
                 Layout.alignment: Qt.AlignVCenter
+                Layout.leftMargin: qtbug.leftMargin(0, 6*appWindow.zoom)
+                Layout.rightMargin: qtbug.rightMargin(0, 6*appWindow.zoom)
 
                 zoom: appWindow.zoom
                 source: appWindow.macVersion ? Qt.resolvedUrl("../../images/desktop/search_clear_mac.svg") :

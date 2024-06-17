@@ -42,7 +42,7 @@ CenteredDialog
             text: qsTr("Can't resume download. Download link likely expired. Resume attempts failed.") + "<br><br>" +
                   qsTr("Please try to update the download link to resume.") + "<br><br>" +
                   qsTr("Go to the website with the original download source and copy the renewed link") +
-                  (info && info.webPageUrl.toString() ? " - <a href='" + info.webPageUrl.toString() + "'>" + qsTr("click here") + "</a>" : "") + "." +
+                  (info && App.tools.isBrowsableUrl(info.webPageUrl) ? " - <a href='" + info.webPageUrl.toString() + "'>" + qsTr("click here") + "</a>" : "") + "." +
                   App.loc.emptyString
             Layout.fillWidth: true
             Layout.fillHeight: true

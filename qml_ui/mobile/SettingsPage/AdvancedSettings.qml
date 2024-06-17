@@ -124,6 +124,8 @@ Page {
                     comboMinimumWidth: 100
                 }
 
+                Item {implicitHeight: 10; implicitWidth: 1}
+
                 SettingsSeparator{
                     visible: switchSetting4.visible
                 }
@@ -172,6 +174,8 @@ Page {
                     anchors.left: parent.left
                     anchors.leftMargin: 20
                 }
+
+                Item {implicitHeight: 10; implicitWidth: 1}
 
                 SettingsSeparator{
                     visible: fileExistsReactionLabel.visible

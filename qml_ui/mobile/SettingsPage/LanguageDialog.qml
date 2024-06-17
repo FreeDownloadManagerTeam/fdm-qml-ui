@@ -27,7 +27,7 @@ Dialog
                          "it_IT": -50, "ja_JP": -150, "pl_PL": -70, "pt_BR": -200, "ro_RO": -60, "ru_RU": -110,
                          "sl_SI": -140, "es_ES": -10, "sv_SE": -90, "tr_TR": -160, "vi_VN": -190, "fa": -210,
                          "hu_HU": -230, "fa_IR": -240, "bg_BG": -280, "ko_KR": -290, "hi_IN": -300,
-                         "cs_CZ": -310, "fi_FI": -320, "lv_LV": -330, "my_MM": -340 }
+                         "cs_CZ": -310, "fi_FI": -320, "lv_LV": -330, "my_MM": -340, "bn_BD": -350 }
 
     contentItem: Item {
         anchors.fill: parent
