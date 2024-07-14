@@ -64,18 +64,15 @@ ComboBox {
                            modelData.mode === TrafficUsageMode.Low ? appWindow.theme.lowMode : "transparent"
                 }
 
-                Rectangle {
-                    color: "transparent"
+                Item {
                     Layout.alignment: Qt.AlignVCenter
                     Layout.preferredWidth: 12*appWindow.zoom
                     Layout.preferredHeight: 10*appWindow.zoom
-                    clip: true
                     WaSvgImage {
                         visible: root.currentTumMode == modelData.mode
-                        source: appWindow.theme.elementsIcons
+                        source: appWindow.theme.elementsIconsRoot + "/check_mark.svg"
                         zoom: appWindow.zoom
-                        x: 0
-                        y: -123*zoom
+                        anchors.centerIn: parent
                     }
                 }
 
@@ -106,19 +103,16 @@ ComboBox {
         }
     }
 
-    indicator: Rectangle {
-        color: "transparent"
+    indicator: Item {
         anchors.verticalCenter: parent.verticalCenter
         anchors.right: parent.right
         anchors.rightMargin: 8*appWindow.zoom
         width: 15*appWindow.zoom
         height: 15*appWindow.zoom
-        clip: true
         WaSvgImage {
-            source: appWindow.theme.elementsIcons
+            source: appWindow.theme.elementsIconsRoot+(root.popup.opened ? "/arrow_down.svg" : "/arrow_up.svg")
             zoom: appWindow.zoom
-            x: (root.popup.opened ? 2 : -38)*zoom
-            y: -22*zoom
+            anchors.centerIn: parent
         }
     }
 

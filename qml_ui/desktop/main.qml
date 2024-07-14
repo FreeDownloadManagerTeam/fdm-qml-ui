@@ -358,6 +358,20 @@ ApplicationWindow {
     }
 
     Loader {
+        id: linux_2023_09_13_Case_Dialog
+        active: false
+        source: "Dialogs/Linux_2023_09_13_Case_Dialog.qml"
+        anchors.centerIn: parent
+        Component.onCompleted: {
+            if (App.app_Linux_2023_09_13_Case_isPositive())
+                active = true;
+                uiReadyTools.onReady(function(){
+                    linux_2023_09_13_Case_Dialog.item.open();
+                });
+        }
+    }
+
+    Loader {
         id: selfTestDlg
         active: App.isSelfTestMode
         source: "Dialogs/SelfTestDialog.qml"

@@ -21,29 +21,18 @@ CheckBox {
     implicitWidth: text.length > 0 ? contentItem.implicitWidth : (xOffset + indicator.width)
     implicitHeight: text.length > 0 ? Math.max(indicator.height, contentItem.implicitHeight) : indicator.height
 
-    indicator: Rectangle {
-        color: "transparent"
+    indicator: Item {
         anchors.verticalCenter: parent.verticalCenter
         x: LayoutMirroring.enabled ? root.width - width - root.xOffset : root.xOffset
         width: 12*appWindow.zoom
         height: 12*appWindow.zoom
-        clip: true
 
         WaSvgImage {
-            x: (checkBoxStyle === "gray" ? (
-                       checkState === Qt.Checked ? -180 :
-                       checkState === Qt.Unchecked ? -160 : -200)
-                   : (
-                checkBoxStyle === "black" ? (
-                    checkState === Qt.Checked ? -120 :
-                    checkState === Qt.Unchecked ? -100 : -140)
-                : (
-                    checkState === Qt.Checked ? -40 :
-                    checkState === Qt.Unchecked ? 0 : -20
-            )))*zoom
-            y: -44*zoom
-            source: appWindow.theme.checkboxIcons
+            source: appWindow.theme.checkboxIconsRoot + "/" + checkBoxStyle + "/" +
+                    (checkState === Qt.Checked ? "checked" : checkState === Qt.Unchecked ? "unchecked" : "indeterminate") +
+                    ".svg"
             zoom: appWindow.zoom
+            anchors.centerIn: parent
             opacity: root.locked || !root.enabled ? 0.4 : 1
             layer {
                 effect: ColorOverlay {

@@ -299,10 +299,25 @@ Column
             onClicked: { uiSettingsTools.settings.toggleBottomPanelByClickingOnDownload = !uiSettingsTools.settings.toggleBottomPanelByClickingOnDownload }
         }
 
+        SettingsCheckBox {
+            id: hideDockIcon
+            visible: appWindow.macVersion
+            text: qsTr("Hide the Dock icon") + App.loc.emptyString
+            checked: App.settings.toBool(App.settings.app.value(AppSettings.HideDockIcon))
+            onClicked: {
+                App.settings.app.setValue(
+                            AppSettings.HideDockIcon,
+                            App.settings.fromBool(checked));
+                if (checked)
+                    appWindow.showWindow(); // macOS hides app's main window when the dock icon is removed; so we restore it
+            }
+        }
+
         Loader {
             width: parent.width
             active: appWindow.macVersion
             source: "DockUploadSpeedSetting.qml"
+            enabled: !hideDockIcon.checked
         }
 
         SettingsCheckBox {
@@ -383,6 +398,7 @@ Column
                     anchors.verticalCenter: parent.verticalCenter
                 }
                 BaseComboBox {
+                    settingsStyle: true
                     anchors.verticalCenter: parent.verticalCenter
                     model: [
                         {text: "100%", value: 1.0},
@@ -405,6 +421,7 @@ Column
                     text: qsTr("Fonts zoom") + App.loc.emptyString
                 }
                 BaseComboBox {
+                    settingsStyle: true
                     anchors.verticalCenter: parent.verticalCenter
                     model: [
                         {text: "70%", value: 0.7},

@@ -77,19 +77,16 @@ Rectangle {
                 }
             }
 
-            Rectangle {
-                color: "transparent"
+            Item {
                 width: 21*appWindow.zoom
                 height: 21*appWindow.zoom
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.rightMargin: 4*appWindow.zoom
-                clip: true
                 WaSvgImage {
-                    source: appWindow.theme.elementsIcons
+                    source: appWindow.theme.elementsIconsRoot + "/close2.svg"
                     zoom: appWindow.zoom
-                    x: 4*zoom
-                    y: -367*zoom
+                    anchors.centerIn: parent
                 }
 
                 MouseArea {

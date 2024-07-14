@@ -49,19 +49,16 @@ Rectangle {
             color: appWindow.macVersion ? appWindow.theme.dialogTitleMac : appWindow.theme.dialogTitle
         }
 
-        Rectangle {
+        Item {
             visible: showCloseButton
             Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
             Layout.preferredHeight: 24*appWindow.zoom
             Layout.preferredWidth: 24*appWindow.zoom
-            clip: true
-            color: "transparent"
 
             WaSvgImage {
-                source: appWindow.theme.elementsIcons
+                source: appWindow.theme.elementsIconsRoot + "/close2.svg"
                 zoom: appWindow.zoom
-                x: 6*zoom
-                y: -366*zoom
+                anchors.centerIn: parent
             }
 
             MouseArea {

@@ -13,19 +13,16 @@ Row {
         width: 30*appWindow.zoom
         height: lbl.height
 
-        Rectangle {
+        Item {
             anchors.verticalCenter: parent.verticalCenter
             anchors.right: parent.right
             anchors.rightMargin: 2
-            color: "transparent"
             width: 8*appWindow.zoom
             height: 8*appWindow.zoom
-            clip: true
             WaSvgImage {
-                source: appWindow.theme.elementsIcons
+                source: appWindow.theme.elementsIconsRoot + "/filled_circle.svg"
                 zoom: appWindow.zoom
-                x: -60*zoom
-                y: -120*zoom
+                anchors.centerIn: parent
                 layer {
                     effect: ColorOverlay {
                         color: appWindow.theme.inactiveControl

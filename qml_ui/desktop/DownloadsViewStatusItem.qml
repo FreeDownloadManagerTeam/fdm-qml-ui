@@ -115,16 +115,13 @@ Item {
                 }
             }
         }
-        Rectangle {
-            clip: true
+        Item {
             width: 12*appWindow.zoom
             height: 15*appWindow.zoom
-            color: "transparent"
             WaSvgImage {
                 zoom: appWindow.zoom
-                x: 0
-                y: -120*zoom
-                source: appWindow.theme.elementsIcons
+                source: appWindow.theme.elementsIconsRoot + "/check_mark.svg"
+                anchors.centerIn: parent
             }
         }
         BaseLabel {

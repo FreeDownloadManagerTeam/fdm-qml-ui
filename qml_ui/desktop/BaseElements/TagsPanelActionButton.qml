@@ -16,14 +16,12 @@ Rectangle {
         width: 18*Math.min(appWindow.fontZoom, appWindow.zoom)
         height: 18*Math.min(appWindow.fontZoom, appWindow.zoom)
         color: appWindow.theme.filterBtnBackground
-        clip: true
         anchors.centerIn: parent
 
         WaSvgImage {
-            source: appWindow.theme.elementsIcons
+            source: appWindow.theme.elementsIconsRoot+(plusBtn ? "/plus.svg" : "/dots.svg")
             zoom: Math.min(appWindow.fontZoom, appWindow.zoom)
-            x: (plusBtn ? 3 : -57)*zoom
-            y: (plusBtn ? 3 : 8)*zoom
+            anchors.centerIn: parent
         }
     }
 

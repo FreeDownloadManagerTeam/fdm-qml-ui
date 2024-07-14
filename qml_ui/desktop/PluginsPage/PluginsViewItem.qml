@@ -56,7 +56,7 @@ RowLayout
                         enabled: model.supportsAutoUpdate
                         text: qsTr("Allow Automatic Updates") + App.loc.emptyString
                         checkable: true
-                        checked: !model.autoUpdateDisabled
+                        checked: model.supportsAutoUpdate && !model.autoUpdateDisabled
                         onTriggered: App.plugins.updateMgr.disableAutoUpdate(model.uuid, !checked)
                     }
 

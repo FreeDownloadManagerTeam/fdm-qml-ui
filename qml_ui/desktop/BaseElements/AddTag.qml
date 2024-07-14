@@ -33,10 +33,9 @@ Item {
 
             WaSvgImage {
                 visible: colorMouseArea.containsMouse
-                source: appWindow.theme.elementsIcons
+                source: appWindow.theme.elementsIconsRoot + "/triangle_down3.svg"
                 zoom: appWindow.zoom
-                x: 1*appWindow.zoom
-                y: -447*appWindow.zoom
+                anchors.centerIn: parent
                 layer {
                     effect: ColorOverlay {
                         color: "#fff"

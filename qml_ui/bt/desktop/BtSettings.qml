@@ -165,6 +165,7 @@ Column
             }
 
             BaseComboBox {
+                settingsStyle: true
                 anchors.verticalCenter: parent.verticalCenter
                 model: [
                     {text: qsTr("No encryption allowed") + App.loc.emptyString, value: AbstractDownloadsUi.NoEncryptionAllowed},

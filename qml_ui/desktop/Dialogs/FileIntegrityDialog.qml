@@ -48,7 +48,7 @@ BaseDialog {
                 HashAlgorithmCombobox {
                     id: hashCombo
                     Layout.preferredWidth: 120*appWindow.zoom
-                    Layout.preferredHeight: 30*appWindow.zoom
+                    Layout.preferredHeight: currentHash.implicitHeight
                 }
 
                 //Progressbar

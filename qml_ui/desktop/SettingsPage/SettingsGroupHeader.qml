@@ -53,18 +53,15 @@ Item
             implicitWidth: 19*appWindow.zoom
             implicitHeight: 21*appWindow.zoom
 
-            Rectangle {
+            Item {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
-                color: "transparent"
                 width: 19*appWindow.zoom
                 height: 15*appWindow.zoom
-                clip: true
                 WaSvgImage {
-                    source: appWindow.theme.elementsIcons
+                    source: appWindow.theme.elementsIconsRoot+(root.hidden ? "/arrow_down.svg" : "/arrow_up.svg")
                     zoom: appWindow.zoom
-                    x: (root.hidden ? 3 : -37)*zoom
-                    y: -22*zoom
+                    anchors.centerIn: parent
                     layer {
                         effect: ColorOverlay {
                             color: appWindow.theme.settingsSubgroupHeader

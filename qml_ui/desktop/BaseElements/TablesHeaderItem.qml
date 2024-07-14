@@ -51,20 +51,17 @@ Rectangle {
         anchors.leftMargin: 6*zoom
     }
 
-    Rectangle {
+    Item {
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
         anchors.leftMargin: root.indicatorElemRealWidth
         visible: showSortIndicator
         width: 10*appWindow.zoom
         height: 10*appWindow.zoom
-        clip: true
-        color: "transparent"
         WaSvgImage {
             zoom: appWindow.zoom
-            source: appWindow.theme.elementsIcons
-            x: (sortAscendingOrder ? -39 : -19)*zoom
-            y: -105*zoom
+            source: appWindow.theme.elementsIconsRoot + (sortAscendingOrder ? "/arrow_up2.svg" : "/arrow_down2.svg")
+            anchors.centerIn: parent
         }
     }
 

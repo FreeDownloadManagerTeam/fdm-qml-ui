@@ -40,17 +40,14 @@ Rectangle {
             onClicked: root.cancel()
         }
 
-        Rectangle {
+        Item {
             anchors.verticalCenter: parent.verticalCenter
             width: 30*appWindow.zoom
             height: 30*appWindow.zoom
-            color: "transparent"
-            clip: true
             WaSvgImage {
-                source: appWindow.theme.elementsIcons
+                anchors.centerIn: parent
+                source: appWindow.theme.elementsIconsRoot + "/close.svg"
                 zoom: appWindow.zoom
-                x: 11*zoom
-                y: -224*zoom
                 MouseArea {
                     anchors.fill: parent
                     onClicked: root.close()

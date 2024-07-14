@@ -23,81 +23,46 @@ MenuItem {
             color: menuItem.highlighted ? appWindow.theme.menuHighlight : (menuItem.insideMainMenu ? appWindow.theme.insideMainMenuBackground : "transparent")
         }
 
-        arrow: Item {
-            visible: menuItem.arrow_down || menuItem.arrow_up
+        arrow: Rectangle {
+            x: LayoutMirroring.enabled ? 0 : Math.round(parent.width - width)
             implicitWidth: 20*appWindow.zoom
             implicitHeight: 20*appWindow.zoom
-            anchors.right: parent.right
             anchors.verticalCenter: parent.verticalCenter
-
-            Rectangle {
-                visible: menuItem.arrow_down
-                width: 9*appWindow.zoom
-                height: 5*appWindow.zoom
-                anchors.centerIn: parent
-                clip: true
-                color: "transparent"
-                Image {
-                    source: appWindow.theme.elementsIcons
-                    sourceSize.width: 93*appWindow.zoom
-                    sourceSize.height: 456*appWindow.zoom
-                    x: -20*appWindow.zoom
-                    y: -108*appWindow.zoom
-                }
-            }
-
-            Rectangle {
-                visible: menuItem.arrow_up
-                width: 9*appWindow.zoom
-                height: 5*appWindow.zoom
-                anchors.centerIn: parent
-                clip: true
-                color: "transparent"
-                WaSvgImage {
-                    source: appWindow.theme.elementsIcons
-                    zoom: appWindow.zoom
-                    x: -39*appWindow.zoom
-                    y: -108*appWindow.zoom
+            visible: menuItem.subMenu
+            color: "transparent"
+            clip: true
+            WaSvgImage {
+                source: Qt.resolvedUrl("../../images/desktop/menu_arrow.svg")
+                zoom: appWindow.zoom
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.horizontalCenter: parent.horizontalCenter
+                opacity: enabled ? 1 : 0.5
+                mirror: LayoutMirroring.enabled
+                layer {
+                    effect: ColorOverlay {
+                        color: appWindow.theme.foreground
+                    }
+                    enabled: true
                 }
             }
         }
 
         indicator: Item {
+            x: LayoutMirroring.enabled ? Math.round(parent.width - width) : 0
             implicitWidth: 20*appWindow.zoom
             implicitHeight: 20*appWindow.zoom
-            anchors.left: parent.left
-            anchors.verticalCenter: menuItem.offerIndicator && !menuItem.checkable ? parent.verticalCenter : undefined
-
-            Rectangle {
-                visible: menuItem.checkable && menuItem.checked
-                width: 12*appWindow.zoom
-                height: 10*appWindow.zoom
-                anchors.bottom: parent.bottom
+            visible: menuItem.checkable && menuItem.checked
+            WaSvgImage {
+                source: appWindow.theme.elementsIconsRoot + "/check_mark.svg"
+                zoom: appWindow.zoom
                 anchors.horizontalCenter: parent.horizontalCenter
-                anchors.bottomMargin: 3*appWindow.zoom
-                clip: true
-                color: "transparent"
-                WaSvgImage {
-                    source: appWindow.theme.elementsIcons
-                    zoom: appWindow.zoom
-                    x: 0
-                    y: -123*appWindow.zoom
-                    layer {
-                        effect: ColorOverlay {
-                            color: appWindow.theme.foreground
-                        }
-                        enabled: !menuItem.insideMainMenu
+                y: (parent.height - height) / 2 + 1*zoom
+                layer {
+                    effect: ColorOverlay {
+                        color: appWindow.theme.foreground
                     }
+                    enabled: true
                 }
-            }
-
-            Rectangle {
-                visible: menuItem.offerIndicator && !menuItem.checkable
-                anchors.centerIn: parent
-                height: 8*appWindow.zoom
-                width: 8*appWindow.zoom
-                radius: 4*appWindow.zoom
-                color: "#40ca0a"
             }
         }
 

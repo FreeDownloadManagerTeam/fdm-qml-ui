@@ -163,7 +163,7 @@ Column {
 
                 MacrosMenu {
                     id: macrosMenu
-                    onMacroSelected: { fixedDownloadFolder.editText += macro; }
+                    onMacroSelected: macro => { fixedDownloadFolder.editText += macro; }
                 }
             }
         }

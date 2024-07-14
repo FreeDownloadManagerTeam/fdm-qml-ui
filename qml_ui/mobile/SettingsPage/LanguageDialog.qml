@@ -21,14 +21,6 @@ Dialog
 
     modal: true
 
-    // warning: don't forget to modify GeneralSettings.qml too
-    property var flags: {"en_US": -250, "ar_EG": -260, "zh_CN": -130, "zh_TW": -270, "ug": -130, "uk_UA": -220,
-                         "da_DK": -100, "nl_NL": -80, "fr_FR": -30, "de_DE": -20, "el_GR": -120, "id_ID": -180,
-                         "it_IT": -50, "ja_JP": -150, "pl_PL": -70, "pt_BR": -200, "ro_RO": -60, "ru_RU": -110,
-                         "sl_SI": -140, "es_ES": -10, "sv_SE": -90, "tr_TR": -160, "vi_VN": -190, "fa": -210,
-                         "hu_HU": -230, "fa_IR": -240, "bg_BG": -280, "ko_KR": -290, "hi_IN": -300,
-                         "cs_CZ": -310, "fi_FI": -320, "lv_LV": -330, "my_MM": -340, "bn_BD": -350 }
-
     contentItem: Item {
         anchors.fill: parent
 
@@ -93,9 +85,7 @@ Dialog
 
                         WaSvgImage {
                             zoom: langList.bckgRatio
-                            x: 0
-                            y: flags[modelData] * zoom
-                            source: Qt.resolvedUrl("../../images/flags.svg")
+                            source: Qt.resolvedUrl("../../images/flags/" + modelData + ".svg")
                             opacity: 0.3
                             layer{
                                 effect: FastBlur {
@@ -118,9 +108,7 @@ Dialog
                         anchors.leftMargin: 70
 
                         WaSvgImage {
-                            x: 0
-                            y: flags[modelData]
-                            source: Qt.resolvedUrl("../../images/flags.svg")
+                            source: Qt.resolvedUrl("../../images/flags/" + modelData + ".svg")
                         }
                     }
 

@@ -121,46 +121,6 @@ Column
 
     BaseHandCursorLabel {
         anchors.left: parent.left
-        text: "<a href='#'>" + "Show elements image" + "</a>"
-        onLinkActivated: {
-            visible = false;
-            elementsIconsStatus.visible = true;
-        }
-    }
-
-    RowLayout {
-        id: elementsIconsStatus
-        visible: false
-
-        WaSvgImage {
-            id: elementsIconsImg
-            source: appWindow.theme.elementsIcons
-            zoom: appWindow.zoom
-            Rectangle {
-                anchors.fill: parent
-                color: "transparent"
-                border.color: appWindow.theme.border
-                border.width: 1
-            }
-        }
-
-        GridLayout {
-            columns: 2
-            BaseLabel {text: "width:"}
-            BaseLabel {text: elementsIconsImg.width}
-            BaseLabel {text: "height:"}
-            BaseLabel {text: elementsIconsImg.height}
-            BaseLabel {text: "preferred width:"}
-            BaseLabel {text: elementsIconsImg.preferredWidth}
-            BaseLabel {text: "preferred height:"}
-            BaseLabel {text: elementsIconsImg.preferredHeight}
-            BaseLabel {text: "zoom:"}
-            BaseLabel {text: elementsIconsImg.zoom}
-        }
-    }
-
-    BaseHandCursorLabel {
-        anchors.left: parent.left
         text: "<a href='#'>" + qsTr("Hide") + App.loc.emptyString + "</a>"
         onLinkActivated: uiSettingsTools.settings.showTroubleshootingUi = false
     }

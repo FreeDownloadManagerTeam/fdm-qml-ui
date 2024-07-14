@@ -133,18 +133,15 @@ Column {
                 width: 19*appWindow.zoom
                 height: 21*appWindow.zoom
 
-                Rectangle {
+                Item {
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.horizontalCenter: parent.horizontalCenter
-                    color: "transparent"
                     width: 19*appWindow.zoom
                     height: 15*appWindow.zoom
-                    clip: true
                     WaSvgImage {
-                        source: appWindow.theme.elementsIcons
+                        source: appWindow.theme.elementsIconsRoot+(browsersList.visible ? "/arrow_up.svg" : "/arrow_down.svg")
                         zoom: appWindow.zoom
-                        x: (!browsersList.visible ? 3 : -37)*zoom
-                        y: -22*zoom
+                        anchors.centerIn: parent
                         layer {
                             effect: ColorOverlay {
                                 color: appWindow.theme.settingsSubgroupHeader

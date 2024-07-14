@@ -10,16 +10,16 @@ import "../BaseElements"
 Item {
     id: root
     property int currentValue: 0 // unlimited
-    property string sUnlimited: qsTr("Unlimited") + App.loc.emptyString
-    property string sCustom: qsTr("Custom...") + App.loc.emptyString
-    property string kbps: qsTr("KB/s") + App.loc.emptyString
+    readonly property string sUnlimited: qsTr("Unlimited") + App.loc.emptyString
+    readonly property string sCustom: qsTr("Custom...") + App.loc.emptyString
+    readonly property string kbps: qsTr("KB/s") + App.loc.emptyString
 
-    implicitHeight: custom.visible ? custom.implicitHeight : combo.height
+    implicitHeight: custom.visible ? custom.implicitHeight : combo.implicitHeight
     implicitWidth: 123*appWindow.fontZoom
 
-    ComboBox {
+    BaseComboBox {
         id: combo
-        height: 25*appWindow.fontZoom
+
         width: parent.width
         anchors.verticalCenter: parent.verticalCenter
         enabled: root.enabled
@@ -27,115 +27,17 @@ Item {
         rightPadding: 5*appWindow.zoom
         leftPadding: 5*appWindow.zoom
 
-        model: ListModel{}
+        fontSize: 12*appWindow.fontZoom
+        settingsStyle: true
 
-        onActivated: {
-            if (currentText === sCustom)
+        onActivated: index => {
+            if (model[index].value === -1)
             {
                 visible = false;
                 value.forceActiveFocus()
                 return;
             }
-            currentValue = currentText == sUnlimited ?
-                        0 : parseInt(currentText) * AppConstants.BytesInKB;
-        }
-
-        delegate: Rectangle {
-            property bool hover: false
-            color: hover ? appWindow.theme.menuHighlight : "transparent"
-            height: 18*appWindow.zoom
-            width: root.width
-            BaseLabel {
-                anchors.left: parent.left
-                leftPadding: qtbug.leftPadding(10*appWindow.zoom,0)
-                rightPadding: qtbug.rightPadding(10*appWindow.zoom,0)
-                anchors.verticalCenter: parent.verticalCenter
-                font.pixelSize: 12*appWindow.fontZoom
-                color: appWindow.theme.settingsItem
-                text: parseInt(modelData) ? modelData + " " + kbps : modelData
-            }
-
-            MouseArea {
-                anchors.fill: parent
-                hoverEnabled: true
-                onEntered: parent.hover = true
-                onExited: parent.hover = false
-                onClicked: {
-                    if (modelData === sCustom) {
-                        combo.visible = false;
-                        value.forceActiveFocus()
-                        return;
-                    }
-                    root.currentValue = modelData == sUnlimited ?
-                                0 : parseInt(modelData) * AppConstants.BytesInKB;
-                    combo.currentIndex = index;
-                    combo.popup.close();
-                }
-            }
-        }
-
-        background: Rectangle {
-            color: "transparent"
-            radius: 5*appWindow.zoom
-            border.color: appWindow.theme.settingsControlBorder
-            border.width: 1*appWindow.zoom
-        }
-
-        contentItem: Rectangle {
-            color: "transparent"
-            clip: true
-            BaseLabel {
-                anchors.left: parent.left
-                anchors.verticalCenter: parent.verticalCenter
-                leftPadding: qtbug.leftPadding(5*appWindow.zoom,0)
-                rightPadding: qtbug.rightPadding(5*appWindow.zoom,0)
-                font.pixelSize: 12*appWindow.fontZoom
-                color: appWindow.theme.settingsItem
-                text: parseInt(combo.currentText) ? combo.currentText + " " + kbps : combo.currentText
-            }
-        }
-
-        indicator: Rectangle {
-            x: LayoutMirroring.enabled ? 0 : combo.width - width
-            y: combo.topPadding + (combo.availableHeight - height) / 2
-            width: height - 1*appWindow.zoom
-            height: combo.height
-            color: "transparent"
-            Rectangle {
-                width: 9*appWindow.zoom
-                height: 8*appWindow.zoom
-                color: "transparent"
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.horizontalCenter: parent.horizontalCenter
-                clip: true
-                WaSvgImage {
-                    source: appWindow.theme.elementsIcons
-                    zoom: appWindow.zoom
-                    x: 0
-                    y: -448*zoom
-                }
-            }
-        }
-
-        popup: Popup {
-            y: combo.height
-            width: combo.width
-            height: 18*appWindow.zoom*combo.model.length + 2*appWindow.zoom
-            padding: 1*appWindow.zoom
-
-            background: Rectangle {
-                color: appWindow.theme.background
-                border.color: appWindow.theme.settingsControlBorder
-                border.width: 1*appWindow.zoom
-            }
-
-            contentItem: ListView {
-                clip: true
-                anchors.fill: parent
-                model: combo.model
-                currentIndex: combo.highlightedIndex
-                delegate: combo.delegate
-            }
+            root.currentValue = model[index].value;
         }
     }
 
@@ -240,29 +142,10 @@ Item {
 
         function closeCustom()
         {
-            applyCurrentValueToCombo();
+            reloadCombo();
             combo.visible = true;
             value.text = "";
         }
-    }
-
-    function applyCurrentValueToCombo()
-    {
-        var cvstr = currentValue && currentValue !== '0' ?
-                    (parseInt(currentValue / AppConstants.BytesInKB)).toString() :
-                    sUnlimited;
-
-        var m = combo.model;
-
-        for (var i = 0; i < m.length; i++) {
-            if (m[i] === cvstr) {
-                combo.currentIndex = i;
-                return;
-            }
-        }
-
-        m.splice(0,0,cvstr);
-        combo.model = m;
     }
 
     Component.onCompleted: root.reloadCombo()
@@ -273,9 +156,54 @@ Item {
     }
 
     function reloadCombo() {
-        combo.model = ["32", "64", "128", "256", "512", String(AppConstants.BytesInKB),
-                     String(AppConstants.BytesInKB * 1.5), String(AppConstants.BytesInKB * 2), String(AppConstants.BytesInKB * 4),
-                     sUnlimited, sCustom];
-        applyCurrentValueToCombo();
+        let vv =
+            [
+                32*AppConstants.BytesInKB,
+                64*AppConstants.BytesInKB,
+                128*AppConstants.BytesInKB,
+                256*AppConstants.BytesInKB,
+                512*AppConstants.BytesInKB,
+                AppConstants.BytesInKB*AppConstants.BytesInKB,
+                AppConstants.BytesInKB*1.5*AppConstants.BytesInKB,
+                AppConstants.BytesInKB*2*AppConstants.BytesInKB,
+                AppConstants.BytesInKB*4*AppConstants.BytesInKB
+            ];
+
+        let m = [];
+        let currentValueIndex = -1;
+
+        for (let i in vv)
+        {
+            if (currentValueIndex === -1 && currentValue > 0)
+            {
+                if (vv[i] === currentValue)
+                {
+                    currentValueIndex = m.length;
+                }
+                else if (vv[i] > currentValue)
+                {
+                    currentValueIndex = m.length;
+                    m.push({text: Math.round(currentValue/AppConstants.BytesInKB) + " " + kbps, value: currentValue});
+                }
+            }
+
+            m.push({text: Math.round(vv[i]/AppConstants.BytesInKB) + " " + kbps, value: vv[i]});
+        }
+
+        if (currentValueIndex === -1 && currentValue > 0)
+        {
+            currentValueIndex = m.length;
+            m.push({text: Math.round(currentValue/AppConstants.BytesInKB) + " " + kbps, value: currentValue});
+        }
+
+        if (currentValueIndex === -1 && !currentValue)
+            currentValueIndex = m.length;
+
+        m.push({text: sUnlimited, value: 0});
+
+        m.push({text: sCustom, value: -1});
+
+        combo.model = m;
+        combo.currentIndex = currentValueIndex;
     }
 }

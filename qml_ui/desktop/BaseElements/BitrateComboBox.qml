@@ -5,7 +5,7 @@ import org.freedownloadmanager.fdm 1.0
 import "../BaseElements"
 import "../../common"
 
-ComboBox {
+BaseComboBox {
     id: root
     height: 25*appWindow.zoom
     rightPadding: 5*appWindow.zoom
@@ -21,11 +21,12 @@ ComboBox {
 
     property string kbps: qsTr("kbps") + App.loc.emptyString
 
-    Layout.preferredWidth: constantBitrate ? 90*appWindow.fontZoom : ((fontMetrics.advanceWidth(root.vbrKbpsText(999,999)) + 50*appWindow.zoom) + fontMetrics.font.pixelSize*0)
+    implicitWidth: (constantBitrate ?
+                       fontMetrics.advanceWidth(root.kbpsText(999)) :
+                       fontMetrics.advanceWidth(root.vbrKbpsText(999,999))) +
+                   50*appWindow.zoom + fontMetrics.font.pixelSize*0
 
     model: []
-
-    FontMetrics {id: fontMetrics; font: currentValue.font}
 
     delegate: Rectangle {
         property bool hover: false
@@ -41,6 +42,7 @@ ComboBox {
             font.pixelSize: 12*appWindow.fontZoom
             color: appWindow.theme.settingsItem
             text: modelData.text
+            font.weight: index === currentIndex ? Font.DemiBold : Font.Normal
         }
 
         MouseArea {
@@ -57,48 +59,8 @@ ComboBox {
         }
     }
 
-    background: Rectangle {
-        color: "transparent"
-        radius: 5*appWindow.zoom
-        border.color: appWindow.theme.settingsControlBorder
-        border.width: 1*appWindow.zoom
-    }
-
-    contentItem: BaseLabel {
-            id: currentValue
-            leftPadding: qtbug.leftPadding(2*appWindow.zoom, 0)
-            rightPadding: qtbug.rightPadding(2*appWindow.zoom, 0)
-            topPadding: 2*appWindow.zoom
-            bottomPadding: 2*appWindow.zoom
-            verticalAlignment: Label.AlignVCenter
-            font.pixelSize: 12*appWindow.fontZoom
-            color: appWindow.theme.settingsItem
-    }
-
-    indicator: Rectangle {
-        x: LayoutMirroring.enabled ? 0 : root.width - width
-        y: root.topPadding + (root.availableHeight - height) / 2
-        width: height - 1*appWindow.zoom
-        height: root.height
-        color: "transparent"
-        Rectangle {
-            width: 9*appWindow.zoom
-            height: 8*appWindow.zoom
-            color: "transparent"
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.horizontalCenter: parent.horizontalCenter
-            clip: true
-            WaSvgImage {
-                source: appWindow.theme.elementsIcons
-                zoom: appWindow.zoom
-                x: 0
-                y: -448*zoom
-            }
-        }
-    }
-
     popup: Popup {
-        y: root.height
+        y: root.height-1
         width: constantBitrate ? popupWidth : root.width
         height: 18*appWindow.zoom * root.model.length + 2*appWindow.zoom
         padding: 1*appWindow.zoom
@@ -216,7 +178,7 @@ ComboBox {
     }
 
     function setCurrentValue() {
-        currentValue.text = constantBitrate ? root.model[currentIndex].value + ' ' + kbps : root.model[currentIndex].text
+        contentItem.text = constantBitrate ? root.model[currentIndex].value + ' ' + kbps : root.model[currentIndex].text
     }
 
     function checkTextSize(text)

@@ -59,16 +59,14 @@ BaseDialog {
                     width: 11*appWindow.zoom
                     height: 12*appWindow.zoom
                     color: tagsTools.editedTagColor
-                    clip: true
 
                     Component.onCompleted: {marker.color = tagsTools.editedTagColor}
 
                     WaSvgImage {
                         visible: colorMouseArea.containsMouse
-                        source: appWindow.theme.elementsIcons
+                        source: appWindow.theme.elementsIconsRoot + "/triangle_down3.svg"
                         zoom: appWindow.zoom
-                        x: 1*appWindow.zoom
-                        y: -447*appWindow.zoom
+                        anchors.centerIn: parent
                         layer {
                             effect: ColorOverlay {
                                 color: "#fff"
@@ -231,7 +229,8 @@ BaseDialog {
     function downloadFolderInitialization() {
         var folderList = App.recentFolders.list;
         var currentFolder = tagsTools.editedTagDownloadFolder;
-        downloadFolder.model.clear();
+        let m = [];
+        
 
         if (!folderList.length) {
             folderList = [];
@@ -239,8 +238,13 @@ BaseDialog {
         }
 
         for (var i = 0; i < folderList.length; i++) {
-            downloadFolder.model.insert(i, {'folder': folderList[i]});
+            m.push({
+                       'text': App.toNativeSeparators(folderList[i]),
+                       'value': folderList[i]
+                   });
         }
+
+        downloadFolder.model = m;
 
         downloadFolder.editText = App.toNativeSeparators(currentFolder);
         downloadFolder.setPopupWidth();

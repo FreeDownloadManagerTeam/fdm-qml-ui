@@ -67,7 +67,7 @@ FocusScope
 
     function initialization() {
         var folderList = App.recentFolders.list;
-        combo.model.clear();
+        let m = [];
 
         if (!folderList.length) {
             folderList = [];
@@ -75,8 +75,13 @@ FocusScope
         }
 
         for (var i = 0; i < folderList.length; i++) {
-            combo.model.insert(i, {'folder': folderList[i]});
+            m.push({
+                       'text': App.toNativeSeparators(folderList[i]),
+                       'value': folderList[i]
+                   });
         }
+
+        combo.model = m;
 
         combo.editText = App.toNativeSeparators(downloadTools.filePath);
     }

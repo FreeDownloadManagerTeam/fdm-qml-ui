@@ -194,6 +194,7 @@ Column {
 
         BaseComboBox {
             anchors.verticalCenter: parent.verticalCenter
+            settingsStyle: true
             model: [
                 {text: "0", value: 0},
                 {text: "1", value: 1},

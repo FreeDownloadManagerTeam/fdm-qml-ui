@@ -53,8 +53,8 @@ QtObject {
     readonly property color progressRunning: "#007dc2"
     readonly property color progressPaused: "#999"
     readonly property color link: "#007dc2"
-    readonly property string elementsIcons: Qt.resolvedUrl("../../images/desktop/dark/elements.svg")
-    readonly property string checkboxIcons: Qt.resolvedUrl("../../images/desktop/dark/checkbox.svg")
+    readonly property string elementsIconsRoot: Qt.resolvedUrl("../../images/desktop/dark/elements")
+    readonly property string checkboxIconsRoot: Qt.resolvedUrl("../../images/desktop/dark/checkbox")
     readonly property string btDldOpenFolder: Qt.resolvedUrl("../../images/desktop/dark/folder_green_t.svg")
     readonly property string headerIcons: Qt.resolvedUrl("../../images/desktop/dark/header_button_win.svg")
     readonly property string headerIconsMac: Qt.resolvedUrl("../../images/desktop/dark/header_button.svg")

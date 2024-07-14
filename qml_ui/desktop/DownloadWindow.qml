@@ -143,18 +143,15 @@ ApplicationWindow
             Row {
                 Layout.fillWidth: true
 
-                Rectangle {
+                Item {
                     visible: downloadsItemTools.destinationPath
                     width: 14*appWindow.zoom
                     height: 18*appWindow.zoom
-                    clip: true
-                    color: "transparent"
                     anchors.verticalCenter: parent.verticalCenter
                     WaSvgImage {
-                        source: appWindow.theme.elementsIcons
+                        source: appWindow.theme.elementsIconsRoot + "/folder.svg"
                         zoom: appWindow.zoom
-                        x: -1*zoom
-                        y: -329*zoom
+                        anchors.centerIn: parent
                     }
                     MouseArea {
                         anchors.fill: parent

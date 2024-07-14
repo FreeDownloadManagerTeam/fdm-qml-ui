@@ -23,7 +23,7 @@ ComboBox
         let h = 0;
         for (let i = 0; i < model.length; ++i)
             h = Math.max(h, fm.advanceWidth(model[i].text));
-        return Math.max(comboMinimumWidth, h + 40 + fm.font.pixelSize*0);
+        return Math.max(comboMinimumWidth, h + 40 + combo.fontSize*0);
     }
 
     indicator: Image {

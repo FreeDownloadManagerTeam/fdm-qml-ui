@@ -4,24 +4,18 @@ import org.freedownloadmanager.fdm 1.0
 import "../BaseElements"
 import "../../common"
 
-ComboBox {
+BaseComboBox {
     id: root
-    implicitHeight: 25*appWindow.fontZoom
+    implicitHeight: Math.round(25*appWindow.fontZoom)
     implicitWidth: 30*appWindow.zoom + 170*appWindow.fontZoom
     rightPadding: 5*appWindow.zoom
     leftPadding: 5*appWindow.zoom
 
-    property int visibleRowsCount: 10
+    popupVisibleRowsCount: 10
+    settingsStyle: true
 
     model: App.loc.installedTranslations
-
-    property var flags: {"en_US": -250, "ar_EG": -260, "zh_CN": -130, "zh_TW": -270, "ug": -130, "uk_UA": -220,
-        "da_DK": -100, "nl_NL": -80, "fr_FR": -30, "de_DE": -20, "el_GR": -120, "id_ID": -180,
-        "it_IT": -50, "ja_JP": -150, "pl_PL": -70, "pt_BR": -200, "ro_RO": -60, "ru_RU": -110,
-        "sl_SI": -140, "es_ES": -10, "sv_SE": -90, "tr_TR": -160, "vi_VN": -190, "fa": -210,
-        "hu_HU": -230, "fa_IR": -240, "bg_BG": -280, "ko_KR": -290, "hi_IN": -300,
-        "cs_CZ": -310, "fi_FI": -320, "lv_LV": -330, "my_MM": -340, "bn_BD": -350
-    }
+    textRole: ""
 
     delegate: Rectangle {
         property bool hover: false
@@ -35,20 +29,11 @@ ComboBox {
             anchors.leftMargin: 6*appWindow.zoom
             spacing: 5
 
-            Rectangle {
+            WaSvgImage {
                 id: icon
-                clip: true
-                color: "transparent"
-                width: 18*appWindow.zoom
-                height: 10*appWindow.zoom
+                source: Qt.resolvedUrl("../../images/flags/" + modelData + ".svg")
+                zoom: appWindow.zoom
                 anchors.verticalCenter: parent.verticalCenter
-
-                WaSvgImage {
-                    x: 0
-                    y: flags[modelData]*zoom
-                    source: Qt.resolvedUrl("../../images/flags.svg")
-                    zoom: appWindow.zoom
-                }
             }
 
             BaseLabel {
@@ -74,13 +59,6 @@ ComboBox {
         }
     }
 
-    background: Rectangle {
-        color: "transparent"
-        radius: 5*appWindow.zoom
-        border.color: appWindow.theme.settingsControlBorder
-        border.width: 1*appWindow.zoom
-    }
-
     contentItem: Row {
         anchors.left: parent.left
         anchors.leftMargin: 7*appWindow.zoom
@@ -94,9 +72,7 @@ ComboBox {
             anchors.verticalCenter: parent.verticalCenter
 
             WaSvgImage {
-                x: 0
-                y: flags[App.loc.currentTranslation]*zoom
-                source: Qt.resolvedUrl("../../images/flags.svg")
+                source: Qt.resolvedUrl("../../images/flags/" + App.loc.currentTranslation + ".svg")
                 zoom: appWindow.zoom
             }
         }
@@ -106,28 +82,6 @@ ComboBox {
             color: appWindow.theme.settingsItem
             text: App.loc.translationLanguageString(App.loc.currentTranslation) + " (" + App.loc.translationCountryString(App.loc.currentTranslation) + ")"
             font.capitalization: Font.Capitalize
-        }
-    }
-
-    indicator: Rectangle {
-        x: LayoutMirroring.enabled ? 0 : root.width - width
-        y: root.topPadding + (root.availableHeight - height) / 2
-        width: height - 1*appWindow.zoom
-        height: root.height
-        color: "transparent"
-        Rectangle {
-            width: 9*appWindow.zoom
-            height: 8*appWindow.zoom
-            color: "transparent"
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.horizontalCenter: parent.horizontalCenter
-            clip: true
-            WaSvgImage {
-                source: appWindow.theme.elementsIcons
-                zoom: appWindow.zoom
-                x: 0
-                y: -448*zoom
-            }
         }
     }
 

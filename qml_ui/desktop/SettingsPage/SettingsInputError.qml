@@ -17,20 +17,12 @@ Rectangle {
     border.color: "#cfa6a9"
     radius: 5*appWindow.zoom
 
-    Rectangle {
-        anchors.horizontalCenter: parent.horizontalCenter
+    WaSvgImage {
+        source: appWindow.theme.elementsIconsRoot + "/triangle_down2.svg"
+        zoom: appWindow.zoom
         anchors.top: parent.bottom
-        anchors.topMargin: -(height/2)
-        color: 'transparent'
-        width: 12*appWindow.zoom
-        height: 12*appWindow.zoom
-        clip: true
-        WaSvgImage {
-            source: appWindow.theme.elementsIcons
-            zoom: appWindow.zoom
-            x: -20*zoom
-            y: -152*zoom
-        }
+        anchors.topMargin: -2*zoom
+        anchors.horizontalCenter: parent.horizontalCenter
     }
 
     BaseLabel {

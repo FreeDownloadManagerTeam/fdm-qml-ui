@@ -4,110 +4,15 @@ import org.freedownloadmanager.fdm 1.0
 import "../BaseElements"
 import "../../common"
 
-ComboBox {
+BaseComboBox {
     id: root
-    height: 25*appWindow.zoom
-    width: 70*appWindow.fontZoom + 30*appWindow.zoom
     rightPadding: 5*appWindow.zoom
     leftPadding: 5*appWindow.zoom
 
-    property int visibleRowsCount: 5
+    fontSize: 12*appWindow.fontZoom
+    settingsStyle: true
 
-    model: []
-
-    delegate: Rectangle {
-        property bool hover: false
-        color: hover ? appWindow.theme.menuHighlight : "transparent"
-        height: 18*appWindow.zoom
-        width: root.width
-
-        BaseLabel {
-            anchors.left: parent.left
-            leftPadding: qtbug.leftPadding(6*appWindow.zoom, 0)
-            rightPadding: qtbug.rightPadding(6*appWindow.zoom, 0)
-            anchors.verticalCenter: parent.verticalCenter
-            font.pixelSize: 12*appWindow.fontZoom
-            color: appWindow.theme.settingsItem
-            text: modelData.text
-        }
-
-        MouseArea {
-            anchors.fill: parent
-            hoverEnabled: true
-            onEntered: parent.hover = true
-            onExited: parent.hover = false
-            onClicked: {
-                root.currentIndex = index;
-                App.settings.setDbBackupMinInterval(modelData.value);
-                root.popup.close();
-            }
-        }
-    }
-
-    background: Rectangle {
-        color: "transparent"
-        radius: 5*appWindow.zoom
-        border.color: appWindow.theme.settingsControlBorder
-        border.width: 1*appWindow.zoom
-    }
-
-    contentItem: Rectangle {
-        color: "transparent"
-        BaseLabel {
-            anchors.left: parent.left
-            leftPadding: qtbug.leftPadding(6*appWindow.zoom, 0)
-            rightPadding: qtbug.rightPadding(6*appWindow.zoom, 0)
-            anchors.verticalCenter: parent.verticalCenter
-            font.pixelSize: 12*appWindow.fontZoom
-            color: appWindow.theme.settingsItem
-            text: root.model[currentIndex].text
-        }
-    }
-
-    indicator: Rectangle {
-        x: LayoutMirroring.enabled ? 0 : root.width - width
-        y: root.topPadding + (root.availableHeight - height) / 2
-        width: height - 1*appWindow.zoom
-        height: root.height
-        color: "transparent"
-        Rectangle {
-            width: 9*appWindow.zoom
-            height: 8*appWindow.zoom
-            color: "transparent"
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.horizontalCenter: parent.horizontalCenter
-            clip: true
-            WaSvgImage {
-                source: appWindow.theme.elementsIcons
-                zoom: appWindow.zoom
-                x: 0
-                y: -448*zoom
-            }
-        }
-    }
-
-    popup: Popup {
-        y: root.height
-        width: root.width
-        height: 18*appWindow.zoom * root.model.length + 2*appWindow.zoom
-        padding: 1*appWindow.zoom
-
-        background: Rectangle {
-            color: appWindow.theme.background
-            border.color: appWindow.theme.settingsControlBorder
-            border.width: 1*appWindow.zoom
-        }
-
-        contentItem: ListView {
-            clip: true
-            anchors.fill: parent
-            model: root.model
-            currentIndex: root.highlightedIndex
-            delegate: root.delegate
-            flickableDirection: Flickable.VerticalFlick
-            boundsBehavior: Flickable.StopAtBounds
-        }
-    }
+    onActivated: index => App.settings.setDbBackupMinInterval(model[index].value);
 
     Component.onCompleted: root.reloadCombo(App.settings.dbBackupMinInterval())
 

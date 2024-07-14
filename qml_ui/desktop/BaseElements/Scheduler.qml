@@ -12,9 +12,6 @@ Item {
     implicitWidth: content.implicitWidth
     implicitHeight: 64*appWindow.zoom
 
-    property string fromTimeComboValue
-    property string toTimeComboValue
-
     ColumnLayout {
         id: content
 
@@ -74,10 +71,6 @@ Item {
 
             SchedulerTimeCombobox {
                 id: fromTimeCombo
-                editText: fromTimeComboValue
-                onTextChanged: {
-                    fromTimeComboValue = JsTools.timeUtils.minutesToTime(JsTools.timeUtils.timeToMinutes(str))
-                }
             }
 
             BaseLabel {
@@ -88,17 +81,13 @@ Item {
 
             SchedulerTimeCombobox {
                 id: toTimeCombo
-                editText: toTimeComboValue
-                onTextChanged: {
-                    toTimeComboValue = JsTools.timeUtils.minutesToTime(JsTools.timeUtils.timeToMinutes(str))
-                }
             }
         }
     }
 
     function initialization() {
-        fromTimeComboValue = JsTools.timeUtils.minutesToTime(schedulerTools.startTime);
-        toTimeComboValue = JsTools.timeUtils.minutesToTime(schedulerTools.endTime);
+        fromTimeCombo.setValue(JsTools.timeUtils.minutesToTime(schedulerTools.startTime));
+        toTimeCombo.setValue(JsTools.timeUtils.minutesToTime(schedulerTools.endTime));
 
         list.model.clear();
         var firstDayOfWeek = Qt.locale(App.loc.currentTranslation).firstDayOfWeek;

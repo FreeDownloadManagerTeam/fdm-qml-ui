@@ -123,21 +123,21 @@ BaseContextMenu {
             id: downloadPriorityGroup
         }
 
-        Action {
+        BaseContextMenuItem {
             text: qsTr("High") + App.loc.emptyString
             checkable: true
             checked: selectedDownloadsTools.getDownloadsPriorityChecked(AbstractDownloadsUi.DownloadPriorityHigh)
             onTriggered: selectedDownloadsTools.setDownloadsPriority(AbstractDownloadsUi.DownloadPriorityHigh)
             ActionGroup.group: downloadPriorityGroup
         }
-        Action {
+        BaseContextMenuItem {
             text: qsTr("Normal") + App.loc.emptyString
             checkable: true
             checked: selectedDownloadsTools.getDownloadsPriorityChecked(AbstractDownloadsUi.DownloadPriorityNormal)
             onTriggered: selectedDownloadsTools.setDownloadsPriority(AbstractDownloadsUi.DownloadPriorityNormal)
             ActionGroup.group: downloadPriorityGroup
         }
-        Action {
+        BaseContextMenuItem {
             text: qsTr("Low") + App.loc.emptyString
             checkable: true
             checked: selectedDownloadsTools.getDownloadsPriorityChecked(AbstractDownloadsUi.DownloadPriorityLow)
@@ -162,12 +162,12 @@ BaseContextMenu {
         enabled: !locked && selectedDownloadsTools.checkMoveAllowed()
         onTriggered: movingFolderDlg.open()
     }
-    Action {
+    BaseContextMenuItem {
         text: qsTr("Delete file") + App.loc.emptyString
         enabled: !locked
         onTriggered: selectedDownloadsTools.removeCurrentDownloadsSimple(modelIds)
     }
-    Action {
+    BaseContextMenuItem {
         text: qsTr("Remove from list") + App.loc.emptyString
         enabled: !locked
         onTriggered: selectedDownloadsTools.removeFromList(modelIds)

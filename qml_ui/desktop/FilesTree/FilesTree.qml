@@ -100,7 +100,7 @@ Item {
 
             delegate: Item {
                 property int rowHeigth: 22*appWindow.zoom
-                width: parent.width
+                width: listView.width
                 height: rowHeigth
                 Layout.preferredHeight: rowHeigth
 
@@ -179,18 +179,15 @@ Item {
                             color: "transparent"
                         }
 
-                        Rectangle {
+                        Item {
                             visible: model.folder
                             Layout.alignment: Qt.AlignVCenter
                             Layout.preferredWidth: 15*appWindow.zoom
                             Layout.preferredHeight: 15*appWindow.zoom
-                            color: "transparent"
-                            clip: true
                             WaSvgImage {
-                                source: appWindow.theme.elementsIcons
+                                source: appWindow.theme.elementsIconsRoot+(model.isOpened ? "/triangle_down.svg" : "/triangle_right.svg")
                                 zoom: appWindow.zoom
-                                x: (model.isOpened ? -17 : 5)*zoom
-                                y: (model.isOpened ? -189 : -191)*zoom
+                                anchors.centerIn: parent
                             }
 
                             MouseArea {

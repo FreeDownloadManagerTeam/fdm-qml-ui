@@ -47,18 +47,15 @@ Rectangle {
                 GradientStop { position: 1.0; color: snailBtn.checked ? appWindow.theme.snailBtnBackgroundEndChecked : appWindow.theme.snailBtnBackgroundEnd }
             }
 
-            Rectangle {
+            Item {
                 width: 23*appWindow.zoom
                 height: 17*appWindow.zoom
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
-                color: "transparent"
-                clip: true
                 WaSvgImage {
-                    source: appWindow.theme.elementsIcons
+                    source: appWindow.theme.elementsIconsRoot + (snailBtn.checked ? "/snail_on.svg" : "/snail_off.svg")
                     zoom: appWindow.zoom
-                    x: 1*zoom
-                    y: (snailBtn.checked ? -422 : -397)*zoom
+                    anchors.centerIn: parent
                 }
             }
 
@@ -197,23 +194,19 @@ Rectangle {
             width: 32*appWindow.zoom
             height: 21*appWindow.zoom
 
-            Rectangle {
+            Item {
                 id: bottomPanelToggle
                 visible: appWindow.canShowSettingsPage() && bottomPanelTools.panelCanBeShown && bottomPanelTools.sufficientWindowHeight
                 anchors.rightMargin: 11*appWindow.zoom
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
-                color: "transparent"
                 width: 19*appWindow.zoom
                 height: 15*appWindow.zoom
-                clip: true
                 WaSvgImage {
-                    source: appWindow.theme.elementsIcons
+                    source: appWindow.theme.elementsIconsRoot+(bottomPanelTools.panelVisible ? "/arrow_down.svg" : "/arrow_up.svg")
                     zoom: appWindow.zoom
-                    x: (bottomPanelTools.panelVisible ? 3 : -37)*zoom
-                    y: -22*zoom
+                    anchors.centerIn: parent
                 }
-
             }
 
             MouseArea {

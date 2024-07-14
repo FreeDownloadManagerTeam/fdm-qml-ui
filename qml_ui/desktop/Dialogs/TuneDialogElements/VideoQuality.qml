@@ -19,9 +19,9 @@ ColumnLayout {
 
     function initialization() {
         downloadTools.versionSelector = App.downloads.creator.resourceVersionSelector(requestId, 0);
-        combo.model.clear();
-        var index = combo.currentIndex;
         if (downloadTools.versionSelector.versionCount > 1) {
+            var m = [];
+            var index = combo.currentIndex;
             for (var i = 0; i < downloadTools.versionSelector.versionCount; i++) {
                 if (i == downloadTools.versionSelector.selectedVersion) {
                     index = i;
@@ -32,10 +32,16 @@ ColumnLayout {
                 var size = downloadTools.versionSelector.size(i);
                 if (size > 0)
                     v += ' ' + App.bytesAsText(downloadTools.versionSelector.size(i));
-                combo.model.insert(i, {'version': v});
+                m.push({'text': v, value: i});
             }
             downloadTools.fileSizeValueChanged(downloadTools.versionSelector.size(index));
+            combo.model = m;
             combo.currentIndex = index;
+        }
+        else
+        {
+            combo.model = [];
+            combo.currentIndex = -1;
         }
     }
 }

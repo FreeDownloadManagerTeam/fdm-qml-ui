@@ -6,40 +6,57 @@ import "../../common"
 ComboBox {
     id: root
 
+    property bool settingsStyle: false
+
+    property int fontSize: defaultLabel.font.pixelSize
+    property int comboMinimumWidth: 0
+    property int comboMaximumWidth: 0
+    property int popupVisibleRowsCount: 0
+    property int delegateMinimumHeight: 0
+
+    model: []
+    textRole: "text"
+
+    BaseLabel {
+        id: defaultLabel
+        visible: false
+    }
+
     BaseLabel {
         id: l
         visible: false
-        font.pixelSize: 12*appWindow.fontZoom
+        font.pixelSize: root.fontSize
     }
 
-    FontMetrics {
-        id: fm
+    readonly property var fontMetrics: FontMetrics {
         font: l.font
     }
 
-    implicitHeight: fm.height + 10*appWindow.zoom
+    implicitHeight: fontMetrics.height + 10*appWindow.zoom
 
     implicitWidth: {
         let h = 0;
         for (let i = 0; i < model.length; ++i)
-            h = Math.max(h, fm.advanceWidth(model[i].text));
-        return h + 40*appWindow.zoom;
+            h = Math.max(h, fontMetrics.advanceWidth(textRole ? model[i][textRole] : model[i]));
+        let result = Math.max(comboMinimumWidth, h + 44*appWindow.zoom + root.fontSize*0);
+        return comboMaximumWidth ? Math.min(comboMaximumWidth, result) : result;
     }
 
     delegate: Rectangle {
         property bool hover: false
         color: hover ? appWindow.theme.menuHighlight : "transparent"
-        height: 18*appWindow.zoom
+        height: Math.max(delegateMinimumHeight, delegateLabel.implicitHeight)
         width: root.width
 
         BaseLabel {
+            id: delegateLabel
             anchors.left: parent.left
             leftPadding: qtbug.leftPadding(6*appWindow.zoom, 0)
             rightPadding: qtbug.rightPadding(6*appWindow.zoom, 0)
             anchors.verticalCenter: parent.verticalCenter
-            font: l.font
-            color: appWindow.theme.settingsItem
-            text: modelData.text
+            font.pixelSize: root.fontSize
+            text: textRole ? modelData[textRole] : modelData
+            font.weight: index === currentIndex ? Font.DemiBold : Font.Normal
         }
 
         MouseArea {
@@ -49,57 +66,68 @@ ComboBox {
             onExited: parent.hover = false
             onClicked: {
                 root.popup.close();
+                if (root.editable)
+                    root.editText = root.textRole ? modelData[root.textRole] : modelData;
                 root.activated(root.currentIndex = index);
             }
         }
     }
 
     background: Rectangle {
-        color: "transparent"
-        radius: 5*appWindow.zoom
-        border.color: appWindow.theme.settingsControlBorder
+        color: root.settingsStyle ? "transparent" : appWindow.theme.background
+        radius: root.settingsStyle ? 5*appWindow.zoom : 0
+        border.color: root.settingsStyle ? appWindow.theme.settingsControlBorder : appWindow.theme.border
         border.width: 1*appWindow.zoom
     }
 
-    contentItem: Rectangle {
-        color: "transparent"
-        BaseLabel {
-            anchors.left: parent.left
-            leftPadding: qtbug.leftPadding(6*appWindow.zoom, 0)
-            rightPadding: qtbug.rightPadding(6*appWindow.zoom, 0)
-            anchors.verticalCenter: parent.verticalCenter
-            font: l.font
-            color: appWindow.theme.settingsItem
-            text: root.model[currentIndex].text
-        }
+    contentItem: BaseLabel {
+        text: root.displayText
+        anchors.left: parent.left
+        leftPadding: qtbug.leftPadding(6*appWindow.zoom, 0)
+        rightPadding: qtbug.rightPadding(6*appWindow.zoom, 0)
+        anchors.verticalCenter: parent.verticalCenter
+        font.pixelSize: root.fontSize
+        elide: Text.ElideRight
+        verticalAlignment: Text.AlignVCenter
+        opacity: enabled ? 1 : 0.5
     }
 
     indicator: Rectangle {
+        z: 1
+        opacity: enabled ? 1 : 0.5
         x: LayoutMirroring.enabled ? 0 : root.width - width
         y: root.topPadding + (root.availableHeight - height) / 2
         width: height - 1*appWindow.zoom
         height: root.height
         color: "transparent"
-        Rectangle {
-            width: 9*appWindow.zoom
-            height: 8*appWindow.zoom
-            color: "transparent"
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.horizontalCenter: parent.horizontalCenter
-            clip: true
-            WaSvgImage {
-                source: appWindow.theme.elementsIcons
-                zoom: appWindow.zoom
-                x: 0
-                y: -448*zoom
+        border.width: root.settingsStyle ? 0 : 1*appWindow.zoom
+        border.color: appWindow.theme.border
+        WaSvgImage {
+            source: appWindow.theme.elementsIconsRoot + "/triangle_down3.svg"
+            zoom: appWindow.zoom
+            anchors.centerIn: parent
+        }
+        MouseArea {
+            enabled: root.editable
+            propagateComposedEvents: false
+            anchors.fill: parent
+            cursorShape: Qt.ArrowCursor
+            onClicked: {
+                if (root.popup.opened)
+                    root.popup.close();
+                else
+                    root.popup.open();
             }
         }
     }
 
     popup: Popup {
-        y: root.height
+        y: root.height-1
         width: root.width
-        height: 18*appWindow.zoom * root.model.length + 2*appWindow.zoom
+        implicitHeight: Math.max(delegateMinimumHeight, fontMetrics.height) * root.model.length + 2*appWindow.zoom
+        height: root.popupVisibleRowsCount ?
+                    Math.min(Math.max(delegateMinimumHeight, fontMetrics.height) * root.popupVisibleRowsCount + 2*appWindow.zoom, implicitHeight) :
+                    implicitHeight
         padding: 1*appWindow.zoom
 
         background: Rectangle {
@@ -116,6 +144,7 @@ ComboBox {
             delegate: root.delegate
             flickableDirection: Flickable.VerticalFlick
             boundsBehavior: Flickable.StopAtBounds
+            ScrollBar.vertical: ScrollBar{ visible: parent.height < root.popup.implicitHeight; policy: ScrollBar.AlwaysOn; }
         }
     }
 }

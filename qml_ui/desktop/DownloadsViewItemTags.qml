@@ -33,17 +33,14 @@ Row {
         }
     }
 
-    Rectangle {
+    Item {
         visible: downloadsItemTools.moreTags
         width: 8*appWindow.zoom
         height: 8*appWindow.zoom
-        color: "transparent"
-        clip: true
         WaSvgImage {
-            source: appWindow.theme.elementsIcons
+            source: appWindow.theme.elementsIconsRoot + "/triangle_down3.svg"
             zoom: appWindow.zoom
-            x: 0
-            y: -448*zoom
+            anchors.centerIn: parent
         }
     }
 }

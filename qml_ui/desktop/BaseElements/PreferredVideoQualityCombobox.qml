@@ -3,32 +3,11 @@ import QtQuick.Controls 2.3
 import org.freedownloadmanager.fdm 1.0
 import "../../common"
 
-ComboBox {
+BaseComboBox {
     id: root
 
     rightPadding: 5*appWindow.zoom
     leftPadding: 5*appWindow.zoom
-
-    property int visibleRowsCount: 4
-
-    model: []
-
-    textRole: "label"
-
-    BaseLabel {id: fml; visible: false}
-    MyFontMetrics {
-        id: fm
-        font: fml.font
-    }
-
-    implicitWidth: {
-        let maxw = 0;
-        for (let i = 0; i < model.length; ++i)
-            maxw = Math.max(maxw, fm.advanceWidth(model[i].label));
-        return maxw + 40*appWindow.zoom;
-    }
-
-    implicitHeight: 30*appWindow.zoom
 
     onVisibleChanged: {
         if (visible) {
@@ -45,13 +24,13 @@ ComboBox {
 
     function reloadCombo() {
         root.model = [
-                    {label: "240p" + " (" + qsTr("Lowest") + ")", value: "240"},
-                    {label: "480p", value: "480"},
-                    {label: "720p", value: "720"},
-                    {label: "1080p", value: "1080"},
-                    {label: "4K (2160p)", value: "2160"},
-                    {label: "5K (2880p)", value: "2880"},
-                    {label: "8K (4320p)" + " (" + qsTr("Highest") + ")", value: "4320"}];
+                    {text: "240p" + " (" + qsTr("Lowest") + ")", value: "240"},
+                    {text: "480p", value: "480"},
+                    {text: "720p", value: "720"},
+                    {text: "1080p", value: "1080"},
+                    {text: "4K (2160p)", value: "2160"},
+                    {text: "5K (2880p)", value: "2880"},
+                    {text: "8K (4320p)" + " (" + qsTr("Highest") + ")", value: "4320"}];
     }
 
     function updateState() {
@@ -80,93 +59,5 @@ ComboBox {
         currentIndex = needIndex;
     }
 
-    delegate: Rectangle {
-        property bool hover: false
-        color: hover ? appWindow.theme.menuHighlight : "transparent"
-        implicitHeight: Math.max(30*appWindow.zoom, l1.implicitHeight)
-        implicitWidth: Math.max(parent.width, l1.implicitWidth)
-        BaseLabel {
-            id: l1
-            anchors.left: parent.left
-            anchors.verticalCenter: parent.verticalCenter
-            leftPadding: qtbug.leftPadding(4*appWindow.zoom, 0)
-            rightPadding: qtbug.rightPadding(4*appWindow.zoom, 0)
-            text: modelData.label
-        }
-
-        MouseArea {
-            anchors.fill: parent
-            hoverEnabled: true
-            onEntered: parent.hover = true
-            onExited: parent.hover = false
-            onClicked: {
-                root.currentIndex = index
-                root.popup.close();
-                downloadTools.setPreferredVideoHeight(modelData.value, true);
-            }
-        }
-    }
-
-    background: Rectangle {
-        color: appWindow.theme.background
-        border.color: appWindow.theme.border
-        border.width: 1*appWindow.zoom
-    }
-
-    contentItem: Rectangle {
-        color: "transparent"
-        BaseLabel {
-            anchors.left: parent.left
-            anchors.verticalCenter: parent.verticalCenter
-            text: root.currentText
-        }
-    }
-
-    indicator: Rectangle {
-        x: LayoutMirroring.enabled ? 0 : root.width - width
-        y: root.topPadding + (root.availableHeight - height) / 2
-        width: height - 1*appWindow.zoom
-        height: root.height
-        color: "transparent"
-        border.width: 1*appWindow.zoom
-        border.color: appWindow.theme.border
-        Rectangle {
-            width: 9*appWindow.zoom
-            height: 8*appWindow.zoom
-            color: "transparent"
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.horizontalCenter: parent.horizontalCenter
-            clip: true
-            WaSvgImage {
-                source: appWindow.theme.elementsIcons
-                zoom: appWindow.zoom
-                x: 0
-                y: -448*zoom
-            }
-        }
-    }
-
-    popup: Popup {
-        y: root.height - 1
-        width: root.width
-        height: visibleRowsCount * 30*appWindow.zoom + 2*appWindow.zoom
-        padding: 1*appWindow.zoom
-
-        background: Rectangle {
-            color: appWindow.theme.background
-            border.color: appWindow.theme.border
-            border.width: 1*appWindow.zoom
-        }
-
-        contentItem: Item {
-            ListView {
-                clip: true
-                boundsBehavior: Flickable.StopAtBounds
-                anchors.fill: parent
-                model: root.model
-                currentIndex: root.highlightedIndex
-                delegate: root.delegate
-            }
-        }
-    }
+    onActivated: index => downloadTools.setPreferredVideoHeight(root.model[index].value, true)
 }

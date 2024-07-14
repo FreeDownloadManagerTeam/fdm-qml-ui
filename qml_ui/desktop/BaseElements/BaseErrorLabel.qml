@@ -9,25 +9,15 @@ BaseBaseErrorLabel
 
     spacing: 3*appWindow.zoom
 
-    Item
+    WaSvgImage
     {
         visible: root.showIcon
 
+        zoom: appWindow.zoom
+        source: appWindow.theme.elementsIconsRoot + "/exclamation.svg"
+
         Layout.alignment: Qt.AlignTop
         Layout.topMargin: 2*appWindow.zoom + (appWindow.zoom2 < 0.9 ? -1 : appWindow.zoom2 > 1.3 ? 1 : 0)
-
-        clip: true
-
-        implicitWidth: 17*appWindow.zoom
-        implicitHeight: 15*appWindow.zoom
-
-        WaSvgImage
-        {
-            zoom: appWindow.zoom
-            x: -41*zoom
-            y: -269*zoom
-            source: appWindow.theme.elementsIcons
-        }
     }
 
     BaseLabel
