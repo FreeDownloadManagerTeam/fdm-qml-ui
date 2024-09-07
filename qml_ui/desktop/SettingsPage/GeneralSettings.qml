@@ -137,8 +137,11 @@ Column {
                 initialPath: App.localDecodePath(App.settings.dmcore.value(DmCoreSettings.FixedDownloadPath))
                 onValidPathChanged2: apply()
                 function apply() {
-                    App.settings.dmcore.setValue(
-                        DmCoreSettings.FixedDownloadPath, App.localEncodePath(validPath.trim()));
+                    if (fixedFolderRadioBtn.checked)
+                    {
+                        App.settings.dmcore.setValue(
+                            DmCoreSettings.FixedDownloadPath, App.localEncodePath(validPath.trim()));
+                    }
                 }
             }
 

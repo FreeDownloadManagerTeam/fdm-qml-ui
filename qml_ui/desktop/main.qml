@@ -364,10 +364,12 @@ ApplicationWindow {
         anchors.centerIn: parent
         Component.onCompleted: {
             if (App.app_Linux_2023_09_13_Case_isPositive())
+            {
                 active = true;
                 uiReadyTools.onReady(function(){
                     linux_2023_09_13_Case_Dialog.item.open();
                 });
+            }
         }
     }
 
