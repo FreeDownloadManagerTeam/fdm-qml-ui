@@ -53,12 +53,32 @@ Item {
 
     Component.onCompleted: {
         updateState();
+        applyEnableUserDefinedOrderOfDownloads();
     }
 
     Connections{
         target: appWindow
-        onUiReadyStateChanged: {
-            updateState();
+        onUiReadyStateChanged: updateState()
+        onUiverChanged: applyEnableUserDefinedOrderOfDownloads()
+    }
+
+    function applyEnableUserDefinedOrderOfDownloads()
+    {
+        if (uiSettingsTools.settings.enableUserDefinedOrderOfDownloads &&
+                appWindow.uiver === 1)
+        {
+            if (sortBy != AbstractDownloadsUi.DownloadsSortByOrder)
+                setSortByAndAsc(AbstractDownloadsUi.DownloadsSortByOrder, false);
         }
+        else
+        {
+            if (sortBy == AbstractDownloadsUi.DownloadsSortByOrder)
+                setSortByAndAsc(AbstractDownloadsUi.DownloadsSortByCreationTime, false);
+        }
+    }
+
+    Connections {
+        target: uiSettingsTools.settings
+        onEnableUserDefinedOrderOfDownloadsChanged: applyEnableUserDefinedOrderOfDownloads()
     }
 }

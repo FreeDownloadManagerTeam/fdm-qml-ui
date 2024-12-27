@@ -113,7 +113,7 @@ BaseDialog {
 
                 spacing: 5*appWindow.zoom
 
-                CustomButton {
+                BaseButton {
                     text: qsTr("Close") + App.loc.emptyString
                     onClicked: root.reject()
                 }

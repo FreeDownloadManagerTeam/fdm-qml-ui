@@ -38,6 +38,9 @@ Item
             waitingComponentsInstallForUpdateUuid = uuid;
             App.plugins.depsInstaller.installMissingDeps(distributivePath);
         }
+        onRejected: {
+            App.plugins.updateMgr.installedAllNewDependencies(uuid, false);
+        }
     }
 
     MessageDialog

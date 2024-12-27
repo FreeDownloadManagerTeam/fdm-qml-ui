@@ -3,6 +3,7 @@ import Qt.labs.settings 1.0
 import Qt.labs.folderlistmodel 2.11
 import Qt.labs.platform 1.0 as QtLabs
 import org.freedownloadmanager.fdm 1.0
+import org.freedownloadmanager.fdm.appconstants 1.0
 
 Item {
     id: root
@@ -12,6 +13,7 @@ Item {
 
     property alias zoom: settings.zoom
     property alias zoom2: settings.zoom2
+    property alias uiVersion: settings.uiVersion
 
     Settings {
         id: settings
@@ -57,6 +59,8 @@ Item {
         property bool showTroubleshootingUi: false
         property bool dontShowOsPermissionsDialog: false
         property bool closeButtonHidesApp: true
+        property int uiVersion: App.uiDefaultVersion()
+        property bool showUiUpdatedBanner: false
     }
 
     readonly property bool hasNonDefaultValues:
@@ -78,6 +82,7 @@ Item {
         settings.closeStandaloneDownloadWindowWhenStopped !== true ||
         settings.dontShowOsPermissionsDialog !== false ||
         settings.closeButtonHidesApp !== true ||
+        settings.uiVersion !== App.uiDefaultVersion() ||
         Object.keys(settings.hideTags).length
 
     function resetToDefaults()
@@ -101,6 +106,7 @@ Item {
         settings.hideTags = {};
         settings.dontShowOsPermissionsDialog = false;
         settings.closeButtonHidesApp = true;
+        settings.uiVersion = App.uiDefaultVersion();
         wasReset();
     }
 
@@ -153,6 +159,7 @@ Item {
         uiSettingsTools.settings.hideTags = s.settings.hideTags;
         uiSettingsTools.settings.dontShowOsPermissionsDialog = s.settings.dontShowOsPermissionsDialog;
         uiSettingsTools.settings.closeButtonHidesApp = s.settings.closeButtonHidesApp;
+        uiSettingsTools.settings.uiVersion = s.settings.uiVersion;
         s.destroy();
     }
 }

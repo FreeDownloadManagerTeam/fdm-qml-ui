@@ -73,13 +73,13 @@ BaseDialog {
                     }
                 }
 
-                CustomButton {
+                BaseButton {
                     id: cnclBtn
                     text: qsTr("Cancel") + App.loc.emptyString
                     onClicked: root.close()
                 }
 
-                CustomButton {
+                BaseButton {
                     id: okbtn
                     text: qsTr("Apply") + App.loc.emptyString
                     blueBtn: true

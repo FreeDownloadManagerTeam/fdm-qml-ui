@@ -10,7 +10,7 @@ import "../qt5compat"
 
 ToolBar {
     id: toolbar
-    height: appWindow.mainToolbarHeight
+    height: (appWindow.macVersion ? 75 : 50) * appWindow.zoom
 
     property string pageId
 
@@ -256,8 +256,7 @@ ToolBar {
                 visible: !pageId
                 Component.onCompleted: {
                     if (appWindow.updateSupported) {
-                        var a = parent.mapToGlobal(parent.width, 0);
-                        setSource("CheckUpdates.qml", {globalMaxX: a.x})
+                        setSource("CheckUpdates.qml", {toolbarCtrl: toolbar})
                     }
                 }
             }

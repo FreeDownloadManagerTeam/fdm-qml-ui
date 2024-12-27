@@ -177,9 +177,9 @@ BaseDialog {
                     }
                 }
 
-                CustomButton {
+                BaseButton {
                     text: qsTr("Macros") + App.loc.emptyString
-                    implicitHeight: 30*appWindow.zoom
+                    height: 30*appWindow.zoom
                     onClicked: macrosMenu.open()
 
                     MacrosMenu {
@@ -194,7 +194,7 @@ BaseDialog {
                 anchors.right: parent.right
                 height: 50*appWindow.zoom
 
-                CustomButton {
+                BaseButton {
                     id: cnclBtn
                     text: qsTr("Cancel") + App.loc.emptyString
                     anchors.bottom: parent.bottom
@@ -203,7 +203,7 @@ BaseDialog {
                     }
                 }
 
-                CustomButton {
+                BaseButton {
                     text: qsTr("OK") + App.loc.emptyString
                     anchors.bottom: parent.bottom
                     blueBtn: true

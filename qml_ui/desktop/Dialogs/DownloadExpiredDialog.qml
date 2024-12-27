@@ -53,7 +53,7 @@ BaseDialog
             RowLayout {
                 Layout.alignment: Qt.AlignRight
 
-                CustomButton {
+                BaseButton {
                     visible: info && (info.flags & AbstractDownloadsUi.AllowChangeSourceUrl)
                     text: qsTr("Update download") + App.loc.emptyString
                     blueBtn: true
@@ -63,7 +63,7 @@ BaseDialog
                     }
                 }
 
-                CustomButton {
+                BaseButton {
                     text: qsTr("Close") + App.loc.emptyString
                     blueBtn: true
                     onClicked: root.close();

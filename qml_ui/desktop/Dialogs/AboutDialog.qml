@@ -90,7 +90,8 @@ BaseDialog {
                 width: height
             }
 
-            CustomButton {
+            BaseButton {
+                visible: appWindow.uiver === 1
                 anchors.right: parent.right
                 text: qsTr("OK") + App.loc.emptyString
                 blueBtn: true

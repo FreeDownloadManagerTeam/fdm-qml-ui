@@ -17,15 +17,6 @@ ItemDelegate
     signal downloadUnselected()
 
     property var view
-    property bool modelChecked: !!model.checked //undefined to false
-    property bool modelRunning: !!model.running //undefined to false
-    property bool modelFinished: model.finished
-    property string modelError: model.error
-
-    onModelCheckedChanged: selectedDownloadsTools.modelCheckedChanged(model.id)
-    onModelRunningChanged: selectedDownloadsTools.modelRunningChanged(model.id)
-    onModelFinishedChanged: selectedDownloadsTools.modelFinishedChanged(model.id)
-    onModelErrorChanged: selectedDownloadsTools.modelErrorChanged(model.id)
 
     DownloadsItemTools {
         id: downloadsItemTools

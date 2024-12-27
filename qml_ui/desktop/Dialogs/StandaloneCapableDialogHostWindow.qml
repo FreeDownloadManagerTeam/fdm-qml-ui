@@ -2,6 +2,7 @@ import QtQuick 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Window 2.12
 import org.freedownloadmanager.fdm 1.0
+import CppControls 1.0 as CppControls
 
 ApplicationWindow
 {
@@ -29,6 +30,13 @@ ApplicationWindow
     Component.onCompleted: {
         x = Qt.binding(() => Screen.width / 2 - width / 2);
         y = Qt.binding(() => Screen.height / 2 - height / 2);
+    }
+
+    CppControls.WindowAppearanceInOs
+    {
+        darkMode: App.useDarkTheme
+        titleBarBackgroundColor: App.titleBarBackgroundColor
+        titleBarTextColor: App.titleBarTextColor
     }
 
     Timer {

@@ -328,21 +328,10 @@ Column
         }
 
         SettingsCheckBox {
+            visible: appWindow.uiver === 1
             text: qsTr("Enable user defined order of downloads") + App.loc.emptyString
             checked: uiSettingsTools.settings.enableUserDefinedOrderOfDownloads
-            onClicked: {
-                uiSettingsTools.settings.enableUserDefinedOrderOfDownloads = checked;
-                if (checked)
-                {
-                    if (sortTools.sortBy != AbstractDownloadsUi.DownloadsSortByOrder)
-                        sortTools.setSortByAndAsc(AbstractDownloadsUi.DownloadsSortByOrder, false);
-                }
-                else
-                {
-                    if (sortTools.sortBy == AbstractDownloadsUi.DownloadsSortByOrder)
-                        sortTools.setSortByAndAsc(AbstractDownloadsUi.DownloadsSortByCreationTime, false);
-                }
-            }
+            onClicked: uiSettingsTools.settings.enableUserDefinedOrderOfDownloads = checked
         }
 
         SettingsCheckBox {
@@ -373,7 +362,7 @@ Column
 
                 delegate: BaseCheckBox {
                     textColor: appWindow.theme.settingsItem
-                    text: modelData.name
+                    text: App.loc.tr(modelData.name)
                     checked: !uiSettingsTools.settings.hideTags[modelData.id]
                     onClicked: {
                         let o = uiSettingsTools.settings.hideTags;
@@ -675,7 +664,7 @@ Column
             text: qsTr("Go back to default settings") + App.loc.emptyString
         }
 
-        CustomButton {
+        BaseButton {
             text: qsTr("Reset") + App.loc.emptyString
             enabled: App.settings.hasNonDefaultValues || uiSettingsTools.hasNonDefaultValues
             onClicked: okToResetMsg.open()

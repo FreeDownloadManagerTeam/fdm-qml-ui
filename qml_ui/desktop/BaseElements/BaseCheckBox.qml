@@ -15,30 +15,63 @@ CheckBox {
 
     property int xOffset: 6*appWindow.zoom
 
+    readonly property bool isEnabled: enabled && !locked
+
     padding: 0
     focusPolicy: Qt.NoFocus
 
-    implicitWidth: text.length > 0 ? contentItem.implicitWidth : (xOffset + indicator.width)
-    implicitHeight: text.length > 0 ? Math.max(indicator.height, contentItem.implicitHeight) : indicator.height
+    implicitWidth: text.length > 0 ? contentItem.implicitWidth : (xOffset + indicator.implicitWidth)
+    implicitHeight: text.length > 0 ? Math.max(indicator.implicitHeight, contentItem.implicitHeight) : indicator.implicitHeight
 
-    indicator: Item {
-        anchors.verticalCenter: parent.verticalCenter
+    indicator: Rectangle {
         x: LayoutMirroring.enabled ? root.width - width - root.xOffset : root.xOffset
-        width: 12*appWindow.zoom
-        height: 12*appWindow.zoom
+        anchors.verticalCenter: parent.verticalCenter
+
+        implicitWidth: appWindow.uiver === 1 ? 12*appWindow.zoom : indicatorImage.implicitWidth
+        implicitHeight: appWindow.uiver === 1 ? 12*appWindow.zoom : indicatorImage.implicitHeight
+
+        radius: appWindow.uiver === 1 ? 0 : 4*appWindow.zoom
+
+        color: appWindow.uiver === 1 ?
+                   "transparent" :
+                   (checked ?
+                        (isEnabled ? appWindow.theme_v2.primary : appWindow.theme_v2.bg400) :
+                        appWindow.theme_v2.bg200)
+
+        border.color: appWindow.uiver === 1 ?
+                          "transparent" :
+                          (checked ?
+                               (isEnabled ? appWindow.theme_v2.primary : appWindow.theme_v2.bg400) :
+                               appWindow.theme_v2.bg400)
+
+        border.width: appWindow.uiver === 1 ?
+                          0 :
+                          1*appWindow.zoom
 
         WaSvgImage {
-            source: appWindow.theme.checkboxIconsRoot + "/" + checkBoxStyle + "/" +
-                    (checkState === Qt.Checked ? "checked" : checkState === Qt.Unchecked ? "unchecked" : "indeterminate") +
-                    ".svg"
+            id: indicatorImage
+
+            source: appWindow.uiver === 1 ?
+                        (appWindow.theme.checkboxIconsRoot + "/" + checkBoxStyle + "/" +
+                         (checkState === Qt.Checked ? "checked" : checkState === Qt.Unchecked ? "unchecked" : "indeterminate") +
+                         ".svg") :
+                        Qt.resolvedUrl("V2/checkmark_v2.svg")
+
             zoom: appWindow.zoom
+
+            visible: appWindow.uiver === 1 ? true : checked
+
             anchors.centerIn: parent
-            opacity: root.locked || !root.enabled ? 0.4 : 1
+
+            opacity: root.isEnabled ? 1.0 : 0.4
+
             layer {
                 effect: ColorOverlay {
-                    color: appWindow.theme.inactiveControl
+                    color: appWindow.uiver === 1 ?
+                               appWindow.theme.inactiveControl :
+                               (root.isEnabled ? appWindow.theme_v2.bg200 : appWindow.theme_v2.bg1000)
                 }
-                enabled: !Window.active
+                enabled: appWindow.uiver === 1 ? !Window.active : true
             }
         }
     }
@@ -46,8 +79,8 @@ CheckBox {
     contentItem: BaseLabel {
         anchors.left: parent.left
         anchors.verticalCenter: parent.verticalCenter
-        leftPadding: qtbug.leftPadding(root.xOffset + root.indicator.width + 8*appWindow.zoom, 0)
-        rightPadding: qtbug.rightPadding(root.xOffset + root.indicator.width + 8*appWindow.zoom, 0)
+        leftPadding: qtbug.leftPadding(root.xOffset + root.indicator.width + (root.text ? 8*appWindow.zoom : 0), 0)
+        rightPadding: qtbug.rightPadding(root.xOffset + root.indicator.width + (root.text ? 8*appWindow.zoom : 0), 0)
         text: parent.text
         color: parent.textColor ? parent.textColor : appWindow.theme.foreground
         font.pixelSize: fontSize

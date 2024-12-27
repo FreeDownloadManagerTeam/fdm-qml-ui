@@ -103,14 +103,14 @@ BaseDialog {
                 }
 
 
-                CustomButton {
+                BaseButton {
                     id: cnclBtn
                     text: qsTr("Cancel") + App.loc.emptyString
                     onClicked: root.close();
                     Layout.alignment: Qt.AlignRight
                 }
 
-                CustomButton {
+                BaseButton {
                     text: qsTr("OK") + App.loc.emptyString
                     blueBtn: true
                     alternateBtnPressed: cnclBtn.isPressed
@@ -154,7 +154,7 @@ BaseDialog {
                 wrapMode: Label.Wrap
             }
 
-            CustomButton {
+            BaseButton {
                 visible: finished
                 id: closeBtn
                 text: qsTr("Close") + App.loc.emptyString

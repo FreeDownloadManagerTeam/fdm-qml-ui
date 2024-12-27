@@ -29,7 +29,7 @@ Column
         anchors.left: parent.left
         spacing: 10*appWindow.zoom
 
-        CustomButton
+        BaseButton
         {
             text: qsTr("Archive logs...") + App.loc.emptyString
 
@@ -44,7 +44,7 @@ Column
             }
         }
 
-        CustomButton
+        BaseButton
         {
             text: qsTr("Archive service data...") + App.loc.emptyString
 
@@ -117,6 +117,12 @@ Column
         BaseLabel {
             text: qsTr("Restart is required") + App.loc.emptyString
         }
+    }
+
+    BaseHandCursorLabel {
+        anchors.left: parent.left
+        text: "<a href='#'>" + qsTr("Do crash app") + App.loc.emptyString + "</a>"
+        onLinkActivated: App.crashSelf()
     }
 
     BaseHandCursorLabel {

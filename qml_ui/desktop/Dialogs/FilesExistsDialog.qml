@@ -68,20 +68,20 @@ BaseDialog {
 
                 spacing: 5*appWindow.zoom
 
-                CustomButton {
+                BaseButton {
                     text: qsTr("Rename (%1)").arg(root.countdown) + App.loc.emptyString
                     blueBtn: true
                     alternateBtnPressed: abortBtn.isPressed || overwriteBtn.isPressed
                     onClicked: root.actionSelected(AbstractDownloadsUi.DfeaRename)
                 }
 
-                CustomButton {
+                BaseButton {
                     id: overwriteBtn
                     text: qsTr("Overwrite") + App.loc.emptyString
                     onClicked: root.actionSelected(AbstractDownloadsUi.DfeaOverwrite)
                 }
 
-                CustomButton {
+                BaseButton {
                     id: abortBtn
                     text: qsTr("Abort") + App.loc.emptyString
                     onClicked: root.actionSelected(AbstractDownloadsUi.DfeaAbort)

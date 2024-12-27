@@ -39,7 +39,7 @@ Rectangle
             enabled: !selectedDownloadsTools.selectedDownloadsIsLocked() && selectedDownloadsTools.checkedDownloadsCount > 0
             icon.source: Qt.resolvedUrl("../images/mobile/selected_delete.svg")
             onClicked: {
-                deleteDownloadsDialog.downloadIds = App.downloads.model.checkedIds();
+                deleteDownloadsDialog.downloadIds = App.downloads.model.checkedIds;
                 deleteDownloadsDialog.open()
             }
         }

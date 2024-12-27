@@ -25,14 +25,34 @@ Page {
         id: uiStrings
     }
 
-    header: MainToolbar {
-        pageId: "plugins"
-        leftPadding: 0
-        rightPadding: 0
-        bottomPadding: 0
+    Component {
+        id: mainToolbar_v1
+
+        MainToolbar {
+            pageId: "plugins"
+            leftPadding: 0
+            rightPadding: 0
+            bottomPadding: 0
+        }
+    }
+
+    Component {
+        id: mainToolbar_v2
+
+        MainToolbar_V2 {
+            pageId: "plugins"
+            leftPadding: 0
+            rightPadding: 0
+            bottomPadding: 0
+        }
+    }
+
+    header: Loader {
+        sourceComponent: appWindow.uiver === 1 ? mainToolbar_v1 : mainToolbar_v2
     }
 
     Rectangle {
+        visible: appWindow.uiver === 1
         anchors.fill: parent
         color: appWindow.theme.background
     }

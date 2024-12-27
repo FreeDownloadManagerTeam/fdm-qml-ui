@@ -112,21 +112,21 @@ BaseStandaloneCapableDialog {
                     implicitHeight: 1
                 }
 
-                CustomButton {
+                BaseButton {
                     Layout.alignment: Qt.AlignRight
                     visible: (downloadTools.statusWarning || downloadTools.lastError) && downloadTools.allowedToReportLastError
                     text: qsTr("Report problem") + App.loc.emptyString
                     onClicked: privacyDlg.open(downloadTools.lastFailedRequestId)
                 }
 
-                CustomButton {
+                BaseButton {
                     id: cnclBtn
                     Layout.alignment: Qt.AlignRight
                     text: qsTr("Cancel") + App.loc.emptyString
                     onClicked: downloadTools.doReject()
                 }
 
-                CustomButton {
+                BaseButton {
                     id: okbtn
                     Layout.alignment: Qt.AlignRight
                     text: (downloadTools.buildingDownload || downloadTools.buildingDownloadFinished ? qsTr("Download") : qsTr("OK")) + App.loc.emptyString

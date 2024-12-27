@@ -141,4 +141,12 @@ ListView {
             selectedDownloadsTools.currentDownloadsVisible();
         }
     }
+
+    Component.onCompleted: {
+        selectedDownloadsTools.registerListView(this);
+    }
+
+    Component.onDestruction: {
+        selectedDownloadsTools.unregisterListView(this);
+    }
 }

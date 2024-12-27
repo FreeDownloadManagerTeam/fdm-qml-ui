@@ -93,7 +93,7 @@ BaseDialog {
                 Layout.bottomMargin: 10*appWindow.zoom
                 Layout.alignment: Qt.AlignRight
 
-                CustomButton {
+                BaseButton {
                     id: cnclBtn
                     Layout.preferredHeight: height
                     Layout.alignment: Qt.AlignRight
@@ -101,7 +101,7 @@ BaseDialog {
                     onClicked: root.close()
                 }
 
-                CustomButton {
+                BaseButton {
                     id: okbtn
                     Layout.preferredHeight: height
                     Layout.alignment: Qt.AlignRight

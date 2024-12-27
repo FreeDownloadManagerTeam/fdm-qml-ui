@@ -3,6 +3,7 @@ import QtQuick.Layouts 1.3
 import org.freedownloadmanager.fdm 1.0
 import "../../BaseElements"
 import "../../FilesTree"
+import "../../V2"
 
 ColumnLayout {
     id: root
@@ -13,6 +14,8 @@ ColumnLayout {
     Layout.fillWidth: true
     Layout.preferredHeight: Math.min((visible ? tree.rowsCount : 0) * 22*appWindow.fontZoom + 55*appWindow.zoom, Math.min(450*appWindow.zoom, Math.max(200*appWindow.fontZoom, appWindow.height - 500*appWindow.zoom)))
     spacing: 5*appWindow.zoom
+
+    readonly property var tree: treeLoader.item
 
     Rectangle {
         Layout.fillWidth: true
@@ -31,6 +34,7 @@ ColumnLayout {
             anchors.rightMargin: 20*appWindow.zoom
             MouseArea {
                 anchors.fill: parent
+                cursorShape: appWindow.uiver === 1 ? Qt.ArrowCursor : Qt.PointingHandCursor
                 onClicked: tree.selectAllToDownload()
             }
         }
@@ -42,6 +46,7 @@ ColumnLayout {
             anchors.right: parent.right
             MouseArea {
                 anchors.fill: parent
+                cursorShape: appWindow.uiver === 1 ? Qt.ArrowCursor : Qt.PointingHandCursor
                 onClicked: tree.selectNoneToDownload()
             }
         }
@@ -50,21 +55,43 @@ ColumnLayout {
     Rectangle {
         Layout.fillWidth: true
         Layout.fillHeight: true
-        border.color: appWindow.theme.border
-        border.width: 1*appWindow.zoom
-        color: appWindow.theme.filesTreeBackground
+        border.color: appWindow.uiver === 1 ? appWindow.theme.border : "transparent"
+        border.width: appWindow.uiver === 1 ? 1*appWindow.zoom : 0
+        color: appWindow.uiver === 1 ? appWindow.theme.filesTreeBackground :
+                                       appWindow.theme_v2.bgColor
 
-        FilesTree {
-            id: tree
-            downloadInfo: null
-            createDownloadDialog: true
+        Component {
+            id: tree_v1
+            FilesTree {
+                downloadInfo: null
+                createDownloadDialog: true
 
-            property var selectedSize: tree.downloadInfo && downloadInfo.filesCount > 1 ? tree.downloadInfo.selectedSize : -1
+                property var selectedSize: tree.downloadInfo && downloadInfo.filesCount > 1 ? tree.downloadInfo.selectedSize : -1
 
-            onSelectedSizeChanged: { downloadTools.fileSizeValueChanged(tree.selectedSize) }
+                onSelectedSizeChanged: { downloadTools.fileSizeValueChanged(tree.selectedSize) }
+            }
+        }
+
+        Component {
+            id: tree_v2
+            FilesTree_V2 {
+                downloadInfo: null
+                createDownloadDialog: true
+
+                property var selectedSize: tree.downloadInfo && downloadInfo.filesCount > 1 ? tree.downloadInfo.selectedSize : -1
+
+                onSelectedSizeChanged: { downloadTools.fileSizeValueChanged(tree.selectedSize) }
+            }
+        }
+
+        Loader {
+            id: treeLoader
+            sourceComponent: appWindow.uiver === 1 ? tree_v1 : tree_v2
+            anchors.fill: parent
         }
 
         Rectangle {
+            visible: appWindow.uiver === 1
             height: 1*appWindow.zoom
             width: parent.width
             anchors.top: parent.top

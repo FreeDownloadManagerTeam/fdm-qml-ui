@@ -7,6 +7,7 @@ import "./Dialogs"
 import "./Banners"
 import "./BottomPanel"
 import "./BaseElements"
+import "./V2"
 import org.freedownloadmanager.fdm 1.0
 import org.freedownloadmanager.fdm.appfeatures 1.0
 
@@ -15,22 +16,13 @@ Page {
 
     property var keyboardFocusItem: keyboardFocusItem
 
+    readonly property bool showDownloadsList: appWindow.emptySearchResults ||
+                                              (downloadsView.item && downloadsView.item.count > 0)
+    readonly property bool showDropArea: !showDownloadsList
+
     Component.onCompleted: {
         keyboardFocusItem.focus = true;
         root.forceActiveFocus();
-
-        colsWidthCalc.downloadsViewSpeedColumnHovered = Qt.binding(function() {
-            return downloadsView.speedColumnHoveredDownloadId != -1;
-        });
-        colsWidthCalc.downloadsViewSpeedColumnHoveredWidth = Qt.binding(function() {
-            return downloadsView.speedColumnHoveredWidth;
-        });
-        colsWidthCalc.downloadsViewSpeedColumnNotHoveredSinceTime = Qt.binding(function() {
-            return downloadsView.speedColumnNotHoveredSinceTime;
-        });
-        colsWidthCalc.downloadsViewShowingCompleteMsg = Qt.binding(function() {
-            return downloadsView.showingCompleteMsg > 0;
-        });
     }
 
     Item {
@@ -113,11 +105,29 @@ Page {
         }
     }
 
-    header: MainToolbar {
-        id: mainToolbar
-        leftPadding: 0
-        rightPadding: 0
-        bottomPadding: 0
+    Component {
+        id: mainToolbar_v1
+
+        MainToolbar {
+            leftPadding: 0
+            rightPadding: 0
+            bottomPadding: 0
+        }
+    }
+
+    Component {
+        id: mainToolbar_v2
+
+        MainToolbar_V2 {
+            leftPadding: 0
+            rightPadding: 0
+            bottomPadding: 0
+        }
+    }
+
+    header: Loader {
+        sourceComponent: appWindow.uiver === 1 ? mainToolbar_v1 : mainToolbar_v2
+        Component.onCompleted: appWindow.mainToolbarHeight = Qt.binding(() => height)
     }
 
     ColumnLayout {
@@ -125,7 +135,11 @@ Page {
         spacing: 0
 
         Rectangle {
-            Layout.preferredHeight: (integrationBanner.item && integrationBanner.item.visible) || shutdownBanner.visible ? 30*appWindow.zoom : 0
+            id: banners
+
+            Layout.preferredHeight: (integrationBanner.item && integrationBanner.item.visible) ||
+                                    shutdownBanner.visible || uiUpdatedBanner.visible ?
+                                        30*appWindow.zoom : 0
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignTop
             color: "transparent"
@@ -139,9 +153,19 @@ Page {
                 height: parent.height
             }
 
+            UiUpdatedBanner {
+                id: uiUpdatedBanner
+            }
+
             ShutdownBanner {
                 id: shutdownBanner
             }
+        }
+
+        Item {
+            visible: appWindow.uiver !== 1 && banners.height > 0
+            implicitHeight: 16*appWindow.zoom
+            implicitWidth: 1
         }
 
         Rectangle {
@@ -162,35 +186,71 @@ Page {
                     Layout.fillHeight: true
 
                     //filters bar
-                    MainFiltersBar {
+                    Loader {
                         id: filtersBar
 
+                        source: Qt.resolvedUrl("MainFiltersBar.qml")
+
+                        active: appWindow.uiver === 1
+                        visible: active
+
                         anchors.left: parent.left
-                        anchors.leftMargin: 5
+                        anchors.leftMargin: 5*appWindow.zoom
+
+                        width: parent.width
+                    }
+
+                    BatchDownloadTitle {
+                        id: filtersBar2
+                        visible: appWindow.uiver !== 1 &&
+                                 downloadsViewTools.downloadsParentIdFilter > -1
+                        anchors.topMargin: 0
+                        anchors.rightMargin: 8*appWindow.zoom
                     }
 
                     Rectangle {
                         anchors.fill: parent
-                        anchors.margins: 5
-                        border.color: App.downloads.infos.empty ? "transparent" : appWindow.theme.border
+                        anchors.margins: appWindow.uiver === 1 ? 5 : 0
+                        border.color: appWindow.uiver === 1 ?
+                                          (!showDownloadsList ? "transparent" : appWindow.theme.border) :
+                                          "transparent"
                         border.width: 1*appWindow.zoom
                         color: "transparent"
-                        anchors.topMargin: filtersBar.height
+                        anchors.topMargin: filtersBar.visible ? filtersBar.height : filtersBar2.visible ? filtersBar2.height + 8*appWindow.zoom : 0
 
-                        DownloadPageBackground {}
+                        DownloadPageBackground {visible: appWindow.uiver === 1}
 
                         //downloads list
-                        Rectangle {
-                            visible: !App.downloads.infos.empty
+                        Item {
+                            visible: showDownloadsList
                             anchors.fill: parent
-                            color: "transparent"
 
-                            DownloadsViewHeader {
+                            Component {
+                                id: downloadsViewHeader_v1
+                                DownloadsViewHeader {}
+                            }
+
+                            Component {
+                                id: downloadsViewHeader_v2
+                                DownloadsViewHeader_V2 {}
+                            }
+
+                            Loader {
                                 id: downloadsViewHeader
                                 width: parent.width
-                                DownloadsViewHeaderColumnsWidthCalc {
+                                sourceComponent: appWindow.uiver === 1 ? downloadsViewHeader_v1 : downloadsViewHeader_v2
+                                onLoaded: {
+                                    colsWidthCalc.setSource(
+                                                Qt.resolvedUrl(appWindow.uiver === 1 ? "DownloadsViewHeaderColumnsWidthCalc.qml" : "V2/DownloadsViewHeaderColumnsWidthCalc_V2.qml"),
+                                                {header: downloadsViewHeader.item});
+                                }
+                                Loader {
                                     id: colsWidthCalc
-                                    header: parent
+                                    onLoaded: {
+                                        downloadsView.setSource(
+                                                    Qt.resolvedUrl(appWindow.uiver === 1 ? "DownloadsView.qml" : "V2/DownloadsView_V2.qml"),
+                                                    {downloadsViewHeader: downloadsViewHeader.item});
+                                    }
                                 }
                             }
 
@@ -198,22 +258,29 @@ Page {
                                 z: 2
                                 width: parent.width
                                 anchors.top: downloadsViewHeader.bottom
-                                anchors.topMargin: -1*appWindow.zoom
+                                anchors.topMargin: ((appWindow.uiver === 1 ? 0 : 8)-1)*appWindow.zoom
                                 anchors.bottom: parent.bottom
                                 color: "transparent"
                                 clip: true
 
-                                DownloadsView {
+                                Loader {
                                     id: downloadsView
                                     anchors.fill: parent
-                                    downloadsViewHeader: downloadsViewHeader
-
-                                    Component.onCompleted: {
-                                        selectedDownloadsTools.registerListView(this);
-                                    }
-
-                                    Component.onDestruction: {
-                                        selectedDownloadsTools.unregisterListView(this);
+                                    onLoaded: {
+                                        if (appWindow.uiver === 1) {
+                                            colsWidthCalc.item.downloadsViewSpeedColumnHovered = Qt.binding(function() {
+                                                return downloadsView.item.speedColumnHoveredDownloadId != -1;
+                                            });
+                                            colsWidthCalc.item.downloadsViewSpeedColumnHoveredWidth = Qt.binding(function() {
+                                                return downloadsView.item.speedColumnHoveredWidth;
+                                            });
+                                            colsWidthCalc.item.downloadsViewSpeedColumnNotHoveredSinceTime = Qt.binding(function() {
+                                                return downloadsView.item.speedColumnNotHoveredSinceTime;
+                                            });
+                                            colsWidthCalc.item.downloadsViewShowingCompleteMsg = Qt.binding(function() {
+                                                return downloadsView.item.showingCompleteMsg > 0;
+                                            });
+                                        }
                                     }
                                 }
                             }
@@ -221,9 +288,8 @@ Page {
 
                         //drop area - empty download list
                         Rectangle {
-                            id: pageBody
+                            visible: appWindow.uiver === 1 && showDropArea
                             anchors.fill: parent
-                            visible: App.downloads.infos.empty
                             color: "transparent"
                             border.color: "transparent"
                             border.width: 2*appWindow.zoom
@@ -263,16 +329,24 @@ Page {
                             }
                         }
 
+                        DownloadsDropArea_V2 {
+                            visible: appWindow.uiver !== 1 && showDropArea
+                            anchors.fill: parent
+                            anchors.leftMargin: appWindow.theme_v2.mainWindowLeftMargin*appWindow.zoom
+                            anchors.rightMargin: appWindow.theme_v2.mainWindowRightMargin*appWindow.zoom
+                            anchors.topMargin: 16*appWindow.zoom
+                            anchors.bottomMargin: 12*appWindow.zoom
+                        }
+
                         //empty search results
                         Rectangle {
                             anchors.fill: parent
-                            anchors.margins: 5*appWindow.zoom
+                            anchors.leftMargin: (appWindow.uiver === 1 ? 5 : appWindow.theme_v2.mainWindowLeftMargin)*appWindow.zoom
+                            anchors.rightMargin: (appWindow.uiver === 1 ? 5 : appWindow.theme_v2.mainWindowRightMargin)*appWindow.zoom
+                            anchors.topMargin: (appWindow.uiver === 1 ? 5 : appWindow.theme_v2.mainWindowTopMargin)*appWindow.zoom
+                            anchors.bottomMargin: (appWindow.uiver === 1 ? 5 : appWindow.theme_v2.mainWindowBottomMargin)*appWindow.zoom
                             color: "transparent"
-                            visible: !App.downloads.infos.empty
-                                     && (downloadsViewTools.emptySearchResults
-                                         || downloadsViewTools.emptyActiveDownloadsList
-                                         || downloadsViewTools.emptyCompleteDownloadsList
-                                         || downloadsViewTools.emptyTagResults)
+                            visible: appWindow.emptySearchResults
 
                             ColumnLayout {
                                 anchors.verticalCenter: parent.verticalCenter
@@ -322,7 +396,12 @@ Page {
                     Layout.preferredHeight: bottomPanelTools.panelHeigth
                     color: "transparent"
 
-                    BottomPanel {}
+                    Loader {
+                        source: Qt.resolvedUrl(appWindow.uiver === 1 ?
+                                                   "BottomPanel/BottomPanel.qml" :
+                                                   "V2/BottomPanel/BottomPanel_V2.qml")
+                        anchors.fill: parent
+                    }
                 }
             }
 

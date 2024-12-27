@@ -128,7 +128,7 @@ Item {
         }
 
         RowLayout {
-            CustomButton {
+            BaseButton {
                 id: addBtn
                 text: qsTr("Add") + App.loc.emptyString
                 blueBtn: true
@@ -136,7 +136,7 @@ Item {
                 onClicked: {addBtn.visible = false}
             }
 
-            CustomButton {
+            BaseButton {
                 id: cnclBtn
                 text: qsTr("Hide") + App.loc.emptyString
                 visible: addBtn.visible
@@ -174,31 +174,50 @@ Item {
                 Layout.alignment: Qt.AlignTop
                 Layout.fillWidth: true
                 spacing: 5*appWindow.zoom
-                CustomButton {
+                BaseButton {
+                    id: okBtn1
                     blueBtn: true
                     alternateBtnPressed: cnclBtn1.isPressed
                     radius: 5*appWindow.zoom
-                    implicitHeight: value.implicitHeight
+                    Layout.preferredHeight: value.implicitHeight
                     Layout.fillWidth: true
                     onClicked: custom.tryAcceptValue()
                     WaSvgImage {
+                        z: 1
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.horizontalCenter: parent.horizontalCenter
                         source: Qt.resolvedUrl("../../images/desktop/ok_white.svg")
                         zoom: appWindow.zoom
+                        layer {
+                            effect: ColorOverlay {
+                                color: appWindow.uiver === 1 ?
+                                           (okBtn1.alternateBtnPressed ? okBtn1.secondaryTextColor : okBtn1.primaryTextColor) :
+                                           appWindow.theme_v2.bg100
+                            }
+                            enabled: true
+                        }
                     }
                 }
-                CustomButton {
+                BaseButton {
                     id: cnclBtn1
                     radius: 5*appWindow.zoom
-                    implicitHeight: value.implicitHeight
+                    Layout.preferredHeight: value.implicitHeight
                     Layout.fillWidth: true
                     onClicked: custom.reject()
                     WaSvgImage {
+                        z: 1
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.horizontalCenter: parent.horizontalCenter
                         source: Qt.resolvedUrl("../../images/desktop/clean.svg")
                         zoom: appWindow.zoom
+                        layer {
+                            effect: ColorOverlay {
+                                color: appWindow.uiver === 1 ?
+                                           (cnclBtn1.isPressed ? cnclBtn1.secondaryTextColor : cnclBtn1.primaryTextColor) :
+                                           appWindow.theme_v2.bg1000
+                            }
+                            enabled: true
+                        }
                     }
                 }
             }

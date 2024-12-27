@@ -14,6 +14,10 @@ Item {
 
     property int arrowCenterX: width/2
 
+    readonly property color bgColor: appWindow.uiver === 1 ?
+                                         appWindow.theme.background :
+                                         appWindow.theme_v2.bgColor
+
     MouseArea {
         anchors.fill: parent
     }
@@ -33,8 +37,12 @@ Item {
             onPaint: {
                 var ctx = getContext("2d")
                 ctx.lineWidth = 1*appWindow.zoom
-                ctx.strokeStyle = appWindow.theme.background
-                ctx.fillStyle = appWindow.theme.background
+                ctx.strokeStyle = appWindow.uiver === 1 ?
+                            root.bgColor :
+                            appWindow.theme_v2.dialogBgColor
+                ctx.fillStyle = appWindow.uiver === 1 ?
+                            root.bgColor :
+                            appWindow.theme_v2.dialogBgColor
                 ctx.beginPath()
                 ctx.moveTo(width / 2,0)
                 ctx.lineTo(width,height)
@@ -53,8 +61,10 @@ Item {
         height: parent.height
         x: -20*appWindow.zoom
         y: 5*appWindow.zoom
-        color: appWindow.theme.background
+        color: root.bgColor
         radius: 5*appWindow.zoom
+        border.color: appWindow.uiver === 1 ? "transparent" : appWindow.theme_v2.dialogBgColor
+        border.width: appWindow.uiver === 1 ? 0 : 2*appWindow.zoom
         clip: true
 
         ColumnLayout {
@@ -94,13 +104,13 @@ Item {
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignCenter
                 spacing: 10*appWindow.zoom
 
-                CustomButton {
+                BaseButton {
                     text: qsTr("Retry") + App.loc.emptyString
                     blueBtn: true
                     smallBtn: true
                     onClicked: updateTools.checkForUpdates()
                 }
-                CustomButton {
+                BaseButton {
                     text: qsTr("Cancel") + App.loc.emptyString
                     smallBtn: true
                     onClicked: updateTools.cancel()
@@ -119,7 +129,7 @@ Item {
                 text: "<a href='#'>" + qsTr("What's new in %1").arg(updateTools.version) + App.loc.emptyString + "</a>"
                 onLinkActivated: updateTools.openWhatsNewDialog()
             }
-            CustomButton {
+            BaseButton {
                 visible: updateTools.state == QtUpdate.Finished && updateTools.updatesAvailable
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignCenter
                 text: qsTr("Update") + App.loc.emptyString
@@ -133,7 +143,7 @@ Item {
                 Layout.alignment: Qt.AlignLeft
                 text: qsTr("%1 is up to date").arg(App.shortDisplayName) + App.loc.emptyString
             }
-            CustomButton {
+            BaseButton {
                 visible: updateTools.state == QtUpdate.Finished && !updateTools.updatesAvailable
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignCenter
                 text: qsTr("OK") + App.loc.emptyString
@@ -160,7 +170,7 @@ Item {
                 percent: updateTools.progress
                 Layout.fillWidth: true
             }
-            CustomButton {
+            BaseButton {
                 visible: updateTools.state == QtUpdate.Ready || updateTools.state == QtUpdate.InProgress || updateTools.state == QtUpdate.Finished
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignCenter
                 text: qsTr("Cancel") + App.loc.emptyString
@@ -184,13 +194,13 @@ Item {
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignCenter
                 spacing: 10*appWindow.zoom
 
-                CustomButton {
+                BaseButton {
                     text: qsTr("Retry") + App.loc.emptyString
                     blueBtn: true
                     smallBtn: true
                     onClicked: updateTools.checkForUpdates()
                 }
-                CustomButton {
+                BaseButton {
                     text: qsTr("Cancel") + App.loc.emptyString
                     smallBtn: true
                     onClicked: updateTools.cancel()
@@ -215,7 +225,7 @@ Item {
                 percent: updateTools.progress
                 Layout.fillWidth: true
             }
-            CustomButton {
+            BaseButton {
                 visible: updateTools.state == QtUpdate.Ready || updateTools.state == QtUpdate.InProgress
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignCenter
                 text: qsTr("Cancel") + App.loc.emptyString
@@ -239,13 +249,13 @@ Item {
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignCenter
                 spacing: 10*appWindow.zoom
 
-                CustomButton {
+                BaseButton {
                     text: qsTr("Retry") + App.loc.emptyString
                     blueBtn: true
                     smallBtn: true
                     onClicked: updateTools.checkForUpdates()
                 }
-                CustomButton {
+                BaseButton {
                     text: qsTr("Cancel") + App.loc.emptyString
                     smallBtn: true
                     onClicked: updateTools.cancel()
@@ -261,13 +271,13 @@ Item {
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignCenter
                 spacing: 10*appWindow.zoom
 
-                CustomButton {
+                BaseButton {
                     text: qsTr("Install update") + App.loc.emptyString
                     blueBtn: true
                     smallBtn: true
                     onClicked: updateTools.updater.installUpdates()
                 }
-                CustomButton {
+                BaseButton {
                     text: qsTr("Cancel") + App.loc.emptyString
                     smallBtn: true
                     onClicked: updateTools.cancel()
@@ -309,13 +319,13 @@ Item {
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignCenter
                 spacing: 10*appWindow.zoom
 
-                CustomButton {
+                BaseButton {
                     text: qsTr("Retry") + App.loc.emptyString
                     blueBtn: true
                     smallBtn: true
                     onClicked: updateTools.checkForUpdates()
                 }
-                CustomButton {
+                BaseButton {
                     text: qsTr("Cancel") + App.loc.emptyString
                     smallBtn: true
                     onClicked: updateTools.cancel()
@@ -357,13 +367,13 @@ Item {
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignCenter
                 spacing: 10*appWindow.zoom
 
-                CustomButton {
+                BaseButton {
                     text: qsTr("Retry") + App.loc.emptyString
                     blueBtn: true
                     smallBtn: true
                     onClicked: updateTools.checkForUpdates()
                 }
-                CustomButton {
+                BaseButton {
                     text: qsTr("Cancel") + App.loc.emptyString
                     smallBtn: true
                     onClicked: updateTools.cancel()
@@ -379,7 +389,7 @@ Item {
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignCenter
                 spacing: 10*appWindow.zoom
 
-                CustomButton {
+                BaseButton {
                     text: qsTr("Relaunch") + App.loc.emptyString
                     blueBtn: true
                     smallBtn: true
@@ -388,7 +398,7 @@ Item {
                     }
                 }
 
-                CustomButton {
+                BaseButton {
                     text: qsTr("Later") + App.loc.emptyString
                     smallBtn: true
                     onClicked: {
@@ -401,7 +411,7 @@ Item {
                 Layout.alignment: Qt.AlignLeft
                 text: qsTr("%1 is up to date").arg(App.shortDisplayName) + App.loc.emptyString
             }
-            CustomButton {
+            BaseButton {
                 visible: updateTools.state == QtUpdate.Finished && !updateTools.restartRequired
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignCenter
                 text: qsTr("Check for updates") + App.loc.emptyString
@@ -413,6 +423,7 @@ Item {
     }
 
     DropShadow {
+        visible: appWindow.uiver === 1
         anchors.fill: dlg
         horizontalOffset: 0
         verticalOffset: 0

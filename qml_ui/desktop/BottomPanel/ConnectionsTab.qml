@@ -21,8 +21,10 @@ Item {
     ListView {
         id: connectionsList
         anchors.fill: parent
+        anchors.topMargin: appWindow.uiver === 1 ? 0 : 8*appWindow.zoom
+        anchors.leftMargin: appWindow.uiver === 1 ? 0 : appWindow.theme_v2.mainWindowLeftMargin*appWindow.zoom
         anchors.bottomMargin: 1*appWindow.zoom
-        ScrollBar.vertical: ScrollBar{}
+        ScrollBar.vertical: BaseScrollBar{}
         flickableDirection: Flickable.AutoFlickIfNeeded
         boundsBehavior: Flickable.StopAtBounds
         clip: true
@@ -42,7 +44,9 @@ Item {
                 text: qsTr("Host") + App.loc.emptyString
                 Layout.preferredWidth: Math.max(200*appWindow.fontZoom, headerMinimumWidth, parent.width / 2)
                 Layout.fillHeight: true
-                color: appWindow.theme.background
+                color: appWindow.uiver === 1 ?
+                           appWindow.theme.background :
+                           appWindow.theme_v2.bgColor
                 onWidthChanged: hostItemWidth = width
             }
 
@@ -51,7 +55,9 @@ Item {
                 text: qsTr("Port") + App.loc.emptyString
                 Layout.preferredWidth: Math.max(70*appWindow.fontZoom, headerMinimumWidth)
                 Layout.fillHeight: true
-                color: appWindow.theme.background
+                color: appWindow.uiver === 1 ?
+                           appWindow.theme.background :
+                           appWindow.theme_v2.bgColor
                 onWidthChanged: portItemWidth = width
             }
 
@@ -60,9 +66,12 @@ Item {
                 text: qsTr("Connection count") + App.loc.emptyString
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                color: appWindow.theme.background
+                color: appWindow.uiver === 1 ?
+                           appWindow.theme.background :
+                           appWindow.theme_v2.bgColor
 
                 Rectangle {
+                    visible: appWindow.uiver === 1
                     height: parent.height
                     width: 1*appWindow.zoom
                     anchors.right: parent.right
@@ -81,8 +90,8 @@ Item {
                 Layout.preferredWidth: hostItemWidth
                 Layout.minimumWidth: Layout.preferredWidth
                 Layout.fillHeight: true
-                leftPadding: qtbug.leftPadding(6*appWindow.zoom,0)
-                rightPadding: qtbug.rightPadding(6*appWindow.zoom,0)
+                leftPadding: appWindow.uiver === 1 ? qtbug.leftPadding(6*appWindow.zoom,0) : 0
+                rightPadding: appWindow.uiver === 1 ? qtbug.rightPadding(6*appWindow.zoom,0) : 0
             }
 
             BaseLabel {
@@ -90,16 +99,16 @@ Item {
                 Layout.preferredWidth: portItemWidth
                 Layout.minimumWidth: Layout.preferredWidth
                 Layout.fillHeight: true
-                leftPadding: qtbug.leftPadding(6*appWindow.zoom,0)
-                rightPadding: qtbug.rightPadding(6*appWindow.zoom,0)
+                leftPadding: appWindow.uiver === 1 ? qtbug.leftPadding(6*appWindow.zoom,0) : 0
+                rightPadding: appWindow.uiver === 1 ? qtbug.rightPadding(6*appWindow.zoom,0) : 0
             }
 
             BaseLabel {
                 text: model.connectionCount
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                leftPadding: qtbug.leftPadding(6*appWindow.zoom,0)
-                rightPadding: qtbug.rightPadding(6*appWindow.zoom,0)
+                leftPadding: appWindow.uiver === 1 ? qtbug.leftPadding(6*appWindow.zoom,0) : 0
+                rightPadding: appWindow.uiver === 1 ? qtbug.rightPadding(6*appWindow.zoom,0) : 0
             }
         }
     }

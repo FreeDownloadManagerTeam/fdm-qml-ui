@@ -45,14 +45,14 @@ BaseDialog {
 
                 spacing: 5*appWindow.zoom
 
-                CustomButton {
+                BaseButton {
                     text: qsTr("Delete anyway") + App.loc.emptyString
                     blueBtn: true
                     alternateBtnPressed: abortBtn.isPressed
                     onClicked: continueClicked()
                 }
 
-                CustomButton {
+                BaseButton {
                     id: abortBtn
                     text: qsTr("Cancel") + App.loc.emptyString
                     onClicked: abortClicked()

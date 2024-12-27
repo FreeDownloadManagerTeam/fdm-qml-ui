@@ -43,7 +43,7 @@ BaseDialog {
                 }
             }
 
-            CustomButton {
+            BaseButton {
                 Layout.alignment: Qt.AlignRight
                 text: "OK"
                 blueBtn: true

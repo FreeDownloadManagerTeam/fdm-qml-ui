@@ -28,11 +28,12 @@ ColumnLayout {
 
         BaseLabel {
             text: qsTr("Select all") + App.loc.emptyString
-            color: linkColor
+            color: appWindow.uiver === 1 ? linkColor : appWindow.theme_v2.primary
             anchors.right: selectNone.left
             anchors.rightMargin: 20*appWindow.zoom
             MouseArea {
                 anchors.fill: parent
+                cursorShape: appWindow.uiver === 1 ? Qt.ArrowCursor : Qt.PointingHandCursor
                 onClicked: {
                     setAllFilesToDownload(true);
                     list.positionViewAtBeginning();
@@ -43,10 +44,11 @@ ColumnLayout {
         BaseLabel {
             id: selectNone
             text: qsTr("Select none") + App.loc.emptyString
-            color: linkColor
+            color: appWindow.uiver === 1 ? linkColor : appWindow.theme_v2.primary
             anchors.right: parent.right
             MouseArea {
                 anchors.fill: parent
+                cursorShape: appWindow.uiver === 1 ? Qt.ArrowCursor : Qt.PointingHandCursor
                 onClicked: setAllFilesToDownload(false)
             }
         }
@@ -55,9 +57,15 @@ ColumnLayout {
     Rectangle {
         Layout.fillWidth: true
         Layout.fillHeight: true
-        border.color: appWindow.theme.border
-        border.width: 1*appWindow.zoom
-        color: appWindow.theme.background
+        border.color: appWindow.uiver === 1 ?
+                          appWindow.theme.border :
+                          "transparent"
+        border.width: appWindow.uiver === 1 ?
+                          1*appWindow.zoom :
+                          0
+        color: appWindow.uiver === 1 ?
+                   appWindow.theme.background :
+                   appWindow.theme_v2.bgColor
 
         ButtonGroup {
             id: downloadsListGroup

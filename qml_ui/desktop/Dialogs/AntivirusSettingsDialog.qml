@@ -35,14 +35,14 @@ BaseDialog {
 
                 spacing: 5*appWindow.zoom
 
-                CustomButton {
+                BaseButton {
                     text: qsTr("Go to settings") + App.loc.emptyString
                     blueBtn: true
                     alternateBtnPressed: cnclBtn.isPressed
                     onClicked: root.goSettingsClick()
                 }
 
-                CustomButton {
+                BaseButton {
                     id: cnclBtn
                     text: qsTr("Cancel") + App.loc.emptyString
                     onClicked: root.close()

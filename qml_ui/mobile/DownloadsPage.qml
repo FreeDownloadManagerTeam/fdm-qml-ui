@@ -263,7 +263,7 @@ Page
         }
 
         onDownloadUnselected: {
-            var checked_ids = App.downloads.model.checkedIds();
+            var checked_ids = App.downloads.model.checkedIds;
             if (checked_ids.length === 0) {
                 root.switchSelectModeOff();
             }

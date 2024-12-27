@@ -30,7 +30,7 @@ BaseDialog {
                 wrapMode: Text.WordWrap
             }
 
-            CustomButton {
+            BaseButton {
                 text: qsTr("OK") + App.loc.emptyString
                 blueBtn: true
                 onClicked: root.close()

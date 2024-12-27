@@ -67,19 +67,17 @@ BaseDialog
 
                 spacing: 5*appWindow.zoom
 
-                CustomButton {
+                BaseButton {
                     id: remindBtn
                     text: qsTr("Remind me later") + App.loc.emptyString
                     onClicked: {
-                        console.log("MEOW")
                         App.pluginsBanners.bannerIsClosed(root.pluginUuid, false);
-                        console.log("MEOW2")
                         root.close();
                     }
                     Layout.alignment: Qt.AlignRight
                 }
 
-                CustomButton {
+                BaseButton {
                     text: qsTr("OK") + App.loc.emptyString
                     blueBtn: true
                     alternateBtnPressed: remindBtn.isPressed

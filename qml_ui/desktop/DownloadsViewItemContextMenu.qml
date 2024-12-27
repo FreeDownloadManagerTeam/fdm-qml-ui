@@ -293,7 +293,7 @@ BaseContextMenu {
 
     Component.onCompleted: {
         if (appWindow.btSupported) {
-            var index = 20;
+            var index = 21;
             if (btTools.item.addTAllowed()) {
                 supportsAddT = true;
                 root.insertItem(index++, Qt.createQmlObject('import "../bt/desktop"; AddTMenuItem {}', root));

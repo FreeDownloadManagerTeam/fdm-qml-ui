@@ -35,7 +35,7 @@ BaseDialog {
                 anchors.right: parent.right
                 spacing: 5*appWindow.zoom
 
-                CustomButton {
+                BaseButton {
                     text: qsTr("OK") + App.loc.emptyString
                     blueBtn: true
                     onClicked: {
@@ -44,7 +44,7 @@ BaseDialog {
                     }
                 }
 
-                CustomButton {
+                BaseButton {
                     text: qsTr("Cancel") + App.loc.emptyString
                     onClicked: {
                         root.close();

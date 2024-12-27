@@ -14,8 +14,8 @@ Rectangle
     readonly property var colorFn: appWindow.theme.isLightTheme ? Qt.darker : Qt.lighter
 
     color: ma.containsMouse && !ma.pressed ?
-               colorFn(appWindow.theme.background, 1.4) :
-               colorFn(appWindow.theme.background, 1.1)
+               colorFn(appWindow.uiver === 1 ? appWindow.theme.background : appWindow.theme_v2.bgColor, 1.4) :
+               colorFn(appWindow.uiver === 1 ? appWindow.theme.background : appWindow.theme_v2.bgColor, 1.1)
 
     radius: 4*appWindow.zoom
 

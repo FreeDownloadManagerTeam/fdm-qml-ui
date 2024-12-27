@@ -51,28 +51,28 @@ BaseDialog
 
                 Layout.alignment: Qt.AlignRight
 
-                CustomButton
+                BaseButton
                 {
                     text: qsTr("Overwrite All") + App.loc.emptyString
                     blueBtn: true
                     onClicked: doRespond(Array(files.length).fill(AbstractDownloadsUi.ExistingFileOverwrite))
                 }
 
-                CustomButton
+                BaseButton
                 {
                     text: qsTr("Rename All") + App.loc.emptyString
                     blueBtn: true
                     onClicked: doRespond(Array(files.length).fill(AbstractDownloadsUi.ExistingFileRename))
                 }
 
-                CustomButton
+                BaseButton
                 {
                     text: qsTr("Skip All") + App.loc.emptyString
                     blueBtn: true
                     onClicked: doRespond(Array(files.length).fill(AbstractDownloadsUi.ExistingFileSkip))
                 }
 
-                CustomButton
+                BaseButton
                 {
                     text: qsTr("Abort") + App.loc.emptyString
                     onClicked: root.doAbort()

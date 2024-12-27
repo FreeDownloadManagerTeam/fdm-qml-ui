@@ -8,29 +8,19 @@ Item {
 
     property double currentDownloadId: -1
 
-    property var checkedIds: []
+    readonly property var checkedIds: App.downloads.model.checkedIds
 
-    property int checkedDownloadsCount: checkedIds.length
-    property int allDownloadsChecked: App.downloads.model.allCheckState
+    readonly property int checkedDownloadsCount: checkedIds.length
+    readonly property int allDownloadsChecked: App.downloads.model.allCheckState
 
-    property bool checkedDownloadsToStartExist: false;
-    property bool checkedDownloadsToStopExist: false;
+    readonly property bool checkedDownloadsToStartExist: App.downloads.model.hasCheckedDownloadsToStart
+    readonly property bool checkedDownloadsToStopExist: App.downloads.model.hasCheckedDownloadsToStop
 
-    property bool downloadsToStartExist: App.downloads.tracker.hasDownloadsToStart
-    property bool downloadsToStopExist: App.downloads.tracker.hasDownloadsToStop
+    readonly property bool downloadsToStartExist: App.downloads.tracker.hasDownloadsToStart
+    readonly property bool downloadsToStopExist: App.downloads.tracker.hasDownloadsToStop
 
     property var draggableCheckedIds: []
     property var draggableCheckedFilesDragUriList: []
-
-    signal modelCheckedChanged(double model_id)
-    signal modelRunningChanged(double model_id)
-    signal modelFinishedChanged(double model_id)
-    signal modelErrorChanged(double model_id)
-
-    onModelCheckedChanged: updateState();
-    onModelFinishedChanged: updateState();
-    onModelRunningChanged: updateState();
-    onModelErrorChanged: updateState();
 
     property QtObject currentDownloadsListView: null
 
@@ -46,7 +36,6 @@ Item {
         onAdded: function(ids) {
             if (ids.length && ids[0])
                 selectDownloadItemById(ids[0]);
-            updateState();
         }
     }
 
@@ -57,7 +46,6 @@ Item {
                 resetShiftSelectStartIndex();
                 currentDownloadId = -1;
             }
-            updateState();
         }
     }
 
@@ -76,20 +64,10 @@ Item {
         } else {
             currentDownloadId = -1;
         }
-        updateState();
     }
 
-    Timer {
-        id: changedTimer
-        interval: 100;
-        running: false;
-        repeat: false
-        onTriggered: {
-            checkedIds = App.downloads.model.checkedIds();
-            checkedDownloadsToStartExist = App.downloads.model.hasCheckedDownloadsToStart();
-            checkedDownloadsToStopExist = App.downloads.model.hasCheckedDownloadsToStop();
-            updateDraggableState();
-        }
+    onCheckedIdsChanged: {
+        updateDraggableState();
     }
 
     function updateDraggableState()
@@ -120,11 +98,6 @@ Item {
         if (App.downloads.model.rowCount > 0) {
             currentDownloadId = App.downloads.model.idByIndex(0);
         }
-    }
-
-    function updateState()
-    {
-        changedTimer.restart();
     }
 
     function startCheckedDownloads() {
@@ -376,11 +349,7 @@ Item {
         if (ids.length > 0) {
             for (var i = 0; i < ids.length; i++) {
                 download = App.downloads.infos.info(ids[i]);
-                const can = (download.flags & AbstractDownloadsUi.SupportsRestart) != 0 &&
-                          (download.missingFiles || (!download.finished && download.error.hasError)) &&
-                          download.lockReason == "" &&
-                          !download.stopping;
-                if (!can)
+                if (!DownloadsTools.canBeRestarted(download))
                     return false;
             }
         }

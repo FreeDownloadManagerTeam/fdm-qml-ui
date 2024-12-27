@@ -40,13 +40,13 @@ BaseDialog {
                     Layout.fillWidth: true
                 }
 
-                CustomButton {
+                BaseButton {
                     id: cnclBtn
                     text: qsTr("Cancel") + App.loc.emptyString
                     onClicked: root.setShutdownAccepted(false)
                 }
 
-                CustomButton {
+                BaseButton {
                     text: qsTr("OK (%1)").arg(root.countdown) + App.loc.emptyString
                     blueBtn: true
                     alternateBtnPressed: cnclBtn.isPressed

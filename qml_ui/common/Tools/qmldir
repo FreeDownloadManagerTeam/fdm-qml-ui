@@ -1,1 +1,2 @@
 singleton JsTools 1.0 JsTools.qml
+singleton DownloadsTools 1.0 DownloadsTools.qml

@@ -12,7 +12,9 @@ MenuSeparator {
             width: parent.width
             anchors.verticalCenter: parent.verticalCenter
             implicitHeight: 1*appWindow.zoom
-            color: appWindow.theme.downloadItemsBorder
+            color: appWindow.uiver === 1 ?
+                       appWindow.theme.downloadItemsBorder :
+                       appWindow.theme_v2.bg400
         }
     }
 }

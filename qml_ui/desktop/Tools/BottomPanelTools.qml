@@ -3,12 +3,16 @@ import org.freedownloadmanager.fdm 1.0
 
 Item {
     id: root
+
+    readonly property int min_bottom_panel_height: (appWindow.uiver === 1 ? 150 :  210)*appWindow.zoom
+    readonly property int min_other_elements_height: 350*appWindow.zoom
+
     property bool panelVisible: false
     property bool panelCanBeShown: false
 
-    property bool sufficientWindowHeight: appWindow.height >= 380+100*appWindow.zoom
+    readonly property bool sufficientWindowHeight: appWindow.height >= min_bottom_panel_height+min_other_elements_height
 
-    property int panelHeigth: 210*appWindow.zoom
+    property int panelHeigth: Math.max(min_other_elements_height, 210*appWindow.zoom)
 
     property var currentTabsModel: []
     property string currentTab
@@ -44,9 +48,6 @@ Item {
 
     function normalizeBottomPanelHeight(height)
     {
-        var min_bottom_panel_height = 150;
-        var min_other_elements_height = 350;
-
         if (height < min_bottom_panel_height) {
             height = min_bottom_panel_height;
         }

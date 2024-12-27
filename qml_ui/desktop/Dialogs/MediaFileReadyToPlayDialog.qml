@@ -40,14 +40,14 @@ BaseDialog {
                 anchors.right: parent.right
                 spacing: 5*appWindow.zoom
 
-                CustomButton {
+                BaseButton {
                     id: playButton
                     text: qsTr("Play") + App.loc.emptyString
                     blueBtn: true
                     onClicked: root.playAndClose()
                 }
 
-                CustomButton {
+                BaseButton {
                     text: qsTr("Cancel") + App.loc.emptyString
                     onClicked: root.close()
                 }

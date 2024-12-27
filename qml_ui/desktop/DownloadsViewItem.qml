@@ -26,10 +26,6 @@ Item
             lastTimeSpeedColumnHoveredWidthBecameZero = appWindow.currentTime;
     }
 
-    property bool modelChecked: !!model.checked //undefined to false
-    property bool modelRunning: !!model.running //undefined to false
-    property bool modelFinished: model.finished
-    property string modelError: model.error
     property int parentY
 
     property bool noActionsAllowed: false
@@ -43,11 +39,6 @@ Item
 
     readonly property bool eatStatusItem: hasStatusItem && statusItem.isEmpty
     readonly property bool eatSpeedItem: (eatStatusItem || !hasStatusItem) && hasSpeedItem && speedColumnBlock.isEmpty
-
-    onModelCheckedChanged: selectedDownloadsTools.modelCheckedChanged(model.id)
-    onModelRunningChanged: selectedDownloadsTools.modelRunningChanged(model.id)
-    onModelFinishedChanged: selectedDownloadsTools.modelFinishedChanged(model.id)
-    onModelErrorChanged: selectedDownloadsTools.modelErrorChanged(model.id)
 
     width: parent ? parent.width : 0
 

@@ -20,7 +20,7 @@ Column {
         onClicked: App.integration.enableIntegrationAutoCheck(appWindow.integrationId, !integrationCol.isIntegrationAutoCheckEnabled)
     }
 
-    CustomButton {
+    BaseButton {
         id: intBtn
         anchors.left: parent.left
         anchors.leftMargin: 38*appWindow.zoom

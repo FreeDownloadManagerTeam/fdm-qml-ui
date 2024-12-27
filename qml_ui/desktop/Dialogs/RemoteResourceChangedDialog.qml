@@ -70,7 +70,7 @@ BaseDialog {
 
                 spacing: 5*appWindow.zoom
 
-                CustomButton {
+                BaseButton {
                     id: ignoreBtn
                     blueBtn: true
                     alternateBtnPressed: cnclBtn.isPressed
@@ -78,7 +78,7 @@ BaseDialog {
                     onClicked: redownloadClicked()
                 }
 
-                CustomButton {
+                BaseButton {
                     id: cnclBtn
                     text: qsTr("Cancel") + App.loc.emptyString
                     onClicked: cancelClicked()

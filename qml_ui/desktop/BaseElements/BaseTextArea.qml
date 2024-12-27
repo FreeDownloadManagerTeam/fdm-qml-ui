@@ -12,12 +12,19 @@ Rectangle {
     property alias rightPadding: textArea.rightPadding
     property alias wrapMode: textArea.wrapMode
     signal selectAll
+    signal escapePressed
 
     property bool enable_QTBUG_110471_workaround: true
     property bool tabChangesFocus: false
 
+    color: appWindow.uiver === 1 ?
+               appWindow.theme.background :
+               appWindow.theme_v2.bgColor
     border.width: 1*appWindow.zoom
-    border.color: appWindow.theme.border
+    border.color: appWindow.uiver === 1 ?
+                      appWindow.theme.border :
+                      appWindow.theme_v2.editTextBorderColor
+    radius: appWindow.uiver === 1 ? 0 : 8*appWindow.zoom
 
     onSelectAll: textArea.selectAll()
 
@@ -27,7 +34,8 @@ Rectangle {
         property bool hasVerticalScrollbar: contentHeight > height
 
         anchors.fill: parent
-        anchors.margins: 1*appWindow.zoom
+        anchors.margins: appWindow.uiver === 1 ? 1*appWindow.zoom : 0
+
         clip: true
         flickableDirection: Flickable.VerticalFlick
 
@@ -40,11 +48,24 @@ Rectangle {
             id: textArea
             horizontalAlignment: TextArea.AlignLeft
             focus: true
+            leftPadding: (appWindow.uiver === 1 ? 4 : 8)*appWindow.zoom
+            rightPadding: leftPadding
             wrapMode: TextArea.WordWrap
-            font.pixelSize: 14*appWindow.fontZoom
+            font.pixelSize: appWindow.uiver === 1 ?
+                                14*appWindow.fontZoom :
+                                appWindow.theme_v2.fontSize*appWindow.fontZoom
+            font.family: appWindow.uiver === 1 ?
+                             (Qt.platform.os === "osx" ? font.family : "Arial") :
+                             appWindow.theme_v2.fontFamily
             color: appWindow.theme.foreground
+            selectionColor: appWindow.uiver === 1 ?
+                                appWindow.theme.textHighlight :
+                                appWindow.theme_v2.selectedTextBgColor
+            selectedTextColor: appWindow.uiver === 1 ?
+                                   appWindow.theme.foreground :
+                                   appWindow.theme_v2.selectedTextColor
             selectByMouse: true
-            Keys.onEscapePressed: root.close()
+            Keys.onEscapePressed: root.escapePressed()
             Keys.onTabPressed: {
                 if (root.tabChangesFocus)
                     nextItemInFocusChain().forceActiveFocus(Qt.TabFocusReason)
@@ -52,9 +73,7 @@ Rectangle {
                     event.accepted = false
             }
 
-            background: Rectangle {
-                color: appWindow.theme.background
-            }
+            background: Item {}
 
             Component.onCompleted: {
                 // https://bugreports.qt.io/browse/QTBUG-110471

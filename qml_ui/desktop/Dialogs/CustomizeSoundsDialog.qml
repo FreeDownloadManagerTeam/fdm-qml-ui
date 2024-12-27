@@ -174,14 +174,14 @@ BaseDialog {
 
                 spacing: 5*appWindow.zoom
 
-                CustomButton {
+                BaseButton {
                     text: qsTr("Set sound") + App.loc.emptyString
                     enabled: soundsList.currentIndex >= 0
                     onClicked: setSoundDlg.openDialog()
                     Layout.alignment: Qt.AlignRight
                 }
 
-                CustomButton {
+                BaseButton {
                     text: qsTr("Remove") + App.loc.emptyString
                     enabled: soundsList.currentIndex >= 0 && soundsList.model[soundsList.currentIndex].soundSource.toString()
                     onClicked: {
@@ -191,14 +191,14 @@ BaseDialog {
                     Layout.alignment: Qt.AlignRight
                 }
 
-                CustomButton {
+                BaseButton {
                     text: qsTr("Test") + App.loc.emptyString
                     enabled: soundsList.currentIndex >= 0 && soundsList.model[soundsList.currentIndex].soundSource.toString()
                     onClicked: App.soundNotifMgr.playSound(soundsList.model[soundsList.currentIndex].setting)
                     Layout.alignment: Qt.AlignRight
                 }
 
-                CustomButton {
+                BaseButton {
                     text: qsTr("Close") + App.loc.emptyString
                     onClicked: root.close()
                     Layout.alignment: Qt.AlignRight

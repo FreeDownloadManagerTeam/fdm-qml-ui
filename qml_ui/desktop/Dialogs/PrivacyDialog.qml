@@ -49,7 +49,7 @@ BaseDialog {
 
                 spacing: 5*appWindow.zoom
 
-                CustomButton {
+                BaseButton {
                     id: okBtn
                     text: qsTr("Send report") + App.loc.emptyString
                     onClicked: root.accept()
@@ -58,7 +58,7 @@ BaseDialog {
                     enabled: agree.checked
                 }
 
-                CustomButton {
+                BaseButton {
                     id: cnclBtn
                     text: qsTr("Cancel") + App.loc.emptyString
                     onClicked: root.reject()

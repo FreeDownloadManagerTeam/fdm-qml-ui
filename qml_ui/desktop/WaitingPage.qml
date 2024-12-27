@@ -74,14 +74,14 @@ Page {
             visible: !App.asyncLoadMgr.loading
             spacing: 10*appWindow.zoom
 
-            CustomButton
+            BaseButton
             {
                 visible: App.asyncLoadMgr.canUserRetryLoad
                 text: qsTr("Retry") + App.loc.emptyString
                 onClicked: App.asyncLoadMgr.retryLoad()
             }
 
-            CustomButton
+            BaseButton
             {
                 visible: App.asyncLoadMgr.canUserCancelLoad
                 text: qsTr("Cancel") + App.loc.emptyString
@@ -89,7 +89,7 @@ Page {
             }
         }
 
-        CustomButton
+        BaseButton
         {
             visible: App.asyncLoadMgr.loading && App.asyncLoadMgr.canUserCancelLoad
             text: qsTr("Abort") + App.loc.emptyString

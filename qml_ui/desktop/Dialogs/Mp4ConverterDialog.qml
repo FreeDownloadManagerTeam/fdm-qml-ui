@@ -106,7 +106,7 @@ BaseDialog {
                     }
                 }
 
-                CustomButton {
+                BaseButton {
                     id: cnclBtn
                     text: qsTr("Cancel") + App.loc.emptyString
                     onClicked: {
@@ -114,7 +114,7 @@ BaseDialog {
                     }
                 }
 
-                CustomButton {
+                BaseButton {
                     text: qsTr("OK") + App.loc.emptyString
                     enabled: !d.accepting && destinationDir.text.length > 0
                     blueBtn: true

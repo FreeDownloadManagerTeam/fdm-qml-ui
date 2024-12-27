@@ -209,13 +209,21 @@ BaseContextMenu {
     }
 
     Component.onCompleted: {
-        if (appWindow.btSupported) {
-            if (App.downloads.tracker.hasPostFinishedTasksDownloadsCount) {
-                let i = 3;
-                root.insertItem(i++, Qt.createQmlObject('import "../bt/desktop"; StartPostFinishedDownloadsMenuItem {}', root));
-                root.insertItem(i++, Qt.createQmlObject('import "../bt/desktop"; StopPostFinishedDownloadsMenuItem {}', root));
-                root.insertItem(i++, Qt.createQmlObject('import "./BaseElements"; BaseContextMenuSeparator {}', root));
-            }
+        if (appWindow.btSupported)
+        {
+            let i = 3;
+
+            let item = Qt.createQmlObject('import "../bt/desktop"; StartPostFinishedDownloadsMenuItem {}', root);
+            item.visible = Qt.binding(() => App.downloads.tracker.hasPostFinishedTasksDownloadsCount);
+            root.insertItem(i++, item);
+
+            item = Qt.createQmlObject('import "../bt/desktop"; StopPostFinishedDownloadsMenuItem {}', root);
+            item.visible = Qt.binding(() => App.downloads.tracker.hasPostFinishedTasksDownloadsCount);
+            root.insertItem(i++, item);
+
+            item = Qt.createQmlObject('import "./BaseElements"; BaseContextMenuSeparator {}', root);
+            item.visible = Qt.binding(() => App.downloads.tracker.hasPostFinishedTasksDownloadsCount);
+            root.insertItem(i++, item);
         }
 
         if (App.rc.client.active)

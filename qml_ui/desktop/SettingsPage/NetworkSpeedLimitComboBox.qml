@@ -80,41 +80,47 @@ Item {
             Layout.alignment: Qt.AlignTop
             Layout.fillWidth: true
             spacing: 5*appWindow.zoom
-            CustomButton {
+            BaseButton {
                 id: okBtn
                 blueBtn: true
                 alternateBtnPressed: cnclBtn.isPressed
                 radius: 5*appWindow.zoom
-                implicitHeight: value.implicitHeight
+                Layout.preferredHeight: value.implicitHeight
                 Layout.fillWidth: true
                 onClicked: custom.tryAcceptValue()
                 WaSvgImage {
+                    z: 1
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.horizontalCenter: parent.horizontalCenter
                     source: Qt.resolvedUrl("../../images/desktop/ok_white.svg")
                     zoom: appWindow.zoom
                     layer {
                         effect: ColorOverlay {
-                            color: okBtn.alternateBtnPressed ? okBtn.secondaryTextColor : okBtn.primaryTextColor
+                            color: appWindow.uiver === 1 ?
+                                       (okBtn.alternateBtnPressed ? okBtn.secondaryTextColor : okBtn.primaryTextColor) :
+                                       appWindow.theme_v2.bg100
                         }
                         enabled: true
                     }
                 }
             }
-            CustomButton {
+            BaseButton {
                 id: cnclBtn
                 radius: 5*appWindow.zoom
-                implicitHeight: value.implicitHeight
+                Layout.preferredHeight: value.implicitHeight
                 Layout.fillWidth: true
                 onClicked: custom.reject()                
                 WaSvgImage {
+                    z: 1
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.horizontalCenter: parent.horizontalCenter
                     source: Qt.resolvedUrl("../../images/desktop/clean.svg")
                     zoom: appWindow.zoom
                     layer {
                         effect: ColorOverlay {
-                            color: cnclBtn.isPressed ? cnclBtn.secondaryTextColor : cnclBtn.primaryTextColor
+                            color: appWindow.uiver === 1 ?
+                                       (cnclBtn.isPressed ? cnclBtn.secondaryTextColor : cnclBtn.primaryTextColor) :
+                                       appWindow.theme_v2.bg1000
                         }
                         enabled: true
                     }

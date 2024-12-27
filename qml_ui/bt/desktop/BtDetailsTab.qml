@@ -26,6 +26,9 @@ ColumnLayout
     {
         columns: 4
 
+        Layout.topMargin: appWindow.uiver === 1 ? 0 : 8*appWindow.zoom
+        Layout.leftMargin: appWindow.uiver === 1 ? 0 : appWindow.theme_v2.mainWindowLeftMargin*appWindow.zoom
+
         BaseLabel
         {
             text: App.my_BT_qsTranslate("BtDetailsTab", "Peers:") + App.loc.emptyString
@@ -36,7 +39,9 @@ ColumnLayout
             BaseLabel
             {
                 text: btPeerCount + ' ' + qsTr("(connected: %1)").arg(btConnectedPeerCount) + App.loc.emptyString
-                color: appWindow.theme.generalTabValue
+                color: appWindow.uiver === 1 ?
+                           appWindow.theme.generalTabValue :
+                           appWindow.theme_v2.textColor
             }
             Item {implicitWidth: 30*appWindow.zoom; implicitHeight: 1} // horizontal spacing
         }
@@ -49,7 +54,9 @@ ColumnLayout
         BaseLabel
         {
             text: btSeedCount + ' ' + qsTr("(connected: %1)").arg(btConnectedSeedCount) + App.loc.emptyString
-            color: appWindow.theme.generalTabValue
+            color: appWindow.uiver === 1 ?
+                       appWindow.theme.generalTabValue :
+                       appWindow.theme_v2.textColor
         }
 
         BaseLabel
@@ -62,7 +69,9 @@ ColumnLayout
         {
             visible: !finished
             text: btAvailability
-            color: appWindow.theme.generalTabValue
+            color: appWindow.uiver === 1 ?
+                       appWindow.theme.generalTabValue :
+                       appWindow.theme_v2.textColor
         }
 
         BaseLabel
@@ -75,7 +84,9 @@ ColumnLayout
         {
             visible: !finished
             text: btLastSeenComplete
-            color: appWindow.theme.generalTabValue
+            color: appWindow.uiver === 1 ?
+                       appWindow.theme.generalTabValue :
+                       appWindow.theme_v2.textColor
         }
     }
 
@@ -86,7 +97,10 @@ ColumnLayout
         Layout.fillHeight: true
         Layout.fillWidth: true
 
-        ScrollBar.vertical: ScrollBar{}
+        Layout.topMargin: appWindow.uiver === 1 ? 0 : 8*appWindow.zoom
+        Layout.leftMargin: appWindow.uiver === 1 ? 0 : appWindow.theme_v2.mainWindowLeftMargin*appWindow.zoom
+
+        ScrollBar.vertical: BaseScrollBar{}
         flickableDirection: Flickable.AutoFlickIfNeeded
         boundsBehavior: Flickable.StopAtBounds
         clip: true
@@ -97,6 +111,7 @@ ColumnLayout
         property int trackerUrlItemWidth: 0
 
         Rectangle {
+            visible: appWindow.uiver === 1
             anchors.fill: parent
             color: "transparent"
             border.color: appWindow.theme.border
@@ -113,7 +128,9 @@ ColumnLayout
                 text: App.my_BT_qsTranslate("BtDetailsTab", "Tracker URL") + App.loc.emptyString
                 Layout.preferredWidth: Math.max(headerMinimumWidth, trackers.width / 3)
                 Layout.fillHeight: true
-                color: appWindow.theme.background
+                color: appWindow.uiver === 1 ?
+                           appWindow.theme.background :
+                           appWindow.theme_v2.bgColor
                 onWidthChanged: trackers.trackerUrlItemWidth = width
             }
 
@@ -122,7 +139,9 @@ ColumnLayout
                 text: qsTr("Status") + App.loc.emptyString
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                color: appWindow.theme.background
+                color: appWindow.uiver === 1 ?
+                           appWindow.theme.background :
+                           appWindow.theme_v2.bgColor
             }
         }
 
@@ -133,12 +152,14 @@ ColumnLayout
 
             ElidedLabelWithTooltip {
                 sourceText: model.url
-                color: appWindow.theme.generalTabValue
+                color: appWindow.uiver === 1 ?
+                           appWindow.theme.generalTabValue :
+                           appWindow.theme_v2.textColor
                 Layout.preferredWidth: trackers.trackerUrlItemWidth
                 Layout.minimumWidth: Layout.preferredWidth
                 Layout.fillHeight: true
-                leftPadding: qtbug.leftPadding(6*appWindow.zoom,0)
-                rightPadding: qtbug.rightPadding(6*appWindow.zoom,0)
+                leftPadding: appWindow.uiver === 1 ? qtbug.leftPadding(6*appWindow.zoom,0) : 0
+                rightPadding: appWindow.uiver === 1 ? qtbug.rightPadding(6*appWindow.zoom,0) : 0
             }
 
             ElidedLabelWithTooltip {
@@ -146,8 +167,8 @@ ColumnLayout
                 color: model.statusColor
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                leftPadding: qtbug.leftPadding(6*appWindow.zoom,0)
-                rightPadding: qtbug.rightPadding(6*appWindow.zoom,0)
+                leftPadding: appWindow.uiver === 1 ? qtbug.leftPadding(6*appWindow.zoom,0) : 0
+                rightPadding: appWindow.uiver === 1 ? qtbug.rightPadding(6*appWindow.zoom,0) : 0
             }
         }
     }

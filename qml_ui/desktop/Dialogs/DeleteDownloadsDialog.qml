@@ -75,7 +75,7 @@ BaseDialog {
                         Layout.fillWidth: true
                     }
 
-                    CustomButton {
+                    BaseButton {
                         id: btn1
                         text: qsTr("Delete files") + App.loc.emptyString
                         blueBtn: true
@@ -83,14 +83,14 @@ BaseDialog {
                         onClicked: root.deleteFilesClick()
                     }
 
-                    CustomButton {
+                    BaseButton {
                         text: qsTr("Remove from list") + App.loc.emptyString
                         blueBtn: true
                         alternateBtnPressed: cnclBtn.isPressed
                         onClicked: root.removeFromList()
                     }
 
-                    CustomButton {
+                    BaseButton {
                         id: cnclBtn
                         text: qsTr("Cancel") + App.loc.emptyString
                         onClicked: root.close()
@@ -106,14 +106,14 @@ BaseDialog {
 
                 spacing: 5*appWindow.zoom
 
-                CustomButton {
+                BaseButton {
                     text: qsTr("OK")
                     blueBtn: true
                     alternateBtnPressed: cnclBtn1.isPressed
                     onClicked: root.deleteFilesClick()
                 }
 
-                CustomButton {
+                BaseButton {
                     id: cnclBtn1
                     text: qsTr("Cancel")
                     onClicked: root.close()

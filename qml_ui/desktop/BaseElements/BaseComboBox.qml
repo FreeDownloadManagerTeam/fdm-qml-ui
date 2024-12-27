@@ -44,7 +44,9 @@ ComboBox {
 
     delegate: Rectangle {
         property bool hover: false
-        color: hover ? appWindow.theme.menuHighlight : "transparent"
+        color: hover ?
+                   (appWindow.uiver === 1 ? appWindow.theme.menuHighlight : appWindow.theme_v2.hightlightBgColor) :
+                   "transparent"
         height: Math.max(delegateMinimumHeight, delegateLabel.implicitHeight)
         width: root.width
 
@@ -74,9 +76,13 @@ ComboBox {
     }
 
     background: Rectangle {
-        color: root.settingsStyle ? "transparent" : appWindow.theme.background
+        color: root.settingsStyle ?
+                   "transparent" :
+                   (appWindow.uiver === 1 ? appWindow.theme.background : appWindow.theme_v2.bgColor)
         radius: root.settingsStyle ? 5*appWindow.zoom : 0
-        border.color: root.settingsStyle ? appWindow.theme.settingsControlBorder : appWindow.theme.border
+        border.color: appWindow.uiver === 1 ?
+                          (root.settingsStyle ? appWindow.theme.settingsControlBorder : appWindow.theme.border) :
+                          appWindow.theme_v2.editTextBorderColor
         border.width: 1*appWindow.zoom
     }
 
@@ -101,7 +107,9 @@ ComboBox {
         height: root.height
         color: "transparent"
         border.width: root.settingsStyle ? 0 : 1*appWindow.zoom
-        border.color: appWindow.theme.border
+        border.color: appWindow.uiver === 1 ?
+                          (root.settingsStyle ? appWindow.theme.settingsControlBorder : appWindow.theme.border) :
+                          appWindow.theme_v2.editTextBorderColor
         WaSvgImage {
             source: appWindow.theme.elementsIconsRoot + "/triangle_down3.svg"
             zoom: appWindow.zoom
@@ -131,8 +139,12 @@ ComboBox {
         padding: 1*appWindow.zoom
 
         background: Rectangle {
-            color: appWindow.theme.background
-            border.color: appWindow.theme.settingsControlBorder
+            color: appWindow.uiver === 1 ?
+                       appWindow.theme.background :
+                       appWindow.theme_v2.popupBgColor
+            border.color: appWindow.uiver === 1 ?
+                              (root.settingsStyle ? appWindow.theme.settingsControlBorder : appWindow.theme.border) :
+                              appWindow.theme_v2.editTextBorderColor
             border.width: 1*appWindow.zoom
         }
 

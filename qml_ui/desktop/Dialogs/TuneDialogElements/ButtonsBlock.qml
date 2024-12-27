@@ -42,13 +42,13 @@ RowLayout {
     }
 
 
-    CustomButton {
+    BaseButton {
         id: cnclBtn
         text: qsTr("Cancel") + App.loc.emptyString
         onClicked: downloadTools.doReject()
     }
 
-    CustomButton {
+    BaseButton {
         id: okbtn
         text: qsTr("Download") + App.loc.emptyString
         blueBtn: true

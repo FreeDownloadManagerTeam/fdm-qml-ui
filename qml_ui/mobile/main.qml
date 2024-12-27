@@ -22,6 +22,8 @@ ApplicationWindow
 
     property bool mobileVersion: true
 
+    property int uiver: 1
+
     readonly property bool smallScreen: width < 500
     readonly property bool verySmallScreen: width < 400
 

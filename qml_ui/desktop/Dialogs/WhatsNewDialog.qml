@@ -48,7 +48,7 @@ BaseDialog
                 readOnly: true
             }
 
-            CustomButton {
+            BaseButton {
                 id: updateBtn
                 text: qsTr("Update") + App.loc.emptyString
                 onClicked: {

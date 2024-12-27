@@ -10,20 +10,41 @@ TextField {
     property bool enable_QTBUG_110471_workaround_2: false
     property bool selectAllAtInit: false
 
+    leftPadding: (appWindow.uiver === 1 ? 4 : 8)*appWindow.zoom
+    rightPadding: leftPadding
+
     implicitHeight: 30*appWindow.fontZoom
     selectByMouse: true
-    selectionColor: appWindow.theme.textHighlight
-    selectedTextColor: appWindow.theme.foreground
-    font.pixelSize: 14*appWindow.fontZoom
-    color: appWindow.theme.foreground
-    placeholderTextColor: appWindow.theme.placeholder
-    opacity: enabled ? 1 : 0.5
+    selectionColor: appWindow.uiver === 1 ?
+                        appWindow.theme.textHighlight :
+                        appWindow.theme_v2.selectedTextBgColor
+    selectedTextColor: appWindow.uiver === 1 ?
+                           appWindow.theme.foreground :
+                           appWindow.theme_v2.selectedTextColor
+    font.pixelSize: appWindow.uiver === 1 ?
+                        14*appWindow.fontZoom :
+                        appWindow.theme_v2.fontSize*appWindow.fontZoom
+    font.family: appWindow.uiver === 1 ?
+                     (Qt.platform.os === "osx" ? font.family : "Arial") :
+                     appWindow.theme_v2.fontFamily
+    color: appWindow.uiver === 1 ?
+               appWindow.theme.foreground :
+               appWindow.theme_v2.textColor
+    placeholderTextColor: appWindow.uiver === 1 ?
+                              appWindow.theme.placeholder :
+                              appWindow.theme_v2.placeholderTextColor
+    opacity: enabled ? 1 : (appWindow.uiver === 1 ? 0.5 : appWindow.theme_v2.opacityDisabled)
     horizontalAlignment: TextInput.AlignLeft
 
     background: Rectangle {
-        border.color: appWindow.theme.border
+        border.color: appWindow.uiver === 1 ?
+                          appWindow.theme.border :
+                          appWindow.theme_v2.editTextBorderColor
         border.width: 1*appWindow.zoom
-        color: appWindow.theme.background
+        color: appWindow.uiver === 1 ?
+                   appWindow.theme.background :
+                   appWindow.theme_v2.bgColor
+        radius: appWindow.uiver === 1 ? 0 : 8*appWindow.zoom
     }
 
     MouseArea {

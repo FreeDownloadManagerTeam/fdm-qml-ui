@@ -61,7 +61,7 @@ Rectangle {
     function updatePanelPosition()
     {
         if (!movingStarted) {
-            draggleRct.y = bottomPanelRct.y - 10;
+            draggleRct.y = bottomPanelRct.y - (appWindow.uiver === 1 ? 10 : 5)*appWindow.zoom;
         }
     }
 }

@@ -75,14 +75,14 @@ BaseDialog {
                     opacity: enabled ? 1 : 0.5
                 }
 
-                CustomButton {
+                BaseButton {
                     id: cnclBtn
                     text: qsTr("Cancel") + App.loc.emptyString
                     onClicked: root.close();
                     Layout.alignment: Qt.AlignRight
                 }
 
-                CustomButton {
+                BaseButton {
                     text: qsTr("OK") + App.loc.emptyString
                     blueBtn: true
                     alternateBtnPressed: cnclBtn.isPressed

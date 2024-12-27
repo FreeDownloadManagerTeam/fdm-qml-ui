@@ -66,6 +66,7 @@ BaseDialog
                 Layout.fillHeight: true
                 Layout.preferredHeight: 150
                 tabChangesFocus: true
+                onEscapePressed: root.close()
             }
 
             RowLayout
@@ -153,14 +154,14 @@ BaseDialog
                     Layout.fillWidth: true
                 }
 
-                CustomButton {
+                BaseButton {
                     id: cnclBtn
                     Layout.preferredHeight: height
                     text: (App.bugReporter.sending ? qsTr("Close") : qsTr("Cancel")) + App.loc.emptyString
                     onClicked: root.close()
                 }
 
-                CustomButton {
+                BaseButton {
                     id: okbtn
                     enabled: root.isOkToSend
                     Layout.preferredHeight: height

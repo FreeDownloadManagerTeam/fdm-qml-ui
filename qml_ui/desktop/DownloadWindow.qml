@@ -17,6 +17,7 @@ ApplicationWindow
 
     property double downloadId: -1
     property var theme: appWindow.theme
+    property var theme_v2: appWindow.theme_v2
 
     //////////////////////////////////////////////////////////////////
     //TODO: move the color properties to themes
@@ -35,10 +36,10 @@ ApplicationWindow
     visibility: Window.Minimized
 
     palette.highlight: theme.textHighlight
-    palette.windowText: theme.foreground
-    palette.window: theme.background
-    palette.base: theme.background
-    palette.text: theme.foreground
+    palette.windowText: uiver === 1 ? theme.foreground : theme_v2.textColor
+    palette.window: uiver === 1 ? theme.background : theme_v2.bgColor
+    palette.base: uiver === 1 ? theme.background : theme_v2.bgColor
+    palette.text: uiver === 1 ? theme.foreground : theme_v2.textColor
 
     //flags: Qt.Window | Qt.WindowTitleHint | Qt.WindowMinMaxButtonsHint | Qt.WindowCloseButtonHint
 
@@ -55,6 +56,13 @@ ApplicationWindow
     CppControls.WindowProgress
     {
         progress : downloadsItemTools.progress
+    }
+
+    CppControls.WindowAppearanceInOs
+    {
+        darkMode: App.useDarkTheme
+        titleBarBackgroundColor: App.titleBarBackgroundColor
+        titleBarTextColor: App.titleBarTextColor
     }
 
     QtObject
@@ -200,14 +208,19 @@ ApplicationWindow
             visible: !downloadsItemTools.unknownFileSize && !downloadsItemTools.hasChildDownloads
             property var mapObj: App.downloads.infos.info(downloadId).progressMap(columnsCount*rowsCount)
             map: mapObj.map
-            filledSquareBorderColor: theme.progressMapFillBorder
-            filledSquareColor: theme.progressMapFillBackground
-            emptySquareBorderColor: theme.progressMapClearBorder
-            emptySquareColor: theme.background
+            filledSquareBorderColor: appWindow.uiver === 1 ? appWindow.theme.progressMapFillBorder : "transparent"
+            filledSquareColor: appWindow.uiver === 1 ? appWindow.theme.progressMapFillBackground : appWindow.theme_v2.bg700
+            emptySquareBorderColor: appWindow.uiver === 1 ? appWindow.theme.progressMapClearBorder : "transparent"
+            emptySquareColor: appWindow.uiver === 1 ? appWindow.theme.background : appWindow.theme_v2.bg400
             squareSize: 8*appWindow.zoom
-            squareSpacing: 3*appWindow.zoom
+            squareSpacing: 2*appWindow.zoom
+            squareRadius: appWindow.uiver === 1 ? 0 : 2*appWindow.zoom
+            justifyH: appWindow.uiver === 1
+            justifyV: justifyH
             Layout.fillWidth: true
             Layout.fillHeight: true
+            Layout.leftMargin: 6*appWindow.zoom
+            Layout.rightMargin: Layout.leftMargin
             Layout.minimumHeight: 70*appWindow.zoom
         }
 
@@ -287,20 +300,20 @@ ApplicationWindow
 
             Layout.alignment: Qt.AlignRight
 
-            CustomButton
+            BaseButton
             {
                 text: qsTr("Hide") + App.loc.emptyString
                 onClicked: root.hide()
             }
 
-            CustomButton
+            BaseButton
             {
                 visible: !App.rc.client.active
                 text: qsTr("Show in folder") + App.loc.emptyString
                 onClicked: App.downloads.mgr.openDownloadFolder(downloadId, -1)
             }
 
-            CustomButton
+            BaseButton
             {
                 visible: !App.rc.client.active
                 text: qsTr("Open") + App.loc.emptyString
@@ -308,7 +321,7 @@ ApplicationWindow
                 enabled: downloadsItemTools.finished
             }
 
-            CustomButton
+            BaseButton
             {
                 text: qsTr("Stop") + App.loc.emptyString
                 onClicked: downloadsItemTools.stopDownload()
@@ -316,7 +329,7 @@ ApplicationWindow
                 enabled: !downloadsItemTools.finished
             }
 
-            CustomButton
+            BaseButton
             {
                 text: qsTr("Start") + App.loc.emptyString
                 onClicked: App.downloads.mgr.startDownload(downloadId, true)

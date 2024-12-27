@@ -43,7 +43,7 @@ BaseDialog
                 }
             }
 
-            CustomButton
+            BaseButton
             {
                 text: qsTr("OK")
                 blueBtn: true

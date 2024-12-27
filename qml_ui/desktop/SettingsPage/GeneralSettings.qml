@@ -24,7 +24,7 @@ Column {
 
         SettingsSubgroupHeader{
             anchors.left: parent.left
-            text: qsTr("Choose theme") + App.loc.emptyString
+            text: qsTr("Theme") + App.loc.emptyString
         }
 
         ThemeComboBox {
@@ -38,6 +38,32 @@ Column {
             anchors.leftMargin: 16*appWindow.zoom
             font.pixelSize: 12*appWindow.fontZoom
             visible: uiSettingsTools.settings.theme === 'system'
+        }
+
+        SettingsSubgroupHeader{
+            anchors.left: parent.left
+            text: qsTr("UI style") + App.loc.emptyString
+        }
+
+        BaseComboBox {
+            anchors.left: parent.left
+            anchors.leftMargin: 16*appWindow.zoom
+            settingsStyle: true
+            model: [
+                {text: qsTr("New (beta)") + App.loc.emptyString, value: 2},
+                {text: qsTr("Classic") + App.loc.emptyString, value: 1}
+            ]
+            currentIndex: {
+                for (let i = 0; i < model.length; ++i) {
+                    if (model[i].value === uiSettingsTools.settings.uiVersion)
+                        return i;
+                }
+                return -1;
+            }
+            onActivated: (index) => {
+                             uiSettingsTools.settings.showUiUpdatedBanner = false;
+                             uiSettingsTools.settings.uiVersion = model[index].value;
+                         }
         }
     }
 
@@ -78,6 +104,7 @@ Column {
     SettingsGroupColumn {
 
         anchors.left: parent.left
+        width: parent.width
 
         SettingsSubgroupHeader {
             anchors.left: parent.left
@@ -130,10 +157,13 @@ Column {
 
         RowLayout {
             spacing: 10*appWindow.zoom
+            width: parent.width - 20*appWindow.zoom
 
             DownloadFolderComboBox {
                 id: fixedDownloadFolder
                 enabled: fixedFolderRadioBtn.checked
+                Layout.fillWidth: true
+                Layout.maximumWidth: 1000*appWindow.zoom
                 initialPath: App.localDecodePath(App.settings.dmcore.value(DmCoreSettings.FixedDownloadPath))
                 onValidPathChanged2: apply()
                 function apply() {
@@ -159,7 +189,7 @@ Column {
                 }
             }
 
-            CustomButton {
+            BaseButton {
                 text: qsTr("Macros") + App.loc.emptyString
                 enabled: fixedFolderRadioBtn.checked
                 onClicked: macrosMenu.open()
@@ -169,6 +199,8 @@ Column {
                     onMacroSelected: macro => { fixedDownloadFolder.editText += macro; }
                 }
             }
+
+            Item {Layout.fillWidth: true; implicitHeight: 1}
         }
     }
 
@@ -182,6 +214,7 @@ Column {
         }
 
         SettingsCheckBox {
+            visible: appWindow.uiver === 1
             text: qsTr("Compact view of downloads list") + App.loc.emptyString
             checked: uiSettingsTools.settings.compactView
             onClicked: { uiSettingsTools.settings.compactView = !uiSettingsTools.settings.compactView }

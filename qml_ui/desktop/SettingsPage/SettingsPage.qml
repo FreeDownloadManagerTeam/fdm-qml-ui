@@ -40,11 +40,30 @@ Page {
         onTriggered: antivirusHeader.clicked()
     }
 
-    header: MainToolbar {
-        pageId: "settings"
-        leftPadding: 0
-        rightPadding: 0
-        bottomPadding: 0
+    Component {
+        id: mainToolbar_v1
+
+        MainToolbar {
+            pageId: "settings"
+            leftPadding: 0
+            rightPadding: 0
+            bottomPadding: 0
+        }
+    }
+
+    Component {
+        id: mainToolbar_v2
+
+        MainToolbar_V2 {
+            pageId: "settings"
+            leftPadding: 0
+            rightPadding: 0
+            bottomPadding: 0
+        }
+    }
+
+    header: Loader {
+        sourceComponent: appWindow.uiver === 1 ? mainToolbar_v1 : mainToolbar_v2
     }
 
     MessageDialog {
@@ -56,13 +75,16 @@ Page {
     }
 
     Rectangle {
+        visible: appWindow.uiver === 1
         anchors.fill: parent
         color: appWindow.theme.background
     }
 
     RowLayout {
         anchors.fill: parent
-        anchors.topMargin: (smallSettingsPage ? 12 : 24)*appWindow.zoom
+        anchors.topMargin: appWindow.uiver === 1 ?
+                               (smallSettingsPage ? 12 : 24)*appWindow.zoom :
+                               0
 
         spacing: 30*appWindow.zoom
 

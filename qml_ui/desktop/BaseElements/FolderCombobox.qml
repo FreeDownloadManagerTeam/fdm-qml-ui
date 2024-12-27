@@ -16,6 +16,7 @@ BaseComboBox {
 
     popupVisibleRowsCount: 7
     comboMaximumWidth: Math.round(appWindow.width*0.8)
+    delegateMinimumHeight: 30*appWindow.zoom
 
     signal folderRemoved(var path)
 
@@ -24,7 +25,7 @@ BaseComboBox {
 
         property bool hover: false
         color: hover ? appWindow.theme.menuHighlight : "transparent"
-        height: 30*appWindow.zoom
+        height: root.delegateMinimumHeight
         width: parent ? parent.width : 0
 
         RowLayout {

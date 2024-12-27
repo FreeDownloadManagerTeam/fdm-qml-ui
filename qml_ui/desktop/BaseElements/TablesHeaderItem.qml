@@ -33,10 +33,12 @@ Rectangle {
         text: root.text
         font.bold: false
         font.pixelSize: 13*appWindow.fontZoom
-        padding: 6*appWindow.zoom
+        padding: appWindow.uiver === 1 ? 6*appWindow.zoom : 0
         anchors.left: parent.left
         anchors.verticalCenter: parent.verticalCenter
-        color: appWindow.theme.tableHeaderItem
+        color: appWindow.uiver === 1 ?
+                   appWindow.theme.tableHeaderItem :
+                   appWindow.theme_v2.bg700
         width: parent.width - 11*appWindow.zoom
     }
 
@@ -66,12 +68,14 @@ Rectangle {
     }
 
     Rectangle {
+        visible: appWindow.uiver === 1
         height: parent.height
         width: 1*appWindow.zoom
         anchors.left: parent.left
         color: appWindow.theme.border
     }
     Rectangle {
+        visible: appWindow.uiver === 1
         width: parent.width
         height: 1*appWindow.zoom
         anchors.bottom: parent.bottom

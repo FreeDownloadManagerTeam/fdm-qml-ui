@@ -109,7 +109,7 @@ BaseDialog {
 
                 spacing: 5*appWindow.zoom
 
-                CustomButton {
+                BaseButton {
                     text: qsTr("Skip") + App.loc.emptyString
                     blueBtn: true
                     alternateBtnPressed: cnclBtn.isPressed
@@ -117,7 +117,7 @@ BaseDialog {
                     onClicked: mergeTools.accept()
                 }
 
-                CustomButton {
+                BaseButton {
                     text: qsTr("Skip all (%1)").arg(App.downloads.mergeOptionsChooser.pendingNewDownloadIdsCount) + App.loc.emptyString
                     visible: App.downloads.mergeOptionsChooser.pendingNewDownloadIdsCount > 1
                     alternateBtnPressed: cnclBtn.isPressed
@@ -125,7 +125,7 @@ BaseDialog {
                     onClicked: mergeTools.acceptAll()
                 }
 
-                CustomButton {
+                BaseButton {
                     id: cnclBtn
                     visible: mergeTools.mergeBtnEnabled
                     text: qsTr("Download") + App.loc.emptyString

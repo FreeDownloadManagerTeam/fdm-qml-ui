@@ -40,26 +40,26 @@ BaseDialog {
 
                 spacing: 5*appWindow.zoom
 
-                CustomButton {
+                BaseButton {
                     text: qsTr("Try again") + App.loc.emptyString
                     blueBtn: true
                     alternateBtnPressed: abortBtn.isPressed || ignoreAllBtn.isPressed || ignoreBtn.isPressed
                     onClicked: tryAgainClicked()
                 }
 
-                CustomButton {
+                BaseButton {
                     id: ignoreBtn
                     text: qsTr("Ignore") + App.loc.emptyString
                     onClicked: ignoreClicked()
                 }
 
-                CustomButton {
+                BaseButton {
                     id: ignoreAllBtn
                     text: qsTr("Ignore all") + App.loc.emptyString
                     onClicked: ignoreAllClicked()
                 }
 
-                CustomButton {
+                BaseButton {
                     id: abortBtn
                     text: qsTr("Abort") + App.loc.emptyString
                     onClicked: abortClicked()

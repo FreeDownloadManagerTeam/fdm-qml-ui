@@ -1,0 +1,81 @@
+import QtQuick
+
+QtObject
+{
+    property bool isLightTheme: false
+
+    readonly property color dark100: "#141415"
+    readonly property color dark200: "#1C1D1F"
+    readonly property color dark300: "#27282A"
+    readonly property color dark400: "#383A3D"
+    readonly property color dark500: "#54575C"
+    readonly property color dark600: "#7A7E85"
+    readonly property color dark700: "#9D9FA3"
+    readonly property color dark800: "#B0B3B8"
+    readonly property color dark900: "#E1E4EB"
+    readonly property color dark1000: "#F4F5F5"
+    readonly property color darkPrimary: "#73CEFC"
+    readonly property color darkSecondary: "#4EC284"
+    readonly property color darkAmber: "#C29B4E"
+    readonly property color darkDanger: "#C24E5D"
+
+    readonly property color light100: "#171A1F"
+    readonly property color light200: "#1F2329"
+    readonly property color light300: "#272C33"
+    readonly property color light400: "#363D47"
+    readonly property color light500: "#464F5C"
+    readonly property color light600: "#6A7585"
+    readonly property color light700: "#929DAD"
+    readonly property color light800: "#ACB5C3"
+    readonly property color light900: "#CED6E0"
+    readonly property color light1000: "#E2EAF6"
+    readonly property color lightPrimary: "#3F80E0"
+    readonly property color lightSecondary: "#288F58"
+    readonly property color lightAmber: "#8F6D28"
+    readonly property color lightDanger: "#8F2836"
+
+
+    readonly property color bg100: isLightTheme ? light1000 : dark100
+    readonly property color bg200: isLightTheme ? light900 : dark200
+    readonly property color bg300: isLightTheme ? light900 : dark300 // dark300 --> light900 instead of light800
+    readonly property color bg400: isLightTheme ? light800 : dark400
+    readonly property color bg500: isLightTheme ? light600 : dark500
+    readonly property color bg600: isLightTheme ? light500 : dark600
+    readonly property color bg700: isLightTheme ? light400 : dark700
+    readonly property color bg800: isLightTheme ? light300 : dark800
+    readonly property color bg900: isLightTheme ? light200 : dark900
+    readonly property color bg1000: isLightTheme ? light100 : dark1000
+    readonly property color primary: isLightTheme ? lightPrimary : darkPrimary
+    readonly property color secondary: isLightTheme ? lightSecondary : darkSecondary
+    readonly property color amber: isLightTheme ? lightAmber : darkAmber
+    readonly property color danger: isLightTheme ? lightDanger : darkDanger
+
+    readonly property string fontFamily: "IBM Plex Sans"
+    readonly property int fontSize: 13
+    readonly property int tooltipFontSize: 12
+
+    readonly property color textColor: bg1000
+    readonly property color bgColor: bg100
+    readonly property color selectedTextColor: isLightTheme ? light1000 : dark1000
+    readonly property color selectedTextBgColor: isLightTheme ? light500 : dark500
+    readonly property color placeholderTextColor: bg700
+    readonly property color editTextBorderColor: bg500
+    readonly property color hightlightBgColor: bg400
+    readonly property color popupBgColor: bg300
+    readonly property color dialogBgColor: bg200
+    readonly property color dialogBorderColor: bg500
+
+    readonly property real opacityDisabled: 0.4
+
+    readonly property int mainWindowTopMargin: 9
+    readonly property int mainWindowBottomMargin: 4
+    readonly property int mainWindowLeftMargin: 16
+    readonly property int mainWindowRightMargin: 16
+
+    function enabledColor(clr, isEnabled)
+    {
+        return isEnabled ?
+                    clr :
+                    Qt.rgba(clr.r, clr.g, clr.b, opacityDisabled);
+    }
+}

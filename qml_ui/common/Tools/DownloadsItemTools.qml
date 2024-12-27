@@ -127,6 +127,8 @@ Item {
                                          (!needToShowWebPageUrl || webPageUrl !== resourceUrl) &&
                                          !resourceUrl.substring(0, 5).toLowerCase().startsWith("file:")
 
+    readonly property bool canBeRestarted: item ? DownloadsTools.canBeRestarted(item) : false
+
 
     onItemIdChanged: {
 

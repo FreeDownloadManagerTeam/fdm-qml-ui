@@ -7,7 +7,7 @@ import org.freedownloadmanager.fdm 1.0
 Item {
 
     anchors.fill: parent
-    anchors.margins: 20*appWindow.zoom
+    anchors.margins: appWindow.uiver === 1 ? 20*appWindow.zoom : 0
 
     Loader {
         active: downloadsItemTools.moduleUid === "downloadsbt"

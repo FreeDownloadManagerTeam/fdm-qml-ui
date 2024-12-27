@@ -42,7 +42,7 @@ BaseDialog {
                 wrapMode: Label.Wrap
             }
 
-            CustomButton {
+            BaseButton {
                 Layout.topMargin: 10*appWindow.zoom
                 Layout.bottomMargin: 10*appWindow.zoom
                 Layout.alignment: Qt.AlignRight

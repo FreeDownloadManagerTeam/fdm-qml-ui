@@ -6,6 +6,7 @@ import org.freedownloadmanager.fdm.dmcoresettings 1.0
 
 Item {
     anchors.fill: parent
+    visible: appWindow.uiver === 1
 
     Image {
         visible: App.settings.tum.currentMode == TrafficUsageMode.Snail

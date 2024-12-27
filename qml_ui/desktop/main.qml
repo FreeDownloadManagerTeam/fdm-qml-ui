@@ -30,9 +30,11 @@ ApplicationWindow {
     // this is working instead:
     readonly property double fontZoom: uiSettingsTools.zoom*uiSettingsTools.zoom2
 
+    property alias uiver: uiSettingsTools.uiVersion
+
     property int lastOkVisibility: ApplicationWindow.Windowed
 
-    property int mainToolbarHeight: (macVersion ? 75 : 50) * zoom
+    property int mainToolbarHeight: 0
 
     readonly property bool createDownloadDialogOpened: (buildDownloadDlg && buildDownloadDlg.opened) ||
                                      (tuneAddDownloadDlg && tuneAddDownloadDlg.opened)
@@ -67,6 +69,12 @@ ApplicationWindow {
 
     property bool disableDrop: false
 
+    readonly property bool emptySearchResults: !App.downloads.infos.empty
+                                               && (downloadsViewTools.emptySearchResults
+                                                   || downloadsViewTools.emptyActiveDownloadsList
+                                                   || downloadsViewTools.emptyCompleteDownloadsList
+                                                   || downloadsViewTools.emptyTagResults)
+
     signal uiReadyStateChanged
     signal newDownloadAdded
     signal appWindowStateChanged
@@ -86,7 +94,7 @@ ApplicationWindow {
 
     width: 910
     height: 610
-    minimumWidth: 200*zoom+350*fontZoom
+    minimumWidth: uiver === 1 ? 200*zoom+350*fontZoom : 500*zoom+450*fontZoom
     minimumHeight: 100*zoom+240*fontZoom
     title: App.isSelfTestMode ? App.displayName + " [Self Test Mode]" :
            (App.rc.client.active && App.asyncLoadMgr.remoteName) ? App.displayName + " [" + qsTr("Remote connection to %1").arg(App.asyncLoadMgr.remoteName) + "]" + App.loc.emptyString :
@@ -99,11 +107,13 @@ ApplicationWindow {
                                          (uiSettingsTools.settings.theme === 'system' && systemTheme == QtSystemTheme.Dark)
     property var theme: useDarkTheme ? darkTheme : lightTheme
 
+    property var theme_v2: Theme_V2 {isLightTheme: !appWindow.useDarkTheme}
+
     palette.highlight: theme.textHighlight
-    palette.windowText: theme.foreground
-    palette.window: appWindow.theme.background
-    palette.base: appWindow.theme.background
-    palette.text: appWindow.theme.foreground
+    palette.windowText: uiver === 1 ? theme.foreground : theme_v2.textColor
+    palette.window: uiver === 1 ? theme.background : theme_v2.bgColor
+    palette.base: uiver === 1 ? theme.background : theme_v2.bgColor
+    palette.text: uiver === 1 ? theme.foreground : theme_v2.textColor
 
     onShowAbout: aboutDlg.open()
     onStopDownload: downloadIds => {
@@ -174,6 +184,7 @@ ApplicationWindow {
         width: parent.width
         anchors.top: parent.top
         anchors.bottom: mainStatusBar.top
+        anchors.bottomMargin: uiver === 1 ? 0 : 3*appWindow.zoom
         onCurrentItemChanged: appWindowStateChanged()
     }
 
@@ -195,10 +206,16 @@ ApplicationWindow {
         }*/
     }
 
-    MainStatusBar {
+    Loader {
         id: mainStatusBar
-        width: parent.width
+        anchors.left: parent.left
+        anchors.right: parent.right
         anchors.bottom: parent.bottom
+        anchors.leftMargin: (uiver === 1 ? 4 : theme_v2.mainWindowLeftMargin)*appWindow.zoom
+        anchors.rightMargin: (uiver === 1 ? 4 : theme_v2.mainWindowRightMargin)*appWindow.zoom
+        anchors.bottomMargin: (uiver === 1 ? 0 : theme_v2.mainWindowBottomMargin)*appWindow.zoom
+        active: App.asyncLoadMgr.ready
+        source: Qt.resolvedUrl(uiver === 1 ? "MainStatusBar.qml" : "V2/MainStatusBar_V2.qml")
     }
 
     ModalDimmingEffect {
@@ -545,7 +562,7 @@ ApplicationWindow {
 
     PluginBannerDialog {
         id: pluginBannerDlg
-    }    
+    }
     PluginsBannersManager {}
 
     ShutdownTools {
@@ -855,6 +872,12 @@ ApplicationWindow {
         uiReadyTools.onReady(updateMacVersionWorkaround);
 
         App.useDarkTheme = Qt.binding(function(){ return useDarkTheme;});
+        App.titleBarBackgroundColor = Qt.binding(function() {
+            return uiver === 1 ? null : theme_v2.bgColor;
+        });
+        App.titleBarTextColor = Qt.binding(function() {
+            return uiver === 1 ? null : theme_v2.textColor;
+        });
 
         uiReadyTools.onReady(function()
         {
@@ -1100,4 +1123,25 @@ ApplicationWindow {
     QTBUG {
         id: qtbug
     }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    // QTBUG-131701 workaround
+    Timer {
+        id: appWindowInvalidateTimer
+        interval: 50
+        onTriggered: {
+            let o = appWindow.opacity;
+            appWindow.opacity = o - 0.01;
+            appWindow.opacity = o;
+        }
+    }
+    onWidthChanged: {
+        if (Qt.platform.os === "windows")
+            appWindowInvalidateTimer.restart();
+    }
+    onHeightChanged: {
+        if (Qt.platform.os === "windows")
+            appWindowInvalidateTimer.restart();
+    }
+    ////////////////////////////////////////////////////////////////////////////////
 }

@@ -2,6 +2,7 @@ import QtQuick 2.0
 import QtQuick.Controls 2.4
 import "../../qt5compat"
 import "../../common"
+import "V2"
 
 MenuItem {
         id: menuItem
@@ -9,10 +10,12 @@ MenuItem {
         visible: true
 
         height: visible ? undefined : 0
-        topPadding: visible ? 1 : 0
-        bottomPadding: visible ? 1 : 0
-        leftPadding: qtbug.leftPadding(20*appWindow.zoom, 10*appWindow.zoom)
-        rightPadding: qtbug.rightPadding(20*appWindow.zoom, 10*appWindow.zoom)
+        topPadding: ((visible && appWindow.uiver === 1) ? 1 : 2)*appWindow.zoom
+        bottomPadding: ((visible && appWindow.uiver === 1) ? 1 : 2)*appWindow.zoom
+        leftPadding: appWindow.uiver === 1 ? qtbug.leftPadding(20*appWindow.zoom, 10*appWindow.zoom) :
+                                             qtbug.leftPadding(16*appWindow.zoom, 12*appWindow.zoom)
+        rightPadding: appWindow.uiver === 1 ? qtbug.rightPadding(20*appWindow.zoom, 10*appWindow.zoom) :
+                                              qtbug.leftPadding(16*appWindow.zoom, 12*appWindow.zoom)
 
         property bool arrow_down: false
         property bool arrow_up: false
@@ -20,7 +23,10 @@ MenuItem {
         property bool offerIndicator: false
 
         background: Rectangle {
-            color: menuItem.highlighted ? appWindow.theme.menuHighlight : (menuItem.insideMainMenu ? appWindow.theme.insideMainMenuBackground : "transparent")
+            color: appWindow.uiver === 1 ?
+                       (menuItem.highlighted ? appWindow.theme.menuHighlight : (menuItem.insideMainMenu ? appWindow.theme.insideMainMenuBackground : "transparent")) :
+                       (menuItem.highlighted ? appWindow.theme_v2.hightlightBgColor : "transparent")
+            radius: appWindow.uiver === 1 ? 0 : 4*appWindow.zoom
         }
 
         arrow: Rectangle {
@@ -66,12 +72,30 @@ MenuItem {
             }
         }
 
-        contentItem: BaseLabel {
-            text: menuItem.text
-            horizontalAlignment: Text.AlignLeft
-            verticalAlignment: Text.AlignVCenter
-            wrapMode: Label.WordWrap
-            textFormat: Text.PlainText
+        Component {
+            id: contentItem_v1
+            BaseLabel {
+                text: menuItem.text
+                horizontalAlignment: Text.AlignLeft
+                verticalAlignment: Text.AlignVCenter
+                wrapMode: Label.WordWrap
+                textFormat: Text.PlainText
+            }
+        }
+
+        Component {
+            id: contentItem_v2
+            BaseText_V2 {
+                text: menuItem.text
+                horizontalAlignment: Text.AlignLeft
+                verticalAlignment: Text.AlignVCenter
+                wrapMode: Label.WordWrap
+                textFormat: Text.PlainText
+            }
+        }
+
+        contentItem: Loader {
+            sourceComponent: appWindow.uiver === 1 ? contentItem_v1 : contentItem_v2
         }
 
         MouseArea {

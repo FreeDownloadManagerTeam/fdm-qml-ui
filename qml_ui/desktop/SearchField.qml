@@ -185,7 +185,7 @@ Item {
 
             function hideSearchFieldIfNeed()
             {
-                if (!appWindow.macVersion && !searchText.focus && searchText.text.length === 0) {
+                if (visible && !appWindow.macVersion && !searchText.focus && searchText.text.length === 0) {
                     searchTextHideAnimate.start();
                 }
             }
