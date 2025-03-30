@@ -5,14 +5,21 @@ import org.freedownloadmanager.fdm 1.0
 import "../BaseElements/V2"
 import "../../common/Tools"
 import "../../common"
+import ".."
 
 Item
 {
+    id: root
+
+    signal justPressed(var mouse)
+    signal justReleased(var mouse)
+    signal justClicked(var mouse)
+
     property var downloadsViewHeader
     property bool noActionsAllowed: false
 
     readonly property int myVerticalPadding: 8*appWindow.zoom
-    readonly property bool containsMouse: ma.containsMouse || ma2.containsMouse || nameText.containsMouse
+    readonly property bool containsMouse: ma.containsMouse || statusField.containsMouse || nameText.containsMouse
 
     implicitWidth: childrenRect.width
 
@@ -60,7 +67,9 @@ Item
 
     HighlightedItem
     {
+        id: hightlightedItem
         anchors.fill: parent
+        anchors.bottomMargin: 1*appWindow.zoom
         visible: containsMouse || model.id === selectedDownloadsTools.currentDownloadId
     }
 
@@ -84,8 +93,19 @@ Item
         {
             moduleUid: downloadsItemTools.moduleUid
             buttonType: downloadsItemTools.buttonType
+            hasChildren: downloadsItemTools.hasChildDownloads
             enabled: !noActionsAllowed && !downloadsItemTools.locked &&
                      (downloadsItemTools.finished || !downloadsItemTools.stopping)
+
+            SelectedDownloadsDragArea {
+                downloadTitleControl: nameText
+                anchors.fill: parent
+                mouseCursorShape: Qt.PointingHandCursor
+                onJustClicked: {
+                    if (parent.canDoAction)
+                        downloadsItemTools.doAction()
+                }
+            }
         }
     }
 
@@ -100,6 +120,16 @@ Item
             id: nameText
             sourceText: downloadsItemTools.tplTitle
             Layout.fillWidth: true
+
+            /*SelectedDownloadsDragArea {
+                downloadTitleControl: nameText
+                anchors.fill: parent
+                Component.onCompleted: {
+                    justPressed.connect(root.justPressed);
+                    justReleased.connect(root.justReleased);
+                    justClicked.connect(root.justClicked);
+                }
+            }*/
         }
     }
 
@@ -124,31 +154,11 @@ Item
         x: downloadsViewHeader.statusColX
         width: downloadsViewHeader.statusColWidth
 
-        DownloadStatus_V2 {
+        DownloadsViewItemStatus_V2
+        {
+            id: statusField
+            highlighted: hightlightedItem.visible
             Layout.fillWidth: true
-            Layout.fillHeight: true
-            MouseArea
-            {
-                id: ma2
-                anchors.fill: parent
-                propagateComposedEvents: true
-                hoverEnabled: true
-                acceptedButtons: Qt.NoButton
-            }
-        }
-
-        WaSvgImage {
-            visible: downloadsItemTools.canBeRestarted
-            source: Qt.resolvedUrl("repeat.svg")
-            layer.enabled: true
-            layer.effect: ColorOverlay {
-                color: appWindow.theme_v2.textColor
-            }
-
-            MouseAreaWithHand_V2 {
-                anchors.fill: parent
-                onClicked: App.downloads.mgr.restartDownload([model.id])
-            }
         }
     }
 
@@ -184,42 +194,9 @@ Item
         width: downloadsViewHeader.addedColWidth
 
         BaseText_V2 {
-            text: App.loc.dateTimeToString_v2(model.added, false) + App.loc.emptyString +
-                  (downloadsViewHeader.minuteUpdate ? "" : "")
-        }
-    }
-
-    MyCell
-    {
-        id: trashCol
-
-        x: downloadsViewHeader.trashColX
-        width: downloadsViewHeader.trashColWidth
-
-        WaSvgImage {
-            zoom: appWindow.zoom
-            source: Qt.resolvedUrl("delete.svg")
-            layer.enabled: true
-            layer.effect: ColorOverlay {
-                color: appWindow.theme_v2.bg700
-            }
-
-            MouseAreaWithHand_V2 {
-                anchors.fill: parent
-                onClicked: trashMenu.open()
-
-                BaseMenu_V2 {
-                    id: trashMenu
-                    BaseMenuItem_V2 {
-                        text: qsTr("Delete file") + App.loc.emptyString;
-                        onClicked: deleteDownloadsDlgSimple.removeAction([model.id])
-                    }
-                    BaseMenuItem_V2 {
-                        text: qsTr("Remove from list") + App.loc.emptyString;
-                        onClicked: selectedDownloadsTools.removeFromList([model.id])
-                    }
-                }
-            }
+            text: model.added ?
+                      (App.loc.dateTimeToString_v2(model.added, false) + App.loc.emptyString + (downloadsViewHeader.minuteUpdate ? "" : "")) :
+                      ""
         }
     }
 }

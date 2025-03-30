@@ -10,15 +10,13 @@ import "../../common"
 BaseDialog {
     id: root
 
-    width: 400*appWindow.zoom
-
     property int failedId
 
-    contentItem: BaseDialogItem {
-        titleText: qsTr("User agreement") + App.loc.emptyString
-        focus: true
+    title: qsTr("User agreement") + App.loc.emptyString
+    onCloseClick: root.reject()
 
-        onCloseClick: root.reject()
+    contentItem: BaseDialogItem {
+        focus: true
 
         Keys.onEscapePressed: root.reject()
 
@@ -26,11 +24,10 @@ BaseDialog {
 
         ColumnLayout {
             width: parent.width
-            Layout.leftMargin: 10*appWindow.zoom
-            Layout.rightMargin: 10*appWindow.zoom
             spacing: 20*appWindow.zoom
 
             BaseLabel {
+                Layout.maximumWidth: 400*appWindow.zoom
                 text: qsTr("A bug report will be sent to the server and used to improve %1 performance. We do not collect your personal data and do not share data with third parties.").arg(App.shortDisplayName) + App.loc.emptyString
                 Layout.fillWidth: true
                 wrapMode: Label.WordWrap
@@ -44,7 +41,6 @@ BaseDialog {
 
             RowLayout {
                 Layout.topMargin: 10*appWindow.zoom
-                Layout.bottomMargin: 10*appWindow.zoom
                 Layout.alignment: Qt.AlignRight
 
                 spacing: 5*appWindow.zoom

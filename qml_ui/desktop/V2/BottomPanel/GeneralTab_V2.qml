@@ -23,6 +23,8 @@ Flickable
     {
         id: meat
 
+        visible: __bugwaCounter === 0
+
         width: parent.width
         y: 16*appWindow.zoom
 
@@ -42,7 +44,7 @@ Flickable
                 anchors.leftMargin: 3*appWindow.zoom
                 anchors.bottomMargin: 6*appWindow.zoom
                 zoom: appWindow.zoom
-                source: Qt.resolvedUrl("folder.svg")
+                source: Qt.resolvedUrl(Qt.platform.os === "osx" ? "folder_mac.svg" : "folder.svg")
             }
         }
 
@@ -176,26 +178,28 @@ Flickable
 
             Item {implicitHeight: 7*appWindow.zoom; implicitWidth: 1}
 
-            RowLayout {
-                visible: downloadsItemTools.webPageUrl.toString()
+            component UrlField : RowLayout {
+                property string url
+                property string title
+                visible: url
                 Layout.fillWidth: true
                 spacing: 8*appWindow.zoom
                 BaseText_V2 {
-                    text: qsTr("Web page") + ':' + App.loc.emptyString
+                    text: title + ':'
                     color: appWindow.theme_v2.bg700
                 }
                 BaseText_V2 {
-                    text: "<a href='#'>" + downloadsItemTools.webPageUrl + "</a>"
+                    text: "<a href='#'>" + url + "</a>"
                     linkColor: appWindow.theme_v2.primary
-                    onLinkActivated: App.openDownloadUrl(downloadsItemTools.webPageUrl)
+                    onLinkActivated: App.openDownloadUrl(url)
                     Layout.fillWidth: true
                     elide: Text.ElideMiddle
                     MouseAreaWithHand_V2 {
                         anchors.fill: parent
                         acceptedButtons: Qt.RightButton
-                        onClicked: (mouse) => parent.showMenu(parent, mouse, downloadsItemTools.webPageUrl)
+                        onClicked: (mouse) => parent.showMenu(parent, mouse)
                     }
-                    function showMenu(anchor, mouse, url)
+                    function showMenu(anchor, mouse)
                     {
                         var component = Qt.createComponent(Qt.resolvedUrl("../../BottomPanel/CopyLinkMenu.qml"));
                         var menu = component.createObject(anchor, {
@@ -210,7 +214,48 @@ Flickable
                     }
                 }
             }
+
+            UrlField {
+                title: qsTr("Web page") + App.loc.emptyString
+                url: downloadsItemTools.webPageUrl
+            }
+
+            Item {implicitHeight: 7*appWindow.zoom; implicitWidth: 1}
+
+            UrlField {
+                title: qsTr("File") + App.loc.emptyString
+                url: downloadsItemTools.resourceUrl
+            }
         }
     }
+
+    ////////////////////////////////////////////////////////////////////////////////////
+    // Qt 6.4.3 Layouts bug workaround
+    // TODO: remove it when switched to Qt 6.8.2+
+    property int __bugwaCounter: 0
+    property int __bugwaCounter2: App.qtVersion() === "6.4.3" ? 0 : 1
+    Timer {
+        id: bugwa
+        interval: 100
+        repeat: true
+        onTriggered: {
+           __bugwaCounter = __bugwaCounter ? 0 : 1;
+            if (++__bugwaCounter2 * interval / 1000.0 >= 0.3)
+            {
+                stop();
+                __bugwaCounter = 0;
+            }
+        }
+    }
+    Connections {
+        target: downloadsItemTools
+        onItemIdChanged: doWorkaround()
+    }
+    Component.onCompleted: doWorkaround()
+    function doWorkaround() {
+        if (visible && !__bugwaCounter2)
+            bugwa.start();
+    }
+    ////////////////////////////////////////////////////////////////////////////////////
 }
 

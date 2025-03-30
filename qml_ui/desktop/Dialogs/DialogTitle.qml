@@ -13,11 +13,19 @@ Rectangle {
     property bool showCloseButton: true
     property url titleIconUrl: Qt.resolvedUrl("../../images/mobile/fdmlogo.svg")
 
+    property int leftPadding: 0
+    property int rightPadding: 0
+    property int topPadding: 0
+    property int bottomPadding: 0
+
     signal closeClick
 
-    readonly property int prefferedHeight: 36*appWindow.zoom
+    readonly property int prefferedHeight: appWindow.uiver === 1 ? 36*appWindow.zoom : 0
+    readonly property int prefferedIconHeight: 30*appWindow.zoom
 
-    implicitHeight: prefferedHeight
+    implicitWidth: meat.implicitWidth + leftPadding + rightPadding
+    implicitHeight: Math.max(meat.implicitHeight + topPadding + bottomPadding, prefferedHeight)
+
     color: appWindow.uiver === 1 ?
                appWindow.theme.dialogTitleBackground :
                "transparent"
@@ -32,14 +40,20 @@ Rectangle {
     }
 
     RowLayout {
+        id: meat
+
         anchors.fill: parent
-        anchors.leftMargin: 10*appWindow.zoom
-        anchors.rightMargin: 10*appWindow.zoom
+        anchors.leftMargin: root.leftPadding
+        anchors.rightMargin: root.rightPadding
+        anchors.topMargin: root.topPadding
+        anchors.bottomMargin: root.bottomPadding
 
         WaSvgImage {
             source: root.titleIconUrl
             zoom: appWindow.zoom
-            Layout.preferredHeight: Math.min(preferredHeight, root.prefferedHeight - 6*appWindow.zoom)
+            Layout.preferredHeight: root.prefferedIconHeight ?
+                                        Math.min(preferredHeight, root.prefferedIconHeight) :
+                                        preferredHeight
             Layout.preferredWidth: Layout.preferredHeight
             Layout.alignment: Qt.AlignVCenter
             visible: root.showTitleIcon
@@ -62,7 +76,9 @@ Rectangle {
             Layout.preferredWidth: 24*appWindow.zoom
 
             WaSvgImage {
-                source: appWindow.theme.elementsIconsRoot + "/close2.svg"
+                source: appWindow.uiver === 1 ?
+                            appWindow.theme.elementsIconsRoot + "/close2.svg" :
+                            Qt.resolvedUrl("V2/close.svg")
                 zoom: appWindow.zoom
                 anchors.centerIn: parent
                 layer.effect: ColorOverlay { color: appWindow.theme_v2.bg600 }

@@ -10,6 +10,7 @@ Item
     property var componentProperties
     property var dialog: null
     property var hostWindow: null
+    property string windowTitle
 
     property bool opened: dialog && dialog.opened
 
@@ -76,6 +77,9 @@ Item
 
                 hostWindow.visible = Qt.binding(() => dialog ? dialog.opened : false);
                 hostWindow.closeClicked.connect(() => dialog.close());
+
+                if (root.windowTitle)
+                    hostWindow.title = Qt.binding(() => root.windowTitle);
             }
         }
     }

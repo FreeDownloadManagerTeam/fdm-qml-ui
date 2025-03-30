@@ -7,8 +7,10 @@ import org.freedownloadmanager.fdm.abstractdownloadsui 1.0
 import "../common"
 import "./BaseElements"
 import "./BaseElements/V2"
+import "./Dialogs"
 import "V2"
 import "../qt5compat"
+import "Banners"
 
 ToolBar {
     id: toolbar
@@ -22,6 +24,14 @@ ToolBar {
     AppDragMoveMouseArea {
         anchors.fill: parent
         z: -1
+    }
+
+    component ToolbarFlatIconButton_V2 : ToolbarFlatButton_V2 {
+        bgColor: "transparent"
+        leftPadding: 4*appWindow.zoom
+        rightPadding: leftPadding
+        topPadding: leftPadding
+        bottomPadding: leftPadding
     }
 
     ColumnLayout {
@@ -46,6 +56,11 @@ ToolBar {
             }
         }
 
+        MainBannersStrip {
+            id: banners
+            Layout.fillWidth: true
+        }
+
         RowLayout {
             Layout.fillWidth: true
             Layout.fillHeight: true
@@ -55,14 +70,12 @@ ToolBar {
             Layout.bottomMargin: 16*appWindow.zoom
             spacing: 0
 
-            ToolBarButton {
+            ToolbarFlatIconButton_V2 {
                 visible: toolbar.pageId
                 Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
-                source: appWindow.theme.mainTbImg.arrow_left
+                iconSource: Qt.resolvedUrl("V2/arrow_left.svg")
+                iconMirror: LayoutMirroring.enabled
                 onClicked: stackView.pop()
-                mirror: LayoutMirroring.enabled
-                implicitWidth: 20*appWindow.zoom
-                implicitHeight: 20*appWindow.zoom
             }
 
             RowLayout {
@@ -99,14 +112,6 @@ ToolBar {
 
                     spacing: 8*appWindow.zoom
 
-                    component ToolbarFlatIconButton_V2 : ToolbarFlatButton_V2 {
-                        transparentBackground: true
-                        leftPadding: 4*appWindow.zoom
-                        rightPadding: leftPadding
-                        topPadding: leftPadding
-                        bottomPadding: leftPadding
-                    }
-
                     ToolbarFlatIconButton_V2 {
                         iconSource: Qt.resolvedUrl("V2/play.svg")
                         enabled: selectedDownloadsTools.checkedDownloadsToStartExist
@@ -132,6 +137,7 @@ ToolBar {
                     }
 
                     ToolbarFlatIconButton_V2 {
+                        visible: !App.rc.client.active
                         iconSource: Qt.resolvedUrl("V2/file_move.svg")
                         enabled: !downloadsViewTools.emptySearchResults
                                  && !selectedDownloadsTools.selectedDownloadsIsLocked()
@@ -150,7 +156,7 @@ ToolBar {
 
                 ToolbarFlatButton_V2 {
                     rightPadding: 12*appWindow.zoom
-                    primaryButton: true
+                    buttonType: ToolbarFlatButton_V2.PrimaryButton
                     title: qsTr("Add download") + App.loc.emptyString
                     iconSource: Qt.resolvedUrl("V2/plus_icon.svg")
                     Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
@@ -199,7 +205,9 @@ ToolBar {
 
                 MainMenu {
                     id: mainMenu
-                    y: parent.height + 5*appWindow.zoom
+                    y: parent.height + 10*appWindow.zoom
+                    leftMargin: 8*appWindow.zoom
+                    rightMargin: leftMargin
                 }
 
                 MouseAreaWithHand_V2 {
@@ -209,7 +217,7 @@ ToolBar {
 
                     BaseToolTip_V2 {
                         text: qsTr("Menu and settings") + App.loc.emptyString
-                        visible: text ? parent.containsMouse : false
+                        visible: parent.containsMouse && !mainMenu.opened
                     }
                 }
             }
@@ -225,11 +233,11 @@ ToolBar {
         color: appWindow.theme.macToolbarOverlay
     }
 
-    MessageDialog {
+    AppMessageDialog {
         id: sortByOrderRequired
         title: App.displayName
         text: qsTr("Switch to user-defined sorting of the download list?") + App.loc.emptyString
-        buttons: buttonOk | buttonCancel
+        buttons: AppMessageDialog.Ok | AppMessageDialog.Cancel
         onAccepted: sortTools.setSortByAndAsc(AbstractDownloadsUi.DownloadsSortByOrder, false)
     }
 }

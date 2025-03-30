@@ -104,7 +104,7 @@ Column
                 PickFileButton {
                     id: folderBtn
                     Layout.alignment: Qt.AlignRight
-                    Layout.preferredHeight: 25*appWindow.zoom
+                    Layout.preferredHeight: torrentFolder.implicitHeight
                     onClicked: browseDlg.open()
                     QtLabs.FolderDialog {
                         id: browseDlg

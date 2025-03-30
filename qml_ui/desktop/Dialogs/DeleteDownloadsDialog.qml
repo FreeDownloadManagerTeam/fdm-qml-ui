@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.11
 import org.freedownloadmanager.fdm 1.0
 import Qt.labs.settings 1.0
 import "../BaseElements"
+import "../BaseElements/V2"
 import "../../common/Tools"
 
 BaseDialog {
@@ -12,29 +13,31 @@ BaseDialog {
     property var downloadIds: []
     property string dialogType: uiSettingsTools.settings.deleteButtonAction == 0 ? "Always ask" : uiSettingsTools.settings.deleteButtonAction == 1 ? "Delete files" : "unknown"
 
+    title: qsTr("Delete selected downloads") + " (%1)".arg(root.downloadIds.length) + App.loc.emptyString
+    onCloseClick: root.close()
+
     contentItem: BaseDialogItem {
-        titleText: qsTr("Delete selected downloads") + App.loc.emptyString
         focus: true
         Keys.onEscapePressed: root.close()
-        onCloseClick: root.close()
 
         ColumnLayout {
             Layout.fillWidth: true
-            Layout.leftMargin: 10*appWindow.zoom
-            Layout.rightMargin: 10*appWindow.zoom
             spacing: 3*appWindow.zoom
 
             ListView {
+                id: listView
                 clip: true
                 Layout.fillWidth: true
                 Layout.preferredHeight: Math.min(contentHeight, 150*appWindow.zoom)
                 Layout.minimumWidth: 342*appWindow.zoom+200*appWindow.fontZoom
-                ScrollBar.vertical: ScrollBar {
-                    active: parent.contentHeight > 150*appWindow.zoom
+                ScrollBar.vertical: BaseScrollBar_V2 {
+                    id: vsb
+                    policy: parent.contentHeight > parent.height ?
+                                ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
                 }
                 model: root.downloadIds
                 delegate: Rectangle {
-                    width: parent.width
+                    width: listView.width - vsb.myWrapSize
                     height: lbl.height
                     color: 'transparent'
 
@@ -43,6 +46,7 @@ BaseDialog {
                         visible: downloadsItemTools.tplPathAndTitle.length > 0
                         width: parent.width
                         elide: Text.ElideMiddle
+                        dialogLabel: true
                         DownloadsItemTools {
                             id: downloadsItemTools
                             itemId: root.downloadIds[index]
@@ -55,7 +59,6 @@ BaseDialog {
             ColumnLayout {
                 visible: root.dialogType === "Always ask"
                 Layout.topMargin: 10*appWindow.zoom
-                Layout.bottomMargin: 10*appWindow.zoom
                 Layout.fillWidth: true
                 spacing: 15*appWindow.zoom
 
@@ -78,20 +81,23 @@ BaseDialog {
                     BaseButton {
                         id: btn1
                         text: qsTr("Delete files") + App.loc.emptyString
-                        blueBtn: true
+                        blueBtn: appWindow.uiver === 1
+                        dangerBtn: !blueBtn
                         alternateBtnPressed: cnclBtn.isPressed
                         onClicked: root.deleteFilesClick()
                     }
 
                     BaseButton {
                         text: qsTr("Remove from list") + App.loc.emptyString
-                        blueBtn: true
+                        blueBtn: appWindow.uiver === 1
+                        useUppercase: appWindow.uiver !== 1
                         alternateBtnPressed: cnclBtn.isPressed
                         onClicked: root.removeFromList()
                     }
 
                     BaseButton {
                         id: cnclBtn
+                        visible: appWindow.uiver === 1
                         text: qsTr("Cancel") + App.loc.emptyString
                         onClicked: root.close()
                     }
@@ -101,7 +107,6 @@ BaseDialog {
             RowLayout {
                 visible: root.dialogType === "Delete files"
                 Layout.topMargin: 10*appWindow.zoom
-                Layout.bottomMargin: 10*appWindow.zoom
                 Layout.alignment: Qt.AlignRight
 
                 spacing: 5*appWindow.zoom

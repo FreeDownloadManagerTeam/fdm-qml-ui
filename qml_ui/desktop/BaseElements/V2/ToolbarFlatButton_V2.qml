@@ -18,28 +18,52 @@ Item
 
     property bool hasCheckBox: false
     property url iconSource
+    property bool ignoreIconHeight: true
     property color iconColor: textColor
     property string title
     property var dropDownMenu: null
+    property alias iconMirror: iconImg.mirror
 
-    property bool primaryButton: false
+    enum ButtonType {
+        NormalButton,
+        PrimaryButton,
+        DangerButton
+    }
+
+    property int buttonType: ToolbarFlatButton_V2.NormalButton
 
     property int leftPadding: 8*appWindow.zoom
     property int rightPadding: 8*appWindow.zoom
     property int topPadding: 8*appWindow.zoom
     property int bottomPadding: 8*appWindow.zoom
 
-    property bool transparentBackground: false
+    property color bgColor: bgColorForButtonType(buttonType)
+    property color textColor: textColorForButtonType(buttonType)
 
     property string tooltipText
 
-    readonly property color textColor: primaryButton ? appWindow.theme_v2.bg100 : appWindow.theme_v2.bg1000
+    property bool useUppercase: buttonType == ToolbarFlatButton_V2.PrimaryButton ||
+                                buttonType == ToolbarFlatButton_V2.DangerButton
 
     property alias checkState: cb.checkState
     property alias tristate: cb.tristate
     property alias checked: cb.checked
     property alias border: myContent.border
     property alias radius: myContent.radius
+
+    function bgColorForButtonType(bt)
+    {
+        return bt == ToolbarFlatButton_V2.PrimaryButton ? appWindow.theme_v2.primary :
+               bt == ToolbarFlatButton_V2.DangerButton ? appWindow.theme_v2.opacityColor(appWindow.theme_v2.danger, 0.2) :
+               appWindow.theme_v2.bg300
+    }
+
+    function textColorForButtonType(bt)
+    {
+        return bt == ToolbarFlatButton_V2.PrimaryButton ? appWindow.theme_v2.bg100 :
+               bt == ToolbarFlatButton_V2.DangerButton ? appWindow.theme_v2.danger :
+               appWindow.theme_v2.bg1000
+    }
 
     implicitHeight: myContent.implicitHeight
     implicitWidth: myContent.implicitWidth
@@ -50,9 +74,9 @@ Item
 
         anchors.fill: parent
         radius: 8*appWindow.zoom
-        color: transparentBackground? "transparent" :
-                                      appWindow.theme_v2.enabledColor(primaryButton ? appWindow.theme_v2.primary : appWindow.theme_v2.bg300,
-                                                                      enabled)
+        color: bgColor.a ?
+                   appWindow.theme_v2.enabledColor(bgColor, enabled) :
+                   bgColor
 
         implicitHeight: myContent2.implicitHeight + root.topPadding + root.bottomPadding
         implicitWidth: myContent2.implicitWidth + root.leftPadding + root.rightPadding
@@ -90,35 +114,45 @@ Item
             {
                 id: cb
                 visible: hasCheckBox
+                v2EnableRicherBgColor: true
                 Layout.alignment: Qt.AlignVCenter
                 onClicked: root.checkBoxClicked()
             }
 
-            WaSvgImage
+            Item
             {
-                source: root.iconSource
-                zoom: appWindow.zoom
-                visible: source.toString()
-                layer.effect: ColorOverlay { color: root.iconColor }
-                //layer.effect: MultiEffect {colorization: 1.0; colorizationColor: root.iconColor}
-                layer.enabled: true
+                visible: iconImg.source.toString()
+                implicitHeight: ignoreIconHeight ? Math.min(titleItem.implicitHeight, iconImg.implicitHeight) :
+                                                   iconImg.implicitHeight
+                implicitWidth: iconImg.implicitWidth
+                WaSvgImage
+                {
+                    id: iconImg
+                    source: root.iconSource
+                    zoom: appWindow.zoom
+                    layer.effect: ColorOverlay { color: root.iconColor }
+                    //layer.effect: MultiEffect {colorization: 1.0; colorizationColor: root.iconColor}
+                    layer.enabled: true
+                    opacity: enabled ? 1.0 : appWindow.theme_v2.opacityDisabled
+                    anchors.centerIn: parent
+                }
             }
 
             Item
             {
+                id: titleItem
                 visible: root.title
                 implicitHeight: 16*appWindow.fontZoom
                 implicitWidth: childrenRect.width
                 BaseText_V2
                 {
-                    opacity: 1.0
                     height: parent.height
                     verticalAlignment: Text.AlignVCenter
                     text: root.title
                     color: root.textColor
-                    font.weight: root.primaryButton ? 600 : 500
-                    font.pixelSize: (root.primaryButton ? 11 : appWindow.theme_v2.fontSize)*appWindow.fontZoom
-                    font.capitalization: root.primaryButton ? Font.AllUppercase : Font.MixedCase
+                    font.weight: root.useUppercase ? 600 : 500
+                    font.pixelSize: (root.useUppercase ? 11 : appWindow.theme_v2.fontSize)*appWindow.fontZoom
+                    font.capitalization: root.useUppercase ? Font.AllUppercase : Font.MixedCase
                 }
             }
 

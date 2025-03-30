@@ -12,20 +12,19 @@ BaseDialog
 
     signal updateClicked()
 
+    title: qsTr("New version is available") + App.loc.emptyString
+    showTitleIcon: true
+
+    onCloseClick: root.close()
+
     contentItem: BaseDialogItem
     {
-        titleText: qsTr("New version is available") + App.loc.emptyString
-        showTitleIcon: true
-
         Keys.onEscapePressed: root.close()
-        onCloseClick: root.close()
 
         ColumnLayout
         {
             Layout.fillHeight: true
             Layout.fillWidth: true
-
-            Layout.margins: 10*appWindow.zoom
 
             spacing: 10*appWindow.zoom
 

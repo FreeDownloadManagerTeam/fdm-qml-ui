@@ -9,7 +9,6 @@ RowLayout {
     readonly property alias downloadBtnEnabled: okbtn.enabled
 
     Layout.topMargin: 10*appWindow.zoom
-    Layout.bottomMargin: 15*appWindow.zoom
     Layout.alignment: Qt.AlignRight
 
     spacing: 5*appWindow.zoom

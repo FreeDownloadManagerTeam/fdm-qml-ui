@@ -12,25 +12,23 @@ BaseDialog {
 
     onRemoteResourceChanged: downloadsListModel.append({'id': id});
 
-    width: 542*appWindow.zoom
+    title: qsTr("Remote resource changed") + App.loc.emptyString
+    onCloseClick: cancelClicked()
 
     contentItem: BaseDialogItem {
-        titleText: qsTr("Remote resource changed") + App.loc.emptyString
         focus: true
         Keys.onEscapePressed: cancelClicked()
         Keys.onReturnPressed: redownloadClicked()
-        onCloseClick: cancelClicked()
 
         ColumnLayout {
             Layout.fillWidth: true
-            Layout.leftMargin: 10*appWindow.zoom
-            Layout.rightMargin: 10*appWindow.zoom
             spacing: 20*appWindow.zoom
 
             ListView {
                 id: downloadsList
                 clip: true
                 Layout.fillWidth: true
+                Layout.minimumWidth: 540*appWindow.zoom
                 Layout.preferredHeight: Math.min(contentHeight, 150*appWindow.zoom)
                 ScrollBar.vertical: ScrollBar {
                     active: parent.contentHeight > 150*appWindow.zoom
@@ -65,7 +63,6 @@ BaseDialog {
 
             RowLayout {
                 Layout.topMargin: 10*appWindow.zoom
-                Layout.bottomMargin: 10*appWindow.zoom
                 Layout.alignment: Qt.AlignRight
 
                 spacing: 5*appWindow.zoom

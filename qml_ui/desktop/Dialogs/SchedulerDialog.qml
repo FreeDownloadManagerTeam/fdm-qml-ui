@@ -8,19 +8,16 @@ import "../../common/Tools"
 BaseDialog {
     id: root
 
-    width: 392*appWindow.zoom+150*appWindow.fontZoom
+    title: qsTr("Scheduler") + App.loc.emptyString
+    onCloseClick: root.close()
 
     contentItem: BaseDialogItem {
-        titleText: qsTr("Scheduler") + App.loc.emptyString
         focus: true
         Keys.onEscapePressed: root.close()
         Keys.onReturnPressed: schedulerTools.doOK()
-        onCloseClick: root.close()
 
         ColumnLayout {
             Layout.fillWidth: true
-            Layout.leftMargin: 10*appWindow.zoom
-            Layout.rightMargin: 10*appWindow.zoom
             Layout.topMargin: 5*appWindow.zoom
             spacing: 10*appWindow.zoom
 
@@ -51,7 +48,6 @@ BaseDialog {
 
             RowLayout {
                 Layout.topMargin: 10*appWindow.zoom
-                Layout.bottomMargin: 10*appWindow.zoom
                 Layout.alignment: Qt.AlignRight
 
                 spacing: 5*appWindow.zoom

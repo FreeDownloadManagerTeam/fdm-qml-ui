@@ -7,9 +7,6 @@ import "../../common"
 BaseComboBox {
     id: root
 
-    rightPadding: 5*appWindow.zoom
-    leftPadding: 5*appWindow.zoom
-
     property string extension: "fdd"
     property string filter: qsTr("%1 downloads files (%2)").arg(App.shortDisplayName).arg("*.fdd") + App.loc.emptyString
 

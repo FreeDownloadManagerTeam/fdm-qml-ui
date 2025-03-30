@@ -29,13 +29,17 @@ Item
         BaseLabel {
             id: lbl
             Layout.fillWidth: true
-            font.pixelSize: (smallSettingsPage ? 18 : 24)*appWindow.fontZoom
-            color: appWindow.theme.settingsGroupHeader
+            font.pixelSize: appWindow.uiver === 1 ?
+                                (smallSettingsPage ? 18 : 24)*appWindow.fontZoom :
+                                20*appWindow.fontZoom
+            color: appWindow.uiver === 1 ?
+                       appWindow.theme.settingsGroupHeader :
+                       appWindow.theme_v2.textColor
             bottomPadding: 10*appWindow.zoom
             text: root.text
 
             Rectangle {
-                visible: !root.enableHideButton || !root.hidden
+                visible: appWindow.uiver === 1 && (!root.enableHideButton || !root.hidden)
                 color: appWindow.theme.settingsLine
                 width: parent.width
                 height: 1*appWindow.zoom

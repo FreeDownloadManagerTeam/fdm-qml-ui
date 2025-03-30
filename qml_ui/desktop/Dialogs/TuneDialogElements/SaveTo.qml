@@ -24,6 +24,7 @@ FocusScope
 
             BaseLabel {
                 text: qsTr("Save to") + App.loc.emptyString
+                dialogLabel: true
                 Layout.fillWidth: true
             }
 
@@ -52,7 +53,7 @@ FocusScope
                 visible: !App.rc.client.active
                 id: folderBtn
                 Layout.alignment: Qt.AlignRight
-                Layout.fillHeight: true
+                Layout.preferredHeight: combo.height
                 onClicked: browseDlg.open()
                 QtLabs.FolderDialog {
                     id: browseDlg

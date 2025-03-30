@@ -50,10 +50,10 @@ ToolbarFlatButton_V2
         }
 
         BaseMenuSeparator_V2 {
-            visible: tagsTools.systemTags.length > 0
+            visible: tagsTools.nonHiddenSystemTags.length > 0
         }
         Repeater {
-            model: tagsTools.systemTags
+            model: tagsTools.nonHiddenSystemTags
             AllDownloadsFilterTagMenuItem {
                 tag: modelData
             }

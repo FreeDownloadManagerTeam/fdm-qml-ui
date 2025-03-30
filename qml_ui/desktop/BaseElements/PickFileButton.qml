@@ -2,12 +2,15 @@ import QtQuick 2.12
 import "../../common"
 import "../../qt5compat"
 import "V2"
+import org.freedownloadmanager.fdm
 
 Item
 {
     id: root
 
     signal clicked()
+
+    property bool toBrowseForFolder: true
 
     readonly property var btn: appWindow.uiver === 1 ? v1 : v2
 
@@ -49,7 +52,15 @@ Item
         visible: appWindow.uiver !== 1
         anchors.fill: parent
 
-        iconSource: Qt.resolvedUrl("../../images/desktop/pick_file.svg")
+        //: Browse for a file
+        title: toBrowseForFolder ? "" : qsTr("Browse...") + App.loc.emptyString
+
+        iconSource: Qt.resolvedUrl("V2/folder_open.svg")
+
+        bgColor: appWindow.theme_v2.bg400
+
+        leftPadding: 12*appWindow.zoom
+        rightPadding: leftPadding
 
         onClicked: root.clicked()
     }

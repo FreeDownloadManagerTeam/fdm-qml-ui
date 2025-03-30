@@ -10,9 +10,6 @@ import "../../common"
 BaseComboBox {
     id: root
 
-    rightPadding: 5*appWindow.zoom
-    leftPadding: 5*appWindow.zoom
-
     property string sCustom: qsTr("Configure manually...") + App.loc.emptyString
 
     popupVisibleRowsCount: 5

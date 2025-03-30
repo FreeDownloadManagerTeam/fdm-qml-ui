@@ -1,49 +1,65 @@
-import QtQuick 2.0
+import QtQuick 2.12
+import QtQuick.Layouts 2.12
 import org.freedownloadmanager.fdm 1.0
 import "../../desktop/BaseElements"
+import "../../desktop/BaseElements/V2"
+import "../../desktop/Banners"
 import "../../common"
 
-Rectangle {
+BannerStrip {
     id: root
-    visible: appWindow.showIntegrationBanner
-    width: parent.width
-    height: parent.height
-    color: appWindow.theme.bannerBackground
 
-    BaseLabel {
-        anchors.leftMargin: 10*appWindow.zoom
-        anchors.left: parent.left
-        anchors.right: buttons.left
-        anchors.verticalCenter: parent.verticalCenter
-        text: App.my_BT_qsTranslate("IntegrationBanner", "Would you like to make %1 the default torrent client?").arg(App.shortDisplayName) + App.loc.emptyString
-        font.pixelSize: 13*appWindow.fontZoom
-        elide: Text.ElideRight
-        color: appWindow.theme.foreground
-    }
+    readonly property bool shouldBeVisible: appWindow.showIntegrationBanner
+    visible: shouldBeVisible
 
-    Row {
-        id: buttons
-        anchors.right: parent.right
-        anchors.rightMargin: 10*appWindow.zoom
-        anchors.verticalCenter: parent.verticalCenter
-        spacing: 10*appWindow.zoom
+    implicitWidth: meat.implicitWidth + meat.anchors.leftMargin + meat.anchors.rightMargin
+    implicitHeight: meat.implicitHeight + meat.anchors.topMargin + meat.anchors.bottomMargin
+
+    readonly property int __spacing: (appWindow.uiver === 1 ? 10 : 16)*appWindow.zoom
+
+    RowLayout {
+        id: meat
+
+        anchors.fill: parent
+        anchors.leftMargin: (appWindow.uiver === 1 ? 10 : 12)*appWindow.zoom
+        anchors.rightMargin: anchors.leftMargin
+        anchors.topMargin: (appWindow.uiver === 1 ? 0 : 8)*appWindow.zoom
+        anchors.bottomMargin: anchors.topMargin
+
+        spacing: 0
+
+        BaseLabel {
+            text: App.my_BT_qsTranslate("IntegrationBanner", "Would you like to make %1 the default torrent client?").arg(App.shortDisplayName) + App.loc.emptyString
+            font.pixelSize: 13*appWindow.fontZoom
+            font.weight: appWindow.uiver === 1 ? 400 : 500
+            elide: Text.ElideRight
+            color: appWindow.uiver === 1 ? appWindow.theme.foreground : appWindow.theme_v2.secondary
+        }
+
+        Item {
+            implicitHeight: 1
+            Layout.fillWidth: true
+            Layout.minimumWidth: __spacing
+        }
 
         BannerCustomButton {
-            anchors.verticalCenter: parent.verticalCenter
             text: qsTr("Set as Default") + App.loc.emptyString
             onClicked: root.doOK()
         }
 
+        Item {implicitWidth: __spacing; implicitHeight: 1}
+
         BannerCustomButton {
-            anchors.verticalCenter: parent.verticalCenter
             text: qsTr("Don't ask again") + App.loc.emptyString
             onClicked: root.cancel()
         }
 
+        Item {implicitWidth: __spacing; implicitHeight: 1}
+
         Item {
-            anchors.verticalCenter: parent.verticalCenter
-            width: 30*appWindow.zoom
-            height: 30*appWindow.zoom
+            visible: appWindow.uiver === 1
+            implicitWidth: 30*appWindow.zoom
+            implicitHeight: 30*appWindow.zoom
             WaSvgImage {
                 anchors.centerIn: parent
                 source: appWindow.theme.elementsIconsRoot + "/close.svg"
@@ -52,6 +68,15 @@ Rectangle {
                     anchors.fill: parent
                     onClicked: root.close()
                 }
+            }
+        }
+
+        SvgImage_V2 {
+            visible: appWindow.uiver !== 1
+            source: Qt.resolvedUrl("../../desktop/BaseElements/V2/close.svg")
+            MouseAreaWithHand_V2 {
+                anchors.fill: parent
+                onClicked: root.close()
             }
         }
     }

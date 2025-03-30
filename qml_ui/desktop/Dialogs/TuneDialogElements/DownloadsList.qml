@@ -5,6 +5,8 @@ import org.freedownloadmanager.fdm 1.0
 import org.freedownloadmanager.fdm.abstractdownloadsui 1.0
 import org.freedownloadmanager.fdm.abstractdownloadoption 1.0
 import "../../BaseElements"
+import "../../BaseElements/V2"
+import "../../../common"
 
 ColumnLayout {
     visible: downloadTools.batchDownload
@@ -15,6 +17,31 @@ ColumnLayout {
 
     property bool showAgeCol
     property bool showMediaDurationCol
+
+    readonly property var ignoredDownloads: {
+        let arr = [];
+        if (App.downloads.creator.ignoredDuplicateDownloadsCount(requestId))
+            arr.push(qsTr("duplicates (%1)").arg(App.downloads.creator.ignoredDuplicateDownloadsCount(requestId)) + App.loc.emptyString);
+        if (App.downloads.creator.ignoredInvalidDownloadsCount(requestId))
+            arr.push(qsTr("invalid (%1)").arg(App.downloads.creator.ignoredInvalidDownloadsCount(requestId)) + App.loc.emptyString);
+        if (App.downloads.creator.ignoredUnsupportedDownloadsCount(requestId))
+            arr.push(qsTr("unsupported (%1)").arg(App.downloads.creator.ignoredUnsupportedDownloadsCount(requestId)) + App.loc.emptyString);
+        return arr;
+    }
+
+    RowLayout {
+        visible: ignoredDownloads.length
+
+        SvgImage_V2 {
+            source: Qt.resolvedUrl("V2/alert.svg")
+            imageColor: appWindow.theme_v2.primary
+        }
+
+        BaseLabel {
+            text: qsTr("Skipped downloads") + ": " + ignoredDownloads.join(", ") + App.loc.emptyString
+            color: appWindow.theme_v2.primary
+        }
+    }
 
     Rectangle {
         Layout.fillWidth: true
@@ -186,7 +213,6 @@ ColumnLayout {
             footer: BusyIndicator {
                 visible: false
                 running: visible
-                anchors.horizontalCenter: parent.horizontalCenter
                 height: visible ? undefined : 0
             }
         }

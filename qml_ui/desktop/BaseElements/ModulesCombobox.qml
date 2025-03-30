@@ -13,9 +13,6 @@ Item {
     BaseComboBox {
         id: combo
 
-        rightPadding: 5*appWindow.zoom
-        leftPadding: 5*appWindow.zoom
-
         anchors.fill: parent
 
         onActivated: index => downloadTools.selectModule(combo.model[index].id)

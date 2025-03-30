@@ -10,17 +10,11 @@ import "../../common"
 BaseDialog {
     id: root
 
-    width: 442*appWindow.zoom+100*appWindow.fontZoom
-
     readonly property int firstColWidth: 20*appWindow.zoom + 60*appWindow.fontZoom
 
-    contentItem: BaseDialogItem {
-        titleText: qsTr("Authentication required") + App.loc.emptyString
+    title: qsTr("Authentication required") + App.loc.emptyString
 
-        onCloseClick: {
-            downloadTools.rejectAuth();
-            root.close();
-        }
+    contentItem: BaseDialogItem {        
 
         Keys.onEscapePressed: {
             downloadTools.rejectAuth();
@@ -29,8 +23,6 @@ BaseDialog {
 
         ColumnLayout {
             Layout.fillWidth: true
-            Layout.leftMargin: 10*appWindow.zoom
-            Layout.rightMargin: 10*appWindow.zoom
             spacing: 10*appWindow.zoom
 
             ColumnLayout {
@@ -110,7 +102,6 @@ BaseDialog {
 
             RowLayout {
                 Layout.topMargin: 10*appWindow.zoom
-                Layout.bottomMargin: 10*appWindow.zoom
                 Layout.alignment: Qt.AlignRight
 
                 spacing: 5*appWindow.zoom
@@ -139,6 +130,11 @@ BaseDialog {
 
     BuildDownloadTools {
         id: downloadTools
+    }
+
+    onCloseClick: {
+        downloadTools.rejectAuth();
+        root.close();
     }
 
     onClosed: {appWindow.appWindowStateChanged();}

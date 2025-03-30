@@ -10,14 +10,15 @@ import "../../common"
 BaseDialog {
     id: root
 
-    contentItem: BaseDialogItem {
-        titleText: qsTr("Warning: potential security risk ahead") + App.loc.emptyString
-        focus: true
+    title: qsTr("Warning: potential security risk ahead") + App.loc.emptyString
 
-        onCloseClick: {
-            downloadTools.rejectSsl();
-            root.close();
-        }
+    onCloseClick: {
+        downloadTools.rejectSsl();
+        root.close();
+    }
+
+    contentItem: BaseDialogItem {
+        focus: true
 
         Keys.onEscapePressed: {
             downloadTools.rejectSsl();
@@ -31,8 +32,6 @@ BaseDialog {
 
         ColumnLayout {
             Layout.fillWidth: true
-            Layout.leftMargin: 10*appWindow.zoom
-            Layout.rightMargin: 10*appWindow.zoom
             spacing: 10*appWindow.zoom
 
             BaseLabel {
@@ -110,7 +109,6 @@ BaseDialog {
 
             RowLayout {
                 Layout.topMargin: 10*appWindow.zoom
-                Layout.bottomMargin: 10*appWindow.zoom
                 Layout.alignment: Qt.AlignRight
 
                 spacing: 5*appWindow.zoom

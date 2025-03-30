@@ -8,30 +8,38 @@ import "../../qt5compat"
 BaseComboBox {
     id: root
 
-    rightPadding: 5*appWindow.zoom
-    leftPadding: 5*appWindow.zoom
-    implicitHeight: 30*appWindow.zoom
-
     editable: true
 
-    popupVisibleRowsCount: 7
+    popupVisibleRowsCount: appWindow.uiver === 1 ? 7 : 5
     comboMaximumWidth: Math.round(appWindow.width*0.8)
     delegateMinimumHeight: 30*appWindow.zoom
 
     signal folderRemoved(var path)
 
-    delegate: Rectangle {
+    delegate: Item {
         id: delegateRoot
 
         property bool hover: false
-        color: hover ? appWindow.theme.menuHighlight : "transparent"
-        height: root.delegateMinimumHeight
-        width: parent ? parent.width : 0
+
+        anchors.left: parent.left
+        height: root.recommendedDelegateHeight
+        width: root.recommendedDelegateWidth
+
+        Rectangle {
+            anchors.fill: parent
+            anchors.margins: appWindow.uiver === 1 ? 0 : 2*appWindow.zoom
+            color: parent.hover ?
+                       (appWindow.uiver === 1 ? appWindow.theme.menuHighlight : appWindow.theme_v2.hightlightBgColor) :
+                       "transparent"
+            radius: parent.hover ?
+                        (appWindow.uiver === 1 ? 0 : 4*appWindow.zoom) :
+                        0
+        }
 
         RowLayout {
             anchors.fill: parent
-            anchors.leftMargin: 6*appWindow.zoom
-            anchors.rightMargin: 6*appWindow.zoom
+            anchors.leftMargin: root.leftPadding
+            anchors.rightMargin: root.rightPadding
 
             BaseLabel {
                 Layout.fillWidth: true
@@ -61,8 +69,6 @@ BaseComboBox {
             WaSvgImage {
                 visible: root.model.length > 1
                 Layout.alignment: Qt.AlignVCenter
-                Layout.leftMargin: qtbug.leftMargin(0, 6*appWindow.zoom)
-                Layout.rightMargin: qtbug.rightMargin(0, 6*appWindow.zoom)
 
                 zoom: appWindow.zoom
                 source: appWindow.macVersion ? Qt.resolvedUrl("../../images/desktop/search_clear_mac.svg") :
@@ -86,13 +92,11 @@ BaseComboBox {
 
     contentItem: BaseTextField {
         text: root.editText
-        anchors.left: parent.left
-        leftPadding: qtbug.leftPadding(6*appWindow.zoom, 30*appWindow.zoom)
-        rightPadding: qtbug.rightPadding(6*appWindow.zoom, 30*appWindow.zoom)
-        background: Rectangle {
-            color: "transparent"
-            border.color: "transparent"
-        }
+        background: Item {}
+        topPadding: 0
+        bottomPadding: 0
+        leftPadding: qtbug.leftPadding(0, root.indicator.width + 4*appWindow.zoom)
+        rightPadding: qtbug.rightPadding(0, root.indicator.width + 4*appWindow.zoom)
         focus: true
     }
 

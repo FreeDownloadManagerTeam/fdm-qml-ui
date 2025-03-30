@@ -1,6 +1,7 @@
 import QtQuick 2.0
 import Qt.labs.platform 1.0
 import org.freedownloadmanager.fdm 1.0
+import "../Dialogs"
 
 Item
 {
@@ -12,27 +13,22 @@ Item
         id: uiStrings
     }
 
-    MessageDialog
+    AppMessageDialog
     {
         id: newDependenciesMissingFatalMsg
         property string uuid
         title: qsTr("Failed to update add-on") + App.loc.emptyString
-        onAccepted: App.plugins.updateMgr.installedAllNewDependencies(uuid, false)
-        onRejected: App.plugins.updateMgr.installedAllNewDependencies(uuid, false)
+        onClosed: App.plugins.updateMgr.installedAllNewDependencies(uuid, false)
     }
 
-    MessageDialog
+    AppMessageDialog
     {
         id: newDependenciesMissingMsg
         property string distributivePath
         property string uuid
         title: qsTr("Failed to update add-on") + App.loc.emptyString
-        ////////////////////////////////////////////////////////////////
-        /// https://bugreports.qt.io/browse/QTBUG-98311
-        readonly property int btnYes: MessageDialog.Yes
-        readonly property int btnNo: MessageDialog.No
-        buttons: btnYes | btnNo
-        ////////////////////////////////////////////////////////////////
+        buttons: AppMessageDialog.Ok | AppMessageDialog.Cancel
+        textFormat: Text.RichText
         onAccepted: {
             waitingComponentsInstallForUpdateDistribPath = distributivePath;
             waitingComponentsInstallForUpdateUuid = uuid;
@@ -43,17 +39,13 @@ Item
         }
     }
 
-    MessageDialog
+    AppMessageDialog
     {
         id: newDangerousPermissionsDlg
         property string uuid
         title: qsTr("Warning!") + App.loc.emptyString
-        ////////////////////////////////////////////////////////////////
-        /// https://bugreports.qt.io/browse/QTBUG-98311
-        readonly property int btnYes: MessageDialog.Yes
-        readonly property int btnNo: MessageDialog.No
-        buttons: btnYes | btnNo
-        ////////////////////////////////////////////////////////////////
+        buttons: AppMessageDialog.Ok | AppMessageDialog.Cancel
+        textFormat: Text.RichText
         onAccepted: App.plugins.updateMgr.acceptAllNewPermissions(uuid, true)
         onRejected: App.plugins.updateMgr.acceptAllNewPermissions(uuid, false)
     }

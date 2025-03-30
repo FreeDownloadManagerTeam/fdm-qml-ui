@@ -39,7 +39,7 @@ TextField {
     background: Rectangle {
         border.color: appWindow.uiver === 1 ?
                           appWindow.theme.border :
-                          appWindow.theme_v2.editTextBorderColor
+                          (textInput.activeFocus ? appWindow.theme_v2.primary : appWindow.theme_v2.editTextBorderColor)
         border.width: 1*appWindow.zoom
         color: appWindow.uiver === 1 ?
                    appWindow.theme.background :

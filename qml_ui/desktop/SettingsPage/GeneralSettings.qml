@@ -18,18 +18,31 @@ Column {
         text: qsTr("General") + App.loc.emptyString
     }
 
+    component VNLayout : GridLayout {
+        anchors.left: parent.left
+
+        rowSpacing: parent.spacing
+        columnSpacing: 16*appWindow.zoom
+
+        rows: appWindow.uiver === 1 ? 100 : 1
+        columns: appWindow.uiver === 1 ? 1 : 100
+    }
+
     SettingsGroupColumn {
 
         anchors.left: parent.left
 
-        SettingsSubgroupHeader{
-            anchors.left: parent.left
-            text: qsTr("Theme") + App.loc.emptyString
-        }
+        VNLayout
+        {
+            SettingsSubgroupHeader{
+                id: themeLabel
+                text: qsTr("Theme") + App.loc.emptyString
+                Layout.preferredWidth: Math.max(implicitWidth, uiverLabel.implicitWidth, languageLabel.implicitWidth)
+            }
 
-        ThemeComboBox {
-            anchors.left: parent.left
-            anchors.leftMargin: 16*appWindow.zoom
+            ThemeComboBox {
+                Layout.leftMargin: parent.columns === 1 ? 16*appWindow.zoom : 0
+            }
         }
 
         BaseLabel {
@@ -40,49 +53,45 @@ Column {
             visible: uiSettingsTools.settings.theme === 'system'
         }
 
-        SettingsSubgroupHeader{
-            anchors.left: parent.left
-            text: qsTr("UI style") + App.loc.emptyString
-        }
-
-        BaseComboBox {
-            anchors.left: parent.left
-            anchors.leftMargin: 16*appWindow.zoom
-            settingsStyle: true
-            model: [
-                {text: qsTr("New (beta)") + App.loc.emptyString, value: 2},
-                {text: qsTr("Classic") + App.loc.emptyString, value: 1}
-            ]
-            currentIndex: {
-                for (let i = 0; i < model.length; ++i) {
-                    if (model[i].value === uiSettingsTools.settings.uiVersion)
-                        return i;
-                }
-                return -1;
+        VNLayout
+        {
+            SettingsSubgroupHeader{
+                id: uiverLabel
+                text: qsTr("UI style") + App.loc.emptyString
+                Layout.preferredWidth: Math.max(implicitWidth, themeLabel.implicitWidth, languageLabel.implicitWidth)
             }
-            onActivated: (index) => {
-                             uiSettingsTools.settings.showUiUpdatedBanner = false;
-                             uiSettingsTools.settings.uiVersion = model[index].value;
-                         }
+
+            BaseComboBox {
+                Layout.leftMargin: parent.columns === 1 ? 16*appWindow.zoom : 0
+                settingsStyle: true
+                model: [
+                    {text: qsTr("New (beta)") + App.loc.emptyString, value: 2},
+                    {text: qsTr("Classic") + App.loc.emptyString, value: 1}
+                ]
+                currentIndex: {
+                    for (let i = 0; i < model.length; ++i) {
+                        if (model[i].value === uiSettingsTools.settings.uiVersion)
+                            return i;
+                    }
+                    return -1;
+                }
+                onActivated: (index) => {
+                                 uiSettingsTools.settings.showUiUpdatedBanner = false;
+                                 uiSettingsTools.settings.uiVersion = model[index].value;
+                             }
+            }
         }
-    }
 
-    SettingsGroupColumn {
-
-        anchors.left: parent.left
-
-        SettingsSubgroupHeader{
-            anchors.left: parent.left
-            text: qsTr("Language") + App.loc.emptyString
-        }
-
-        Column {
-            anchors.left: parent.left
-            anchors.leftMargin: 16*appWindow.zoom
-            spacing: parent.spacing
+        VNLayout
+        {
+            SettingsSubgroupHeader{
+                id: languageLabel
+                text: qsTr("Language") + App.loc.emptyString
+                Layout.preferredWidth: Math.max(implicitWidth, uiverLabel.implicitWidth, themeLabel.implicitWidth)
+            }
 
             Row {
-                anchors.left: parent.left
+                Layout.leftMargin: parent.columns === 1 ? 16*appWindow.zoom : 0
                 spacing: 30*appWindow.zoom
 
                 LanguageComboBox {}
@@ -92,12 +101,31 @@ Column {
                     anchors.verticalCenter: parent.verticalCenter
                 }
             }
+        }
 
-            BaseHyperLabel {
-                anchors.left: parent.left
-                text: qsTr("Your language is not listed or the translation isn't complete?") + " <a href='https://github.com/FreeDownloadManagerTeam/FDM6-localization'>" + qsTr("Let's fix it!") + "</a>" + App.loc.emptyString
-                font.pixelSize: 12*appWindow.fontZoom
-            }
+        BaseHyperLabel {
+            anchors.left: parent.left
+            anchors.leftMargin: 16*appWindow.zoom
+            text: qsTr("Your language is not listed or the translation isn't complete?") + " <a href='https://github.com/FreeDownloadManagerTeam/FDM6-localization'>" + qsTr("Let's fix it!") + "</a>" + App.loc.emptyString
+            font.pixelSize: (appWindow.uiver === 1 ? 12 : appWindow.theme_v2.fontSize)*appWindow.fontZoom
+        }
+    }
+
+    SettingsGroupColumn {
+
+        anchors.left: parent.left
+        width: parent.width
+
+        SettingsSubgroupHeader{
+            anchors.left: parent.left
+            text: qsTr("Options") + App.loc.emptyString
+        }
+
+        SettingsCheckBox {
+            text: qsTr("Launch at startup (minimized)") + App.loc.emptyString
+            checked: App.autorunEnabled()
+            onClicked: App.enableAutorun(checked)
+            visible: App.features.hasFeature(AppFeatures.Autorun)
         }
     }
 
@@ -178,7 +206,7 @@ Column {
             PickFileButton {
                 id: folderBtn
                 enabled: fixedFolderRadioBtn.checked
-                implicitHeight: 25*appWindow.zoom
+                Layout.preferredHeight: fixedDownloadFolder.height
                 onClicked: browseDlg.open()
                 QtLabs.FolderDialog {
                     id: browseDlg
@@ -192,6 +220,7 @@ Column {
             BaseButton {
                 text: qsTr("Macros") + App.loc.emptyString
                 enabled: fixedFolderRadioBtn.checked
+                Layout.preferredHeight: fixedDownloadFolder.height
                 onClicked: macrosMenu.open()
 
                 MacrosMenu {

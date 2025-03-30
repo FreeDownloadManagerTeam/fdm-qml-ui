@@ -99,7 +99,7 @@ Column
             PickFileButton {
                 id: folderBtn
                 Layout.alignment: Qt.AlignRight               
-                implicitHeight: 25*appWindow.zoom
+                implicitHeight: urlField.implicitHeight
                 onClicked: browseDlg.open()
                 FileDialog {
                     id: browseDlg

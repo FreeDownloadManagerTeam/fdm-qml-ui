@@ -13,19 +13,17 @@ BaseDialog
     property int recommendedWidth: 0
     property int recommendedHeight: 0
 
+    title: qsTr("Failed to convert") + App.loc.emptyString
+    onCloseClick: root.close()
+
     contentItem: BaseDialogItem
     {
-        titleText: qsTr("Failed to convert") + App.loc.emptyString
         focus: true
         Keys.onEscapePressed: root.close()
-        onCloseClick: root.close()
 
         ColumnLayout
         {
             Layout.fillWidth: true
-            Layout.leftMargin: 10*appWindow.zoom
-            Layout.rightMargin: 10*appWindow.zoom
-            Layout.bottomMargin: 10*appWindow.zoom
             spacing: 10*appWindow.zoom
 
             ListView
@@ -63,12 +61,13 @@ BaseDialog
 
     onFilesChanged:
     {
-        var w = 300*appWindow.zoom, h = 110*appWindow.zoom;
+        var w = 300*appWindow.zoom,
+        h = contentItem.implicitHeight + header.implicitHeight + root.topPadding + root.bottomPadding;
 
         for (var i = 0; i < files.length; ++i)
         {
-            w = Math.max(w, fm.advanceWidth(files[i]) + 10*appWindow.zoom);
-            h += fm.font.pixelSize + 2*appWindow.zoom;
+            w = Math.max(w, fm.advanceWidth(files[i]) + root.leftPadding + root.rightPadding);
+            h += fm.height;
         }
 
         root.recommendedWidth = w;

@@ -6,20 +6,21 @@ Button {
     id: customBtn
 
     property bool enabled: true
-    property int radius: 0
+    property int radius: appWindow.uiver === 1 ? 0 : 4*appWindow.zoom
 
-    leftPadding: 10*appWindow.zoom
-    rightPadding: 10*appWindow.zoom
-    opacity: enabled ? 1 : 0.4
+    leftPadding: (appWindow.uiver === 1 ? 10 : 16)*appWindow.zoom
+    rightPadding: leftPadding
+    topPadding: (appWindow.uiver === 1 ? 5 : 4)*appWindow.zoom
+    bottomPadding: topPadding
+
+    opacity: enabled ? 1 : (appWindow.uiver === 1 ? 0.4 : appWindow.theme_v2.opacityDisabled)
 
     property bool isHovered: false
     property bool isPressed: false
 
     background: Rectangle {
-        implicitHeight: 22*appWindow.zoom
-        implicitWidth: Math.max(labelElement.implicitWidth + 6*appWindow.zoom, 60*appWindow.zoom)
-
-        border.color: "#d4d4d4"
+        color: appWindow.uiver === 1 ? "white" : appWindow.theme_v2.bg300
+        border.color: appWindow.uiver === 1 ? "#d4d4d4" : appWindow.theme_v2.bg500
         border.width: 1*appWindow.zoom
         radius: customBtn.radius
     }
@@ -29,9 +30,9 @@ Button {
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         text: parent.text
-        color: "#000"
-        font.pixelSize: 13*appWindow.fontZoom
-        font.family: Qt.platform.os === "osx" ? font.family : "Arial"
+        color: appWindow.uiver === 1 ? "#000" : appWindow.theme_v2.bg700
+        font.pixelSize: (appWindow.uiver === 1 ? 13 : 12)*appWindow.fontZoom
+        font.weight: appWindow.uiver === 1 ? 400 : 500
     }
 
     MouseArea {
@@ -43,41 +44,7 @@ Button {
         onExited: customBtn.isHovered = false
         onPressed: customBtn.isPressed = true
         onReleased: customBtn.isPressed = false
-    }
 
-
-
-    function getGradientColorTop()
-    {
-             if (!customBtn.enabled) {
-                return "#f0f0f0";
-            }
-            if (customBtn.isHovered) {
-                if (customBtn.isPressed) {
-                    return "#e5e5e5";
-                } else {
-                    return "#ffffff";
-                }
-
-            } else {
-                return "#f0f0f0";
-            }
-    }
-
-    function getGradientColorBottom()
-    {
-            if (!customBtn.enabled) {
-                return "#e5e5e5";
-            }
-            if (customBtn.isHovered) {
-                if (customBtn.isPressed) {
-                    return "#dbdbdb";
-                } else {
-                    return "#f5f5f5";
-                }
-
-            } else {
-                return "#e5e5e5";
-            }
+        cursorShape: appWindow.uiver === 1 ? Qt.ArrowCursor : Qt.PointingHandCursor
     }
 }

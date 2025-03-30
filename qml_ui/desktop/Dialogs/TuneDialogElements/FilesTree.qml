@@ -24,6 +24,7 @@ ColumnLayout {
 
         BaseLabel {
             text: qsTr("Files") + App.loc.emptyString
+            dialogLabel: true
             anchors.left: parent.left
         }
 

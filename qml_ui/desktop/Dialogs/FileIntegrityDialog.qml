@@ -8,8 +8,6 @@ import "../BaseElements"
 BaseDialog {
     id: root
 
-    width: 542*appWindow.zoom
-
     property bool verificationEnabled: currentHash.text != "" && userHash.text != ""
     property bool verificationOK: verificationEnabled && currentHash.text.toLowerCase() == userHash.text.toLowerCase().trim()
 
@@ -17,15 +15,14 @@ BaseDialog {
         id: fileIntegrityTools
     }
 
+    title: qsTr("Check file integrity") + App.loc.emptyString
+    onCloseClick: root.reject()
+
     contentItem: BaseDialogItem {
-        titleText: qsTr("Check file integrity") + App.loc.emptyString
         Keys.onEscapePressed: root.reject()
-        onCloseClick: root.reject()
 
         ColumnLayout {
             Layout.fillWidth: true
-            Layout.leftMargin: 10*appWindow.zoom
-            Layout.rightMargin: 10*appWindow.zoom
             spacing: 7*appWindow.zoom
 
             BaseLabel {
@@ -64,6 +61,7 @@ BaseDialog {
 
                     DownloadsItemProgressIndicator {
                         Layout.fillWidth: true
+                        Layout.minimumWidth: currentHash.Layout.minimumWidth
                         percent: fileIntegrityTools.calculatingProgress
                     }
 
@@ -74,6 +72,7 @@ BaseDialog {
                     id: currentHash
                     visible: !fileIntegrityTools.calculatingInProgress
                     Layout.fillWidth: true
+                    Layout.minimumWidth: 400*appWindow.fontZoom
                     selectByMouse: true
                     readOnly: true
                 }
@@ -108,7 +107,6 @@ BaseDialog {
 
             RowLayout {
                 Layout.topMargin: 10*appWindow.zoom
-                Layout.bottomMargin: 10*appWindow.zoom
                 Layout.alignment: Qt.AlignRight
 
                 spacing: 5*appWindow.zoom

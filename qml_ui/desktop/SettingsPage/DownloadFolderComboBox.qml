@@ -14,9 +14,6 @@ BaseComboBox {
     Layout.leftMargin: qtbug.leftMargin(40*appWindow.zoom,0)
     Layout.rightMargin: qtbug.rightMargin(40*appWindow.zoom,0)
 
-    rightPadding: 5*appWindow.zoom
-    leftPadding: 5*appWindow.zoom
-
     editable: true
 
     popupVisibleRowsCount: 7
@@ -60,15 +57,13 @@ BaseComboBox {
 
     contentItem: BaseTextField {
         text: root.editText
-        anchors.left: parent.left
-        rightPadding: qtbug.rightPadding(7*appWindow.zoom, 30*appWindow.zoom)
-        leftPadding: qtbug.leftPadding(7*appWindow.zoom, 30*appWindow.zoom)
+        topPadding: 0
+        bottomPadding: 0
+        leftPadding: qtbug.leftPadding(0, root.indicator.width + 4*appWindow.zoom)
+        rightPadding: qtbug.rightPadding(0, root.indicator.width + 4*appWindow.zoom)
         font.pixelSize: root.fontSize
         color: root.isCurrentPathInvalid ? appWindow.theme.errorMessage : appWindow.theme.settingsItem
-        background: Rectangle {
-            color: "transparent"
-            border.color: "transparent"
-        }
+        background: Item {}
     }
 
     Component.onCompleted: {

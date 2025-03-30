@@ -3,6 +3,7 @@ import QtQuick.Layouts
 import QtQuick.Controls
 import Qt5Compat.GraphicalEffects
 import "../../common"
+import "../BaseElements/V2"
 import org.freedownloadmanager.fdm 1.0
 
 Rectangle
@@ -30,6 +31,8 @@ Rectangle
 
         TextField
         {
+            id: searchField
+
             Layout.fillWidth: true
 
             background: Item {}
@@ -47,6 +50,19 @@ Rectangle
             }
 
             onTextChanged: downloadsViewTools.setDownloadsTitleFilter(text)
+        }
+
+        SvgImage_V2 {
+            source: Qt.resolvedUrl("close.svg")
+            imageColor: appWindow.theme_v2.bg600
+            visible: searchField.text
+            MouseAreaWithHand_V2 {
+                anchors.fill: parent
+                onClicked: {
+                    searchField.text = "";
+                    searchField.forceActiveFocus();
+                }
+            }
         }
     }
 }

@@ -9,19 +9,17 @@ BaseDialog {
 
     property string message: ""
 
+    title: qsTr("Are you sure you want to quit?") + App.loc.emptyString
+    onCloseClick: root.close()
+
     contentItem: BaseDialogItem {
-        titleText: qsTr("Are you sure you want to quit?") + App.loc.emptyString
 
         focus: true
         Keys.onEscapePressed: root.close()
         Keys.onReturnPressed: root.close()
-        onCloseClick: root.close()
 
         Column {
             id: col
-            Layout.leftMargin: 10*appWindow.zoom
-            Layout.rightMargin: 10*appWindow.zoom
-            Layout.bottomMargin: 10*appWindow.zoom
             spacing: 5*appWindow.zoom
 
             BaseLabel

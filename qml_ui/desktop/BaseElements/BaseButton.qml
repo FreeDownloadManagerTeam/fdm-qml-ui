@@ -1,4 +1,5 @@
 import QtQuick 2.10
+import "V2"
 
 Loader
 {
@@ -9,10 +10,12 @@ Loader
     property string text
 
     property bool blueBtn: false
+    property bool dangerBtn: false
     property bool smallBtn: false
     property bool alternateBtnPressed: false
     property bool isPressed: false
     property int radius: 0
+    property bool useUppercase: blueBtn || dangerBtn
 
     property color primaryBtnColor: blueBtn ? appWindow.theme.btnBlueBackgroud : appWindow.theme.btnGreyBackgroud
     property color secondaryBtnColor: blueBtn ? appWindow.theme.btnGreyBackgroud : appWindow.theme.btnBlueBackgroud
@@ -47,9 +50,16 @@ Loader
         }
         else
         {
+            var __item = item;
             item.title = Qt.binding(() => root.text);
-            item.primaryButton = Qt.binding(() => root.blueBtn);
+            item.buttonType = Qt.binding(() => root.blueBtn ? ToolbarFlatButton_V2.PrimaryButton :
+                                               root.dangerBtn ? ToolbarFlatButton_V2.DangerButton :
+                                                                ToolbarFlatButton_V2.NormalButton)
             item.leftPadding = item.rightPadding = 12*appWindow.zoom
+            item.bgColor = Qt.binding(() => __item.buttonType == ToolbarFlatButton_V2.NormalButton ?
+                                          appWindow.theme_v2.bg400 :
+                                          __item.bgColorForButtonType(__item.buttonType));
+            item.useUppercase = Qt.binding(() => root.useUppercase);
             root.isPressed = false;
         }
     }

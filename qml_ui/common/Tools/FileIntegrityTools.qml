@@ -70,7 +70,7 @@ Item {
         var m = hashCombo.model;
 
         for (var i = 0; i < hashCombo.model.length; i++) {
-            m.splice(i,i,{text: hashCombo.model[i].text, algorithm: hashCombo.model[i].algorithm, hash: ""});
+            m.splice(i,1,{text: hashCombo.model[i].text, algorithm: hashCombo.model[i].algorithm, hash: ""});
         }
 
         hashCombo.model = m;

@@ -15,68 +15,60 @@ BaseDialog
     property int recommendedWidth: 0
     property int recommendedHeight: 0
 
+    title: qsTr("Destination files already exists") + App.loc.emptyString
+    onCloseClick: root.doAbort()
+
     contentItem: BaseDialogItem
     {
-        titleText: qsTr("Destination files already exists") + App.loc.emptyString
         focus: true
         Keys.onEscapePressed: root.doAbort()
-        onCloseClick: root.doAbort()
 
-        ColumnLayout
+        ListView
         {
+            clip: true
             Layout.fillWidth: true
-            Layout.leftMargin: 10*appWindow.zoom
-            Layout.rightMargin: 10*appWindow.zoom
-            Layout.bottomMargin: 10*appWindow.zoom
-            spacing: 10*appWindow.zoom
-
-            ListView
+            Layout.fillHeight: true
+            ScrollBar.vertical: ScrollBar {}
+            model: root.files
+            delegate: BaseLabel
             {
-                clip: true
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                ScrollBar.vertical: ScrollBar {}
-                model: root.files
-                delegate: BaseLabel
-                {
-                    width: parent.width
-                    elide: Text.ElideMiddle
-                    text: modelData
-                }
+                width: parent.width
+                elide: Text.ElideMiddle
+                text: modelData
+            }
+        }
+
+        RowLayout
+        {
+            id: buttons
+
+            Layout.alignment: Qt.AlignRight
+
+            BaseButton
+            {
+                text: qsTr("Overwrite All") + App.loc.emptyString
+                blueBtn: true
+                onClicked: doRespond(Array(files.length).fill(AbstractDownloadsUi.ExistingFileOverwrite))
             }
 
-            RowLayout
+            BaseButton
             {
-                id: buttons
+                text: qsTr("Rename All") + App.loc.emptyString
+                blueBtn: true
+                onClicked: doRespond(Array(files.length).fill(AbstractDownloadsUi.ExistingFileRename))
+            }
 
-                Layout.alignment: Qt.AlignRight
+            BaseButton
+            {
+                text: qsTr("Skip All") + App.loc.emptyString
+                blueBtn: true
+                onClicked: doRespond(Array(files.length).fill(AbstractDownloadsUi.ExistingFileSkip))
+            }
 
-                BaseButton
-                {
-                    text: qsTr("Overwrite All") + App.loc.emptyString
-                    blueBtn: true
-                    onClicked: doRespond(Array(files.length).fill(AbstractDownloadsUi.ExistingFileOverwrite))
-                }
-
-                BaseButton
-                {
-                    text: qsTr("Rename All") + App.loc.emptyString
-                    blueBtn: true
-                    onClicked: doRespond(Array(files.length).fill(AbstractDownloadsUi.ExistingFileRename))
-                }
-
-                BaseButton
-                {
-                    text: qsTr("Skip All") + App.loc.emptyString
-                    blueBtn: true
-                    onClicked: doRespond(Array(files.length).fill(AbstractDownloadsUi.ExistingFileSkip))
-                }
-
-                BaseButton
-                {
-                    text: qsTr("Abort") + App.loc.emptyString
-                    onClicked: root.doAbort()
-                }
+            BaseButton
+            {
+                text: qsTr("Abort") + App.loc.emptyString
+                onClicked: root.doAbort()
             }
         }
     }
@@ -91,12 +83,13 @@ BaseDialog
 
     onFilesChanged:
     {
-        var w = Math.max(300*appWindow.zoom, buttons.width + 35*appWindow.zoom), h = 110*appWindow.zoom;
+        var w = Math.max(300*appWindow.zoom, buttons.width + 35*appWindow.zoom),
+        h = contentItem.implicitHeight + header.implicitHeight + root.topPadding + root.bottomPadding;
 
         for (var i = 0; i < files.length; ++i)
         {
-            w = Math.max(w, fm.advanceWidth(files[i]) + 10*appWindow.zoom);
-            h += fm.font.pixelSize + 2*appWindow.zoom;
+            w = Math.max(w, fm.advanceWidth(files[i]) + root.leftPadding + root.rightPadding);
+            h += fm.height;
         }
 
         root.recommendedWidth = w;

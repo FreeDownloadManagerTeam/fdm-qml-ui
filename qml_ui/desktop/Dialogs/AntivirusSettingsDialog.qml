@@ -9,17 +9,17 @@ import "../../common/Tools"
 BaseDialog {
     id: root
 
-    contentItem: BaseDialogItem {
-        titleText: qsTr("Virus check") + App.loc.emptyString
+    title: qsTr("Virus check") + App.loc.emptyString
+
+    onCloseClick: root.close()
+
+    contentItem: BaseDialogItem {       
         focus: true
         Keys.onEscapePressed: root.close()
         Keys.onReturnPressed: root.deleteFilesClick()
-        onCloseClick: root.close()
 
         ColumnLayout {
             Layout.fillWidth: true
-            Layout.leftMargin: 10*appWindow.zoom
-            Layout.rightMargin: 10*appWindow.zoom
             spacing: 3*appWindow.zoom
 
             BaseLabel {
@@ -30,7 +30,6 @@ BaseDialog {
 
             RowLayout {
                 Layout.topMargin: 10*appWindow.zoom
-                Layout.bottomMargin: 10*appWindow.zoom
                 Layout.alignment: Qt.AlignRight
 
                 spacing: 5*appWindow.zoom

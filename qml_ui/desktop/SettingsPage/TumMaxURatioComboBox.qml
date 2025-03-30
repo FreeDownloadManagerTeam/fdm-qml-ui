@@ -39,9 +39,6 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         enabled: root.enabled
 
-        rightPadding: 5*appWindow.zoom
-        leftPadding: 5*appWindow.zoom
-
         fontSize: 12*appWindow.fontZoom
         settingsStyle: true
 

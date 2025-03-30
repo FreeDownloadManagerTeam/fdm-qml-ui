@@ -7,17 +7,15 @@ BaseBaseErrorLabel
 {
     id: root
 
+    property alias containsMouse: ma.containsMouse
+
     spacing: 3*appWindow.zoom
 
-    WaSvgImage
+    SvgImage_V2
     {
         visible: root.showIcon
-
-        zoom: appWindow.zoom
-        source: appWindow.theme.elementsIconsRoot + "/exclamation.svg"
-
-        Layout.alignment: Qt.AlignVCenter
-        Layout.topMargin: 2*appWindow.zoom + (appWindow.zoom2 < 0.9 ? -1 : appWindow.zoom2 > 1.3 ? 1 : 0)
+        source: Qt.resolvedUrl("triangle_alert.svg")
+        imageColor: appWindow.theme_v2.danger
     }
 
     BaseText_V2
@@ -40,15 +38,11 @@ BaseBaseErrorLabel
 
         MouseArea
         {
+            id: ma
             enabled: parent.truncated
-
-            propagateComposedEvents: true
             anchors.fill: parent
             hoverEnabled: true
-            cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
-
-            onClicked : function (mouse) {mouse.accepted = false;}
-            onPressed: function (mouse) {mouse.accepted = false;}
+            acceptedButtons: Qt.NoButton
 
             BaseToolTip_V2
             {

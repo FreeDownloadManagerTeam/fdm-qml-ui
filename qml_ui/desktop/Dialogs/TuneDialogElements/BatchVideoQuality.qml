@@ -12,6 +12,7 @@ ColumnLayout {
     BaseLabel {
         Layout.topMargin: 6*appWindow.zoom
         text: qsTr("Max. video quality:") + App.loc.emptyString
+        dialogLabel: true
     }
 
     PreferredVideoQualityCombobox {

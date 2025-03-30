@@ -13,8 +13,6 @@ import "../../common"
 BaseDialog {
     id: root
 
-    width: 542*appWindow.zoom
-
     property var downloadsIds: []
     property var filesIndices: []
     property bool wrongFilePathWarning: false
@@ -24,13 +22,11 @@ BaseDialog {
         property bool accepting: false
     }
 
-    contentItem: BaseDialogItem {
-        titleText: qsTr("Convert to mp4") + App.loc.emptyString
-        focus: true
+    title: qsTr("Convert to mp4") + App.loc.emptyString
+    onCloseClick: root.close()
 
-        onCloseClick: {
-            root.close();
-        }
+    contentItem: BaseDialogItem {
+        focus: true
 
         Keys.onEscapePressed: {
             root.close();
@@ -42,8 +38,6 @@ BaseDialog {
 
         ColumnLayout {
             Layout.fillWidth: true
-            Layout.leftMargin: 10*appWindow.zoom
-            Layout.rightMargin: 10*appWindow.zoom
             spacing: 10*appWindow.zoom
 
 
@@ -59,6 +53,7 @@ BaseDialog {
                     enabled: !d.accepting
                     focus: true
                     Layout.fillWidth: true
+                    Layout.minimumWidth: 500*appWindow.fontZoom
                     onAccepted: root.doOK()
                     Keys.onEscapePressed: root.close();
                 }
@@ -84,7 +79,6 @@ BaseDialog {
 
             RowLayout {
                 Layout.topMargin: 10*appWindow.zoom
-                Layout.bottomMargin: 10*appWindow.zoom
                 Layout.alignment: Qt.AlignRight
 
                 spacing: 5*appWindow.zoom

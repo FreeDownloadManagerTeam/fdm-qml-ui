@@ -4,18 +4,29 @@ import org.freedownloadmanager.fdm 1.0
 import org.freedownloadmanager.vmsqt 1.0
 import "../BaseElements"
 
-Rectangle {
+BannerStrip {
     id: shutdownBanner
-    visible: shutdownTools.showBanner
-    width: parent.width
-    height: parent.height
-    color: appWindow.theme.shutdownBannerBackground
+
+    readonly property bool shouldBeVisible: shutdownTools.showBanner
+    visible: shouldBeVisible
+
+    isShutdownBanner: true
+
+    implicitWidth: meat.implicitWidth + meat.anchors.leftMargin + meat.anchors.rightMargin
+    implicitHeight: meat.implicitHeight + meat.anchors.topMargin + meat.anchors.bottomMargin
+
+    readonly property int __spacing: (appWindow.uiver === 1 ? 10 : 16)*appWindow.zoom
 
     RowLayout {
+        id: meat
+
         anchors.fill: parent
-        height: parent.height
-        anchors.leftMargin: 10*appWindow.zoom
-        anchors.rightMargin: 10*appWindow.zoom
+        anchors.leftMargin: (appWindow.uiver === 1 ? 10 : 12)*appWindow.zoom
+        anchors.rightMargin: anchors.leftMargin
+        anchors.topMargin: (appWindow.uiver === 1 ? 0 : 8)*appWindow.zoom
+        anchors.bottomMargin: anchors.topMargin
+
+        spacing: 0
 
         BaseLabel {
             Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
@@ -24,7 +35,14 @@ Rectangle {
                   (shutdownTools.powerManagement.shutdownType == VmsQt.HibernateComputer ? qsTr("Computer will be hibernate after all downloads are completed.") :
                   (shutdownTools.powerManagement.shutdownType == VmsQt.ShutdownComputer  ? qsTr("Computer will be shutdown after all downloads are completed.") : "")) + App.loc.emptyString
             font.pixelSize: 13*appWindow.fontZoom
-            color: "#ffffff"
+            font.weight: appWindow.uiver === 1 ? 400 : 500
+            color: appWindow.uiver === 1 ? "#ffffff" : appWindow.theme_v2.secondary
+        }
+
+        Item {
+            implicitHeight: 1
+            Layout.fillWidth: true
+            Layout.minimumWidth: __spacing
         }
 
         BannerCustomButton {

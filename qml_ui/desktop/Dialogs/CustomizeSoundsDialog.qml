@@ -10,19 +10,16 @@ import org.freedownloadmanager.fdm.appnotificationevent 1.0
 BaseDialog {
     id: root
 
-    width: 542*appWindow.zoom
-
     property int selectedItem: -1
 
+    title: qsTr("Customize sounds") + App.loc.emptyString
+    onCloseClick: root.close()
+
     contentItem: BaseDialogItem {
-        titleText: qsTr("Customize sounds") + App.loc.emptyString
         Keys.onEscapePressed: root.close()
-        onCloseClick: root.close()
 
         ColumnLayout {
             Layout.fillWidth: true
-            Layout.leftMargin: 10*appWindow.zoom
-            Layout.rightMargin: 10*appWindow.zoom
             spacing: 7*appWindow.zoom
 
             Rectangle {
@@ -168,7 +165,6 @@ BaseDialog {
 
             RowLayout {
                 Layout.topMargin: 10*appWindow.zoom
-                Layout.bottomMargin: 10*appWindow.zoom
                 Layout.alignment: Qt.AlignRight
                 Layout.fillWidth: true
 

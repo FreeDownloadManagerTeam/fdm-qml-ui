@@ -9,21 +9,16 @@ import "../../common/Tools"
 BaseDialog {
     id: root
 
+    title: qsTr("About") + App.loc.emptyString
+
     contentItem: BaseDialogItem {
-        titleText: qsTr("About") + App.loc.emptyString
-
-        width: col.width + 20*appWindow.zoom
-
         focus: true
         Keys.onEscapePressed: root.close()
         Keys.onReturnPressed: root.close()
-        onCloseClick: root.close()
 
         Column {
             id: col
-            Layout.leftMargin: 10*appWindow.zoom
-            Layout.rightMargin: 10*appWindow.zoom
-            Layout.bottomMargin: 10*appWindow.zoom
+
             spacing: 5*appWindow.zoom
 
             BaseLabel {
@@ -99,6 +94,8 @@ BaseDialog {
             }
         }
     }
+
+    onCloseClick: root.close()
 
     onOpened: {
         forceActiveFocus();

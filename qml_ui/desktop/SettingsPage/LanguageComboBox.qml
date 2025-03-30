@@ -6,10 +6,6 @@ import "../../common"
 
 BaseComboBox {
     id: root
-    implicitHeight: Math.round(25*appWindow.fontZoom)
-    implicitWidth: 30*appWindow.zoom + 170*appWindow.fontZoom
-    rightPadding: 5*appWindow.zoom
-    leftPadding: 5*appWindow.zoom
 
     popupVisibleRowsCount: 10
     settingsStyle: true
@@ -17,16 +13,43 @@ BaseComboBox {
     model: App.loc.installedTranslations
     textRole: ""
 
-    delegate: Rectangle {
+    function itemText(loc) {
+        return App.loc.translationLanguageString(loc) + " (" + App.loc.translationCountryString(loc) + ")"
+    }
+
+    implicitWidth: {
+        let h = 0;
+        for (let i = 0; i < model.length; ++i)
+            h = Math.max(h, fontMetrics.advanceWidth(itemText(model[i])));
+        let result = Math.max(comboMinimumWidth, h + (18+5)*appWindow.zoom/*flag*/ + 44*appWindow.zoom + fontMetrics.font.pixelSize*0);
+        result += root.leftPadding + root.rightPadding
+        return comboMaximumWidth ? Math.min(comboMaximumWidth, result) : result;
+    }
+
+    delegate: Item {
         property bool hover: false
-        color: hover ? appWindow.theme.menuHighlight : "transparent"
-        height: 18*appWindow.fontZoom
-        width: root.width
+
+        anchors.left: parent ? parent.left : undefined
+        height: recommendedDelegateHeight
+        width: recommendedDelegateWidth
+
+        Rectangle {
+            anchors.fill: parent
+            anchors.margins: appWindow.uiver === 1 ? 0 : 2*appWindow.zoom
+            color: parent.hover ?
+                       (appWindow.uiver === 1 ? appWindow.theme.menuHighlight : appWindow.theme_v2.hightlightBgColor) :
+                       "transparent"
+            radius: parent.hover ?
+                        (appWindow.uiver === 1 ? 0 : 4*appWindow.zoom) :
+                        0
+        }
 
         Row
         {
             anchors.left: parent.left
-            anchors.leftMargin: 6*appWindow.zoom
+            anchors.leftMargin: root.leftPadding
+            anchors.rightMargin: root.rightPadding
+            anchors.verticalCenter: parent.verticalCenter
             spacing: 5
 
             WaSvgImage {
@@ -40,7 +63,7 @@ BaseComboBox {
                 anchors.verticalCenter: parent.verticalCenter
                 font.pixelSize: appWindow.fonts.defaultSize
                 color: appWindow.theme.settingsItem
-                text: App.loc.translationLanguageString(modelData) + " (" + App.loc.translationCountryString(modelData) + ")"
+                text: itemText(modelData)
                 font.capitalization: Font.Capitalize
             }
         }
@@ -60,8 +83,6 @@ BaseComboBox {
     }
 
     contentItem: Row {
-        anchors.left: parent.left
-        anchors.leftMargin: 7*appWindow.zoom
         spacing: 5*appWindow.zoom
 
         Rectangle {
@@ -80,31 +101,8 @@ BaseComboBox {
             anchors.verticalCenter: parent.verticalCenter
             font.pixelSize: appWindow.fonts.defaultSize
             color: appWindow.theme.settingsItem
-            text: App.loc.translationLanguageString(App.loc.currentTranslation) + " (" + App.loc.translationCountryString(App.loc.currentTranslation) + ")"
+            text: itemText(App.loc.currentTranslation)
             font.capitalization: Font.Capitalize
-        }
-    }
-
-    popup: Popup {
-        y: root.height
-        width: root.width
-        height: 182*appWindow.fontZoom
-        padding: 1*appWindow.zoom
-
-        background: Rectangle {
-            color: appWindow.theme.background
-            border.color: appWindow.theme.settingsControlBorder
-            border.width: 1*appWindow.zoom
-        }
-
-        contentItem: ListView {
-            clip: true
-            model: root.model
-            currentIndex: root.highlightedIndex
-            delegate: root.delegate
-            flickableDirection: Flickable.VerticalFlick
-            ScrollBar.vertical: ScrollBar{ policy: ScrollBar.AlwaysOn; }
-            boundsBehavior: Flickable.StopAtBounds
         }
     }
 }

@@ -8,9 +8,6 @@ BaseComboBox {
 
     signal textChanged(string str)
 
-    rightPadding: 5*appWindow.zoom
-    leftPadding: 5*appWindow.zoom
-
     editable: true
 
     popupVisibleRowsCount: 7
@@ -25,13 +22,12 @@ BaseComboBox {
 
     contentItem: BaseTextField {
         text: root.editText
-        leftPadding: qtbug.leftPadding(0, 30*appWindow.zoom)
-        rightPadding: qtbug.rightPadding(0, 30*appWindow.zoom)
+        topPadding: 0
+        bottomPadding: 0
+        leftPadding: qtbug.leftPadding(0, root.indicator.width + 4*appWindow.zoom)
+        rightPadding: qtbug.rightPadding(0, root.indicator.width + 4*appWindow.zoom)
         selectByMouse: true
-        background: Rectangle {
-            color: "transparent"
-            border.color: "transparent"
-        }
+        background: Item {}
 
         inputMethodHints: Qt.ImhTime
         validator: QtRegExpValidator { regExp: /^(\d{0,2})([:]\d{0,2})?$/ }

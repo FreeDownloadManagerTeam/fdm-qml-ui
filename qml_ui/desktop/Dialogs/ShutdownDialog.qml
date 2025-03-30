@@ -9,19 +9,17 @@ BaseDialog {
     id: root
     property int timeout: 30
     property int countdown: root.timeout
-    width: 550*appWindow.zoom
+
+    title: qsTr("Confirm") + App.loc.emptyString
+    onCloseClick: root.setShutdownAccepted(false)
 
     contentItem: BaseDialogItem {
-        titleText: qsTr("Confirm") + App.loc.emptyString
 
         Keys.onReturnPressed: root.setShutdownAccepted(true)
         Keys.onEscapePressed: root.setShutdownAccepted(false)
-        onCloseClick: root.setShutdownAccepted(false)
 
         ColumnLayout {
             Layout.fillWidth: true
-            Layout.leftMargin: 10*appWindow.zoom
-            Layout.rightMargin: 10*appWindow.zoom
             spacing: 3*appWindow.zoom
 
             BaseLabel {
@@ -29,12 +27,12 @@ BaseDialog {
                       shutdownTools.powerManagement.shutdownType == VmsQt.SuspendComputer ? qsTr("Attention! Your computer will be put to Sleep mode.") :
                       (shutdownTools.powerManagement.shutdownType == VmsQt.HibernateComputer ? qsTr("Attention! Your computer will be hibernated.") :
                       (shutdownTools.powerManagement.shutdownType == VmsQt.ShutdownComputer  ? qsTr("Attention! Your computer will be shut down.") : "")) + App.loc.emptyString
+                Layout.maximumWidth: 550*appWindow.fontZoom
             }
 
             RowLayout {
                 Layout.fillWidth: true
                 Layout.topMargin: 10*appWindow.zoom
-                Layout.bottomMargin: 10*appWindow.zoom
 
                 Item {
                     Layout.fillWidth: true
@@ -52,16 +50,16 @@ BaseDialog {
                     alternateBtnPressed: cnclBtn.isPressed
                     onClicked: root.setShutdownAccepted(true)
                 }
-
-                Timer {
-                    id: countdownTimer
-                    interval: 1000
-                    running: false
-                    repeat: true
-                    onTriggered: timerHandler()
-                }
             }
         }
+    }
+
+    Timer {
+        id: countdownTimer
+        interval: 1000
+        running: false
+        repeat: true
+        onTriggered: timerHandler()
     }
 
     function open(){

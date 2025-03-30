@@ -40,23 +40,26 @@ Menu {
         }
     }
 
-    background: Rectangle {
-        color: appWindow.uiver === 1 ? "transparent" : appWindow.theme_v2.popupBgColor
-        radius: appWindow.uiver === 1 ? 0 : 8*appWindow.zoom
+    background: Item {
         RectangularGlow {
-            visible: appWindow.uiver === 1
+            visible: appWindow.uiver === 1 || appWindow.theme_v2.useGlow
             anchors.fill: menuBackground
-            color: "black"
+            color: appWindow.uiver === 1 ?
+                       "black" :
+                       appWindow.theme_v2.glowColor
             glowRadius: 0
             spread: 0
-            cornerRadius: 20*appWindow.zoom
+            cornerRadius: appWindow.uiver === 1 ?
+                              20*appWindow.zoom :
+                              menuBackground.radius
         }
         Rectangle {
-            visible: appWindow.uiver === 1
             id: menuBackground
             anchors.fill: parent
-            color: appWindow.theme.background
-            radius: 6*appWindow.zoom
+            color: appWindow.uiver === 1 ?
+                       appWindow.theme.background :
+                       appWindow.theme_v2.popupBgColor
+            radius: (appWindow.uiver === 1 ? 6 : 8)*appWindow.zoom
         }
     }
 

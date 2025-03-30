@@ -11,6 +11,7 @@ ColumnLayout {
     BaseLabel {
         Layout.topMargin: 6*appWindow.zoom
         text: qsTr("Quality:") + App.loc.emptyString
+        dialogLabel: true
     }
 
     DownloadQualityCombobox {

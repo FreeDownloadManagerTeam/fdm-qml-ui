@@ -26,9 +26,15 @@ ListView
         //parentY: y
         noActionsAllowed: downloadsViewTools.showingDownloadsWithMissingFilesOnly
         DownloadsViewItemMouseArea {
+            id: itemMa
             downloadModel: model
             anchors.fill: parent
         }
+
+        onJustPressed: mouse => itemMa.onPressed(mouse)
+        onJustReleased: mouse => itemMa.onReleased(mouse)
+        onJustClicked: mouse => itemMa.onClicked(mouse)
+
         //readonly property bool lastChild: index == count -1
 
         //batch download background
@@ -82,8 +88,17 @@ ListView
     }*/
 
     ScrollBar.vertical: BaseScrollBar_V2 {
+        id: vbar
+
         policy: parent.contentHeight > parent.height ?
                     ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
+
+        stepSize: 1.0 / listView.count
+        snapMode: ScrollBar.SnapOnRelease
+    }
+
+    WheelHandler {
+        onWheel: event => Qt.callLater(event.angleDelta.y > 0 ? vbar.decrease : vbar.increase)
     }
 
     DownloadsDropArea_V2 {

@@ -8,9 +8,6 @@ import "../../common"
 BaseComboBox {
     id: root
 
-    rightPadding: 5*appWindow.zoom
-    leftPadding: 5*appWindow.zoom
-
     model: [
         {text: qsTr("MD5"), algorithm: AbstractDownloadsUi.Md5, hash: ""},
         {text: qsTr("SHA-1"), algorithm: AbstractDownloadsUi.Sha1, hash: ""},

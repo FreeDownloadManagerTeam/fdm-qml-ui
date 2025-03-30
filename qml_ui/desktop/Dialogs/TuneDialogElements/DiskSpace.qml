@@ -8,7 +8,9 @@ BaseLabel {
 
     visible: downloadTools.fileSize >= 0 || downloadTools.freeDiskSpace >= 0
 
-    color: downloadTools.notEnoughSpaceWarning ? appWindow.theme.errorMessage : "#737373"
+    color: downloadTools.notEnoughSpaceWarning ?
+               (appWindow.uiver === 1 ? appWindow.theme.errorMessage : appWindow.theme_v2.danger) :
+               (appWindow.uiver === 1 ? "#737373" : appWindow.theme_v2.bg600)
 
     text: ((downloadTools.freeDiskSpace >= 0 && downloadTools.fileSize >= 0) ?
               qsTr("Size: %1 (Disk space: %2)").arg(App.bytesAsText(downloadTools.fileSize)).arg(App.bytesAsText(downloadTools.freeDiskSpace)) :

@@ -8,6 +8,7 @@ import "./Banners"
 import "./BottomPanel"
 import "./BaseElements"
 import "./V2"
+import "./BaseElements/V2"
 import org.freedownloadmanager.fdm 1.0
 import org.freedownloadmanager.fdm.appfeatures 1.0
 
@@ -134,36 +135,14 @@ Page {
         anchors.fill: parent
         spacing: 0
 
-        Rectangle {
+        MainBannersStrip {
             id: banners
-
-            Layout.preferredHeight: (integrationBanner.item && integrationBanner.item.visible) ||
-                                    shutdownBanner.visible || uiUpdatedBanner.visible ?
-                                        30*appWindow.zoom : 0
+            visible: appWindow.uiver === 1 && activeBanner
             Layout.fillWidth: true
-            Layout.alignment: Qt.AlignTop
-            color: "transparent"
-            clip: true
-
-            Loader {
-                id: integrationBanner
-                active: btSupported && !App.rc.client.active
-                source: "../bt/desktop/IntegrationBanner.qml"
-                width: parent.width
-                height: parent.height
-            }
-
-            UiUpdatedBanner {
-                id: uiUpdatedBanner
-            }
-
-            ShutdownBanner {
-                id: shutdownBanner
-            }
         }
 
         Item {
-            visible: appWindow.uiver !== 1 && banners.height > 0
+            visible: appWindow.uiver !== 1 && banners.visible
             implicitHeight: 16*appWindow.zoom
             implicitWidth: 1
         }
@@ -200,12 +179,31 @@ Page {
                         width: parent.width
                     }
 
-                    BatchDownloadTitle {
+                    RowLayout {
                         id: filtersBar2
+
                         visible: appWindow.uiver !== 1 &&
                                  downloadsViewTools.downloadsParentIdFilter > -1
-                        anchors.topMargin: 0
-                        anchors.rightMargin: 8*appWindow.zoom
+
+                        anchors.left: parent.left
+                        anchors.leftMargin: appWindow.theme_v2.mainWindowLeftMargin*appWindow.zoom
+                        anchors.right: parent.right
+                        anchors.rightMargin: appWindow.theme_v2.mainWindowRightMargin*appWindow.zoom
+
+                        BatchDownloadTitle_V2 {}
+
+                        BaseLabel {
+                            text: qsTr("Show all downloads") + App.loc.emptyString
+                            color: appWindow.theme_v2.bg800
+                            font.pixelSize: 12*appWindow.fontZoom
+                            font.capitalization: Font.AllUppercase
+                            Layout.alignment: Qt.AlignRight
+
+                            MouseAreaWithHand_V2 {
+                                anchors.fill: parent
+                                onClicked: selectedDownloadsTools.selectDownloadItemById(downloadsViewTools.downloadsParentIdFilter)
+                            }
+                        }
                     }
 
                     Rectangle {
@@ -216,7 +214,7 @@ Page {
                                           "transparent"
                         border.width: 1*appWindow.zoom
                         color: "transparent"
-                        anchors.topMargin: filtersBar.visible ? filtersBar.height : filtersBar2.visible ? filtersBar2.height + 8*appWindow.zoom : 0
+                        anchors.topMargin: filtersBar.visible ? filtersBar.height : filtersBar2.visible ? filtersBar2.height + 16*appWindow.zoom : 0
 
                         DownloadPageBackground {visible: appWindow.uiver === 1}
 

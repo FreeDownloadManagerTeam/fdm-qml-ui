@@ -3,6 +3,7 @@ import QtQuick.Layouts
 import QtQuick.Controls
 import "../BaseElements/V2"
 import "../../common"
+import "../../qt5compat"
 import org.freedownloadmanager.fdm
 import org.freedownloadmanager.fdm.appsettings
 import org.freedownloadmanager.fdm.dmcoresettings
@@ -42,14 +43,17 @@ RowLayout
 
     spacing: 0
 
+    Item {implicitHeight: 25*appWindow.zoom; implicitWidth: 1*appWindow.zoom}
+
     ToolbarFlatButton_V2 {
+        id: snailBtn
         iconSource: Qt.resolvedUrl("snail.svg")
         iconColor: isSnail ? appWindow.theme_v2.amber : appWindow.theme_v2.bg700
         border.color: isSnail ? iconColor : "transparent"
         radius: 4*appWindow.zoom
         topPadding: 2*appWindow.zoom
         bottomPadding: topPadding
-        leftPadding: 14*appWindow.zoom
+        leftPadding: 13*appWindow.zoom
         rightPadding: leftPadding
         tooltipText: qsTr("Snail mode frees bandwidth without stopping downloads.") + App.loc.emptyString
         property int prevTum
@@ -72,118 +76,157 @@ RowLayout
         color: appWindow.theme_v2.bg800
     }
 
-    RowLayout {
+    Item {
         visible: !isSnail
-        spacing: 0
 
-        Item {
-            implicitWidth: 16*appWindow.zoom
-            implicitHeight: implicitWidth
-            SvgImage_V2 {
-                imageColor: appWindow.theme_v2.bg600
-                source: Qt.resolvedUrl("arrow_drop_down.svg")
-                anchors.centerIn: parent
-            }
-        }
-        BaseText_V2 {
-            text: App.speedAsText(App.downloads.stats.totalDownloadSpeed) + App.loc.emptyString
-            color: appWindow.theme_v2.bg800
-        }
+        implicitWidth: tumLayout.implicitWidth + tumLayout.x*2
+        implicitHeight: Math.max(tumLayout.implicitHeight, snailBtn.implicitHeight + 2*appWindow.zoom)
 
-        Item {implicitWidth: 8*appWindow.zoom; implicitHeight: 1}
-
-        Item {
-            implicitWidth: 16*appWindow.zoom
-            implicitHeight: implicitWidth
-            SvgImage_V2 {
-                imageColor: appWindow.theme_v2.bg600
-                source: Qt.resolvedUrl("arrow_drop_up.svg")
-                anchors.centerIn: parent
-            }
-        }
-        BaseText_V2 {
-            text: App.speedAsText(App.downloads.stats.totalUploadSpeed) + App.loc.emptyString
-            color: appWindow.theme_v2.bg800
+        Rectangle {
+            anchors.fill: parent
+            color: App.settings.tum.currentMode != TrafficUsageMode.High ?
+                       appWindow.theme_v2.opacityColor(tumColor, 0.1) :
+                       "transparent"
+            border.width: 1*appWindow.zoom
+            border.color: App.settings.tum.currentMode != TrafficUsageMode.High ?
+                              tumColor :
+                              appWindow.theme_v2.bg300
+            radius: 4*appWindow.zoom
         }
 
-        Item {implicitWidth: 12*appWindow.zoom; implicitHeight: 1}
+        RowLayout {
+            id: tumLayout
 
-        Item {
-            implicitWidth: tumSelector.implicitWidth
-            implicitHeight: tumSelector.implicitHeight
-            RowLayout {
-                id: tumSelector
-                anchors.fill: parent
-                spacing: 0
-                Item {
-                    implicitWidth: childrenRect.width
-                    implicitHeight: 16*appWindow.zoom
-                    BaseText_V2 {
-                        text: tumDisplayText(App.settings.tum.currentMode) + App.loc.emptyString
-                        color: tumColor
-                        font.pixelSize: 12*appWindow.fontZoom
-                        font.capitalization: Font.AllUppercase
-                        anchors.verticalCenter: parent.verticalCenter
-                    }
-                }
-                Item {
-                    implicitWidth: 16*appWindow.zoom
-                    implicitHeight: implicitWidth
-                    SvgImage_V2 {
-                        imageColor: tumColor
-                        source: Qt.resolvedUrl("trending_up.svg")
-                        anchors.centerIn: parent
-                    }
+            anchors.verticalCenter: parent.verticalCenter
+            x: 4*appWindow.zoom
+
+            spacing: 0
+
+            Item {
+                implicitWidth: 16*appWindow.zoom
+                implicitHeight: implicitWidth
+                SvgImage_V2 {
+                    imageColor: appWindow.theme_v2.bg600
+                    source: Qt.resolvedUrl("arrow_drop_down.svg")
+                    anchors.centerIn: parent
                 }
             }
-            MouseAreaWithHand_V2 {
-                anchors.fill: parent
-                hoverEnabled: true
-                onClicked: {
-                    if (!tumSelectorPopupHelper.isPopupClosedRecently())
-                        tumSelectorPopup.open();
-                }
-                BaseToolTip_V2 {
-                    text: qsTr("Set the traffic usage mode") + App.loc.emptyString
-                    visible: parent.containsMouse && !tumSelectorPopup.opened
+            BaseText_V2 {
+                text: App.speedAsText(App.downloads.stats.totalDownloadSpeed) + App.loc.emptyString
+                color: appWindow.theme_v2.bg800
+            }
+
+            Item {implicitWidth: 8*appWindow.zoom; implicitHeight: 1}
+
+            Item {
+                implicitWidth: 16*appWindow.zoom
+                implicitHeight: implicitWidth
+                SvgImage_V2 {
+                    imageColor: appWindow.theme_v2.bg600
+                    source: Qt.resolvedUrl("arrow_drop_up.svg")
+                    anchors.centerIn: parent
                 }
             }
-            PopupHelper {
-                id: tumSelectorPopupHelper
-                popup: tumSelectorPopup
+            BaseText_V2 {
+                text: App.speedAsText(App.downloads.stats.totalUploadSpeed) + App.loc.emptyString
+                color: appWindow.theme_v2.bg800
             }
-            Popup {
-                id: tumSelectorPopup
-                y: -height
-                background: Rectangle {
-                    color: appWindow.theme_v2.popupBgColor
-                    radius: 8*appWindow.zoom
-                }
-                contentItem: ColumnLayout {
+
+            Item {implicitWidth: 16*appWindow.zoom; implicitHeight: 1}
+
+            Item {
+                implicitWidth: tumSelector.implicitWidth
+                implicitHeight: tumSelector.implicitHeight
+                RowLayout {
+                    id: tumSelector
+                    anchors.fill: parent
                     spacing: 0
-                    Repeater {
-                        model: [TrafficUsageMode.High, TrafficUsageMode.Medium, TrafficUsageMode.Low]
+                    Rectangle {
+                        implicitWidth: 16*appWindow.zoom
+                        implicitHeight: implicitWidth
+                        radius: 4*appWindow.zoom
+                        color: tumColor
+                        SvgImage_V2 {
+                            imageColor: appWindow.theme_v2.bgColor
+                            source: Qt.resolvedUrl("trending_up.svg")
+                            anchors.centerIn: parent
+                        }
+                    }
+                    Item {implicitWidth: 6*appWindow.zoom; implicitHeight: 1}
+                    Item {
+                        implicitWidth: childrenRect.width
+                        implicitHeight: 16*appWindow.zoom
+                        BaseText_V2 {
+                            text: tumDisplayText(App.settings.tum.currentMode) + App.loc.emptyString
+                            font.pixelSize: 12*appWindow.fontZoom
+                            font.capitalization: Font.AllUppercase
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+                    }
+                    Item {implicitWidth: 4*appWindow.zoom; implicitHeight: 1}
+                }
+                MouseAreaWithHand_V2 {
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    onClicked: {
+                        if (!tumSelectorPopupHelper.isPopupClosedRecently())
+                            tumSelectorPopup.open();
+                    }
+                    BaseToolTip_V2 {
+                        text: qsTr("Set the traffic usage mode") + App.loc.emptyString
+                        visible: parent.containsMouse && !tumSelectorPopup.opened
+                    }
+                }
+                PopupHelper {
+                    id: tumSelectorPopupHelper
+                    popup: tumSelectorPopup
+                }
+                Popup {
+                    id: tumSelectorPopup
+                    y: -height
+                    background: Item {
+                        RectangularGlow {
+                            visible: appWindow.theme_v2.useGlow
+                            anchors.fill: tumSelectorPopupBg
+                            color: appWindow.theme_v2.glowColor
+                            glowRadius: 0
+                            spread: 0
+                            cornerRadius: tumSelectorPopupBg.radius
+                        }
                         Rectangle {
-                            Layout.preferredWidth: Math.max(tumSelectorPopupItemText.contentWidth + (12+16)*appWindow.zoom, 160*appWindow.zoom)
-                            Layout.preferredHeight: tumSelectorPopupItemText.contentHeight + 2*8*appWindow.zoom
-                            color: tumSelectorPopupItemMa.containsMouse ? appWindow.theme_v2.bg400 : "transparent"
-                            radius: 4*appWindow.zoom
-                            BaseText_V2 {
-                                id: tumSelectorPopupItemText
-                                x: 12
-                                y: 8
-                                text: tumDisplayText(modelData) +
-                                      (tumSelectorPopupItemMa.containsMouse ? " (%1)".arg(tumParamsDisplayText(modelData)) : "")
-                                color: tumDisplayColor(modelData)
-                                font.capitalization: Font.AllUppercase
-                            }
-                            MouseAreaWithHand_V2 {
-                                id: tumSelectorPopupItemMa
-                                anchors.fill: parent
-                                hoverEnabled: true
-                                onClicked: {
-                                    App.settings.tum.currentMode = modelData;
-                                    tumSelectorPopup.close();
+                            id: tumSelectorPopupBg
+                            anchors.fill: parent
+                            color: appWindow.theme_v2.popupBgColor
+                            radius: 8*appWindow.zoom
+                        }
+                    }
+
+                    contentItem: ColumnLayout {
+                        spacing: 0
+                        Repeater {
+                            model: [TrafficUsageMode.High, TrafficUsageMode.Medium, TrafficUsageMode.Low]
+                            Rectangle {
+                                Layout.preferredWidth: Math.max(tumSelectorPopupItemText.contentWidth + (12+16)*appWindow.zoom, 160*appWindow.zoom)
+                                Layout.preferredHeight: tumSelectorPopupItemText.contentHeight + 2*8*appWindow.zoom
+                                color: tumSelectorPopupItemMa.containsMouse ? appWindow.theme_v2.bg400 : "transparent"
+                                radius: 4*appWindow.zoom
+                                BaseText_V2 {
+                                    id: tumSelectorPopupItemText
+                                    x: 12
+                                    y: 8
+                                    text: tumDisplayText(modelData) +
+                                          (tumSelectorPopupItemMa.containsMouse ? " (%1)".arg(tumParamsDisplayText(modelData)) : "")
+                                    color: tumDisplayColor(modelData)
+                                    font.capitalization: Font.AllUppercase
+                                }
+                                MouseAreaWithHand_V2 {
+                                    id: tumSelectorPopupItemMa
+                                    anchors.fill: parent
+                                    hoverEnabled: true
+                                    onClicked: {
+                                        App.settings.tum.currentMode = modelData;
+                                        tumSelectorPopup.close();
+                                    }
                                 }
                             }
                         }

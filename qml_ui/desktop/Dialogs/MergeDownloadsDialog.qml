@@ -11,19 +11,16 @@ import Qt.labs.platform 1.0 as QtLabs
 BaseDialog {
     id: root
 
-    width: 542*appWindow.zoom
+    title: qsTr("The download already exists") + App.loc.emptyString
+    onCloseClick: mergeTools.reject()
 
     contentItem: BaseDialogItem {
-        titleText: qsTr("The download already exists") + App.loc.emptyString
         focus: true
         Keys.onEscapePressed: mergeTools.reject()
         Keys.onReturnPressed: mergeTools.accept()
-        onCloseClick: mergeTools.reject()
 
         ColumnLayout {
             Layout.fillWidth: true
-            Layout.leftMargin: 10*appWindow.zoom
-            Layout.rightMargin: 10*appWindow.zoom
             spacing: 10*appWindow.zoom
             visible: mergeTools.dialogEnabled
 
@@ -41,6 +38,7 @@ BaseDialog {
                     font.pixelSize: 13*appWindow.fontZoom
                     font.weight: Font.DemiBold
                     text: qsTr("URL:") + App.loc.emptyString
+                    dialogLabel: true
                 }
                 BaseLabel {
                     id: url
@@ -49,6 +47,7 @@ BaseDialog {
                     text: downloadsItemTools.resourceUrl
                     elide: Text.ElideMiddle
                     Layout.fillWidth: true
+                    dialogLabel: true
                 }
             }
             RowLayout {
@@ -60,6 +59,7 @@ BaseDialog {
                     font.pixelSize: 13*appWindow.fontZoom
                     font.weight: Font.DemiBold
                     text: qsTr("Path:") + App.loc.emptyString
+                    dialogLabel: true
                 }
                 BaseLabel {
                     id: path
@@ -68,6 +68,7 @@ BaseDialog {
                     text: downloadsItemTools.hasChildDownloads ? downloadsItemTools.destinationPath : downloadsItemTools.tplPathAndTitle
                     elide: Text.ElideMiddle
                     Layout.fillWidth: true
+                    dialogLabel: true
                 }
             }
             RowLayout {
@@ -77,12 +78,14 @@ BaseDialog {
                     font.pixelSize: 13*appWindow.fontZoom
                     font.weight: Font.DemiBold
                     text: qsTr("Size:") + App.loc.emptyString
+                    dialogLabel: true
                 }
                 BaseLabel {
                     id: size
                     visible: mergeTools.dialogEnabled && downloadsItemTools.selectedSize > 0
                     font.pixelSize: 13*appWindow.fontZoom
                     text: App.bytesAsText(downloadsItemTools.selectedSize) + App.loc.emptyString
+                    dialogLabel: true
                 }
             }
             RowLayout {
@@ -92,6 +95,7 @@ BaseDialog {
                     font.pixelSize: 13*appWindow.fontZoom
                     font.weight: Font.DemiBold
                     text: qsTr("Added at:") + App.loc.emptyString
+                    dialogLabel: true
                 }
                 BaseLabel {
                     id: date
@@ -100,11 +104,10 @@ BaseDialog {
                     text: downloadsItemTools.added ?
                               App.loc.dateOrTimeToString(downloadsItemTools.added, false) + App.loc.emptyString :
                               ""
+                    dialogLabel: true
                 }
             }
             RowLayout {
-                Layout.topMargin: 0
-                Layout.bottomMargin: 10*appWindow.zoom
                 Layout.alignment: Qt.AlignRight
 
                 spacing: 5*appWindow.zoom
@@ -122,6 +125,7 @@ BaseDialog {
                     visible: App.downloads.mergeOptionsChooser.pendingNewDownloadIdsCount > 1
                     alternateBtnPressed: cnclBtn.isPressed
                     enabled: mergeTools.dialogEnabled
+                    useUppercase: appWindow.uiver !== 1
                     onClicked: mergeTools.acceptAll()
                 }
 
@@ -130,6 +134,7 @@ BaseDialog {
                     visible: mergeTools.mergeBtnEnabled
                     text: qsTr("Download") + App.loc.emptyString
                     enabled: mergeTools.dialogEnabled
+                    useUppercase: appWindow.uiver !== 1
                     onClicked: mergeTools.dontMerge()
                 }
             }

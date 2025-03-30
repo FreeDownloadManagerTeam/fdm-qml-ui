@@ -22,17 +22,14 @@ BaseDialog
 
     onOpened: root.forceActiveFocus()
 
-    width: 542*appWindow.zoom
+    title: qsTr("Rename file") + App.loc.emptyString
+    onCloseClick: root.close()
 
     contentItem: BaseDialogItem {
-        titleText: qsTr("Rename file") + App.loc.emptyString
         Keys.onEscapePressed: root.close()
-        onCloseClick: root.close()
 
         ColumnLayout {
             Layout.fillWidth: true
-            Layout.leftMargin: 10*appWindow.zoom
-            Layout.rightMargin: 10*appWindow.zoom
             spacing: 7*appWindow.zoom
 
             BaseLabel {
@@ -45,6 +42,7 @@ BaseDialog
                 enabled: !tools.renaming
                 focus: true
                 Layout.fillWidth: true
+                Layout.minimumWidth: 540*appWindow.zoom
                 Keys.onEscapePressed: root.close()
             }
 
@@ -64,7 +62,6 @@ BaseDialog
 
             RowLayout {
                 Layout.topMargin: 10*appWindow.zoom
-                Layout.bottomMargin: 10*appWindow.zoom
                 Layout.alignment: Qt.AlignRight
                 Layout.fillWidth: true
 

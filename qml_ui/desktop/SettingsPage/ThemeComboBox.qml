@@ -9,8 +9,6 @@ import "../../common"
 
 BaseComboBox {
     id: root
-    rightPadding: 5*appWindow.zoom
-    leftPadding: 5*appWindow.zoom
 
     settingsStyle: true
 

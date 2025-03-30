@@ -321,6 +321,9 @@ Item {
     {
         var text = App.clipboard.text.trim();
 
+        if (text)
+            text = text.split(/[\r\n]/)[0];
+
         if (checkIfAcceptableUrl(text, function(acceptable, modulesUids, urlDescriptions, downloadsTypes){
             if (acceptable) {
                 setAcceptableUrl(text);

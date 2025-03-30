@@ -28,13 +28,12 @@ Item
     readonly property alias addedColX: addedCol.x
     readonly property alias addedColWidth: addedCol.width
 
-    readonly property alias trashColX: trashCol.x
-    readonly property alias trashColWidth: trashCol.width
 
     property bool minuteUpdate: false // to update "Today"/"Yestarday" date strings
     Timer {
         interval: 60*1000
         repeat: true
+        running: true
         onTriggered: minuteUpdate = !minuteUpdate
     }
 
@@ -89,7 +88,8 @@ Item
         DownloadsViewHeaderItem_V2 {
             id: statusCol
             text: qsTr("Status") + App.loc.emptyString
-            Layout.minimumWidth: 192*appWindow.zoom
+            Layout.minimumWidth: 161*appWindow.zoom
+            Layout.preferredWidth: Layout.minimumWidth
         }
 
         Item {
@@ -125,14 +125,8 @@ Item
         }
 
         Item {
-            Layout.preferredWidth: colSpacing
-        }
-
-        DownloadsViewHeaderItem_V2 {
-            id: trashCol
-            Layout.preferredWidth: (16+8+appWindow.theme_v2.mainWindowRightMargin)*appWindow.zoom
+            Layout.preferredWidth: appWindow.theme_v2.mainWindowRightMargin*appWindow.zoom
         }
     }
-
 }
 

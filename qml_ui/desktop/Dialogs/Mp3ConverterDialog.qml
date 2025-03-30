@@ -22,13 +22,11 @@ BaseDialog {
         property bool accepting: false
     }
 
-    contentItem: BaseDialogItem {
-        titleText: qsTr("Convert to mp3 with adjustable bitrate") + App.loc.emptyString
-        focus: true
+    title: qsTr("Convert to mp3 with adjustable bitrate") + App.loc.emptyString
+    onCloseClick: root.close()
 
-        onCloseClick: {
-            root.close();
-        }
+    contentItem: BaseDialogItem {
+        focus: true
 
         Keys.onEscapePressed: {
             root.close();
@@ -40,8 +38,6 @@ BaseDialog {
 
         ColumnLayout {
             Layout.fillWidth: true
-            Layout.leftMargin: 10*appWindow.zoom
-            Layout.rightMargin: 10*appWindow.zoom
             spacing: 10*appWindow.zoom
 
 
@@ -124,7 +120,6 @@ BaseDialog {
 
             RowLayout {
                 Layout.topMargin: 10*appWindow.zoom
-                Layout.bottomMargin: 10*appWindow.zoom
                 Layout.alignment: Qt.AlignRight
 
                 spacing: 5*appWindow.zoom

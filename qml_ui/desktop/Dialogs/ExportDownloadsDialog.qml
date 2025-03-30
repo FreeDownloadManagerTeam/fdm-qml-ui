@@ -19,23 +19,21 @@ BaseDialog {
 
     property var selectedDownloads: []
 
-    width: 542*appWindow.zoom
+    title: (selectedDownloads.length > 0 ? qsTr("Export selected downloads") : qsTr("Export all downloads")) + App.loc.emptyString
+    onCloseClick: root.close()
 
     contentItem: BaseDialogItem {
-        titleText: (selectedDownloads.length > 0 ? qsTr("Export selected downloads") : qsTr("Export all downloads")) + App.loc.emptyString
         focus: true
         Keys.onEscapePressed: root.close()
         Keys.onReturnPressed: root.close()
-        onCloseClick: root.close()
 
         ColumnLayout {
             Layout.fillWidth: true
-            Layout.leftMargin: 10*appWindow.zoom
-            Layout.rightMargin: 10*appWindow.zoom
             spacing: 3*appWindow.zoom
 
             BaseLabel {
                 text: qsTr("Save to") + App.loc.emptyString
+                dialogLabel: true
             }
 
             RowLayout {
@@ -44,6 +42,7 @@ BaseDialog {
                 BaseTextField {
                     id: path
                     Layout.fillWidth: true
+                    Layout.minimumWidth: 400*appWindow.zoom
                     Layout.preferredHeight: height
                     onAccepted: doOK();
                     onTextChanged: browseDlg.currentFile = App.tools.urlFromLocalFile(text).url
@@ -53,6 +52,7 @@ BaseDialog {
                     id: folderBtn
                     Layout.alignment: Qt.AlignRight
                     Layout.fillHeight: true
+                    toBrowseForFolder: false
 
                     onClicked: browseDlg.open()
 
@@ -90,7 +90,6 @@ BaseDialog {
 
             RowLayout {
                 Layout.topMargin: 10*appWindow.zoom
-                Layout.bottomMargin: 10*appWindow.zoom
                 Layout.alignment: Qt.AlignRight
 
                 BaseButton {
@@ -103,6 +102,7 @@ BaseDialog {
 
                 BaseButton {
                     id: okbtn
+                    enabled: path.text
                     Layout.preferredHeight: height
                     Layout.alignment: Qt.AlignRight
                     text: qsTr("Export") + App.loc.emptyString

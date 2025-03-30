@@ -8,13 +8,16 @@ WaSvgImage
 {
     property var buttonType
     property string moduleUid: ""
+    property bool hasChildren: false
+
+    readonly property bool canDoAction: !App.rc.client.active || buttonType !== "showInFolder"
 
     zoom: appWindow.zoom
 
     opacity: enabled ? 1 : 0.3
 
     source: Qt.resolvedUrl(
-                buttonType === "showInFolder" ? "single_download_folder.svg" :
+                buttonType === "showInFolder" ? (hasChildren ? "batch_download_icon.svg" : "single_download_folder.svg") :
                 buttonType === "pause" ? "single_download_pause.svg" :
                 buttonType === "start" ? "single_download_play.svg" :
                 buttonType === "scheduler" ? "single_download_scheduler.svg" :
@@ -29,7 +32,7 @@ WaSvgImage
     }
 
     MouseAreaWithHand_V2 {
-        visible: buttonType !== "showInFolder" || !App.rc.client.active
+        visible: canDoAction
         anchors.fill: parent
         onClicked: {
             downloadsItemTools.doAction()

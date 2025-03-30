@@ -23,7 +23,7 @@ Rectangle {
     border.width: 1*appWindow.zoom
     border.color: appWindow.uiver === 1 ?
                       appWindow.theme.border :
-                      appWindow.theme_v2.editTextBorderColor
+                      (textArea.activeFocus ? appWindow.theme_v2.primary : appWindow.theme_v2.editTextBorderColor)
     radius: appWindow.uiver === 1 ? 0 : 8*appWindow.zoom
 
     onSelectAll: textArea.selectAll()

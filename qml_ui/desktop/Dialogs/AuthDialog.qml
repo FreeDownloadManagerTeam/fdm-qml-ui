@@ -14,14 +14,11 @@ BaseDialog {
     property alias password: passField.text
     property alias save: rememberField.checked
 
-    width: 542*appWindow.zoom
+    title: qsTr("Authentication required") + App.loc.emptyString
+
+    onCloseClick: root.reject()
 
     contentItem: BaseDialogItem {
-        titleText: qsTr("Authentication required") + App.loc.emptyString
-
-        onCloseClick: {
-            root.reject();
-        }
 
         Keys.onEscapePressed: {
             root.reject();
@@ -29,8 +26,6 @@ BaseDialog {
 
         ColumnLayout {
             Layout.fillWidth: true
-            Layout.leftMargin: 10*appWindow.zoom
-            Layout.rightMargin: 10*appWindow.zoom
             spacing: 10*appWindow.zoom
 
             GridLayout {
@@ -96,7 +91,6 @@ BaseDialog {
 
             RowLayout {
                 Layout.topMargin: 10*appWindow.zoom
-                Layout.bottomMargin: 10*appWindow.zoom
                 Layout.alignment: Qt.AlignRight
 
                 spacing: 5*appWindow.zoom

@@ -1,3 +1,10 @@
+/*
+  Warning:
+  Buggy Qt says:
+  CreatePortableDialog.qml:10:1: QML CreatePortableDialog: Binding loop detected for property "height"
+  CreatePortableDialog.qml:10:1: QML CreatePortableDialog: Binding loop detected for property "implicitHeight"
+  This is caused by the workaround below.
+*/
 import QtQuick 2.0
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
@@ -10,8 +17,6 @@ import Qt.labs.platform 1.0 as QtLabs
 BaseDialog {
     id: root
 
-    width: 542*appWindow.zoom
-
     property int percents
     property bool running: false
     property bool finished: false
@@ -19,16 +24,16 @@ BaseDialog {
     property string errorMsg
     property bool showWarning
 
+    title: qsTr("Create portable version") + App.loc.emptyString
+    onCloseClick: root.close()
+
     contentItem: BaseDialogItem {
-        titleText: qsTr("Create portable version") + App.loc.emptyString
         Keys.onEscapePressed: root.close()
-        onCloseClick: root.close()
 
         ColumnLayout {
             Layout.fillWidth: true
-            Layout.leftMargin: 10*appWindow.zoom
-            Layout.rightMargin: 10*appWindow.zoom
             spacing: 10*appWindow.zoom
+            Layout.preferredWidth: 540*appWindow.zoom
 
             DialogWrappedLabel {
                 text: qsTr("Portable version of %1 can be used on different computers without the need to install and configure it on each of them.").arg(App.displayName) + App.loc.emptyString
@@ -63,7 +68,7 @@ BaseDialog {
                 PickFileButton {
                     id: folderBtn
                     Layout.alignment: Qt.AlignRight
-                    Layout.fillHeight: true
+                    Layout.preferredHeight: pathField.implicitHeight
                     onClicked: browseDlg.open()
                     QtLabs.FolderDialog {
                         id: browseDlg
@@ -79,7 +84,6 @@ BaseDialog {
                 visible: !running && !finished
 
                 Layout.topMargin: 10*appWindow.zoom
-                Layout.bottomMargin: 10*appWindow.zoom
                 Layout.alignment: Qt.AlignRight
                 Layout.fillWidth: true
 
@@ -87,7 +91,7 @@ BaseDialog {
 
                 Rectangle {
                     color: "transparent"
-                    height: cnclBtn.height
+                    implicitHeight: cnclBtn.height
                     Layout.fillWidth: true
 
                     BaseLabel {
@@ -167,7 +171,7 @@ BaseDialog {
 
     onClosed: {
         if (finished) {
-            reset();
+            __reset();
         }
         appWindow.appWindowStateChanged()
     }
@@ -183,7 +187,7 @@ BaseDialog {
         }
     }
 
-    function reset()
+    function __reset()
     {
         finished = false;
         error = false;

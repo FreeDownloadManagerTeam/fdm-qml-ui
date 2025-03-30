@@ -36,6 +36,8 @@ ApplicationWindow {
 
     property int mainToolbarHeight: 0
 
+    property int appMessageDialogsOpened: 0
+
     readonly property bool createDownloadDialogOpened: (buildDownloadDlg && buildDownloadDlg.opened) ||
                                      (tuneAddDownloadDlg && tuneAddDownloadDlg.opened)
     readonly property bool nonCreateDownloadDialogOpened: aboutDlg.opened
@@ -51,7 +53,7 @@ ApplicationWindow {
                                     || mp4ConverterDlg.opened || privacyDlg.opened || reportSentDlg.opened
                                     || remoteBannerMgr.bannerOpened || renameDownloadFileDlg.opened
                                     || submitBugReportDlg.opened || pluginBannerDlg.opened
-                                    || mediaFileReadyToPlayDlg.opened
+                                    || mediaFileReadyToPlayDlg.opened || appMessageDialogsOpened
 
     readonly property bool modalDialogOpened: createDownloadDialogOpened || nonCreateDownloadDialogOpened
     property bool supportComputerShutdown: App.features.hasFeature(AppFeatures.ComputerShutdown) &&
@@ -166,6 +168,16 @@ ApplicationWindow {
         windowName: "appWindow"
         setVisibleWhenCompleted: true
         forceHidden: App.startHidden()
+    }
+
+    BaseLabel {
+        id: defaultLabel
+        visible: false
+    }
+
+    FontMetrics {
+        id: defaultFontMetrics
+        font: defaultLabel.font
     }
 
     UiReadyTools {
@@ -353,6 +365,18 @@ ApplicationWindow {
         return true;
     }
 
+    function checkForUpdatesRequested() {
+        if (currentPageName())
+            stackView.pop();
+        uiReadyTools.onReady(appWindow.checkUpdates);
+    }
+
+    function showPreferencesRequested() {
+        appWindow.showWindow(true);
+        if (!App.rc.client.active)
+           uiReadyTools.onReady(appWindow.openSettings);
+    }
+
     Connections
     {
         target: App
@@ -360,6 +384,11 @@ ApplicationWindow {
         onActivateRequested: showWindow()
         onShowAboutRequested: {showWindow(); aboutDlg.open();}
         onShowQuitConfirmation: {quitConfDlg.open(message);}
+        onCheckForUpdatesRequested: {
+            checkForUpdatesRequested();
+            showWindow();
+        }
+        onShowPreferencesRequested: showPreferencesRequested()
     }
 
     Loader {
@@ -630,6 +659,7 @@ ApplicationWindow {
         id: buildDownloadDlgMgr
         standalone: uiSettingsTools.settings.enableStandaloneCreateDownloadsWindows
         componentSource: Qt.resolvedUrl("Dialogs/BuildDownloadDialog.qml")
+        windowTitle: qsTr("Add download") + App.loc.emptyString
     }
     property alias buildDownloadDlg: buildDownloadDlgMgr.dialog
 
@@ -637,6 +667,7 @@ ApplicationWindow {
         id: tuneAddDownloadDlgMgr
         standalone: uiSettingsTools.settings.enableStandaloneCreateDownloadsWindows
         componentSource: Qt.resolvedUrl("Dialogs/TuneAndAddDownloadDialog.qml")
+        windowTitle: qsTr("New download") + App.loc.emptyString
     }
     property alias tuneAddDownloadDlg: tuneAddDownloadDlgMgr.dialog
 
@@ -895,11 +926,8 @@ ApplicationWindow {
         onReceived: {
             //arguments: id, json, isRequest
             var request_data = JSON.parse(json);
-            if (request_data && request_data.type === 'optionsClick') {
-                appWindow.showWindow(true);
-                if (!App.rc.client.active)
-                   uiReadyTools.onReady(appWindow.openSettings);
-            }
+            if (request_data && request_data.type === 'optionsClick')
+                appWindow.showPreferencesRequested();
         }
     }
 
@@ -980,8 +1008,8 @@ ApplicationWindow {
     signal doDownloadUpdate()
     WhatsNewDialog {
         id: whatsnew
-        width: Math.min(500*appWindow.zoom, appWindow.width - 100*appWindow.zoom)
-        height: Math.min(250*appWindow.zoom, appWindow.height - 100*appWindow.zoom)
+        width: Math.min(500*appWindow.fontZoom, appWindow.width - 100*appWindow.zoom)
+        height: Math.min(250*appWindow.fontZoom, appWindow.height - 100*appWindow.zoom)
         onUpdateClicked: doDownloadUpdate()
     }
     function openWhatsNewDialog(version, changelog)

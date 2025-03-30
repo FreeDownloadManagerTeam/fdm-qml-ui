@@ -12,37 +12,37 @@ import "../../common/Tools"
 BaseStandaloneCapableDialog {
     id: root
 
-    readonly property int preferredWidth: 542*appWindow.zoom
+    readonly property int preferredWidth: 540*appWindow.fontZoom
 
     height: standalone ?
                 Math.min(implicitHeight, Screen.height - 200) :
                 Math.min(implicitHeight, appWindow.height - 50)
-    width: standalone ?
+    width: (standalone ?
                Math.min(preferredWidth, Screen.width - 200) :
-               Math.min(preferredWidth, appWindow.width - 50)
+               Math.min(preferredWidth, appWindow.width - 50)) + __bugwaCounter
+
+    title: standalone ? "" : (qsTr("Add download") + App.loc.emptyString)
 
     contentItem: BaseDialogItem {
-        titleText: qsTr("Add download") + App.loc.emptyString
-        showCloseButton: !root.standalone
-        onCloseClick: downloadTools.doReject()
-
+        spacing: 0 // weird layout bug workaround
         ColumnLayout {
             Layout.fillWidth: true
-            Layout.leftMargin: 10*appWindow.zoom
-            Layout.rightMargin: 10*appWindow.zoom
             spacing: 3*appWindow.zoom
 
             BaseLabel {
+                dialogLabel: true
                 text: App.cfg.cdEnterUrlText + App.loc.emptyString
             }
 
             RowLayout {
                 Layout.fillWidth: true
+                spacing: 8*appWindow.zoom
 
                 BaseTextField {
                     id: urlField
                     focus: true
                     Layout.fillWidth: true
+                    Layout.preferredHeight: Math.max(urlField.implicitHeight, folderBtn.implicitHeight)
                     text: downloadTools.urlText
                     onTextChanged: downloadTools.onUrlTextChanged(text)
                     onAccepted: downloadTools.doOK()
@@ -53,8 +53,9 @@ BaseStandaloneCapableDialog {
                 PickFileButton {
                     id: folderBtn
                     visible: App.cfg.cdShowOpenFileBtn
+                    toBrowseForFolder: false
                     Layout.alignment: Qt.AlignRight
-                    Layout.fillHeight: true
+                    Layout.preferredHeight: Math.max(urlField.implicitHeight, folderBtn.implicitHeight)
                     onClicked: browseDlg.open()
                     FileDialog {
                         id: browseDlg
@@ -73,8 +74,8 @@ BaseStandaloneCapableDialog {
             }
 
             BaseLabel {
-                visible: !downloadTools.lastError
-                text: downloadTools.statusText
+                visible: text
+                text: downloadTools.lastError ? "" : downloadTools.statusText
                 color: downloadTools.statusWarning ? appWindow.theme.errorMessage : appWindow.theme.successMessage
                 wrapMode: Text.Wrap
                 font.pixelSize: 13*appWindow.fontZoom
@@ -96,7 +97,6 @@ BaseStandaloneCapableDialog {
 
             RowLayout {
                 Layout.topMargin: 10*appWindow.zoom
-                Layout.bottomMargin: 10*appWindow.zoom
 
                 BusyIndicator
                 {
@@ -127,7 +127,6 @@ BaseStandaloneCapableDialog {
                 }
 
                 BaseButton {
-                    id: okbtn
                     Layout.alignment: Qt.AlignRight
                     text: (downloadTools.buildingDownload || downloadTools.buildingDownloadFinished ? qsTr("Download") : qsTr("OK")) + App.loc.emptyString
                     enabled: urlField.text.length > 0
@@ -175,6 +174,8 @@ BaseStandaloneCapableDialog {
         }
     }
 
+    onCloseClick: downloadTools.doReject()
+
     onClosed: {
         downloadTools.doRejectLastFailedRequestId();
         appWindow.appWindowStateChanged();
@@ -194,4 +195,28 @@ BaseStandaloneCapableDialog {
         return urlField.text.length !== 0 ||
                 downloadTools.isBusy();
     }
+
+    ////////////////////////////////////////////////////////////////////////////////////
+    // Qt 6.4.3 Layouts bug workaround
+    // TODO: remove it when switched to Qt 6.8.2+
+    property int __bugwaCounter: 0
+    property int __bugwaCounter2: App.qtVersion() === "6.4.3" ? 0 : 1
+    Timer {
+        id: bugwa
+        interval: 10
+        repeat: true
+        onTriggered: {
+           __bugwaCounter = __bugwaCounter ? 0 : 1;
+            if (++__bugwaCounter2 * interval / 1000.0 >= 0.3)
+            {
+                stop();
+                __bugwaCounter = 0;
+            }
+        }
+    }
+    onOpened: {
+        if (!__bugwaCounter2)
+            bugwa.start();
+    }
+    ////////////////////////////////////////////////////////////////////////////////////
 }

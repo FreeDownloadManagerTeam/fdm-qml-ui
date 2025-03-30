@@ -6,6 +6,7 @@ import org.freedownloadmanager.vmsqt 1.0
 import org.freedownloadmanager.fdm.abstractdownloadsui 1.0
 import "../common"
 import "./BaseElements"
+import "./Dialogs"
 import "../qt5compat"
 
 ToolBar {
@@ -313,11 +314,11 @@ ToolBar {
         color: appWindow.theme.macToolbarOverlay
     }
 
-    MessageDialog {
+    AppMessageDialog {
         id: sortByOrderRequired
         title: App.displayName
         text: qsTr("Switch to user-defined sorting of the download list?") + App.loc.emptyString
-        buttons: buttonOk | buttonCancel
+        buttons: AppMessageDialog.Ok | AppMessageDialog.Cancel
         onAccepted: sortTools.setSortByAndAsc(AbstractDownloadsUi.DownloadsSortByOrder, false)
     }
 }

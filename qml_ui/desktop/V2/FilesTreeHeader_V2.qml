@@ -23,6 +23,9 @@ Item
 
     readonly property alias priorityColX: priorityCol.x
     readonly property alias priorityColWidth: priorityCol.width
+    readonly property int priorityTextMaxWidth: Math.max(fm.advanceWidth(qsTr('Normal') + App.loc.emptyString),
+                                                         fm.advanceWidth(qsTr('High') + App.loc.emptyString),
+                                                         fm.advanceWidth(qsTr('Low') + App.loc.emptyString))
 
     component HeaderItem : BaseText_V2 {
         color: appWindow.theme_v2.bg700
@@ -94,10 +97,7 @@ Item
         HeaderItem {
             id: priorityCol
             text: qsTr("Priority") + App.loc.emptyString
-            Layout.preferredWidth: Math.max(fm.advanceWidth(text),
-                                            fm.advanceWidth(qsTr('Normal') + App.loc.emptyString),
-                                            fm.advanceWidth(qsTr('High') + App.loc.emptyString),
-                                            fm.advanceWidth(qsTr('Low') + App.loc.emptyString)) +
+            Layout.preferredWidth: Math.max(fm.advanceWidth(text), priorityTextMaxWidth + 50*appWindow.zoom) +
                                    appWindow.theme_v2.mainWindowRightMargin*appWindow.zoom + fm.font.pixelSize*0
             Layout.minimumWidth: 80*appWindow.zoom
         }

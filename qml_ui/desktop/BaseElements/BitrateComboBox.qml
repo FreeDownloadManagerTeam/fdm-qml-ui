@@ -7,9 +7,6 @@ import "../../common"
 
 BaseComboBox {
     id: root
-    height: 25*appWindow.zoom
-    rightPadding: 5*appWindow.zoom
-    leftPadding: 5*appWindow.zoom
 
     property int visibleRowsCount: 5
     property bool constantBitrate: false
@@ -17,27 +14,37 @@ BaseComboBox {
     property int minBitrate
     property int maxBitrate
 
-    property int popupWidth: 120*appWindow.zoom
-
     property string kbps: qsTr("kbps") + App.loc.emptyString
 
     implicitWidth: (constantBitrate ?
                        fontMetrics.advanceWidth(root.kbpsText(999)) :
                        fontMetrics.advanceWidth(root.vbrKbpsText(999,999))) +
-                   50*appWindow.zoom + fontMetrics.font.pixelSize*0
+                   leftPadding + rightPadding + 40*appWindow.zoom +
+                   fontMetrics.font.pixelSize*0
 
     model: []
 
-    delegate: Rectangle {
+    delegate: Item {
         property bool hover: false
-        color: hover ? appWindow.theme.menuHighlight : "transparent"
-        height: 18*appWindow.zoom
-        width: constantBitrate ? popupWidth : root.width
+        anchors.left: parent.left
+        height: recommendedDelegateHeight
+        width: recommendedDelegateWidth
+
+        Rectangle {
+            anchors.fill: parent
+            anchors.margins: appWindow.uiver === 1 ? 0 : 2*appWindow.zoom
+            color: parent.hover ?
+                       (appWindow.uiver === 1 ? appWindow.theme.menuHighlight : appWindow.theme_v2.hightlightBgColor) :
+                       "transparent"
+            radius: parent.hover ?
+                        (appWindow.uiver === 1 ? 0 : 4*appWindow.zoom) :
+                        0
+        }
 
         BaseLabel {
             anchors.left: parent.left
-            leftPadding: qtbug.leftPadding(6*appWindow.zoom, 0)
-            rightPadding: qtbug.rightPadding(6*appWindow.zoom, 0)
+            leftPadding: root.leftPadding
+            rightPadding: root.rightPadding
             anchors.verticalCenter: parent.verticalCenter
             font.pixelSize: 12*appWindow.fontZoom
             color: appWindow.theme.settingsItem
@@ -55,31 +62,6 @@ BaseComboBox {
                 root.setCurrentValue();
                 root.applyValues();
                 root.popup.close();
-            }
-        }
-    }
-
-    popup: Popup {
-        y: root.height-1
-        width: constantBitrate ? popupWidth : root.width
-        height: 18*appWindow.zoom * root.model.length + 2*appWindow.zoom
-        padding: 1*appWindow.zoom
-
-        background: Rectangle {
-            color: appWindow.theme.background
-            border.color: appWindow.theme.settingsControlBorder
-            border.width: 1*appWindow.zoom
-        }
-
-        contentItem: Item {
-            ListView {
-                clip: true
-                anchors.fill: parent
-                model: root.model
-                currentIndex: root.highlightedIndex
-                delegate: root.delegate
-                flickableDirection: Flickable.VerticalFlick
-                boundsBehavior: Flickable.StopAtBounds
             }
         }
     }
@@ -171,9 +153,9 @@ BaseComboBox {
                 currentVal = checkTextSize(model[index].text);
                 maxVal = maxVal < currentVal ? currentVal : maxVal;
             }
-            popupWidth = maxVal + 20*appWindow.zoom;
+            delegateMinimumWidth = maxVal + 20*appWindow.zoom;
         } else {
-            popupWidth = 120*appWindow.zoom;
+            delegateMinimumWidth = 120*appWindow.zoom;
         }
     }
 

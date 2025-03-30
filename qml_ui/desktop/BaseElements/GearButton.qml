@@ -11,7 +11,11 @@ Rectangle
     implicitHeight: 26*appWindow.zoom
     implicitWidth: implicitHeight
 
-    readonly property var colorFn: appWindow.theme.isLightTheme ? Qt.darker : Qt.lighter
+    function colorFn(clr, factor) {
+        return appWindow.theme.isLightTheme ?
+                    Qt.darker(clr, factor) :
+                    Qt.lighter(clr, factor);
+    }
 
     color: ma.containsMouse && !ma.pressed ?
                colorFn(appWindow.uiver === 1 ? appWindow.theme.background : appWindow.theme_v2.bgColor, 1.4) :

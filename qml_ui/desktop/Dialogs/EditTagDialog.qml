@@ -12,20 +12,16 @@ import Qt.labs.platform 1.0 as QtLabs
 BaseDialog {
     id: root
 
-    width: 480*appWindow.zoom
+    title: qsTr("Edit tag") + App.loc.emptyString
+    onCloseClick: root.close()
 
     contentItem: BaseDialogItem {
-        titleText: qsTr("Edit tag") + App.loc.emptyString
         Keys.onReturnPressed: save()
         Keys.onEscapePressed: root.close()
-        onCloseClick: root.close()
 
         Column {
             spacing: 5*appWindow.zoom
             Layout.fillWidth: true
-            Layout.leftMargin: 10*appWindow.zoom
-            Layout.rightMargin: 10*appWindow.zoom
-            Layout.bottomMargin: 10*appWindow.zoom
 
 
             BaseLabel {

@@ -18,6 +18,7 @@ BaseContextMenu {
     BaseContextMenuItem {
         text: qsTr("Paste urls from clipboard") + App.loc.emptyString
         onTriggered: App.pasteUrlsFromClipboard()
+        enabled: App.clipboard.text.trim()
     }
 
     BaseContextMenuItem {
@@ -169,12 +170,7 @@ BaseContextMenu {
     BaseContextMenuItem {
         visible: appWindow.updateSupported
         text: qsTr("Check for updates...") + App.loc.emptyString
-        onTriggered: {
-            if (pageId) {
-                stackView.pop();
-            }
-            appWindow.checkUpdates()
-        }
+        onTriggered: appWindow.checkForUpdatesRequested()
     }
 
     BaseContextMenuItem {

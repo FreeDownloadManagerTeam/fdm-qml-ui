@@ -8,9 +8,6 @@ BaseComboBox {
 
     visible: count > 1
 
-    rightPadding: 5*appWindow.zoom
-    leftPadding: 5*appWindow.zoom
-
     property var labels: ['', qsTr('Audio') + App.loc.emptyString, qsTr('Video') + App.loc.emptyString]
 
     onActivated: index => downloadTools.setPreferredFileType(combo.model[index].value, true)

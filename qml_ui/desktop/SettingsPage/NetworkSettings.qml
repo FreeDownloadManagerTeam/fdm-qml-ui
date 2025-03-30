@@ -41,7 +41,7 @@ Column {
 
         SettingsRadioButton {
             id: manualProxy
-            text: qsTr("Configure manually:") + App.loc.emptyString
+            text: qsTr("Configure manually") + App.loc.emptyString
             checked: proxyMode === AppSettings.ManualProxy
             onClicked: tryApplyProxySettings()
         }
@@ -49,6 +49,8 @@ Column {
         Rectangle { color: "transparent"; height: 1*appWindow.zoom; width: 1*appWindow.zoom}
 
         GridLayout {
+            visible: manualProxy.checked
+
             columns: 4
             enabled: manualProxy.checked
             anchors.left: parent.left

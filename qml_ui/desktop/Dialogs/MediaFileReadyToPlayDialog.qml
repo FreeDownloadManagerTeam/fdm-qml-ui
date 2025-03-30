@@ -15,17 +15,15 @@ BaseDialog {
                                      downloadId != -1 ? App.downloads.infos.info(downloadId).title :
                                      ""
 
+    title: qsTr("Ready to play") + App.loc.emptyString
+    onCloseClick: root.close()
+
     contentItem: BaseDialogItem {
-        titleText: qsTr("Ready to play") + App.loc.emptyString
         focus: true
         Keys.onEscapePressed: root.close()
         Keys.onReturnPressed: root.playAndClose()
-        onCloseClick: root.close()
 
         Column {
-            Layout.leftMargin: 10*appWindow.zoom
-            Layout.rightMargin: 10*appWindow.zoom
-            Layout.bottomMargin: 10*appWindow.zoom
             spacing: 5*appWindow.zoom
 
             BaseLabel

@@ -5,6 +5,7 @@ import org.freedownloadmanager.fdm 1.0
 import org.freedownloadmanager.fdm.appsettings 1.0
 import "../"
 import "../BaseElements"
+import "../Dialogs"
 import "../../common"
 import "../../qt5compat"
 
@@ -230,40 +231,31 @@ Page {
         }
     }
 
-    MessageDialog
+    AppMessageDialog
     {
         id: errorMsg
         title: qsTr("Failed to install add-on") + App.loc.emptyString
     }
 
-    MessageDialog
+    AppMessageDialog
     {
         id: needInstallComponentsMsg
         property string distributivePath
         title: qsTr("Failed to install add-on") + App.loc.emptyString
-        ////////////////////////////////////////////////////////////////
-        /// https://bugreports.qt.io/browse/QTBUG-98311
-        readonly property int btnYes: MessageDialog.Yes
-        readonly property int btnNo: MessageDialog.No
-        buttons: btnYes | btnNo
-        ////////////////////////////////////////////////////////////////
+        buttons: AppMessageDialog.Ok | AppMessageDialog.Cancel
         onAccepted: {
             waitingComponentsInstallForDistribPath = distributivePath;
             App.plugins.depsInstaller.installMissingDeps(distributivePath);
         }
     }
 
-    MessageDialog
+    AppMessageDialog
     {
         id: dangerousPermissionsDlg
         property string distributivePath
         title: qsTr("Warning!") + App.loc.emptyString
-        ////////////////////////////////////////////////////////////////
-        /// https://bugreports.qt.io/browse/QTBUG-98311
-        readonly property int btnYes: MessageDialog.Yes
-        readonly property int btnNo: MessageDialog.No
-        buttons: btnYes | btnNo
-        ////////////////////////////////////////////////////////////////
+        buttons: AppMessageDialog.Ok | AppMessageDialog.Cancel
+        textFormat: Text.RichText
         onAccepted: App.plugins.mgr.acceptDangerousPermissions(distributivePath, true)
         onRejected: App.plugins.mgr.acceptDangerousPermissions(distributivePath, false)
     }

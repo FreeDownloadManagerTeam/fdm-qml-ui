@@ -11,19 +11,16 @@ BaseDialog {
     property int downloadId
     property string errorMessage
 
-    width: 542*appWindow.zoom
+    title: qsTr("Moving download failed") + App.loc.emptyString
+    onCloseClick: root.abortMoving()
 
     contentItem: BaseDialogItem {
-        titleText: qsTr("Moving download failed") + App.loc.emptyString
         focus: true
         Keys.onEscapePressed: root.abortMoving()
         Keys.onReturnPressed: root.retryMoving()
-        onCloseClick: root.abortMoving()
 
         ColumnLayout {
             Layout.fillWidth: true
-            Layout.leftMargin: 10*appWindow.zoom
-            Layout.rightMargin: 10*appWindow.zoom
             spacing: 3*appWindow.zoom
 
             BaseLabel {
@@ -47,7 +44,6 @@ BaseDialog {
 
             RowLayout {
                 Layout.topMargin: 10*appWindow.zoom
-                Layout.bottomMargin: 10*appWindow.zoom
                 Layout.alignment: Qt.AlignRight
 
                 spacing: 5*appWindow.zoom

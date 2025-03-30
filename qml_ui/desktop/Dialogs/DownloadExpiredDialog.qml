@@ -11,24 +11,20 @@ BaseDialog
     property double downloadId: -1
     property var info: downloadId !== -1 ? App.downloads.infos.info(downloadId) : null
 
+    title: qsTr("Download Failure") + App.loc.emptyString
+    showTitleIcon: true
+    titleIconUrl: appWindow.theme.attentionImg
+
+    onCloseClick: root.close()
+
     contentItem: BaseDialogItem
     {
-        titleText: qsTr("Download Failure") + App.loc.emptyString
-
-        showTitleIcon: true
-        titleIconUrl: appWindow.theme.attentionImg
-
         Keys.onEscapePressed: root.close()
-        onCloseClick: root.close()
 
         ColumnLayout
         {
             Layout.fillHeight: true
             Layout.fillWidth: true
-
-            Layout.leftMargin: 10*appWindow.zoom
-            Layout.rightMargin: Layout.leftMargin
-            Layout.bottomMargin: Layout.leftMargin
 
             spacing: 10*appWindow.zoom
 

@@ -15,6 +15,7 @@ ColumnLayout {
 
     //file name / create subfolder
     BaseLabel {
+        dialogLabel: true
         Layout.topMargin: 6*appWindow.zoom
         text: (root.isSubFolder ? qsTr("Create subfolder") : qsTr("File name")) + App.loc.emptyString
     }

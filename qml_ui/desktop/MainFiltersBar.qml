@@ -1,6 +1,7 @@
 import QtQuick 2.10
 import QtQuick.Controls 2.3
 import "./BaseElements"
+import "./Dialogs"
 import "../qt5compat"
 import org.freedownloadmanager.fdm 1.0
 import org.freedownloadmanager.fdm.abstractdownloadsui 1.0
@@ -85,11 +86,11 @@ Rectangle {
                 id: tagPanelBtn
             }
 
-            MessageDialog {
+            AppMessageDialog {
                 id: removeTagDlg
                 property int tagId
                 text: qsTr("OK to remove tag?") + App.loc.emptyString
-                buttons: buttonOk | buttonCancel
+                buttons: AppMessageDialog.Ok | AppMessageDialog.Cancel
                 onAccepted: {
                     if (App.downloads.model.tagIdFilter == tagId)
                         downloadsViewTools.resetDownloadsTagFilter();

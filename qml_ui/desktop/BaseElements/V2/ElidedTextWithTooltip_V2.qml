@@ -32,7 +32,7 @@ BaseText_V2
         acceptedButtons: Qt.NoButton
         BaseToolTip_V2 {
             text: root.sourceText
-            visible: parent.containsMouse
+            visible: ma.containsMouse
         }
     }
 }

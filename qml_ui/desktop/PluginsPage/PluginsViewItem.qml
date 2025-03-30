@@ -3,6 +3,7 @@ import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
 import "../../common"
 import "../BaseElements"
+import "../Dialogs"
 import "../../qt5compat"
 import org.freedownloadmanager.fdm 1.0
 
@@ -144,11 +145,12 @@ RowLayout
         Layout.fillWidth: true
     }
 
-    MessageDialog
+    AppMessageDialog
     {
         id: okToRemoveMsg
+        title: model.name
         text: qsTr("OK to remove?")
-        buttons: buttonOk | buttonCancel
+        buttons: AppMessageDialog.Ok | AppMessageDialog.Cancel
         onAccepted: removePluginWithoutConfirmation()
     }
 

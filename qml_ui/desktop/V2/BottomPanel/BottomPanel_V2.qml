@@ -23,69 +23,67 @@ Item
         anchors.fill: parent
         spacing: 0
 
-        Rectangle {
-            Layout.fillWidth: true
-            Layout.preferredHeight: 1
-            color: appWindow.theme_v2.bg200
-        }
-
-        RowLayout
+        Rectangle
         {
-            spacing: 0
+            Layout.fillWidth: true
+            Layout.preferredHeight: tabsLayout.implicitHeight
+            color: appWindow.theme_v2.bg200
 
-            Layout.leftMargin: (appWindow.theme_v2.mainWindowLeftMargin-8)*appWindow.zoom
-            Layout.rightMargin: (appWindow.theme_v2.mainWindowRightMargin-8)*appWindow.zoom
+            RowLayout
+            {
+                id: tabsLayout
 
-            Repeater {
-                id: tabs
-                model: bottomPanelTools.currentTabsModel
+                spacing: 0
 
-                BaseText_V2 {
-                    text: modelData.name
-                    color: bottomPanelTools.currentTab === modelData.id ? appWindow.theme_v2.bg1000 : appWindow.theme_v2.bg700
-                    font.weight: 600
-                    font.pixelSize: 10*appWindow.fontZoom
-                    font.capitalization: Font.AllUppercase
+                anchors.fill: parent
+                anchors.leftMargin: (appWindow.theme_v2.mainWindowLeftMargin-8)*appWindow.zoom
+                anchors.rightMargin: (appWindow.theme_v2.mainWindowRightMargin-8)*appWindow.zoom
 
+                Repeater {
+                    id: tabs
+                    model: bottomPanelTools.currentTabsModel
+
+                    BaseText_V2 {
+                        text: modelData.name
+                        color: bottomPanelTools.currentTab === modelData.id ? appWindow.theme_v2.bg1000 : appWindow.theme_v2.bg700
+                        font.weight: 600
+                        font.pixelSize: 10*appWindow.fontZoom
+                        font.capitalization: Font.AllUppercase
+
+                        Layout.leftMargin: 8*appWindow.zoom
+                        Layout.rightMargin: 8*appWindow.zoom
+                        Layout.topMargin: 7*appWindow.zoom
+                        Layout.bottomMargin: 7*appWindow.zoom
+
+                        MouseAreaWithHand_V2 {
+                            anchors.fill: parent
+                            onClicked: bottomPanelTools.panelTabClick(modelData.id)
+                        }
+                    }
+                }
+
+                Item {
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: 1
+                }
+
+                WaSvgImage {
+                    zoom: appWindow.zoom
+                    source: Qt.resolvedUrl("close.svg")
+                    layer {
+                        enabled: true
+                        effect: ColorOverlay {color: appWindow.theme_v2.bg800}
+                    }
                     Layout.leftMargin: 8*appWindow.zoom
                     Layout.rightMargin: 8*appWindow.zoom
                     Layout.topMargin: 7*appWindow.zoom
                     Layout.bottomMargin: 7*appWindow.zoom
-
                     MouseAreaWithHand_V2 {
                         anchors.fill: parent
-                        onClicked: bottomPanelTools.panelTabClick(modelData.id)
+                        onClicked: bottomPanelTools.panelCloseClick()
                     }
                 }
             }
-
-            Item {
-                Layout.fillWidth: true
-                Layout.preferredHeight: 1
-            }
-
-            WaSvgImage {
-                zoom: appWindow.zoom
-                source: Qt.resolvedUrl("close.svg")
-                layer {
-                    enabled: true
-                    effect: ColorOverlay {color: appWindow.theme_v2.bg800}
-                }
-                Layout.leftMargin: 8*appWindow.zoom
-                Layout.rightMargin: 8*appWindow.zoom
-                Layout.topMargin: 7*appWindow.zoom
-                Layout.bottomMargin: 7*appWindow.zoom
-                MouseAreaWithHand_V2 {
-                    anchors.fill: parent
-                    onClicked: bottomPanelTools.panelCloseClick()
-                }
-            }
-        }
-
-        Rectangle {
-            Layout.fillWidth: true
-            Layout.preferredHeight: 1
-            color: appWindow.theme_v2.bg200
         }
 
         Item {

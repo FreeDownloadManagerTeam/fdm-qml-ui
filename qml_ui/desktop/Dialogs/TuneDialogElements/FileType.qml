@@ -12,6 +12,7 @@ ColumnLayout {
     BaseLabel {
         Layout.topMargin: 6*appWindow.zoom
         text: qsTr("File type:") + App.loc.emptyString
+        dialogLabel: true
     }
 
     PreferredFileTypeCombobox {

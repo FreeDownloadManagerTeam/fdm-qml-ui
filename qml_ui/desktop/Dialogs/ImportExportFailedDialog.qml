@@ -8,23 +8,18 @@ import "../../common/Tools"
 BaseDialog {
     id: root
 
-    property string dialogTitle
     property string filePath
     property string errorMessage
 
-    width: 542*appWindow.zoom
+    onCloseClick: root.close()
 
     contentItem: BaseDialogItem {
-        titleText: dialogTitle
         focus: true
         Keys.onEscapePressed: root.close()
         Keys.onReturnPressed: root.close()
-        onCloseClick: root.close()
 
         ColumnLayout {
             Layout.fillWidth: true
-            Layout.leftMargin: 10*appWindow.zoom
-            Layout.rightMargin: 10*appWindow.zoom
             spacing: 3*appWindow.zoom
 
             BaseLabel {
@@ -44,7 +39,6 @@ BaseDialog {
 
             BaseButton {
                 Layout.topMargin: 10*appWindow.zoom
-                Layout.bottomMargin: 10*appWindow.zoom
                 Layout.alignment: Qt.AlignRight
                 blueBtn: true
                 text: qsTr("OK") + App.loc.emptyString
@@ -66,7 +60,7 @@ BaseDialog {
         target: App
         onImportListOfUrlsFromFileFailed: {
             if (!root.opened) {
-                dialogTitle = qsTr("Failure to paste URLs from the file") + App.loc.emptyString;
+                title = qsTr("Failure to paste URLs from the file") + App.loc.emptyString;
                 filePath = file;
                 errorMessage = errDesc;
                 root.open();
@@ -78,7 +72,7 @@ BaseDialog {
         target: App
         onImportListOfUrlsFromFileFailed: {
             if (!root.opened) {
-                dialogTitle = qsTr("Failure to paste URLs from the file") + App.loc.emptyString;
+                title = qsTr("Failure to paste URLs from the file") + App.loc.emptyString;
                 filePath = qsTr("Unable to import the list of URLs from the file: %1").arg(file) + App.loc.emptyString
                 errorMessage = errDesc;
                 root.open();
@@ -90,7 +84,7 @@ BaseDialog {
         target: App.exportImport
         onExportFinished: (file, error) => {
             if (!root.opened && error.hasError) {
-                dialogTitle = qsTr("Failure to export") + App.loc.emptyString;
+                title = qsTr("Failure to export") + App.loc.emptyString;
                 filePath = qsTr("Unable to export to the file: %1").arg(file) + App.loc.emptyString
                 errorMessage = error.displayTextLong;
                 root.open();
@@ -98,7 +92,7 @@ BaseDialog {
         }
         onImportFinished: (file, error) => {
             if (!root.opened && error.hasError) {
-                dialogTitle = qsTr("Failure to import") + App.loc.emptyString;
+                title = qsTr("Failure to import") + App.loc.emptyString;
                 filePath = qsTr("Unable to import from the file: %1").arg(file) + App.loc.emptyString
                 errorMessage = error.displayTextLong;
                 root.open();

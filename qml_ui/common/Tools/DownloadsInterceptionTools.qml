@@ -112,7 +112,7 @@ Item {
     Connections
     {
         target: App.downloads.mergeOptionsChooser
-        onGotMergeRequest: newMergeRequests(newDownloadId, existingDownloadId);
+        onGotMergeRequest: (newDownloadId, existingDownloadId) => newMergeRequests(newDownloadId, existingDownloadId);
     }
 
     Connections
@@ -130,7 +130,10 @@ Item {
     Connections
     {
         target: App.downloads.moveFilesMgr
-        onMoveFinished: if (downloadId && error.hasError) hasMovingFailedDownloads(downloadId, error.displayTextShort)
+        onMoveFinished: (downloadId, error) => {
+                            if (downloadId && error.hasError)
+                                hasMovingFailedDownloads(downloadId, error.displayTextShort)
+                        }
     }
 
     Connections {

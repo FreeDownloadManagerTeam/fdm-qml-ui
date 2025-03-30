@@ -11,19 +11,16 @@ BaseDialog {
 
     property var downloadIds: []
 
-    width: 542*appWindow.zoom
+    title: qsTr("Pause download") + App.loc.emptyString
+    onCloseClick: root.close()
 
     contentItem: BaseDialogItem {
-        titleText: qsTr("Pause download") + App.loc.emptyString
         focus: true
         Keys.onEscapePressed: root.close()
         Keys.onReturnPressed: root.okClick()
-        onCloseClick: root.close()
 
         ColumnLayout {
             Layout.fillWidth: true
-            Layout.leftMargin: 10*appWindow.zoom
-            Layout.rightMargin: 10*appWindow.zoom
             spacing: 3*appWindow.zoom
 
             BaseLabel {
@@ -35,6 +32,7 @@ BaseDialog {
             ListView {
                 clip: true
                 Layout.fillWidth: true
+                Layout.minimumWidth: 540*appWindow.fontZoom
                 Layout.preferredHeight: Math.min(contentHeight, 150*appWindow.zoom)
                 ScrollBar.vertical: ScrollBar {
                     active: parent.contentHeight > 150*appWindow.zoom
@@ -62,7 +60,6 @@ BaseDialog {
 
             RowLayout {
                 Layout.topMargin: 10*appWindow.zoom
-                Layout.bottomMargin: 10*appWindow.zoom
                 Layout.alignment: Qt.AlignRight
 
                 spacing: 5*appWindow.zoom

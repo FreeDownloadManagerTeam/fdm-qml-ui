@@ -21,11 +21,10 @@ Item
         id: mouseAreaRow
         anchors.fill: parent
         acceptedButtons: Qt.LeftButton | Qt.RightButton
-        propagateComposedEvents: true
-        enabled: !createDownloadDialog
+        hoverEnabled: true
         onClicked: (mouse) =>
                    {
-                       if (mouse.button === Qt.RightButton)
+                       if (!createDownloadDialog && mouse.button === Qt.RightButton)
                        {
                            var download = App.downloads.infos.info(downloadItemId);
                            var component = Qt.createComponent("../FilesTree/FilesTreeContextMenu.qml");
@@ -46,7 +45,11 @@ Item
                    }
 
         onDoubleClicked: {
-            if (downloadItemId && !model.folder && App.downloads.infos.info(downloadItemId).fileInfo(model.fileIndex).finished) {
+            if (!createDownloadDialog &&
+                    downloadItemId &&
+                    !model.folder &&
+                    App.downloads.infos.info(downloadItemId).fileInfo(model.fileIndex).finished)
+            {
                 App.downloads.mgr.openDownload(downloadItemId, model.fileIndex);
             }
         }
@@ -145,58 +148,108 @@ Item
                      model.priority != AbstractDownloadsUi.DownloadPriorityUnknown
             implicitWidth: prioritySelector.implicitWidth
             implicitHeight: prioritySelector.implicitHeight
-            BaseText_V2 {
+
+            RowLayout {
                 id: prioritySelector
-                text: priorityCol.priorityDisplayName(model.priority) + App.loc.emptyString
-            }
-            MouseAreaWithHand_V2 {
-                anchors.fill: parent
-                onClicked: {
-                    if (!prioritySelectorPopupHelper.isPopupClosedRecently())
-                        prioritySelectorPopup.open();
-                }
-            }
-            PopupHelper {
-                id: prioritySelectorPopupHelper
-                popup: prioritySelectorPopup
-            }
-            Popup {
-                id: prioritySelectorPopup
-                x: -16
-                y: -height
-                background: Rectangle {
-                    color: appWindow.theme_v2.bg300
-                    radius: 8*appWindow.zoom
-                }
-                contentItem: ColumnLayout {
-                    spacing: 0
-                    Repeater {
-                        model: [
-                            AbstractDownloadsUi.DownloadPriorityLow,
-                            AbstractDownloadsUi.DownloadPriorityNormal,
-                            AbstractDownloadsUi.DownloadPriorityHigh
-                        ]
-                        Rectangle {
-                            Layout.preferredWidth: Math.max(prioritySelectorPopupItemText.contentWidth + (8+8)*appWindow.zoom, 16*appWindow.zoom)
-                            Layout.preferredHeight: prioritySelectorPopupItemText.contentHeight + 2*8*appWindow.zoom
-                            color: prioritySelectorPopupItemMa.containsMouse ? appWindow.theme_v2.bg400 : "transparent"
-                            radius: 4*appWindow.zoom
-                            BaseText_V2 {
-                                id: prioritySelectorPopupItemText
-                                x: 8
-                                y: 8
-                                text: priorityCol.priorityDisplayName(modelData)
-                            }
-                            MouseAreaWithHand_V2 {
-                                id: prioritySelectorPopupItemMa
-                                anchors.fill: parent
-                                hoverEnabled: true
-                                onClicked: {
-                                    priorityCol.setPriority(modelData);
-                                    prioritySelectorPopup.close();
+
+                BaseText_V2 {
+                    text: priorityCol.priorityDisplayName(model.priority) + App.loc.emptyString
+
+                    Layout.minimumWidth: header.priorityTextMaxWidth + 5*appWindow.fontZoom
+
+                    MouseAreaWithHand_V2 {
+                        anchors.fill: parent
+                        onClicked: {
+                            if (!prioritySelectorPopupHelper.isPopupClosedRecently())
+                                prioritySelectorPopup.open();
+                        }
+                    }
+                    PopupHelper {
+                        id: prioritySelectorPopupHelper
+                        popup: prioritySelectorPopup
+                    }
+                    Popup {
+                        id: prioritySelectorPopup
+                        x: -16
+                        y: -height
+                        background: Rectangle {
+                            color: appWindow.theme_v2.bg300
+                            radius: 8*appWindow.zoom
+                        }
+                        contentItem: ColumnLayout {
+                            spacing: 0
+                            Repeater {
+                                model: [
+                                    AbstractDownloadsUi.DownloadPriorityLow,
+                                    AbstractDownloadsUi.DownloadPriorityNormal,
+                                    AbstractDownloadsUi.DownloadPriorityHigh
+                                ]
+                                Rectangle {
+                                    Layout.preferredWidth: Math.max(prioritySelectorPopupItemText.contentWidth + (8+8)*appWindow.zoom, 16*appWindow.zoom)
+                                    Layout.preferredHeight: prioritySelectorPopupItemText.contentHeight + 2*8*appWindow.zoom
+                                    color: prioritySelectorPopupItemMa.containsMouse ? appWindow.theme_v2.bg400 : "transparent"
+                                    radius: 4*appWindow.zoom
+                                    BaseText_V2 {
+                                        id: prioritySelectorPopupItemText
+                                        x: 8
+                                        y: 8
+                                        text: priorityCol.priorityDisplayName(modelData)
+                                    }
+                                    MouseAreaWithHand_V2 {
+                                        id: prioritySelectorPopupItemMa
+                                        anchors.fill: parent
+                                        hoverEnabled: true
+                                        onClicked: {
+                                            priorityCol.setPriority(modelData);
+                                            prioritySelectorPopup.close();
+                                        }
+                                    }
                                 }
                             }
                         }
+                    }
+                }
+
+                RowLayout {
+                    visible: mouseAreaRow.containsMouse || priorityUpBtn.containsMouse || priorityDownBtn.containsMouse
+
+                    component PriorityButton : SvgImage_V2 {
+                        property bool isUp
+                        property alias containsMouse: priorityBtnMa.containsMouse
+                        readonly property bool isEnabled: model.priority != (isUp ? AbstractDownloadsUi.DownloadPriorityHigh : AbstractDownloadsUi.DownloadPriorityLow)
+                        source: Qt.resolvedUrl(isUp ? "priority_up.svg" : "priority_down.svg")
+                        imageColor: isEnabled ?
+                                        (priorityBtnMa.containsMouse ? appWindow.theme_v2.primary : appWindow.theme_v2.bg600) :
+                                        appWindow.theme_v2.enabledColor(appWindow.theme_v2.bg600, false)
+                        MouseArea {
+                            id: priorityBtnMa
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            acceptedButtons: Qt.LeftButton
+                            onClicked: {
+                                if (!isEnabled)
+                                    return;
+                                if (isUp) {
+                                    model.priority = model.priority == AbstractDownloadsUi.DownloadPriorityLow ?
+                                                AbstractDownloadsUi.DownloadPriorityNormal :
+                                                AbstractDownloadsUi.DownloadPriorityHigh;
+                                } else {
+                                    model.priority = model.priority == AbstractDownloadsUi.DownloadPriorityHigh ?
+                                                AbstractDownloadsUi.DownloadPriorityNormal :
+                                                AbstractDownloadsUi.DownloadPriorityLow;
+                                }
+                            }
+                        }
+                    }
+
+                    PriorityButton {
+                        id: priorityUpBtn
+                        isUp: true
+                    }
+
+                    PriorityButton {
+                        id: priorityDownBtn
+                        isUp: false
                     }
                 }
             }

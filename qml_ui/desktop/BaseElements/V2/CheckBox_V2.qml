@@ -5,5 +5,5 @@ import ".."
 
 BaseCheckBox
 {
-
+    xOffset: 0
 }

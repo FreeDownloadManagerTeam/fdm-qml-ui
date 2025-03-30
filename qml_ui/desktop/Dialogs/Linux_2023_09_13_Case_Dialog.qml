@@ -9,20 +9,18 @@ import "../../common/Tools"
 BaseDialog {
     id: root
 
+    title: "Warning: your computer might be infected!"
+    onCloseClick: root.close()
+
     contentItem: BaseDialogItem {
-        titleText: "Warning: your computer might be infected!"
         focus: true
         Keys.onEscapePressed: root.close()
         Keys.onReturnPressed: {
             Qt.openUrlExternally("https://www.freedownloadmanager.org/blog/?p=664");
             root.close();
         }
-        onCloseClick: root.close()
 
         ColumnLayout {
-            Layout.leftMargin: 10*appWindow.zoom
-            Layout.rightMargin: 10*appWindow.zoom
-            Layout.bottomMargin: 10*appWindow.zoom
             spacing: 10*appWindow.zoom
 
             RowLayout {

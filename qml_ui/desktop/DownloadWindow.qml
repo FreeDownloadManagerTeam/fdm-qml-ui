@@ -203,20 +203,11 @@ ApplicationWindow
             }
         }
 
-        CppControls.ProgressMap
+        ProgressMapControl
         {
             visible: !downloadsItemTools.unknownFileSize && !downloadsItemTools.hasChildDownloads
             property var mapObj: App.downloads.infos.info(downloadId).progressMap(columnsCount*rowsCount)
             map: mapObj.map
-            filledSquareBorderColor: appWindow.uiver === 1 ? appWindow.theme.progressMapFillBorder : "transparent"
-            filledSquareColor: appWindow.uiver === 1 ? appWindow.theme.progressMapFillBackground : appWindow.theme_v2.bg700
-            emptySquareBorderColor: appWindow.uiver === 1 ? appWindow.theme.progressMapClearBorder : "transparent"
-            emptySquareColor: appWindow.uiver === 1 ? appWindow.theme.background : appWindow.theme_v2.bg400
-            squareSize: 8*appWindow.zoom
-            squareSpacing: 2*appWindow.zoom
-            squareRadius: appWindow.uiver === 1 ? 0 : 2*appWindow.zoom
-            justifyH: appWindow.uiver === 1
-            justifyV: justifyH
             Layout.fillWidth: true
             Layout.fillHeight: true
             Layout.leftMargin: 6*appWindow.zoom

@@ -9,6 +9,7 @@ Item {
 
     property var allTags: []
     property var systemTags: []
+    property var nonHiddenSystemTags: []
     property var customTags: []
     property var visibleTags: []
     property var hiddenTags: []
@@ -66,7 +67,13 @@ Item {
         //join all tags to common array
         allTags = systemTags.concat(customTags);
 
+        updateNonHiddenSystemTags();
+
         splitTagsByVisibility();
+    }
+
+    function updateNonHiddenSystemTags() {
+        nonHiddenSystemTags = systemTags.filter(e => !uiSettingsTools.settings.hideTags[e.id])
     }
 
     function checkTagSize(tagLabel)
@@ -386,7 +393,10 @@ Item {
 
     Connections {
         target: uiSettingsTools.settings
-        onHideTagsChanged: splitTagsByVisibility()
+        onHideTagsChanged: {
+            updateNonHiddenSystemTags();
+            splitTagsByVisibility();
+        }
     }
 
     TextMetrics {

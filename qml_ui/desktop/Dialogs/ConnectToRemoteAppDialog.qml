@@ -11,17 +11,14 @@ BaseDialog {
     readonly property string remoteId: idField.text.trim()
     readonly property bool isRemoteIdValid: remoteId !== '' && remoteId !== App.rc.id
 
-    width: 542*appWindow.zoom
+    title: qsTr("Connect to remote %1").arg(App.shortDisplayName) + ' ' + qsTr("(beta)") + App.loc.emptyString
+    onCloseClick: root.close()
 
     contentItem: BaseDialogItem {
-        titleText: qsTr("Connect to remote %1").arg(App.shortDisplayName) + ' ' + qsTr("(beta)") + App.loc.emptyString
         Keys.onEscapePressed: root.close()
-        onCloseClick: root.close()
 
         ColumnLayout {
             Layout.fillWidth: true
-            Layout.leftMargin: 10*appWindow.zoom
-            Layout.rightMargin: 10*appWindow.zoom
             spacing: 10*appWindow.zoom
 
             DialogWrappedLabel {
@@ -42,7 +39,7 @@ BaseDialog {
                     id: idField
                     text: uiSettingsTools.settings.lastRemoteAppId
                     focus: true
-                    Layout.fillWidth: true
+                    Layout.preferredWidth: 540*appWindow.zoom
                     onAccepted: {
                         if (root.isRemoteIdValid)
                             root.accept();
@@ -66,7 +63,6 @@ BaseDialog {
 
             RowLayout {
                 Layout.topMargin: 10*appWindow.zoom
-                Layout.bottomMargin: 10*appWindow.zoom
                 Layout.alignment: Qt.AlignRight
                 Layout.fillWidth: true
 

@@ -7,8 +7,7 @@ ScrollBar
     readonly property int mySize: 4*appWindow.zoom
     readonly property int myRadius: 4*appWindow.zoom
 
-    opacity: policy === ScrollBar.AlwaysOn ||
-             (active && size < 1.0) ? 1 : 0
+    opacity: (policy === ScrollBar.AlwaysOn || (active && size < 1.0)) ? 1 : 0
 
     background: Item
     {

@@ -12,17 +12,16 @@ BaseDialog {
     property bool ignoreAllMode: false
     property var taskQueue: []
 
+    title: qsTr("Download deleting failed") + App.loc.emptyString
+    onCloseClick: ignoreClicked()
+
     contentItem: BaseDialogItem {
-        titleText: qsTr("Download deleting failed") + App.loc.emptyString
         focus: true
         Keys.onEscapePressed: ignoreClicked()
         Keys.onReturnPressed: tryAgainClicked()
-        onCloseClick: ignoreClicked()
 
         ColumnLayout {
             Layout.fillWidth: true
-            Layout.leftMargin: 10*appWindow.zoom
-            Layout.rightMargin: 10*appWindow.zoom
             spacing: 3*appWindow.zoom
 
             BaseLabel {
@@ -35,7 +34,6 @@ BaseDialog {
 
             RowLayout {
                 Layout.topMargin: 10*appWindow.zoom
-                Layout.bottomMargin: 10*appWindow.zoom
                 Layout.alignment: Qt.AlignRight
 
                 spacing: 5*appWindow.zoom

@@ -7,20 +7,17 @@ import org.freedownloadmanager.fdm 1.0
 BaseDialog {
     id: root
 
-    width: 542*appWindow.zoom
-
     property var downloadModel
     property string destinationPath
 
+    title: qsTr("Change download URL") + App.loc.emptyString
+    onCloseClick: root.close()
+
     contentItem: BaseDialogItem {
-        titleText: qsTr("Change download URL") + App.loc.emptyString
         Keys.onEscapePressed: root.close()
-        onCloseClick: root.close()
 
         ColumnLayout {
             Layout.fillWidth: true
-            Layout.leftMargin: 10*appWindow.zoom
-            Layout.rightMargin: 10*appWindow.zoom
             spacing: 7*appWindow.zoom
 
             BaseLabel {
@@ -31,7 +28,7 @@ BaseDialog {
             {
                 id: newUrl
                 focus: true
-                Layout.fillWidth: true
+                Layout.preferredWidth: 540*appWindow.zoom
                 onAccepted: root.doOK()
                 Keys.onEscapePressed: root.close()
                 enable_QTBUG_110471_workaround_2: true
@@ -59,7 +56,6 @@ BaseDialog {
 
             RowLayout {
                 Layout.topMargin: 10*appWindow.zoom
-                Layout.bottomMargin: 10*appWindow.zoom
                 Layout.alignment: Qt.AlignRight
                 Layout.fillWidth: true
 

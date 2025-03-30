@@ -82,7 +82,9 @@ Item {
             var info = App.downloads.infos.info(App.downloads.model.parentDownloadIdFilter);
             if (!info)
                 return "";
-            return info.title + " (" + App.downloads.model.rowCount + ")";
+            return appWindow.uiver === 1 ?
+                        (info.title + " (" + App.downloads.model.rowCount + ")") :
+                        (info.title + " — " + qsTr("Downloads: %1").arg(App.downloads.model.rowCount) + App.loc.emptyString);
         });
     }
 

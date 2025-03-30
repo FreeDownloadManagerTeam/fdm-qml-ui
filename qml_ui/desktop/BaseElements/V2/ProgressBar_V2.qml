@@ -31,7 +31,9 @@ ProgressBar
         Rectangle {
             visible: !root.indeterminate
             radius: 4*appWindow.zoom
-            color: value == to ? appWindow.theme_v2.primary : appWindow.theme_v2.bg400
+            color: value == to ? appWindow.theme_v2.primaryOpacity :
+                   root.running ? appWindow.theme_v2.primary :
+                   appWindow.theme_v2.bg400
             width: root.visualPosition * parent.width
             height: parent.height
         }
@@ -41,12 +43,7 @@ ProgressBar
             radius: 4*appWindow.zoom
             width: parent.width/4
             height: parent.height
-            gradient: Gradient {
-                orientation: Gradient.Horizontal
-                GradientStop { position: 0.0; color: appWindow.theme_v2.bg500 }
-                GradientStop { position: 0.5; color: appWindow.theme_v2.bg600 }
-                GradientStop { position: 1.0; color: appWindow.theme_v2.bg500 }
-            }
+            color: appWindow.theme_v2.primary
             XAnimator on x {
                 from: -parent.width
                 to: root.width

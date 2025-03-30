@@ -233,13 +233,6 @@ Column
             text: qsTr("Options") + App.loc.emptyString
         }
 
-        SettingsCheckBox {
-            text: qsTr("Launch at startup (minimized)") + App.loc.emptyString
-            checked: App.autorunEnabled()
-            onClicked: App.enableAutorun(checked)
-            visible: App.features.hasFeature(AppFeatures.Autorun)
-        }
-
         Rectangle {
             width: parent.width
             height: backupCheckbox.height
@@ -518,7 +511,7 @@ Column
                 PickFileButton {
                     id: folderBtn
                     Layout.alignment: Qt.AlignRight
-                    implicitHeight: 25*appWindow.zoom
+                    implicitHeight: urlField.implicitHeight
                     onClicked: browseDlg.open()
                     FileDialog {
                         id: browseDlg
@@ -671,12 +664,12 @@ Column
             blueBtn: true
             anchors.left: parent.left
             anchors.leftMargin: 20*appWindow.zoom
-            MessageDialog
+            AppMessageDialog
             {
                 id: okToResetMsg
                 title: qsTr("Default settings") + App.loc.emptyString
                 text: qsTr("Restore default settings?") + App.loc.emptyString
-                buttons: buttonOk | buttonCancel
+                buttons: AppMessageDialog.Ok | AppMessageDialog.Cancel
                 onAccepted: {
                     App.settings.resetToDefaults();
                     uiSettingsTools.resetToDefaults();

@@ -12,8 +12,8 @@ CheckBox {
     property bool truncated: contentItem.truncated
     property bool elideText: true
     property bool locked: false
-
     property int xOffset: 6*appWindow.zoom
+    property bool v2EnableRicherBgColor: false
 
     readonly property bool isEnabled: enabled && !locked
 
@@ -36,7 +36,7 @@ CheckBox {
                    "transparent" :
                    (checked ?
                         (isEnabled ? appWindow.theme_v2.primary : appWindow.theme_v2.bg400) :
-                        appWindow.theme_v2.bg200)
+                        (v2EnableRicherBgColor ? appWindow.theme_v2.bg100 : appWindow.theme_v2.bg200))
 
         border.color: appWindow.uiver === 1 ?
                           "transparent" :

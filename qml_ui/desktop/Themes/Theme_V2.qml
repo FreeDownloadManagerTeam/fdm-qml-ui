@@ -15,6 +15,7 @@ QtObject
     readonly property color dark900: "#E1E4EB"
     readonly property color dark1000: "#F4F5F5"
     readonly property color darkPrimary: "#73CEFC"
+    readonly property color darkPrimaryOpacity: "#51849E"
     readonly property color darkSecondary: "#4EC284"
     readonly property color darkAmber: "#C29B4E"
     readonly property color darkDanger: "#C24E5D"
@@ -22,14 +23,15 @@ QtObject
     readonly property color light100: "#171A1F"
     readonly property color light200: "#1F2329"
     readonly property color light300: "#272C33"
-    readonly property color light400: "#363D47"
-    readonly property color light500: "#464F5C"
-    readonly property color light600: "#6A7585"
-    readonly property color light700: "#929DAD"
-    readonly property color light800: "#ACB5C3"
-    readonly property color light900: "#CED6E0"
-    readonly property color light1000: "#E2EAF6"
+    readonly property color light400: "#424B57"
+    readonly property color light500: "#5A6677"
+    readonly property color light600: "#929DAD"
+    readonly property color light700: "#CED6E0"
+    readonly property color light800: "#DDE2E9"
+    readonly property color light900: "#ECEFF3"
+    readonly property color light1000: "#F7FAFD"
     readonly property color lightPrimary: "#3F80E0"
+    readonly property color lightPrimaryOpacity: "#92B7ED"
     readonly property color lightSecondary: "#288F58"
     readonly property color lightAmber: "#8F6D28"
     readonly property color lightDanger: "#8F2836"
@@ -38,7 +40,7 @@ QtObject
     readonly property color bg100: isLightTheme ? light1000 : dark100
     readonly property color bg200: isLightTheme ? light900 : dark200
     readonly property color bg300: isLightTheme ? light900 : dark300 // dark300 --> light900 instead of light800
-    readonly property color bg400: isLightTheme ? light800 : dark400
+    readonly property color bg400: isLightTheme ? light700 : dark400
     readonly property color bg500: isLightTheme ? light600 : dark500
     readonly property color bg600: isLightTheme ? light500 : dark600
     readonly property color bg700: isLightTheme ? light400 : dark700
@@ -46,6 +48,7 @@ QtObject
     readonly property color bg900: isLightTheme ? light200 : dark900
     readonly property color bg1000: isLightTheme ? light100 : dark1000
     readonly property color primary: isLightTheme ? lightPrimary : darkPrimary
+    readonly property color primaryOpacity: isLightTheme ? lightPrimaryOpacity : darkPrimaryOpacity
     readonly property color secondary: isLightTheme ? lightSecondary : darkSecondary
     readonly property color amber: isLightTheme ? lightAmber : darkAmber
     readonly property color danger: isLightTheme ? lightDanger : darkDanger
@@ -62,8 +65,12 @@ QtObject
     readonly property color editTextBorderColor: bg500
     readonly property color hightlightBgColor: bg400
     readonly property color popupBgColor: bg300
+    readonly property color tooltipBgColor: isLightTheme ? light500 : dark400
+    readonly property color tooltipTextColor: isLightTheme ? light900 : light1000
     readonly property color dialogBgColor: bg200
     readonly property color dialogBorderColor: bg500
+    readonly property color glowColor: dark300
+    readonly property bool useGlow: isLightTheme
 
     readonly property real opacityDisabled: 0.4
 
@@ -72,10 +79,15 @@ QtObject
     readonly property int mainWindowLeftMargin: 16
     readonly property int mainWindowRightMargin: 16
 
+    function opacityColor(clr, opacity)
+    {
+        return Qt.rgba(clr.r, clr.g, clr.b, opacity);
+    }
+
     function enabledColor(clr, isEnabled)
     {
         return isEnabled ?
                     clr :
-                    Qt.rgba(clr.r, clr.g, clr.b, opacityDisabled);
+                    opacityColor(clr, opacityDisabled);
     }
 }

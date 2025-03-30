@@ -32,11 +32,12 @@ BaseStandaloneCapableDialog {
         property bool accepting: false
     }
 
+    title: standalone ? "" : (qsTr("New download") + App.loc.emptyString)
+
+    onCloseClick: downloadTools.doReject()
+
     contentItem: BaseDialogItem {
-        titleText: qsTr("New download") + App.loc.emptyString
-        showCloseButton: !root.standalone
         Keys.onEscapePressed: downloadTools.doReject()
-        onCloseClick: downloadTools.doReject()
         spacing: 0
 
         Flickable
@@ -56,7 +57,7 @@ BaseStandaloneCapableDialog {
                 id: mainLayout
 
                 anchors.fill: parent
-                anchors.margins: 10*appWindow.zoom
+                //anchors.margins: 10*appWindow.zoom
                 spacing: 2*appWindow.zoom
 
                 Title {}
@@ -111,8 +112,12 @@ BaseStandaloneCapableDialog {
                     SchedulerCheckbox {
                         id: schedulerCheckbox
                         Layout.alignment: Qt.AlignVCenter
-                        Layout.fillWidth: true
                         xOffset: 0
+                    }
+
+                    Item {
+                        Layout.fillWidth: true
+                        implicitHeight: 1
                     }
 
                     DiskSpace {
