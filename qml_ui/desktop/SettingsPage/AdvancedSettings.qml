@@ -616,8 +616,6 @@ Column
     SettingsGroupColumn {
         id: existingFileReactionGroup
 
-        property int existingFileReaction: App.settings.dmcore.value(DmCoreSettings.ExistingFileReaction)
-
         visible: !root.hidden
         anchors.left: parent.left
 
@@ -628,17 +626,17 @@ Column
 
         SettingsRadioButton {
             text: qsTr("Rename") + App.loc.emptyString
-            checked: existingFileReactionGroup.existingFileReaction == AbstractDownloadsUi.DefrRename
+            checked: App.settings.dmcore.value(DmCoreSettings.ExistingFileReaction) == AbstractDownloadsUi.DefrRename
             onClicked: existingFileReactionGroup.setFileExistsReaction(AbstractDownloadsUi.DefrRename)
         }
         SettingsRadioButton {
             text: qsTr("Overwrite") + App.loc.emptyString
-            checked: existingFileReactionGroup.existingFileReaction == AbstractDownloadsUi.DefrOverwrite
+            checked: App.settings.dmcore.value(DmCoreSettings.ExistingFileReaction) == AbstractDownloadsUi.DefrOverwrite
             onClicked: existingFileReactionGroup.setFileExistsReaction(AbstractDownloadsUi.DefrOverwrite)
         }
         SettingsRadioButton {
             text: qsTr("Always ask") + App.loc.emptyString
-            checked: existingFileReactionGroup.existingFileReaction == AbstractDownloadsUi.DefrAsk
+            checked: App.settings.dmcore.value(DmCoreSettings.ExistingFileReaction) == AbstractDownloadsUi.DefrAsk
             onClicked: existingFileReactionGroup.setFileExistsReaction(AbstractDownloadsUi.DefrAsk)
         }
 

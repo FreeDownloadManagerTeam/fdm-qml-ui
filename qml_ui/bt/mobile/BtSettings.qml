@@ -193,6 +193,16 @@ Page {
                     }
                 }
 
+                SwitchSetting {
+                    description: App.my_BT_qsTranslate("Settings", "Use UPnP / NAT-PMP port forwarding") + App.loc.emptyString
+                    switchChecked: App.settings.toBool(App.settings.dmcore.value(DmCoreSettings.BtEnablePortForwarding))
+                    onClicked: {
+                        switchChecked = !switchChecked;
+                        App.settings.dmcore.setValue(DmCoreSettings.BtEnablePortForwarding,
+                                                     App.settings.fromBool(switchChecked));
+                    }
+                }
+
                 SettingsSeparator{}
 
                 SwitchSetting {

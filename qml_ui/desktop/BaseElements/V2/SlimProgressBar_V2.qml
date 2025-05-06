@@ -5,8 +5,8 @@ ProgressBar
 {
     id: root
 
-    property color bgColor
-    property color progressColor
+    property color bgColor: appWindow.theme_v2.bg300
+    property color progressColor : appWindow.theme_v2.primary
     property bool running: false
     property int radius: height
 
@@ -16,19 +16,24 @@ ProgressBar
     background: Rectangle {
         implicitHeight: 4*appWindow.zoom
         implicitWidth: 70*appWindow.zoom
-        radius: height
+        radius: root.radius
         color: root.bgColor
     }
 
     contentItem: Item {
         clip: true
 
-        Rectangle {
-            visible: !root.indeterminate
+        Item {
+            clip: width < childrenRect.width
             width: root.visualPosition * parent.width
             height: parent.height
-            radius: root.radius
-            color: root.progressColor
+            Rectangle {
+                visible: !root.indeterminate
+                width: Math.max(parent.width, root.radius*2+1)
+                height: parent.height
+                radius: root.radius
+                color: root.progressColor
+            }
         }
 
         Rectangle {

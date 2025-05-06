@@ -114,13 +114,12 @@ Column {
         }
 
         Row {
-            topPadding: 20*appWindow.zoom
             anchors.left: parent.left
 
             BaseLabel {
                 id: lbl
                 text: qsTr("Other supported browsers") + App.loc.emptyString
-                color: appWindow.theme.settingsSubgroupHeader
+                color: appWindow.uiver === 1 ? appWindow.theme.settingsSubgroupHeader : appWindow.theme_v2.settingsSubgroupHeader
                 MouseArea {
                     anchors.fill: parent
                     cursorShape: Qt.PointingHandCursor
@@ -144,7 +143,7 @@ Column {
                         anchors.centerIn: parent
                         layer {
                             effect: ColorOverlay {
-                                color: appWindow.theme.settingsSubgroupHeader
+                                color: appWindow.uiver === 1 ? appWindow.theme.settingsSubgroupHeader : appWindow.theme_v2.settingsSubgroupHeader
                             }
                             enabled: true
                         }
@@ -204,10 +203,9 @@ Column {
             }
         }
 
-        Rectangle {
+        Item {
             width: parent.width
             height: skipDomains.height
-            color: "transparent"
             SettingsCheckBox {
                 id: skipDomains
                 text: qsTr("Skip domains") + App.loc.emptyString
@@ -220,26 +218,26 @@ Column {
                 }
             }
 
-            Rectangle {
+            Item {
                 visible: !unwantedHostsList.visible
                 anchors.left: skipDomains.right
                 anchors.leftMargin: 5*appWindow.zoom
                 anchors.verticalCenter: parent.verticalCenter
                 width: 16*appWindow.zoom
                 height: width
-                color: "transparent"
 
                 WaSvgImage {
                     zoom: appWindow.zoom
-                    source: Qt.resolvedUrl("../../images/desktop/edit_list.svg")
+                    source: Qt.resolvedUrl(appWindow.uiver === 1 ? "../../images/desktop/edit_list.svg" : "V2/edit.svg")
                     opacity: skipDomains.checked ? 1 : 0.5
                     layer {
                         effect: ColorOverlay {
-                            color: appWindow.theme.foreground
+                            color: appWindow.uiver === 1 ? appWindow.theme.foreground : appWindow.theme_v2.textColor
                         }
                         enabled: true
                     }
                     MouseArea {
+                        visible: skipDomains.checked
                         anchors.fill: parent
                         cursorShape: Qt.PointingHandCursor
                         hoverEnabled: true
@@ -281,10 +279,9 @@ Column {
             }
         }
 
-        Rectangle {
+        Item {
             width: parent.width
             height: skipCheckBox.height
-            color: "transparent"
             SettingsCheckBox {
                 id: skipCheckBox
                 text: qsTr("Skip files with extensions") + App.loc.emptyString
@@ -293,33 +290,33 @@ Column {
                     App.settings.app.setValue(
                                 AppSettings.WbDontInterceptDownloadsWithUnwantedExtensions,
                                 App.settings.fromBool(checked));
-                    extensionsList.visible = false;
+                    unwantedExtensionsList.visible = false;
                 }
             }
 
-            Rectangle {
-                visible: !extensionsList.visible
+            Item {
+                visible: !unwantedExtensionsList.visible
                 anchors.left: skipCheckBox.right
                 anchors.leftMargin: 5*appWindow.zoom
                 anchors.verticalCenter: parent.verticalCenter
                 width: 16*appWindow.zoom
                 height: width
-                color: "transparent"
                 WaSvgImage {
                     zoom: appWindow.zoom
-                    source: Qt.resolvedUrl("../../images/desktop/edit_list.svg")
+                    source: Qt.resolvedUrl(appWindow.uiver === 1 ? "../../images/desktop/edit_list.svg" : "V2/edit.svg")
                     opacity: skipCheckBox.checked ? 1 : 0.5
                     layer {
                         effect: ColorOverlay {
-                            color: appWindow.theme.foreground
+                            color: appWindow.uiver === 1 ? appWindow.theme.foreground : appWindow.theme_v2.textColor
                         }
                         enabled: true
                     }
                     MouseArea {
+                        visible: skipCheckBox.checked
                         anchors.fill: parent
                         cursorShape: Qt.PointingHandCursor
                         hoverEnabled: true
-                        onClicked: { if (skipCheckBox.checked) {extensionsList.visible = true} }
+                        onClicked: { if (skipCheckBox.checked) {unwantedExtensionsList.visible = true} }
                         onEntered: toolTipExtensions.visible = true
                         onExited: toolTipExtensions.visible = false
 
@@ -333,7 +330,7 @@ Column {
         }
 
         RowLayout {
-            id: extensionsList
+            id: unwantedExtensionsList
             visible: false
             width: 220*appWindow.zoom
             anchors.left: parent.left
@@ -346,7 +343,7 @@ Column {
                 validationRegex: /^[\d\w\+\-\!]+$/
 
                 onCloseClicked: {
-                    extensionsList.visible = false
+                    unwantedExtensionsList.visible = false
                 }
 
                 onListChanged: {

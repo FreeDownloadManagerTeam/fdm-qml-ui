@@ -7,6 +7,7 @@ BaseLabel
 
     property string sourceText: ""
     readonly property int sourceTextWidth: Math.ceil(fm.advanceWidth(sourceText)) + fm.font.pixelSize*0
+    readonly property bool containsMouse: ma.containsMouse
 
     MyFontMetrics {
         id: fm
@@ -18,6 +19,7 @@ BaseLabel
               width - leftPadding - rightPadding + fm.font.pixelSize*0)
 
     MouseArea {
+        id: ma
         enabled: label.text != label.sourceText
         propagateComposedEvents: true
         anchors.fill: parent

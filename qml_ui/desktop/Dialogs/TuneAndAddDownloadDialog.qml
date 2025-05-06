@@ -5,6 +5,7 @@ import QtQuick.Window 2.12
 import org.freedownloadmanager.fdm 1.0
 import "../../common/Tools"
 import "../BaseElements"
+import "../BaseElements/V2"
 import "TuneDialogElements"
 
 BaseStandaloneCapableDialog {
@@ -40,109 +41,122 @@ BaseStandaloneCapableDialog {
         Keys.onEscapePressed: downloadTools.doReject()
         spacing: 0
 
-        Flickable
+        Item
         {
-            id: dlgContent
             Layout.fillWidth: true
             Layout.fillHeight: true
-            flickableDirection: Flickable.VerticalFlick
-            implicitHeight: mainLayout.implicitHeight + mainLayout.anchors.topMargin + mainLayout.anchors.bottomMargin
-            implicitWidth: mainLayout.implicitWidth + mainLayout.anchors.leftMargin + mainLayout.anchors.rightMargin
-            contentHeight: implicitHeight
-            clip: true
-            boundsBehavior: Flickable.StopAtBounds
-            ScrollBar.vertical: ScrollBar { visible: dlgContent.height < mainLayout.implicitHeight; policy: ScrollBar.AlwaysOn; }
+            implicitWidth: dlgContent.implicitWidth
+            implicitHeight: dlgContent.implicitHeight
 
-            ColumnLayout {
-                id: mainLayout
-
-                anchors.fill: parent
-                //anchors.margins: 10*appWindow.zoom
-                spacing: 2*appWindow.zoom
-
-                Title {}
-
-                SaveTo {
-                    id: saveTo
-                    enabled: !d.accepting
-                    Layout.fillWidth: true
-                    focus: true
+            Flickable
+            {
+                id: dlgContent
+                width: parent.width + sbar.myWrapSize
+                height: parent.height
+                flickableDirection: Flickable.VerticalFlick
+                implicitHeight: mainLayout.implicitHeight + mainLayout.anchors.topMargin + mainLayout.anchors.bottomMargin
+                implicitWidth: mainLayout.implicitWidth + mainLayout.anchors.leftMargin + mainLayout.anchors.rightMargin
+                contentHeight: implicitHeight
+                clip: true
+                boundsBehavior: Flickable.StopAtBounds
+                ScrollBar.vertical: BaseScrollBar_V2
+                {
+                    id: sbar
+                    visible: dlgContent.height < mainLayout.implicitHeight
+                    policy: ScrollBar.AlwaysOn
                 }
 
-                FileName {
-                    id: fileName
-                    saveToControl: saveTo
-                }
+                ColumnLayout {
+                    id: mainLayout
 
-                Url {}
+                    anchors.fill: parent
+                    anchors.rightMargin: sbar.myWrapSize
+                    spacing: 2*appWindow.zoom
 
-                FilesTree {
-                    id: filesTree
-                }
+                    Title {}
 
-                DownloadsList {
-                    id: downloadsList
-                }
-
-                VideoQuality {
-                    id: videoQuality
-                }
-
-                Rectangle {
-                    Layout.fillWidth: true
-                    Layout.preferredHeight: (fileType.visible || batchVideoQuality.visible) ? 70*appWindow.zoom : 0
-                    color: "transparent"
-
-                    FileType { id: fileType}
-
-                    BatchVideoQuality {id: batchVideoQuality}
-                }
-
-                Subtitles {}
-
-                AddDateToFileName {
-                    id: addDate
-                }
-
-                RowLayout {
-                    Layout.fillWidth: true
-                    Layout.preferredHeight: 40*appWindow.zoom
-                    spacing: 30*appWindow.zoom
-
-                    SchedulerCheckbox {
-                        id: schedulerCheckbox
-                        Layout.alignment: Qt.AlignVCenter
-                        xOffset: 0
-                    }
-
-                    Item {
+                    SaveTo {
+                        id: saveTo
+                        enabled: !d.accepting
                         Layout.fillWidth: true
-                        implicitHeight: 1
+                        focus: true
                     }
 
-                    DiskSpace {
-                        saveToPath: App.fromNativeSeparators(saveTo.path)
-                        Layout.alignment: Qt.AlignVCenter
+                    FileName {
+                        id: fileName
+                        saveToControl: saveTo
                     }
-                }
 
-                SchedulerBlock {
-                    id: schedulerBlock
-                    visible: schedulerCheckbox.checked
-                    Layout.fillWidth: true
-                    Layout.preferredHeight: visible ? 84*appWindow.zoom : 0
-                }
+                    Url {}
 
-                NoResumeSupportBlock {
-                    id: noResumeSupportBlock
-                    Layout.topMargin: 10*appWindow.zoom
-                }
+                    FilesTree {
+                        id: filesTree
+                    }
 
-                PlayAsap {
-                    id: playAsap
-                }
+                    DownloadsList {
+                        id: downloadsList
+                    }
 
-                ButtonsBlock {id: bb; forceDisableOK: d.accepting}
+                    VideoQuality {
+                        id: videoQuality
+                    }
+
+                    Rectangle {
+                        Layout.fillWidth: true
+                        Layout.preferredHeight: (fileType.visible || batchVideoQuality.visible) ? 70*appWindow.zoom : 0
+                        color: "transparent"
+
+                        FileType { id: fileType}
+
+                        BatchVideoQuality {id: batchVideoQuality}
+                    }
+
+                    Subtitles {}
+
+                    AddDateToFileName {
+                        id: addDate
+                    }
+
+                    RowLayout {
+                        Layout.fillWidth: true
+                        Layout.preferredHeight: 40*appWindow.zoom
+                        spacing: 30*appWindow.zoom
+
+                        SchedulerCheckbox {
+                            id: schedulerCheckbox
+                            Layout.alignment: Qt.AlignVCenter
+                            xOffset: 0
+                        }
+
+                        Item {
+                            Layout.fillWidth: true
+                            implicitHeight: 1
+                        }
+
+                        DiskSpace {
+                            saveToPath: App.fromNativeSeparators(saveTo.path)
+                            Layout.alignment: Qt.AlignVCenter
+                        }
+                    }
+
+                    SchedulerBlock {
+                        id: schedulerBlock
+                        visible: schedulerCheckbox.checked
+                        Layout.fillWidth: true
+                        Layout.preferredHeight: visible ? 84*appWindow.zoom : 0
+                    }
+
+                    NoResumeSupportBlock {
+                        id: noResumeSupportBlock
+                        Layout.topMargin: 10*appWindow.zoom
+                    }
+
+                    PlayAsap {
+                        id: playAsap
+                    }
+
+                    ButtonsBlock {id: bb; forceDisableOK: d.accepting}
+                }
             }
         }
     }

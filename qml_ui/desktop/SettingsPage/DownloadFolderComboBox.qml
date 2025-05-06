@@ -17,7 +17,7 @@ BaseComboBox {
     editable: true
 
     popupVisibleRowsCount: 7
-    fontSize: 12*appWindow.fontZoom
+    fontSize: (appWindow.uiver === 1 ? 12 : appWindow.theme_v2.fontSize)*appWindow.fontZoom
     settingsStyle: true
     textRole: ""
 

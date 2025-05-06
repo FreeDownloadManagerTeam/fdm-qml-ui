@@ -136,7 +136,7 @@ BaseDialog {
                     text: qsTr("Creating %1\%").arg(Math.round(percents)) + App.loc.emptyString
                 }
 
-                DownloadsItemProgressIndicator {
+                ProgressIndicator {
                     Layout.fillWidth: true
                     percent: percents
                 }

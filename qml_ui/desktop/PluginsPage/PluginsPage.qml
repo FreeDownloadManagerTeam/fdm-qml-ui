@@ -84,18 +84,26 @@ Page {
 
         RowLayout
         {
+            Layout.topMargin: appWindow.uiver === 1 ?
+                                  (smallPage ? 12 : 24)*appWindow.zoom :
+                                  16*appWindow.zoom
+            Layout.bottomMargin: appWindow.uiver === 1 ?
+                                     (smallPage ? 6 : 18)*appWindow.zoom :
+                                     16*appWindow.zoom
+
+            spacing: 8*appWindow.zoom
+
             BaseLabel {
                 text: qsTr("Add-ons") + App.loc.emptyString
-                font.pixelSize: (smallPage ? 18 : 24)*appWindow.fontZoom
-                Layout.topMargin: (smallPage ? 12 : 24)*appWindow.zoom
-                Layout.bottomMargin: (smallPage ? 6 : 18)*appWindow.zoom
+                font.pixelSize: appWindow.uiver === 1 ?
+                                    (smallPage ? 18 : 24)*appWindow.fontZoom :
+                                    20**appWindow.fontZoom
             }
 
             GearButton
             {
                 id: menuBtn
 
-                Layout.alignment: Qt.AlignVCenter
                 Layout.preferredHeight: 26*appWindow.zoom
                 Layout.preferredWidth: Layout.preferredHeight
 
@@ -111,7 +119,7 @@ Page {
 
                     BaseContextMenuItem {
                         enabled: App.plugins.model.atLeast1PluginSupportsAutoUpdate
-                        text: qsTr("Check for Updates") + App.loc.emptyString
+                        text: qsTr("Check for updates") + App.loc.emptyString
                         onTriggered: {
                             root.checkUpdateAllLaunchedByUser = true;
                             root.updateAllResult = "";
@@ -124,14 +132,14 @@ Page {
 
                     BaseContextMenuItem {
                         enabled: allowInstallPlugin
-                        text: qsTr("Install Add-on From File...") + App.loc.emptyString
+                        text: qsTr("Install add-on from file...") + App.loc.emptyString
                         onTriggered: installPluginDlg.open()
                     }
 
                     BaseContextMenuSeparator {}
 
                     BaseContextMenuItem {
-                        text: qsTr("Update Add-ons Automatically") + App.loc.emptyString
+                        text: qsTr("Update add-ons automatically") + App.loc.emptyString
                         checkable: true
                         checked: App.settings.toBool(App.settings.app.value(AppSettings.UpdatePluginsAutomatically))
                         onTriggered: App.settings.app.setValue(AppSettings.UpdatePluginsAutomatically,
@@ -139,9 +147,19 @@ Page {
                     }
 
                     BaseContextMenuItem {
-                        text: qsTr("Reset All Add-ons to Update Automatically") + App.loc.emptyString
+                        text: qsTr("Reset all add-ons to update automatically") + App.loc.emptyString
                         enabled: App.plugins.updateMgr.hasPluginsWithDisabledAutoUpdate
                         onTriggered: App.plugins.updateMgr.resetAllPluginsToUpdateAutomatically()
+                    }
+
+                    BaseContextMenuSeparator {}
+
+                    BaseContextMenuItem {
+                        text: qsTr("Allow add-ons to use web browser cookies") + App.loc.emptyString
+                        checkable: true
+                        checked: App.settings.toBool(App.settings.app.value(AppSettings.PluginsAllowWbCookies))
+                        onTriggered: App.settings.app.setValue(AppSettings.PluginsAllowWbCookies,
+                                                               App.settings.fromBool(checked))
                     }
                 }
             }
@@ -155,7 +173,7 @@ Page {
                     text: qsTr("Updating installed add-ons...") + App.loc.emptyString
                 }
 
-                DownloadsItemProgressIndicator
+                ProgressIndicator
                 {
                     infinityIndicator: true
                     Layout.preferredHeight: (smallPage ? 6 : 10)*appWindow.zoom

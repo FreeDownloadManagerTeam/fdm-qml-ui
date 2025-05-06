@@ -32,19 +32,84 @@ Flickable
 
         Item
         {
+            id: imageHolder
+
+            readonly property var preview: App.downloads.previews.preview(selectedDownloadsTools.currentDownloadId)
+            readonly property var previewUrl: preview && !preview.usingFileIconPreview ? preview.large : null
+            readonly property bool hasPreview: previewUrl && previewUrl.toString()
+            readonly property int supposedWidth: 104*appWindow.zoom
+            readonly property int supposedHeight: 128*appWindow.zoom
+
             Layout.alignment: Qt.AlignTop
-            Layout.preferredWidth: 104*appWindow.zoom
-            Layout.preferredHeight: 128*appWindow.zoom
+            Layout.preferredWidth: hasPreview ?
+                                       previewHolder.recommendedWidth(supposedWidth, supposedHeight) :
+                                       supposedWidth
+            Layout.preferredHeight: hasPreview ?
+                                        previewHolder.recommendedHeight(supposedWidth, supposedHeight) :
+                                        supposedHeight
             Layout.leftMargin: appWindow.theme_v2.mainWindowLeftMargin*appWindow.zoom
 
             WaSvgImage
             {
+                visible: !parent.hasPreview
                 anchors.left: parent.left
                 anchors.bottom: parent.bottom
                 anchors.leftMargin: 3*appWindow.zoom
                 anchors.bottomMargin: 6*appWindow.zoom
                 zoom: appWindow.zoom
-                source: Qt.resolvedUrl(Qt.platform.os === "osx" ? "folder_mac.svg" : "folder.svg")
+                source: parent.hasPreview ? "" : Qt.resolvedUrl(Qt.platform.os === "osx" ? "folder_mac.svg" : "folder.svg")
+            }
+
+            Item
+            {
+                id: previewHolder
+                visible: parent.hasPreview
+
+                readonly property int minimumHeight: 68*appWindow.zoom
+
+                function recommendedWidth(supposedWidth, supposedHeight)
+                {
+                    return previewImg.isHorizontal ?
+                                Math.max(supposedWidth, minimumHeight * previewImg.ratio) :
+                                supposedHeight * previewImg.ratio;
+                }
+
+                function recommendedHeight(supposedWidth, supposedHeight)
+                {
+                    return previewImg.isHorizontal ?
+                                Math.max(minimumHeight, supposedWidth / previewImg.ratio) :
+                                supposedHeight;
+                }
+
+                anchors.top: parent.top
+                anchors.topMargin: 10*appWindow.zoom
+
+                height: recommendedHeight(parent.width, parent.height)
+                width: recommendedWidth(parent.width, parent.height)
+
+                Image
+                {
+                    id: previewImg
+                    readonly property real ratio: sourceSize.height ? sourceSize.width / sourceSize.height : 0
+                    readonly property bool isHorizontal: ratio > 1
+                    source: imageHolder.hasPreview ? imageHolder.previewUrl : ""
+                    anchors.fill: parent
+                    layer.enabled: true
+                    layer.effect: OpacityMask {
+                        maskSource: Rectangle {
+                            width: previewImg.width
+                            height: previewImg.height
+                            radius: 4*appWindow.zoom
+                        }
+                    }
+                }
+            }
+
+            MouseAreaWithHand_V2 {
+                visible: !App.rc.client.active && downloadsItemTools.finished
+                anchors.fill: parent
+                cursorShape: Qt.PointingHandCursor
+                onClicked: App.downloads.mgr.openDownload(downloadsItemTools.itemId, -1)
             }
         }
 
@@ -98,11 +163,13 @@ Flickable
 
             DownloadStatus_V2
             {
+                id: statusItem
+                visible: !absolutelyFinished
                 Layout.fillWidth: true
                 Layout.maximumWidth: 524*appWindow.zoom
             }
 
-            Item {implicitHeight: 11*appWindow.zoom; implicitWidth: 1}
+            Item {visible: statusItem.visible; implicitHeight: 11*appWindow.zoom; implicitWidth: 1}
 
             GridLayout
             {

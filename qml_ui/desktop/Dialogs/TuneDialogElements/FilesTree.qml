@@ -56,10 +56,13 @@ ColumnLayout {
     Rectangle {
         Layout.fillWidth: true
         Layout.fillHeight: true
-        border.color: appWindow.uiver === 1 ? appWindow.theme.border : "transparent"
-        border.width: appWindow.uiver === 1 ? 1*appWindow.zoom : 0
+        border.color: appWindow.uiver === 1 ?
+                          appWindow.theme.border :
+                          appWindow.theme_v2.outlineBorderColor
+        border.width: 1*appWindow.zoom
         color: appWindow.uiver === 1 ? appWindow.theme.filesTreeBackground :
                                        appWindow.theme_v2.bgColor
+        radius: appWindow.uiver === 1 ? 0 : 8*appWindow.zoom
 
         Component {
             id: tree_v1
@@ -89,6 +92,7 @@ ColumnLayout {
             id: treeLoader
             sourceComponent: appWindow.uiver === 1 ? tree_v1 : tree_v2
             anchors.fill: parent
+            anchors.margins: appWindow.uiver === 1 ? 0 : 8*appWindow.zoom
         }
 
         Rectangle {

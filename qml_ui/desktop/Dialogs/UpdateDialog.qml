@@ -5,12 +5,18 @@ import "../../qt5compat"
 import org.freedownloadmanager.fdm 1.0
 import org.freedownloadmanager.fdm.qtupdate 1.0
 import "../BaseElements"
+import "../BaseElements/V2"
 
 Item {
     id: root
     visible: updateTools.showDialog
-    height: 100*appWindow.zoom
-    width: 100*appWindow.zoom + 200*appWindow.fontZoom
+
+    readonly property bool needMoreSpace: appWindow.uiver !== 1 &&
+                                          (updateTools.state != QtUpdate.Failed ||
+                                          (updateTools.state == QtUpdate.Finished && updateTools.updatesAvailable))
+
+    height: (needMoreSpace ? 112 : 100)*appWindow.zoom
+    width: (needMoreSpace ? 112 : 100)*appWindow.zoom + 200*appWindow.fontZoom
 
     property int arrowCenterX: width/2
 
@@ -18,11 +24,24 @@ Item {
                                          appWindow.theme.background :
                                          appWindow.theme_v2.bgColor
 
+    readonly property int fontSize: (appWindow.uiver === 1 ? 14 : 16)*appWindow.fontZoom
+
     MouseArea {
         anchors.fill: parent
     }
 
+    RectangularGlow {
+        visible: appWindow.uiver !== 1 && appWindow.theme_v2.useGlow
+        anchors.fill: dlg
+        anchors.margins: 3*appWindow.zoom
+        color: appWindow.theme_v2.glowColor
+        glowRadius: 0
+        spread: 0
+        cornerRadius: dlg.radius
+    }
+
     Rectangle {
+        visible: appWindow.uiver === 1
         clip: true
         color: "transparent"
         width: 10*appWindow.zoom
@@ -60,16 +79,16 @@ Item {
         width: parent.width
         height: parent.height
         x: -20*appWindow.zoom
-        y: 5*appWindow.zoom
+        y: appWindow.uiver === 1 ? 5*appWindow.zoom : 0
         color: root.bgColor
-        radius: 5*appWindow.zoom
-        border.color: appWindow.uiver === 1 ? "transparent" : appWindow.theme_v2.dialogBgColor
-        border.width: appWindow.uiver === 1 ? 0 : 2*appWindow.zoom
+        radius: (appWindow.uiver === 1 ? 5 : 16)*appWindow.zoom
+        border.color: appWindow.uiver === 1 ? "transparent" : appWindow.theme_v2.bg400
+        border.width: appWindow.uiver === 1 ? 0 : 1*appWindow.zoom
         clip: true
 
         ColumnLayout {
             visible: updateTools.stage == QtUpdate.CheckUpdates
-            anchors.margins: 10*appWindow.zoom
+            anchors.margins: (appWindow.uiver === 1 ? 10 :  16)*appWindow.zoom
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.fill: parent
             spacing: 5*appWindow.zoom
@@ -78,11 +97,22 @@ Item {
                 visible: updateTools.state == QtUpdate.Ready || updateTools.state == QtUpdate.InProgress
                 Layout.alignment: Qt.AlignLeft | Qt.AlignTop
                 text: qsTr("Checking for updates...") + App.loc.emptyString
+                font.pixelSize: root.fontSize
             }
             DownloadsItemProgressIndicator {
-                visible: updateTools.state == QtUpdate.Ready || updateTools.state == QtUpdate.InProgress
+                visible: appWindow.uiver === 1 &&
+                         (updateTools.state == QtUpdate.Ready || updateTools.state == QtUpdate.InProgress)
                 infinityIndicator: updateTools.progress === -1
                 percent: updateTools.progress
+                Layout.fillWidth: true
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignCenter
+            }
+            SlimProgressBar_V2 {
+                visible: appWindow.uiver !== 1 &&
+                         (updateTools.state == QtUpdate.Ready || updateTools.state == QtUpdate.InProgress)
+                indeterminate: updateTools.progress === -1
+                value: updateTools.progress
+                running: updateTools.state == QtUpdate.InProgress
                 Layout.fillWidth: true
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignCenter
             }
@@ -92,12 +122,14 @@ Item {
                 Layout.alignment: Qt.AlignLeft
                 color: appWindow.theme.errorMessage
                 text: qsTr("Error:") + App.loc.emptyString
+                font.pixelSize: root.fontSize
             }
             BaseLabel {
                 visible: updateTools.state == QtUpdate.Failed
                 Layout.alignment: Qt.AlignLeft
                 color: appWindow.theme.errorMessage
                 text: updateTools.lastErrorDescription
+                font.pixelSize: root.fontSize
             }
             Row {
                 visible: updateTools.state == QtUpdate.Failed
@@ -121,6 +153,7 @@ Item {
                 visible: updateTools.state == QtUpdate.Finished && updateTools.updatesAvailable
                 Layout.alignment: Qt.AlignLeft
                 text: qsTr("New version is available") + App.loc.emptyString
+                font.pixelSize: root.fontSize
             }
             BaseHandCursorLabel {
                 visible: updateTools.state == QtUpdate.Finished && updateTools.updatesAvailable &&
@@ -140,8 +173,9 @@ Item {
 
             BaseLabel {
                 visible: updateTools.state == QtUpdate.Finished && !updateTools.updatesAvailable
-                Layout.alignment: Qt.AlignLeft
+                Layout.alignment: appWindow.uiver === 1 ? Qt.AlignLeft : Qt.AlignHCenter
                 text: qsTr("%1 is up to date").arg(App.shortDisplayName) + App.loc.emptyString
+                font.pixelSize: root.fontSize
             }
             BaseButton {
                 visible: updateTools.state == QtUpdate.Finished && !updateTools.updatesAvailable
@@ -155,7 +189,7 @@ Item {
 
         ColumnLayout {
             visible: updateTools.stage == QtUpdate.DownloadUpdates
-            anchors.margins: 10*appWindow.zoom
+            anchors.margins: (appWindow.uiver === 1 ? 10 :  16)*appWindow.zoom
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.fill: parent
 
@@ -163,6 +197,7 @@ Item {
                 visible: updateTools.state == QtUpdate.Ready || updateTools.state == QtUpdate.InProgress || updateTools.state == QtUpdate.Finished
                 Layout.alignment: Qt.AlignLeft
                 text: qsTr("Downloading update") + App.loc.emptyString
+                font.pixelSize: root.fontSize
             }
             DownloadsItemProgressIndicator {
                 visible: updateTools.state == QtUpdate.Ready || updateTools.state == QtUpdate.InProgress || updateTools.state == QtUpdate.Finished
@@ -182,12 +217,14 @@ Item {
                 Layout.alignment: Qt.AlignLeft
                 color: appWindow.theme.errorMessage
                 text: qsTr("Error downloading update:") + App.loc.emptyString
+                font.pixelSize: root.fontSize
             }
             BaseLabel {
                 visible: updateTools.state == QtUpdate.Failed
                 Layout.alignment: Qt.AlignLeft
                 color: appWindow.theme.errorMessage
                 text: updateTools.lastErrorDescription
+                font.pixelSize: root.fontSize
             }
             Row {
                 visible: updateTools.state == QtUpdate.Failed
@@ -210,7 +247,7 @@ Item {
 
         ColumnLayout {
             visible: updateTools.stage == QtUpdate.PostDownloadCheck
-            anchors.margins: 10*appWindow.zoom
+            anchors.margins: (appWindow.uiver === 1 ? 10 :  16)*appWindow.zoom
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.fill: parent
 
@@ -218,6 +255,7 @@ Item {
                 visible: updateTools.state == QtUpdate.Ready || updateTools.state == QtUpdate.InProgress
                 Layout.alignment: Qt.AlignLeft
                 text: qsTr("Checking...") + App.loc.emptyString
+                font.pixelSize: root.fontSize
             }
             DownloadsItemProgressIndicator {
                 visible: updateTools.state == QtUpdate.Ready || updateTools.state == QtUpdate.InProgress
@@ -237,12 +275,14 @@ Item {
                 Layout.alignment: Qt.AlignLeft
                 color: appWindow.theme.errorMessage
                 text: qsTr("Error:") + App.loc.emptyString
+                font.pixelSize: root.fontSize
             }
             BaseLabel {
                 visible: updateTools.state == QtUpdate.Failed
                 Layout.alignment: Qt.AlignLeft
                 color: appWindow.theme.errorMessage
                 text: updateTools.lastErrorDescription
+                font.pixelSize: root.fontSize
             }
             Row {
                 visible: updateTools.state == QtUpdate.Failed
@@ -265,6 +305,7 @@ Item {
                 visible: updateTools.state == QtUpdate.Finished && updateTools.updater.initiator == QtUpdate.InitiatorAutomatic
                 Layout.alignment: Qt.AlignLeft
                 text: qsTr("Update downloaded") + App.loc.emptyString
+                font.pixelSize: root.fontSize
             }
             Row {
                 visible: updateTools.state == QtUpdate.Finished && updateTools.updater.initiator == QtUpdate.InitiatorAutomatic
@@ -287,7 +328,7 @@ Item {
 
         ColumnLayout {
             visible: updateTools.stage == QtUpdate.PreInstallCheck
-            anchors.margins: 10*appWindow.zoom
+            anchors.margins: (appWindow.uiver === 1 ? 10 :  16)*appWindow.zoom
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.fill: parent
 
@@ -295,6 +336,7 @@ Item {
                 visible: updateTools.state == QtUpdate.Ready || updateTools.state == QtUpdate.InProgress || updateTools.state == QtUpdate.Finished
                 Layout.alignment: Qt.AlignLeft
                 text: qsTr("Installing updates") + App.loc.emptyString
+                font.pixelSize: root.fontSize
             }
             DownloadsItemProgressIndicator {
                 visible: updateTools.state == QtUpdate.Ready || updateTools.state == QtUpdate.InProgress || updateTools.state == QtUpdate.Finished
@@ -307,12 +349,14 @@ Item {
                 Layout.alignment: Qt.AlignLeft
                 color: appWindow.theme.errorMessage
                 text: qsTr("Error occurred during installation:") + App.loc.emptyString
+                font.pixelSize: root.fontSize
             }
             BaseLabel {
                 visible: updateTools.state == QtUpdate.Failed
                 Layout.alignment: Qt.AlignLeft
                 color: appWindow.theme.errorMessage
                 text: updateTools.lastErrorDescription
+                font.pixelSize: root.fontSize
             }
             Row {
                 visible: updateTools.state == QtUpdate.Failed
@@ -335,7 +379,7 @@ Item {
 
         ColumnLayout {
             visible: updateTools.stage == QtUpdate.InstallUpdates
-            anchors.margins: 10*appWindow.zoom
+            anchors.margins: (appWindow.uiver === 1 ? 10 :  16)*appWindow.zoom
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.fill: parent
 
@@ -343,6 +387,7 @@ Item {
                 visible: updateTools.state == QtUpdate.Ready || updateTools.state == QtUpdate.InProgress
                 Layout.alignment: Qt.AlignLeft
                 text: qsTr("Installing updates") + App.loc.emptyString
+                font.pixelSize: root.fontSize
             }
             DownloadsItemProgressIndicator {
                 visible: updateTools.state == QtUpdate.Ready || updateTools.state == QtUpdate.InProgress
@@ -355,12 +400,14 @@ Item {
                 Layout.alignment: Qt.AlignLeft
                 color: appWindow.theme.errorMessage
                 text: qsTr("Error occurred during installation:") + App.loc.emptyString
+                font.pixelSize: root.fontSize
             }
             BaseLabel {
                 visible: updateTools.state == QtUpdate.Failed
                 Layout.alignment: Qt.AlignLeft
                 color: appWindow.theme.errorMessage
                 text: updateTools.lastErrorDescription
+                font.pixelSize: root.fontSize
             }
             Row {
                 visible: updateTools.state == QtUpdate.Failed
@@ -383,6 +430,7 @@ Item {
                 visible: updateTools.state == QtUpdate.Finished && updateTools.restartRequired
                 Layout.alignment: Qt.AlignLeft
                 text: qsTr("Relaunch %1 to update").arg(App.shortDisplayName) + App.loc.emptyString
+                font.pixelSize: root.fontSize
             }
             Row {
                 visible: updateTools.state == QtUpdate.Finished && updateTools.restartRequired
@@ -410,6 +458,7 @@ Item {
                 visible: updateTools.state == QtUpdate.Finished && !updateTools.restartRequired
                 Layout.alignment: Qt.AlignLeft
                 text: qsTr("%1 is up to date").arg(App.shortDisplayName) + App.loc.emptyString
+                font.pixelSize: root.fontSize
             }
             BaseButton {
                 visible: updateTools.state == QtUpdate.Finished && !updateTools.restartRequired

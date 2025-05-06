@@ -8,7 +8,7 @@ CheckBox {
     id: root
     property string checkBoxStyle: "blue"
     property string textColor
-    property int fontSize: 14*appWindow.fontZoom
+    property int fontSize: (appWindow.uiver === 1 ? 14 : appWindow.theme_v2.fontSize)*appWindow.fontZoom
     property bool truncated: contentItem.truncated
     property bool elideText: true
     property bool locked: false

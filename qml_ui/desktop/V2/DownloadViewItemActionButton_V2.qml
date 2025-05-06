@@ -17,7 +17,7 @@ WaSvgImage
     opacity: enabled ? 1 : 0.3
 
     source: Qt.resolvedUrl(
-                buttonType === "showInFolder" ? (hasChildren ? "batch_download_icon.svg" : "single_download_folder.svg") :
+                buttonType === "showInFolder" ? (hasChildren ? "batch_download_icon.svg" : (Qt.platform.os === "osx" ? "single_download_folder_mac.svg" : "single_download_folder.svg")) :
                 buttonType === "pause" ? "single_download_pause.svg" :
                 buttonType === "start" ? "single_download_play.svg" :
                 buttonType === "scheduler" ? "single_download_scheduler.svg" :

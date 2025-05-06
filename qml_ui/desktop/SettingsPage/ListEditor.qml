@@ -5,11 +5,12 @@ import "../../qt5compat"
 import "../../common"
 import org.freedownloadmanager.fdm 1.0
 import "../BaseElements"
+import "../BaseElements/V2"
 
 Item {
     id: root
     property var myStr
-    property var myModel: myStr.length > 0 ? myStr.split(' ').sort() : null
+    property var myModel: myStr.length > 0 ? myStr.split(' ').sort() : []
     width: parent.width
     height: 170*appWindow.zoom
     property string clear_btn_img: appWindow.macVersion ? Qt.resolvedUrl("../../images/desktop/search_clear_mac.svg") : Qt.resolvedUrl("../../images/desktop/clean.svg")
@@ -29,15 +30,17 @@ Item {
             color: "transparent"
             clip: true
             border.width: 1*appWindow.zoom
-            border.color: appWindow.theme.settingsControlBorder
+            border.color: appWindow.uiver === 1 ?
+                              appWindow.theme.settingsControlBorder :
+                              appWindow.theme_v2.outlineBorderColor
+            radius: appWindow.uiver === 1 ? 0 : 8*appWindow.zoom
 
             ListView {
                 id: listView
                 model: myModel
-                anchors.left: parent.left
-                anchors.top: parent.top
-                height: parent.height
-                width: parent.width
+                anchors.fill: parent
+                anchors.margins: (appWindow.uiver === 1 ? 1 : 8)*appWindow.zoom
+                anchors.rightMargin: 0
                 clip: true
 
                 currentIndex: -1
@@ -45,38 +48,44 @@ Item {
                 highlightFollowsCurrentItem: false
                 focus: true
 
-                ScrollBar.vertical: ScrollBar{}
-                ScrollBar.horizontal: ScrollBar{}
+                ScrollBar.vertical: BaseScrollBar_V2{
+                    id: sb
+                    policy: listView.contentHeight > listView.height ?
+                                ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
+                }
 
                 flickableDirection: Flickable.AutoFlickIfNeeded
                 boundsBehavior: Flickable.StopAtBounds
 
                 delegate: Item {
-                    property int rowHeigth: 22*appWindow.zoom
-                    width: parent.width
+                    readonly property int rowHeigth: 22*appWindow.zoom
+                    width: parent.width - sb.myWrapSize
                     height: rowHeigth
                     Layout.preferredHeight: rowHeigth
                     Layout.margins: 1*appWindow.zoom
-                    property bool enabledHover: false
+                    readonly property bool highlighted: ma.containsMouse || elidedLabel.containsMouse
 
                     Rectangle {
                         anchors.fill: parent
                         anchors.margins: 1*appWindow.zoom
-                        color: appWindow.theme.menuHighlight
-                        visible: enabledHover
+                        color: appWindow.uiver === 1 ?
+                                   appWindow.theme.menuHighlight :
+                                   appWindow.theme_v2.hightlightBgColor
+                        radius: appWindow.uiver === 1 ? 0 : 4*appWindow.zoom
+                        visible: highlighted
                     }
 
                     MouseArea {
+                        id: ma
                         anchors.fill: parent
                         hoverEnabled: true
-                        onEntered: { enabledHover = true }
-                        onExited: { enabledHover = false }
                     }
 
                     RowLayout {
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.leftMargin: 5*appWindow.zoom
                         anchors.left: parent.left
+                        anchors.right: parent.right
 
                         WaSvgImage {
                             id: clearBtnImg
@@ -102,10 +111,11 @@ Item {
                             }
                         }
 
-                        BaseLabel {
+                        ElidedLabelWithTooltip {
+                            id: elidedLabel
                             Layout.alignment: Qt.AlignVCenter
-                            text: modelData
-                            font.pixelSize: 13*appWindow.fontZoom
+                            sourceText: modelData
+                            Layout.fillWidth: true
                         }
                     }
                 }

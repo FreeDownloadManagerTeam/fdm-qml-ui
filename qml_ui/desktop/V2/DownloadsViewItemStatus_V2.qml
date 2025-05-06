@@ -168,7 +168,8 @@ Item
                                                           "canChangeUrl": (item.flags & AbstractDownloadsUi.AllowChangeSourceUrl) != 0,
                                                           "supportsMirror": (item.flags & AbstractDownloadsUi.SupportsMirrors) != 0,
                                                           "batchDownload": downloadsItemTools.hasChildDownloads,
-                                                          "endlessStream": (item.flags & AbstractDownloadsUi.EndlessStream) != 0
+                                                          "endlessStream": (item.flags & AbstractDownloadsUi.EndlessStream) != 0,
+                                                          "hideDisabledItems": true
                                                       });
                     menu.open();
                     menu.aboutToHide.connect(function(){menu.destroy();});

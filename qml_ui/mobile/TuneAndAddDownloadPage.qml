@@ -112,9 +112,10 @@ Page {
                                         let p = modelData.path;
                                         let newIndex = index < saveTo.model.length - 1 ? index : 0;
                                         let m = saveTo.model;
+                                        let __saveTo = saveTo;
                                         m.splice(index, 1);
-                                        saveTo.currentIndex = newIndex;
-                                        saveTo.model = m;
+                                        __saveTo.currentIndex = newIndex;
+                                        __saveTo.model = m;
                                         App.recentFolders.removeFolder(p);
                                     }
                                 }

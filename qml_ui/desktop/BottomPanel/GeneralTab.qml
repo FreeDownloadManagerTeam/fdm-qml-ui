@@ -56,6 +56,13 @@ Flickable {
                 source: previewUrl.toString() ? previewUrl : (downloadsItemTools.hasChildDownloads ? appWindow.theme.batchDownloadIcon : appWindow.theme.defaultFileIcon)
                 fillMode: Image.PreserveAspectFit
                 height: Math.min(sourceSize.height, bottomPanelHeight, Math.floor(sourceSize.height * Math.min(sourceSize.width, parent.width * 0.3) / sourceSize.width))
+
+                MouseArea {
+                    visible: !App.rc.client.active && downloadsItemTools.finished
+                    anchors.fill: parent
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked: App.downloads.mgr.openDownload(downloadsItemTools.itemId, -1)
+                }
             }
 
             Column {

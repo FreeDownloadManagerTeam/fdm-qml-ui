@@ -68,7 +68,7 @@ Item
                     anchors.centerIn: parent
                     layer {
                         effect: ColorOverlay {
-                            color: appWindow.theme.settingsSubgroupHeader
+                            color: appWindow.uiver === 1 ? appWindow.theme.settingsSubgroupHeader : appWindow.theme_v2.settingsSubgroupHeader
                         }
                         enabled: true
                     }

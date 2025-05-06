@@ -117,16 +117,13 @@ Page {
             {
                 id: tabsPanel
 
-                anchors.top: parent.top
+                anchors.fill: parent
                 anchors.topMargin: meat.myTopMargin
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.rightMargin: meat.sideBarAddWidth
 
                 BaseLabel {
                     id: preferencesLabel
-                    Layout.leftMargin: qtbug.leftMargin((smallSettingsPage ? 18 : 22)*appWindow.zoom, 0)
-                    Layout.rightMargin: qtbug.rightMargin((smallSettingsPage ? 18 : 22)*appWindow.zoom, 0)
+                    Layout.leftMargin: qtbug.leftMargin((smallSettingsPage ? 18 : 22)*appWindow.zoom, meat.sideBarAddWidth)
+                    Layout.rightMargin: qtbug.rightMargin((smallSettingsPage ? 18 : 22)*appWindow.zoom, meat.sideBarAddWidth)
                     Layout.bottomMargin: (smallSettingsPage ? 6 : 18)*appWindow.zoom
                     text: qsTr("Preferences") + App.loc.emptyString
                     font.pixelSize: appWindow.uiver === 1 ?
@@ -138,87 +135,118 @@ Page {
                     }
                 }
 
-                RightItemLabel {
-                    text: qsTr("General") + App.loc.emptyString
-                    onClicked: flick.contentY = general.y
-                    current: flick.currentTab === general
-                    Layout.fillWidth: true
-                }
+                Flickable
+                {
+                    id: tabsFlickable
 
-                RightItemLabel {
-                    text: qsTr("Browser Integration") + App.loc.emptyString
-                    onClicked: flick.contentY = browserIntegration.y
-                    current: flick.currentTab === browserIntegration
-                    Layout.fillWidth: true
-                }
+                    implicitHeight: tabsCol.implicitHeight
+                    implicitWidth: tabsCol.implicitWidth + sbar.myWrapSize
 
-                RightItemLabel {
-                    text: qsTr("Network") + App.loc.emptyString
-                    onClicked: flick.contentY = network.y
-                    current: flick.currentTab === network
+                    Layout.fillHeight: true
                     Layout.fillWidth: true
-                }
+                    Layout.leftMargin: qtbug.leftMargin(0, Math.max(0, meat.sideBarAddWidth - sbar.myWrapSize))
+                    Layout.rightMargin: qtbug.rightMargin(0, Math.max(0, meat.sideBarAddWidth - sbar.myWrapSize))
 
-                RightItemLabel {
-                    text: qsTr("Traffic Limits") + App.loc.emptyString
-                    onClicked: flick.contentY = tum.y
-                    current: flick.currentTab === tum
-                    Layout.fillWidth: true
-                }
+                    contentHeight: tabsCol.implicitHeight
 
-                RightItemLabel {
-                    id: antivirusHeader
-                    text: qsTr("Antivirus") + App.loc.emptyString
-                    onClicked: flick.contentY = antivirus.y
-                    current: flick.currentTab === antivirus
-                    Layout.fillWidth: true
-                }
+                    clip: true
 
-                RightItemLabel {
-                    visible: appWindow.btSupported
-                    text: appWindow.btSupported ? appWindow.btS.protocolName : ""
-                    onClicked: flick.contentY = bt.y
-                    current: flick.currentTab === bt
-                    Layout.fillWidth: true
-                }
+                    ScrollBar.vertical: BaseScrollBar_V2
+                    {
+                        id: sbar
+                        visible: tabsFlickable.height < tabsFlickable.contentHeight
+                        policy: ScrollBar.AlwaysOn
+                    }
 
-                RightItemLabel {
-                    visible: rc.visible
-                    text: qsTr("Remote Access") + App.loc.emptyString
-                    onClicked: flick.contentY = rc.y
-                    current: flick.currentTab === rc
-                    Layout.fillWidth: true
-                }
+                    ColumnLayout
+                    {
+                        id: tabsCol
 
-                RightItemLabel {
-                    text: qsTr("Advanced") + App.loc.emptyString
-                    readonly property int adjust: Math.max(0, flick.height - advanced.height)
-                    onClicked: {
-                        if (advanced.hidden)
-                        {
-                            advanced.hidden = false;
-                            advancedTabTimer.start();
+                        width: parent.width - sbar.myWrapSize
+
+                        RightItemLabel {
+                            text: qsTr("General") + App.loc.emptyString
+                            onClicked: flick.contentY = general.y
+                            current: flick.currentTab === general
+                            Layout.fillWidth: true
                         }
-                        else
-                        {
-                            flick.contentY = advanced.y;
+
+                        RightItemLabel {
+                            text: qsTr("Browser Integration") + App.loc.emptyString
+                            onClicked: flick.contentY = browserIntegration.y
+                            current: flick.currentTab === browserIntegration
+                            Layout.fillWidth: true
+                        }
+
+                        RightItemLabel {
+                            text: qsTr("Network") + App.loc.emptyString
+                            onClicked: flick.contentY = network.y
+                            current: flick.currentTab === network
+                            Layout.fillWidth: true
+                        }
+
+                        RightItemLabel {
+                            text: qsTr("Traffic Limits") + App.loc.emptyString
+                            onClicked: flick.contentY = tum.y
+                            current: flick.currentTab === tum
+                            Layout.fillWidth: true
+                        }
+
+                        RightItemLabel {
+                            id: antivirusHeader
+                            text: qsTr("Antivirus") + App.loc.emptyString
+                            onClicked: flick.contentY = antivirus.y
+                            current: flick.currentTab === antivirus
+                            Layout.fillWidth: true
+                        }
+
+                        RightItemLabel {
+                            visible: appWindow.btSupported
+                            text: appWindow.btSupported ? appWindow.btS.protocolName : ""
+                            onClicked: flick.contentY = bt.y
+                            current: flick.currentTab === bt
+                            Layout.fillWidth: true
+                        }
+
+                        RightItemLabel {
+                            visible: rc.visible
+                            text: qsTr("Remote Access") + App.loc.emptyString
+                            onClicked: flick.contentY = rc.y
+                            current: flick.currentTab === rc
+                            Layout.fillWidth: true
+                        }
+
+                        RightItemLabel {
+                            text: qsTr("Advanced") + App.loc.emptyString
+                            readonly property int adjust: Math.max(0, flick.height - advanced.height)
+                            onClicked: {
+                                if (advanced.hidden)
+                                {
+                                    advanced.hidden = false;
+                                    advancedTabTimer.start();
+                                }
+                                else
+                                {
+                                    flick.contentY = advanced.y;
+                                }
+                            }
+                            current: flick.currentTab === advanced
+                            Layout.fillWidth: true
+                            Timer {
+                                id: advancedTabTimer
+                                interval: 100
+                                onTriggered: flick.contentY = advanced.y
+                            }
+                        }
+
+                        RightItemLabel {
+                            visible: troubleshooting.visible
+                            text: qsTr("Troubleshooting") + App.loc.emptyString
+                            onClicked: flick.contentY = troubleshooting.y
+                            current: flick.currentTab === troubleshooting
+                            Layout.fillWidth: true
                         }
                     }
-                    current: flick.currentTab === advanced
-                    Layout.fillWidth: true
-                    Timer {
-                        id: advancedTabTimer
-                        interval: 100
-                        onTriggered: flick.contentY = advanced.y
-                    }
-                }
-
-                RightItemLabel {
-                    visible: troubleshooting.visible
-                    text: qsTr("Troubleshooting") + App.loc.emptyString
-                    onClicked: flick.contentY = troubleshooting.y
-                    current: flick.currentTab === troubleshooting
-                    Layout.fillWidth: true
                 }
             }
         }
@@ -252,12 +280,8 @@ Page {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
 
-                readonly property int myRightMargin: appWindow.uiver === 1 ?
-                                                         (smallSettingsPage ? 10 : 30)*appWindow.zoom :
-                                                         appWindow.theme_v2.mainWindowRightMargin*appWindow.zoom
-
-                Layout.leftMargin:  qtbug.leftMargin(30*appWindow.zoom, myRightMargin)
-                Layout.rightMargin: qtbug.rightMargin(30*appWindow.zoom, myRightMargin)
+                Layout.leftMargin:  qtbug.leftMargin(30*appWindow.zoom, 0)
+                Layout.rightMargin: qtbug.rightMargin(30*appWindow.zoom, 0)
 
                 flickableDirection: Flickable.HorizontalAndVerticalFlick
 
@@ -277,7 +301,7 @@ Page {
                 ColumnLayout
                 {
                     id: all
-                    width: parent.width
+                    width: parent.width - 16*appWindow.zoom/*scrollbar width*/
                     spacing: 20*appWindow.zoom
                     GeneralSettings {id: general; Layout.fillWidth: true}
                     BrowserIntegrationSettings {id: browserIntegration; Layout.fillWidth: true}

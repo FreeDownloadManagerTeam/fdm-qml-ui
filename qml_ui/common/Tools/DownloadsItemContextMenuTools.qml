@@ -12,6 +12,7 @@ Item {
 
     property bool canBeOpened: false
     property bool canBeShownInFolder: App.features.hasFeature(AppFeatures.OpenFolder)
+    property bool canShareFile: false
 
     onFinishedChanged: updateState()
     Component.onCompleted: updateState()
@@ -19,16 +20,19 @@ Item {
     function updateState()
     {
         let cbo = false;
+        let csf = false;
 
         if (singleDownload)
         {
+            let info = App.downloads.infos.info(modelId);
+
             if (root.finished)
             {
                 cbo = true;
+                csf = info.filesCount === 1;
             }
             else
             {
-                let info = App.downloads.infos.info(modelId);
                 if (info.nonSkippedFilesCount() === 1)
                 {
                     let index = info.firstNonSkippedFileIndex();
@@ -42,7 +46,11 @@ Item {
             }
         }
 
+        if (csf && !App.features.hasFeature(AppFeatures.ShareFile))
+            csf = false;
+
         canBeOpened = cbo;
+        canShareFile = csf;
     }
 
     function openClick()
@@ -55,6 +63,16 @@ Item {
     {
         if (!App.rc.client.active)
             App.downloads.mgr.openDownloadFolder(modelId, -1)
+    }
+
+    function shareFileClick()
+    {
+        if (!App.rc.client.active)
+        {
+            let info = App.downloads.infos.info(modelId);
+            let file = info.fileInfo(0);
+            App.tools.shareFile(info.destinationPath + "/" + file.path);
+        }
     }
 
     function copyLinkClick()

@@ -285,6 +285,14 @@ Column
 
         SettingsCheckBox
         {
+            text: App.my_BT_qsTranslate("Settings", "Use UPnP / NAT-PMP port forwarding") + App.loc.emptyString
+            checked: App.settings.toBool(App.settings.dmcore.value(DmCoreSettings.BtEnablePortForwarding))
+            onClicked: App.settings.dmcore.setValue(DmCoreSettings.BtEnablePortForwarding,
+                                                    App.settings.fromBool(checked))
+        }
+
+        SettingsCheckBox
+        {
             id: enableTrackerList
             text: App.my_BT_qsTranslate("Settings", "Enable list of predefined trackers") + App.loc.emptyString
             checked: parseInt(App.settings.dmcore.value(DmCoreSettings.BtEnableTrackerList))

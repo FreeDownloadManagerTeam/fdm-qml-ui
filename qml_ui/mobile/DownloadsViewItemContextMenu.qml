@@ -125,8 +125,14 @@ Menu
         text: qsTr("Show in folder") + App.loc.emptyString
         onTriggered: contextMenuTools.showInFolderClick()
     }
+    BaseMenuItem {
+        id: shareFile
+        visible: !App.rc.client.active && contextMenuTools.canShareFile
+        text: qsTr("Share file") + App.loc.emptyString
+        onTriggered: contextMenuTools.shareFileClick()
+    }
     BaseMenuSeparator {
-        visible: restartVisible || openVisible || showInFolderVisible
+        visible: restartVisible || openVisible || showInFolderVisible || shareFile.visible
     }
 
     BaseMenuItem {

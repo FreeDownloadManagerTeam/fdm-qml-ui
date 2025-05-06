@@ -35,6 +35,8 @@ RowLayout
 
         RowLayout
         {
+            spacing: 8*appWindow.zoom
+
             BaseLabel
             {
                 text: model.name
@@ -55,7 +57,7 @@ RowLayout
 
                     BaseContextMenuItem {
                         enabled: model.supportsAutoUpdate
-                        text: qsTr("Allow Automatic Updates") + App.loc.emptyString
+                        text: qsTr("Allow automatic updates") + App.loc.emptyString
                         checkable: true
                         checked: model.supportsAutoUpdate && !model.autoUpdateDisabled
                         onTriggered: App.plugins.updateMgr.disableAutoUpdate(model.uuid, !checked)
@@ -63,7 +65,7 @@ RowLayout
 
                     BaseContextMenuItem {
                         enabled: model.supportsAutoUpdate
-                        text: qsTr("Check for Updates") + App.loc.emptyString
+                        text: qsTr("Check for updates") + App.loc.emptyString
                         onTriggered: {
                             root.checkUpdateThisLaunchedByUser = true;
                             root.updateResult = "";
@@ -90,7 +92,7 @@ RowLayout
                     text: qsTr("Updating...") + App.loc.emptyString
                 }
 
-                DownloadsItemProgressIndicator
+                ProgressIndicator
                 {
                     infinityIndicator: true
                     Layout.preferredHeight: (smallPage ? 6 : 10)*appWindow.zoom
@@ -100,7 +102,7 @@ RowLayout
 
             BaseLabel
             {
-                visible: text && text !== updateAllResult
+                visible: !model.updating && text && text !== updateAllResult
                 text: root.updateResult
                 color: root.updateFailed ? appWindow.theme.errorMessage : appWindow.theme.foreground
             }

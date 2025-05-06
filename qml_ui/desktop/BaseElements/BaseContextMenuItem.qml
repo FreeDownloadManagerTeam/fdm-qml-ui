@@ -13,9 +13,9 @@ MenuItem {
         topPadding: ((visible && appWindow.uiver === 1) ? 1 : 2)*appWindow.zoom
         bottomPadding: ((visible && appWindow.uiver === 1) ? 1 : 2)*appWindow.zoom
         leftPadding: appWindow.uiver === 1 ? qtbug.leftPadding(20*appWindow.zoom, 10*appWindow.zoom) :
-                                             qtbug.leftPadding(16*appWindow.zoom, 12*appWindow.zoom)
+                                             qtbug.leftPadding(20*appWindow.zoom, 12*appWindow.zoom)
         rightPadding: appWindow.uiver === 1 ? qtbug.rightPadding(20*appWindow.zoom, 10*appWindow.zoom) :
-                                              qtbug.leftPadding(16*appWindow.zoom, 12*appWindow.zoom)
+                                              qtbug.leftPadding(20*appWindow.zoom, 12*appWindow.zoom)
 
         property bool arrow_down: false
         property bool arrow_up: false

@@ -4,9 +4,14 @@ import org.freedownloadmanager.fdm 1.0
 import "../../BaseElements"
 
 Rectangle {
-    color: appWindow.theme.background
+    color: appWindow.uiver === 1 ?
+               appWindow.theme.background :
+               appWindow.theme_v2.dialogSpecialAreaColor
     border.width: 1*appWindow.zoom
-    border.color: appWindow.theme.border
+    border.color: appWindow.uiver === 1 ?
+                      appWindow.theme.border :
+                      appWindow.theme_v2.outlineBorderColor
+    radius: appWindow.uiver === 1 ? 0 : 8*appWindow.zoom
 
     implicitWidth: scheduler.implicitWidth
     implicitHeight: scheduler.implicitHeight

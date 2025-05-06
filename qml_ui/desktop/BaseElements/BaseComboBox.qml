@@ -153,6 +153,7 @@ ComboBox {
             visible: appWindow.uiver !== 1
             source: visible ? Qt.resolvedUrl("V2/expand_more.svg") : ""
             anchors.centerIn: parent
+            rotation: popup.opened ? 180 : 0
         }
 
         MouseArea {

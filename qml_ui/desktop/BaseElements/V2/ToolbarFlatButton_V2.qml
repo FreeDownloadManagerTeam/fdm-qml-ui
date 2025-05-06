@@ -18,8 +18,12 @@ Item
 
     property bool hasCheckBox: false
     property url iconSource
+    property int iconPreferredHeight: 0
+    property int iconPreferredWidth: 0
     property bool ignoreIconHeight: true
     property color iconColor: textColor
+    property bool applyIconColor: true
+    property bool iconRotate: false
     property string title
     property var dropDownMenu: null
     property alias iconMirror: iconImg.mirror
@@ -123,8 +127,8 @@ Item
             {
                 visible: iconImg.source.toString()
                 implicitHeight: ignoreIconHeight ? Math.min(titleItem.implicitHeight, iconImg.implicitHeight) :
-                                                   iconImg.implicitHeight
-                implicitWidth: iconImg.implicitWidth
+                                iconPreferredHeight ? iconPreferredHeight : iconImg.implicitHeight
+                implicitWidth: iconPreferredWidth?  iconPreferredWidth : iconImg.implicitWidth
                 WaSvgImage
                 {
                     id: iconImg
@@ -132,9 +136,29 @@ Item
                     zoom: appWindow.zoom
                     layer.effect: ColorOverlay { color: root.iconColor }
                     //layer.effect: MultiEffect {colorization: 1.0; colorizationColor: root.iconColor}
-                    layer.enabled: true
+                    layer.enabled: root.applyIconColor
                     opacity: enabled ? 1.0 : appWindow.theme_v2.opacityDisabled
                     anchors.centerIn: parent
+                    height: iconPreferredHeight ? iconPreferredHeight : preferredHeight
+                    width: iconPreferredWidth ? iconPreferredWidth : preferredWidth
+
+                    // QML bug workaround:
+                    // RotationAnimator is not working here due to an unknown reason, so we use Timer instead.
+                    Timer {
+                        interval: 100
+                        onTriggered: {
+                            let r = iconImg.rotation += 45;
+                            if (r >= 360)
+                                r = 0;
+                            iconImg.rotation = r;
+                        }
+                        running: root.iconRotate
+                        repeat: true
+                        onRunningChanged: {
+                            if (!running)
+                                iconImg.rotation = 0;
+                        }
+                    }
                 }
             }
 

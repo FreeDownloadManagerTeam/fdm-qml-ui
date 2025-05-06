@@ -3,13 +3,16 @@ import QtQuick.Controls 2.4
 import "../../qt5compat"
 import org.freedownloadmanager.fdm 1.0
 import "../BaseElements"
+import "../BaseElements/V2"
 import "../../common"
 
 Row {
     property var browser
 
-    Rectangle {
-        color: "transparent"
+    spacing: (appWindow.uiver === 1 ? 0 : 8)*appWindow.zoom
+
+    Item {
+        visible: appWindow.uiver === 1
         width: 30*appWindow.zoom
         height: lbl.height
 
@@ -36,7 +39,8 @@ Row {
     BaseLabel {
         id: lbl
         text: browser.title
-        color: browser.installed ? linkColor : appWindow.theme.settingsItem
+        color: browser.installed ? linkColor :
+                                   (appWindow.uiver === 1 ? appWindow.theme.settingsItem : appWindow.theme_v2.bg600)
         leftPadding: qtbug.leftPadding(8*appWindow.zoom,0)
         rightPadding: qtbug.rightPadding(8*appWindow.zoom,0)
         MouseArea {
@@ -50,10 +54,15 @@ Row {
         }
     }
 
+    SvgImage_V2 {
+        visible: browser.installed && appWindow.uiver !== 1
+        source: Qt.resolvedUrl("V2/link.svg")
+    }
+
     BaseLabel {
         visible: !browser.installed
         text: qsTr("(browser is not installed)") + App.loc.emptyString
-        color: "#999"
+        color: appWindow.uiver === 1 ? "#999" : appWindow.theme_v2.bg600
         leftPadding: qtbug.leftPadding(3*appWindow.zoom,0)
         rightPadding: qtbug.rightPadding(3*appWindow.zoom,0)
     }

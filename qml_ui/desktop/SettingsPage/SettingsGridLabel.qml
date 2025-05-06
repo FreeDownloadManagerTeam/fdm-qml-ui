@@ -2,6 +2,7 @@ import QtQuick 2.0
 import "../BaseElements"
 
 BaseLabel {
-    font.pixelSize: 14*appWindow.fontZoom
-    color: appWindow.theme.settingsItem
+    color: appWindow.uiver === 1 ?
+               appWindow.theme.settingsItem :
+               appWindow.theme_v2.textColor
 }

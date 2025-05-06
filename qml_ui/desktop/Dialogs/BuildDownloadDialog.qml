@@ -27,7 +27,7 @@ BaseStandaloneCapableDialog {
         spacing: 0 // weird layout bug workaround
         ColumnLayout {
             Layout.fillWidth: true
-            spacing: 3*appWindow.zoom
+            spacing: (appWindow.uiver === 1 ? 3 : 8)*appWindow.zoom
 
             BaseLabel {
                 dialogLabel: true

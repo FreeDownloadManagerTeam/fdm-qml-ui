@@ -14,6 +14,8 @@ BaseDialog {
     title: qsTr("The download already exists") + App.loc.emptyString
     onCloseClick: mergeTools.reject()
 
+    width: Math.min(implicitWidth, 542*appWindow.zoom)
+
     contentItem: BaseDialogItem {
         focus: true
         Keys.onEscapePressed: mergeTools.reject()

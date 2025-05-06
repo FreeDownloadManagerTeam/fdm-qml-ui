@@ -205,7 +205,9 @@ ToolBar {
 
                 MainMenu {
                     id: mainMenu
-                    y: parent.height + 10*appWindow.zoom
+                    readonly property int maxHeight: appWindow.height - 50
+                    y: implicitHeight >= maxHeight ? 3*appWindow.zoom : parent.height + 10*appWindow.zoom
+                    height: Math.min(implicitHeight, maxHeight)
                     leftMargin: 8*appWindow.zoom
                     rightMargin: leftMargin
                 }

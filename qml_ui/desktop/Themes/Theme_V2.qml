@@ -59,18 +59,21 @@ QtObject
 
     readonly property color textColor: bg1000
     readonly property color bgColor: bg100
+    readonly property color outlineBorderColor: bg400
     readonly property color selectedTextColor: isLightTheme ? light1000 : dark1000
     readonly property color selectedTextBgColor: isLightTheme ? light500 : dark500
     readonly property color placeholderTextColor: bg700
-    readonly property color editTextBorderColor: bg500
+    readonly property color editTextBorderColor: outlineBorderColor
     readonly property color hightlightBgColor: bg400
     readonly property color popupBgColor: bg300
     readonly property color tooltipBgColor: isLightTheme ? light500 : dark400
     readonly property color tooltipTextColor: isLightTheme ? light900 : light1000
     readonly property color dialogBgColor: bg200
-    readonly property color dialogBorderColor: bg500
+    readonly property color dialogBorderColor: outlineBorderColor
     readonly property color glowColor: dark300
     readonly property bool useGlow: isLightTheme
+    readonly property color settingsSubgroupHeader: bg800
+    readonly property color dialogSpecialAreaColor: isLightTheme ? light1000 : dark300
 
     readonly property real opacityDisabled: 0.4
 

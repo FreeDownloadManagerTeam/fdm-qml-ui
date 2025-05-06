@@ -40,12 +40,21 @@ Item
         }
     }
 
-    function onAppReady()
+    Connections {
+        target: App.settings
+        onChanged: refresh()
+    }
+
+    function refresh()
     {
         autoRemoveDownloads = App.settings.toBool(
                     App.settings.dmcore.value(
                         DmCoreSettings.AutoRemoveDownloadsWithMissingFiles));
+    }
 
+    function onAppReady()
+    {
+        refresh();
         resetFilter();
     }
 

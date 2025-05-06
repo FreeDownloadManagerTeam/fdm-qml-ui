@@ -59,7 +59,7 @@ BaseDialog {
                         text: qsTr("Calculating %1\%").arg(Math.round(fileIntegrityTools.calculatingProgress)) + App.loc.emptyString
                     }
 
-                    DownloadsItemProgressIndicator {
+                    ProgressIndicator {
                         Layout.fillWidth: true
                         Layout.minimumWidth: currentHash.Layout.minimumWidth
                         percent: fileIntegrityTools.calculatingProgress

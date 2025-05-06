@@ -56,7 +56,7 @@ RowLayout
             }
         }
 
-        DownloadsItemProgressIndicator
+        ProgressIndicator
         {
             visible: App.plugins.depsInstaller.running
             infinityIndicator: App.plugins.depsInstaller.progress === -1

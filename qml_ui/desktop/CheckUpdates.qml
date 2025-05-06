@@ -1,5 +1,7 @@
 import QtQuick 2.11
+import QtQuick.Layouts
 import "./BaseElements"
+import "./BaseElements/V2"
 import "./Dialogs"
 import "../common/Tools"
 
@@ -23,15 +25,31 @@ Item {
         id: updateTools
     }
 
-    ToolBarButton {
+    RowLayout {
         id: updateArrows
-        rotate: updateTools.arrowsRotate
-        color: 'transparent'
         visible: updateTools.showArrows
         anchors.right: parent.right
-        source: appWindow.theme.mainTbImg.reverse
-        onClicked: updateTools.toggleDialog()
         anchors.verticalCenter: parent.verticalCenter
+
+        ToolBarButton {
+            visible: appWindow.uiver === 1
+            rotate: updateTools.arrowsRotate
+            color: 'transparent'
+            source: appWindow.theme.mainTbImg.reverse
+            onClicked: updateTools.toggleDialog()
+        }
+
+        ToolbarFlatButton_V2 {
+            visible: appWindow.uiver !== 1
+            bgColor: "transparent"
+            leftPadding: 0
+            rightPadding: 0
+            topPadding: 0
+            bottomPadding: 0
+            iconSource: Qt.resolvedUrl("V2/reverse.svg")
+            iconRotate: updateTools.arrowsRotate
+            onClicked: updateTools.toggleDialog()
+        }
     }
 
     UpdateDialog {
@@ -47,7 +65,8 @@ Item {
                Math.max(5*appWindow.zoom, updateArrows.x + updateArrows.width/2 - width/2) :
                Math.min(parent.mapFromGlobal(globalMaxX, 0).x - width - 5*appWindow.zoom, updateArrows.x + updateArrows.width/2 - width/2))
                + root.x*0 + workaroundX*0
-        y: updateArrows.y + updateArrows.height - 5*appWindow.zoom
+        y: updateArrows.y + updateArrows.height -
+           (appWindow.uiver === 1 ? 15 : -10)*appWindow.zoom
         arrowCenterX: updateArrows.x - x + updateArrows.width/2
     }
 

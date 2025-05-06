@@ -112,10 +112,9 @@ Item {
 
     Connections {
         target: App.exportImport
-        onImportFinished: {
-            if (error.length == 0) {
+        onImportFinished: (file, error) => {
+            if (!error || !error.hasError)
                 sync();
-            }
         }
     }
 
