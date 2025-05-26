@@ -177,7 +177,7 @@ Column {
         anchors.left: parent.left
 
         SettingsSubgroupHeader {
-            text: qsTr("Automatically catch downloads from browsers") + App.loc.emptyString
+            text: qsTr("Automatically capture downloads from browsers") + App.loc.emptyString
         }
 
         SettingsCheckBox {
@@ -287,10 +287,9 @@ Column {
                 text: qsTr("Skip files with extensions") + App.loc.emptyString
                 checked: App.settings.toBool(App.settings.app.value(AppSettings.WbDontInterceptDownloadsWithUnwantedExtensions))
                 onClicked: {
-                    App.settings.app.setValue(
-                                AppSettings.WbDontInterceptDownloadsWithUnwantedExtensions,
-                                App.settings.fromBool(checked));
-                    unwantedExtensionsList.visible = false;
+                    if (checked)
+                        catchCheckBox.checked = false;
+                    applyExtsSettings();
                 }
             }
 
@@ -354,6 +353,79 @@ Column {
             }
         }
 
+        Item {
+            width: parent.width
+            height: catchCheckBox.height
+            SettingsCheckBox {
+                id: catchCheckBox
+                text: qsTr("Capture files with extensions") + App.loc.emptyString
+                checked: App.settings.toBool(App.settings.app.value(AppSettings.WbInterceptDownloadsWithExtensions))
+                onClicked: {
+                    if (checked)
+                        skipCheckBox.checked = false;
+                    applyExtsSettings();
+                }
+            }
+
+            Item {
+                visible: !catchExtensionsList.visible
+                anchors.left: catchCheckBox.right
+                anchors.leftMargin: 5*appWindow.zoom
+                anchors.verticalCenter: parent.verticalCenter
+                width: 16*appWindow.zoom
+                height: width
+                WaSvgImage {
+                    zoom: appWindow.zoom
+                    source: Qt.resolvedUrl(appWindow.uiver === 1 ? "../../images/desktop/edit_list.svg" : "V2/edit.svg")
+                    opacity: catchCheckBox.checked ? 1 : 0.5
+                    layer {
+                        effect: ColorOverlay {
+                            color: appWindow.uiver === 1 ? appWindow.theme.foreground : appWindow.theme_v2.textColor
+                        }
+                        enabled: true
+                    }
+                    MouseArea {
+                        visible: catchCheckBox.checked
+                        anchors.fill: parent
+                        cursorShape: Qt.PointingHandCursor
+                        hoverEnabled: true
+                        onClicked: { if (catchCheckBox.checked) {catchExtensionsList.visible = true} }
+                        onEntered: toolTipExtensions2.visible = true
+                        onExited: toolTipExtensions2.visible = false
+
+                        BaseToolTip {
+                            id: toolTipExtensions2
+                            text: qsTr("Edit list") + App.loc.emptyString
+                        }
+                    }
+                }
+            }
+        }
+
+        RowLayout {
+            id: catchExtensionsList
+            visible: false
+            width: 220*appWindow.zoom
+            anchors.left: parent.left
+
+            ListEditor {
+                myStr: App.settings.app.value(AppSettings.WbDownloadsExtensionsList)
+                Layout.leftMargin: qtbug.leftMargin(38*appWindow.zoom,0)
+                Layout.rightMargin: qtbug.rightMargin(38*appWindow.zoom,0)
+                errorMsg: qsTr("Are you sure this is a valid file extension?") + App.loc.emptyString
+                validationRegex: /^[\d\w\+\-\!]+$/
+
+                onCloseClicked: {
+                    catchExtensionsList.visible = false
+                }
+
+                onListChanged: {
+                    if (str != App.settings.dmcore.value(AppSettings.WbDownloadsExtensionsList)) {
+                        App.settings.app.setValue(AppSettings.WbDownloadsExtensionsList, str);
+                    }
+                }
+            }
+        }
 
         Rectangle {
             width: parent.width
@@ -361,7 +433,7 @@ Column {
             color: "transparent"
             SettingsCheckBox {
                 id: noCatchSmaller
-                text: qsTr("Don't catch downloads smaller than") + App.loc.emptyString
+                text: qsTr("Don't capture downloads smaller than") + App.loc.emptyString
                 checked: App.settings.toBool(App.settings.app.value(AppSettings.WbDontInterceptTooSmallDownloads))
                 onClicked: {
                     App.settings.app.setValue(
@@ -452,5 +524,19 @@ Column {
             App.settings.app.setValue(AppSettings.WbDownloadsTooSmallSizeValue,
                                          small_size_value_format);
         }
+    }
+
+    function applyExtsSettings()
+    {
+        unwantedExtensionsList.visible = false;
+        catchExtensionsList.visible = false;
+
+        App.settings.app.setValue(
+                    AppSettings.WbDontInterceptDownloadsWithUnwantedExtensions,
+                    App.settings.fromBool(skipCheckBox.checked));
+
+        App.settings.app.setValue(
+                    AppSettings.WbInterceptDownloadsWithExtensions,
+                    App.settings.fromBool(catchCheckBox.checked));
     }
 }

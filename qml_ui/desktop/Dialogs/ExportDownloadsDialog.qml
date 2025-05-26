@@ -159,8 +159,7 @@ BaseDialog {
         } else if (typeCombo.currentIndex === 1) {
             App.exportImport.exportDownloadsAsListOfUrls(selectedDownloads, finishedOnly.checked, App.fromNativeSeparators(path.text));
         } else if (typeCombo.currentIndex === 2) {
-            App.exportImport.exportDownloadsToCsv(selectedDownloads,
-                AbstractDownloadsUi.Url | AbstractDownloadsUi.File | AbstractDownloadsUi.Size | AbstractDownloadsUi.Date,
+            App.exportImport.exportDownloadsToCsv(selectedDownloads, AbstractDownloadsUi.ExportAll,
                 finishedOnly.checked, App.fromNativeSeparators(path.text));
         }
         root.close();

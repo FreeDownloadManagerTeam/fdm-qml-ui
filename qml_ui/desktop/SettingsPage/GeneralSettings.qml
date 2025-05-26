@@ -387,6 +387,29 @@ Column {
         }
 
         Row {
+            visible: App.features.hasFeature(AppFeatures.MarkOfTheWeb)
+
+            anchors.left: parent.left
+            anchors.leftMargin: 12*appWindow.zoom
+
+            spacing: 8*appWindow.zoom
+
+            SettingsCheckBox0 {
+                text: qsTr("Mark downloaded files") + App.loc.emptyString
+                checked: App.settings.toBool(App.settings.dmcore.value(DmCoreSettings.SetMarkOfTheWeb))
+                onClicked: {
+                    App.settings.dmcore.setValue(
+                                DmCoreSettings.SetMarkOfTheWeb,
+                                App.settings.fromBool(checked));
+               }
+            }
+
+            BaseHyperLabel {
+                text: "<a href='" + App.markOfTheWebFeatureHelpUrl() + "'>?</a>"
+            }
+        }
+
+        Row {
             anchors.left: parent.left
             anchors.leftMargin: 17*appWindow.zoom
 

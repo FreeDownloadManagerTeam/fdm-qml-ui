@@ -54,6 +54,7 @@ Item {
     property bool notEnoughSpaceWarning: freeDiskSpace != -1 && fileSize > 0 && fileSize > freeDiskSpace
     property bool wrongFilePathWarning: false
     property bool wrongFileNameWarning: false
+    property bool emptyFileNameWarning: false
 
     property var versionSelector: null
     property int versionCount: versionSelector ? versionSelector.versionCount : 0
@@ -310,6 +311,7 @@ Item {
         emptyDownloadsListWarning = false;
         batchDownloadLimitWarning = false;
         wrongFileNameWarning = false;
+        emptyFileNameWarning = false;
         wrongFilePathWarning = false;
         setSubtitlesEnabled(false);
         needDownloadSubtitles = false;
@@ -566,7 +568,10 @@ Item {
     function onFileNameTextChanged(new_text)
     {
         wrongFileNameWarning = false;
+        emptyFileNameWarning = false;
         fileName = new_text;
+        if (batchDownload && !fileName)
+            emptyFileNameWarning = true;
     }
 
     function fileSizeValueChanged(new_size)

@@ -22,16 +22,17 @@ RowLayout {
             visible: schedulerTools.statusWarning || downloadTools.emptyDownloadsListWarning
                      || downloadTools.batchDownloadLimitWarning || downloadTools.notEnoughSpaceWarning
                      || downloadTools.wrongFilePathWarning || downloadTools.wrongFileNameWarning
-                     || !downloadTools.hasWriteAccess
+                     || downloadTools.emptyFileNameWarning || !downloadTools.hasWriteAccess
             anchors.verticalCenter: parent.verticalCenter
-            text: schedulerTools.statusWarning ? schedulerTools.lastError : (
-                  downloadTools.emptyDownloadsListWarning ? qsTr("Please select download link") + App.loc.emptyString : (
-                  downloadTools.batchDownloadLimitWarning ? qsTr("You can select no more than %1 links at a time").arg(downloadTools.batchDownloadMaxUrlsCount) + App.loc.emptyString : (
-                  !downloadTools.hasWriteAccess ? qsTr("No write access to the selected directory") + App.loc.emptyString : (
-                  downloadTools.notEnoughSpaceWarning ? qsTr("Not enough disk space") + App.loc.emptyString : (
+            text: (schedulerTools.statusWarning ? schedulerTools.lastError : (
+                  downloadTools.emptyDownloadsListWarning ? qsTr("Please select download link") : (
+                  downloadTools.batchDownloadLimitWarning ? qsTr("You can select no more than %1 links at a time").arg(downloadTools.batchDownloadMaxUrlsCount) : (
+                  !downloadTools.hasWriteAccess ? qsTr("No write access to the selected directory") : (
+                  downloadTools.notEnoughSpaceWarning ? qsTr("Not enough disk space") : (
                   downloadTools.wrongFilePathWarning ? qsTr("The path contains invalid characters") : (
-                  downloadTools.wrongFileNameWarning ? (downloadTools.batchDownload ? qsTr("The subfolder name contains invalid characters") : qsTr("The filename contains invalid characters")) :
-                                                       ""))))))
+                  downloadTools.wrongFileNameWarning ? (downloadTools.batchDownload ? qsTr("The subfolder name contains invalid characters") : qsTr("The filename contains invalid characters")) : (
+                  downloadTools.emptyFileNameWarning ? (downloadTools.batchDownload ? qsTr("The subfolder name must not be empty") : qsTr("The filename must not be empty")) :
+                                                       "")))))))) + App.loc.emptyString
             clip: true
             elide: Text.ElideRight
             width: parent.width
@@ -53,7 +54,10 @@ RowLayout {
         blueBtn: true
         alternateBtnPressed: cnclBtn.isPressed
         enabled: !forceDisableOK &&
-                 (downloadTools.hasWriteAccess && !downloadTools.notEnoughSpaceWarning && !downloadTools.emptyDownloadsListWarning)
+                 downloadTools.hasWriteAccess &&
+                 !downloadTools.notEnoughSpaceWarning &&
+                 !downloadTools.emptyDownloadsListWarning &&
+                 !downloadTools.emptyFileNameWarning
         onClicked: tuneDialog.doOK()
     }
 }
