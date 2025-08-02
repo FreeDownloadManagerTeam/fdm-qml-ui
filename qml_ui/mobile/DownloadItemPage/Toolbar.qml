@@ -16,7 +16,7 @@ BaseToolBar {
         }
 
         ToolbarLabel {
-            text: downloadsItemTools.tplTitle
+            text: downloadsItemTools.title
             Layout.fillWidth: true
             font.pixelSize: 14
         }
@@ -26,19 +26,23 @@ BaseToolBar {
             icon.source: Qt.resolvedUrl("../../images/mobile/menu.svg")
             onClicked: {
                 selectedDownloadsTools.currentDownloadId = downloadsItemTools.itemId;
-                contextMenu.open();
-            }
 
-            DownloadsViewItemContextMenu {
-                id: contextMenu
-                modelIds: [downloadsItemTools.itemId]
-                downloadItemPage: true
-                finished: downloadsItemTools.finished
-                hasPostFinishedTasks: downloadsItemTools.hasPostFinishedTasks
-                priority: downloadsItemTools.priority
-                downloadModel: downloadsItemTools.item
+                let component = Qt.createComponent("../DownloadsViewItemContextMenu.qml");
+                let menu = component.createObject(
+                            groupOperationsBtn,
+                            {
+                                "modelIds": [downloadsItemTools.itemId],
+                                "downloadItemPage" : true,
+                                "finished": downloadsItemTools.finished,
+                                "hasPostFinishedTasks": downloadsItemTools.hasPostFinishedTasks,
+                                "priority": downloadsItemTools.priority,
+                                "downloadModel": downloadsItemTools.item
+                            });
+                menu.open();
+                menu.aboutToHide.connect(function(){
+                    menu.destroy();
+                });
             }
         }
     }
-
 }

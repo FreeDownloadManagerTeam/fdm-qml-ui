@@ -3,9 +3,17 @@ import org.freedownloadmanager.fdm 1.0
 import "../../desktop/BaseElements"
 
 BaseContextMenuItem {
+    property double downloadId: -1
     enabled: !locked
     text: App.my_BT_qsTranslate("DownloadContextMenu", "Ignore upload ratio limit") + App.loc.emptyString
     checkable: true
-    checked: btTools.item.ignoreURatioLimitChecked()
-    onTriggered: btTools.item.ignoreURatioLimit(checked)
+    checked: downloadId === -1 ?
+                 btTools.item.ignoreURatioLimitChecked() :
+                 App.downloads.infos.info(downloadId).ignoreURatioLimit
+    onTriggered: {
+        if (downloadId === -1)
+            btTools.item.ignoreURatioLimit(checked);
+        else
+            App.downloads.infos.info(downloadId).ignoreURatioLimit = checked;
+    }
 }

@@ -1,7 +1,8 @@
 import QtQuick
 import QtQuick.Layouts
 import Qt5Compat.GraphicalEffects
-import org.freedownloadmanager.fdm 1.0
+import org.freedownloadmanager.fdm
+import org.freedownloadmanager.fdm.abstractdownloadsui
 import "../BaseElements/V2"
 import "../../common/Tools"
 import "../../common"
@@ -19,14 +20,21 @@ Item
     property bool noActionsAllowed: false
 
     readonly property int myVerticalPadding: 8*appWindow.zoom
-    readonly property bool containsMouse: ma.containsMouse || statusField.containsMouse || nameText.containsMouse
+    readonly property bool containsMouse: ma.containsMouse || statusField.containsMouse || nameCol.containsMouse ||
+                                          priorityBlock.containsMouse
 
     implicitWidth: childrenRect.width
 
     implicitHeight: myVerticalPadding*2 - 1 +
                     Math.max(numCol.implicitHeight, nameCol.implicitHeight, statusCol.implicitHeight)
 
-    component MyCell : RowLayout
+    component MyCellBase : RowLayout
+    {
+        readonly property bool maContainsMouse: ma.containsMouse && ma.mouseX >= x && ma.mouseX < x+width
+        height: parent.height
+    }
+
+    component MyCell : MyCellBase
     {
         y: myVerticalPadding
         height: parent.height - myVerticalPadding*2
@@ -34,18 +42,10 @@ Item
 
     component HighlightedItem : Rectangle
     {
-        property color baseColor: appWindow.theme_v2.isLightTheme ?
-                                 appWindow.theme_v2.bg200 :
-                                 Qt.lighter(appWindow.theme_v2.bg200, 1.2)
-
         gradient: Gradient {
             orientation: Gradient.Horizontal
-            GradientStop { position: 0.0; color: baseColor }  // Start color
-            GradientStop { position: 0.6; color: baseColor }  // 60% stop with solid color
-            GradientStop { position: 1.0; color: Qt.rgba(Qt.color(baseColor).r,
-                                                         Qt.color(baseColor).g,
-                                                         Qt.color(baseColor).b,
-                                                         appWindow.theme_v2.isLightTheme ? 0 : 0.5) }  // End color with transparency
+            GradientStop { position: 0.6; color: appWindow.theme_v2.highlightedDownloadGradientStart }
+            GradientStop { position: 1.0; color: appWindow.theme_v2.highlightedDownloadGradientEnd }
         }
     }
 
@@ -113,12 +113,16 @@ Item
     {
         id: nameCol
 
+        readonly property bool containsMouse: maContainsMouse || nameText.containsMouse || maTagContainsMouse
+
+        property int maTagContainsMouse: 0
+
         x: downloadsViewHeader.nameColX
         width: downloadsViewHeader.nameColWidth
 
         ElidedTextWithTooltip_V2 {
             id: nameText
-            sourceText: downloadsItemTools.tplTitle
+            sourceText: downloadsItemTools.titleSingleLine
             Layout.fillWidth: true
 
             /*SelectedDownloadsDragArea {
@@ -130,6 +134,36 @@ Item
                     justClicked.connect(root.justClicked);
                 }
             }*/
+        }
+
+        RowLayout {
+            spacing: 3*appWindow.zoom
+            Repeater {
+                model: downloadsItemTools.allTags
+                delegate: Rectangle {
+                    implicitWidth: appWindow.theme_v2.tagSquareSize*appWindow.zoom
+                    implicitHeight: implicitWidth
+                    color: modelData.color
+                    radius: 4*appWindow.zoom
+                    MouseArea {
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        propagateComposedEvents: true
+                        acceptedButtons: Qt.NoButton
+                        //onClicked: downloadsViewTools.setDownloadsTagFilter(modelData.id)
+                        BaseToolTip_V2 {
+                            text: modelData.name
+                            visible: parent.containsMouse
+                        }
+                        onContainsMouseChanged: {
+                            if (containsMouse)
+                                ++nameCol.maTagContainsMouse;
+                            else
+                                --nameCol.maTagContainsMouse;
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -166,11 +200,14 @@ Item
     {
         id: dlCol
 
+        visible: !priorityBlock.visible
+
         x: downloadsViewHeader.dlColX
         width: downloadsViewHeader.dlColWidth
 
         BaseText_V2 {
             text: App.speedAsText(downloadsItemTools.downloadSpeed) + App.loc.emptyString
+            color: priorityColor(model.priority)
         }
     }
 
@@ -178,12 +215,114 @@ Item
     {
         id: uplCol
 
+        visible: !priorityBlock.visible
+
         x: downloadsViewHeader.uplColX
         width: downloadsViewHeader.uplColWidth
 
         BaseText_V2 {
             text: App.speedAsText(downloadsItemTools.uploadSpeed) + App.loc.emptyString
+            color: priorityColor(model.priority)
         }
+    }
+
+    component DownloadPriorityButton : Item
+    {
+        property alias containsMouse: maDlPriorityBtn.containsMouse
+        property bool isUp: true
+
+        enabled: isUp ? model.priority != AbstractDownloadsUi.DownloadPriorityHigh :
+                        model.priority != AbstractDownloadsUi.DownloadPriorityLow
+
+        implicitWidth: 24*appWindow.zoom
+        implicitHeight: implicitWidth
+
+        SvgImage_V2
+        {
+            source: Qt.resolvedUrl("download_priority_up.svg")
+            rotation: isUp ? 0 : 180
+            imageColor: {
+                if (!enabled || !maDlPriorityBtn.containsMouse)
+                    return supposedImageColor;
+
+                if (isUp) {
+                    if (model.priority == AbstractDownloadsUi.DownloadPriorityNormal)
+                        return appWindow.theme_v2.secondary;
+                } else {
+                    if (model.priority == AbstractDownloadsUi.DownloadPriorityNormal)
+                        return appWindow.theme_v2.danger;
+                }
+
+                return supposedImageColor;
+            }
+            anchors.centerIn: parent
+        }
+
+        MouseAreaWithHand_V2
+        {
+            id: maDlPriorityBtn
+            hoverEnabled: true
+            anchors.fill: parent
+            onClicked: {
+                if (isUp) {
+                    if (model.priority == AbstractDownloadsUi.DownloadPriorityNormal) {
+                        App.downloads.infos.info(model.id).priority = AbstractDownloadsUi.DownloadPriorityHigh;
+                    } else if (model.priority == AbstractDownloadsUi.DownloadPriorityLow) {
+                        App.downloads.infos.info(model.id).priority = AbstractDownloadsUi.DownloadPriorityNormal;
+                    }
+                } else {
+                    if (model.priority == AbstractDownloadsUi.DownloadPriorityHigh) {
+                        App.downloads.infos.info(model.id).priority = AbstractDownloadsUi.DownloadPriorityNormal;
+                    } else if (model.priority == AbstractDownloadsUi.DownloadPriorityNormal) {
+                        App.downloads.infos.info(model.id).priority = AbstractDownloadsUi.DownloadPriorityLow;
+                    }
+                }
+            }
+        }
+    }
+
+    function priorityColor(priority)
+    {
+        return priority == AbstractDownloadsUi.DownloadPriorityHigh ? appWindow.theme_v2.secondary :
+               priority == AbstractDownloadsUi.DownloadPriorityLow ? appWindow.theme_v2.danger :
+               appWindow.theme_v2.textColor;
+    }
+
+    MyCellBase
+    {
+        id: priorityBlock
+
+        readonly property bool containsMouse: maContainsMouse || priorityDown.containsMouse || priorityUp.containsMouse
+
+        visible: !downloadsItemTools.finished &&
+                 (dlCol.maContainsMouse || uplCol.maContainsMouse || containsMouse)
+
+        x: downloadsViewHeader.dlColX
+        width: downloadsViewHeader.uplColX - downloadsViewHeader.dlColX + downloadsViewHeader.uplColWidth
+
+        spacing: 8*appWindow.zoom
+
+        DownloadPriorityButton
+        {
+            id: priorityDown
+            isUp: false
+        }
+
+        BaseText_V2
+        {
+            text: qsTr("Priority") + App.loc.emptyString
+            color: priorityColor(model.priority)
+            Layout.fillWidth: true
+            Layout.maximumWidth: implicitWidth
+        }
+
+        DownloadPriorityButton
+        {
+            id: priorityUp
+            isUp: true
+        }
+
+        Item {Layout.fillWidth: true; implicitHeight: 1}
     }
 
     MyCell
@@ -195,7 +334,7 @@ Item
 
         BaseText_V2 {
             text: model.added ?
-                      (App.loc.dateTimeToString_v2(model.added, false) + App.loc.emptyString + (downloadsViewHeader.minuteUpdate ? "" : "")) :
+                      (App.loc.dateTimeToString_v2(model.added, false, false) + App.loc.emptyString + (downloadsViewHeader.minuteUpdate ? "" : "")) :
                       ""
         }
     }

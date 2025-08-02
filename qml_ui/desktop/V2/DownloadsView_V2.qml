@@ -23,7 +23,6 @@ ListView
     {
         z: model.id === selectedDownloadsTools.currentDownloadId ? 5 : 3
         downloadsViewHeader: listView.downloadsViewHeader
-        //parentY: y
         noActionsAllowed: downloadsViewTools.showingDownloadsWithMissingFilesOnly
         DownloadsViewItemMouseArea {
             id: itemMa
@@ -34,58 +33,7 @@ ListView
         onJustPressed: mouse => itemMa.onPressed(mouse)
         onJustReleased: mouse => itemMa.onReleased(mouse)
         onJustClicked: mouse => itemMa.onClicked(mouse)
-
-        //readonly property bool lastChild: index == count -1
-
-        //batch download background
-        /*Rectangle {
-            z: -2
-            anchors.fill: parent
-            visible: downloadsViewTools.downloadsParentIdFilter > -1
-            anchors.topMargin: 1
-            color: appWindow.theme.batchDownloadBackground
-        }*/
-
-        //selected download background
-        /*Rectangle {
-            z: -1
-            anchors.fill: parent
-            anchors.topMargin: 1
-            visible: !!model.checked
-            color: appWindow.theme.selectedBackground
-        }*/
-
-        //priority marker
-        /*Rectangle {
-            id: priority
-            anchors.left: parent.left
-            anchors.top: parent.top
-            anchors.leftMargin: 1
-            anchors.topMargin: 1
-            width: 4*appWindow.zoom
-            height: lastChild ? parent.height-2 : parent.height-1
-            color: model.priority == AbstractDownloadsUi.DownloadPriorityHigh ? appWindow.theme.highMode : appWindow.theme.lowMode
-            visible: model.priority != AbstractDownloadsUi.DownloadPriorityNormal
-        }*/
-
-        //selected download frame
-        /*Rectangle {
-            visible: model.id === selectedDownloadsTools.currentDownloadId
-            border.color: appWindow.active ? appWindow.theme_v2.primary : appWindow.theme_v2.secondary
-            border.width: 1*appWindow.zoom
-            width: parent.width
-            height:  parent.height - parent.myVerticalPadding
-            color: "transparent"
-            anchors.verticalCenter: parent.verticalCenter
-        }*/
     }
-
-    /*MouseArea {
-        z: -1
-        anchors.fill: parent
-        acceptedButtons: Qt.LeftButton | Qt.RightButton
-        onClicked: selectedDownloadsTools.resetSelecting()
-    }*/
 
     ScrollBar.vertical: BaseScrollBar_V2 {
         id: vbar
@@ -110,6 +58,15 @@ ListView
         anchors.topMargin: 16*appWindow.zoom
         anchors.bottomMargin: 16*appWindow.zoom
         visibleAreaTopMargin: listView.contentHeight
+    }
+
+    DropArea {
+        enabled: !appWindow.disableDrop
+        anchors.fill: parent
+        onDropped: {
+            if (!drag.source)
+                App.onDropped(drop)
+        }
     }
 
     onHeightChanged:  {

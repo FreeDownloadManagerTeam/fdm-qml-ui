@@ -6,9 +6,6 @@ import "../../BaseElements"
 ColumnLayout {
     visible: ftcombo.count > 1
 
-    anchors.verticalCenter: parent.verticalCenter
-    anchors.left: parent.left
-
     BaseLabel {
         Layout.topMargin: 6*appWindow.zoom
         text: qsTr("File type:") + App.loc.emptyString
@@ -17,7 +14,6 @@ ColumnLayout {
 
     PreferredFileTypeCombobox {
         id: ftcombo
-        Layout.preferredWidth: 150*appWindow.zoom
-        Layout.preferredHeight: 30*appWindow.zoom
+        comboMinimumWidth: 150*appWindow.zoom
     }
 }

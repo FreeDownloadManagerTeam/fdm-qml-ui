@@ -576,4 +576,6 @@ ApplicationWindow
             }
         });
     }
+
+    SnailTools {id: snailTools}
 }

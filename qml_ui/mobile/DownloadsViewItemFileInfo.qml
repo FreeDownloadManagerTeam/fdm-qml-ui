@@ -113,7 +113,7 @@ Rectangle {
     //file name
     Label {
         id: titleLabel
-        text: downloadsItemTools.tplTitle
+        text: downloadsItemTools.title
         anchors.left: parent.left
         anchors.leftMargin: 5
         horizontalAlignment: Text.AlignLeft

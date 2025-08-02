@@ -1,17 +1,22 @@
 import QtQuick
 import QtQuick.Layouts
 import org.freedownloadmanager.fdm 1.0
+import "../BaseElements"
+import "../BaseElements/V2"
 
 Item
 {
+    readonly property bool batchDownload: downloadsViewTools.downloadsParentIdFilter > -1
+    readonly property int batchDownloadIndent: batchDownload ? 32*appWindow.zoom : 0
+
     readonly property int numberColNameColSpacing: 8*appWindow.zoom
     readonly property int colSpacing: 16*appWindow.zoom
 
-    readonly property alias numColX: nCol.x
-    readonly property alias numColWidth: nCol.width
+    readonly property int numColX: nCol.x + batchDownloadIndent
+    readonly property int numColWidth: nCol.width
 
-    readonly property alias nameColX: nameCol.x
-    readonly property alias nameColWidth: nameCol.width
+    readonly property int nameColX: nameCol.x + batchDownloadIndent
+    readonly property int nameColWidth: nameCol.width - batchDownloadIndent
 
     readonly property alias sizeColX: sizeCol.x
     readonly property alias sizeColWidth: sizeCol.width
@@ -27,7 +32,6 @@ Item
 
     readonly property alias addedColX: addedCol.x
     readonly property alias addedColWidth: addedCol.width
-
 
     property bool minuteUpdate: false // to update "Today"/"Yestarday" date strings
     Timer {
@@ -45,7 +49,7 @@ Item
     implicitWidth: meat.implicitWidth
     implicitHeight: meat.implicitHeight
 
-    RowLayout
+    ColumnLayout
     {
         id: meat
 
@@ -53,79 +57,150 @@ Item
 
         spacing: 0
 
-        DownloadsViewHeaderItem_V2 {
-            id: nCol
-            text: "#"
-            Layout.minimumWidth: 40*appWindow.zoom
-            Layout.leftMargin: appWindow.theme_v2.mainWindowLeftMargin*appWindow.zoom
-        }
-
-        Item {
-            Layout.preferredWidth: numberColNameColSpacing
-        }
-
-        DownloadsViewHeaderItem_V2 {
-            id: nameCol
-            text: qsTr("Name") + App.loc.emptyString
+        RowLayout
+        {
             Layout.fillWidth: true
-            Layout.minimumWidth: 100*appWindow.fontZoom
+
+            spacing: 0
+
+            DownloadsViewHeaderItem_V2 {
+                id: nCol
+                text: "#"
+                Layout.minimumWidth: 40*appWindow.zoom
+                Layout.leftMargin: appWindow.theme_v2.mainWindowLeftMargin*appWindow.zoom
+            }
+
+            Item {
+                Layout.preferredWidth: numberColNameColSpacing
+            }
+
+            DownloadsViewHeaderItem_V2 {
+                id: nameCol
+                text: qsTr("Name") + App.loc.emptyString
+                Layout.fillWidth: true
+                Layout.minimumWidth: 100*appWindow.fontZoom
+            }
+
+            Item {
+                Layout.preferredWidth: colSpacing
+            }
+
+            DownloadsViewHeaderItem_V2 {
+                id: sizeCol
+                text: qsTr("Size") + App.loc.emptyString
+                Layout.minimumWidth: 64*appWindow.fontZoom
+            }
+
+            Item {
+                Layout.preferredWidth: colSpacing
+            }
+
+            DownloadsViewHeaderItem_V2 {
+                id: statusCol
+                text: qsTr("Status") + App.loc.emptyString
+                Layout.minimumWidth: 161*appWindow.zoom
+                Layout.preferredWidth: Layout.minimumWidth
+            }
+
+            Item {
+                Layout.preferredWidth: colSpacing
+            }
+
+            DownloadsViewHeaderItem_V2 {
+                id: dlCol
+                text: qsTr("Download") + App.loc.emptyString
+                Layout.minimumWidth: 80*appWindow.fontZoom
+            }
+
+            Item {
+                Layout.preferredWidth: colSpacing
+            }
+
+            DownloadsViewHeaderItem_V2 {
+                id: uplCol
+                text: qsTr("Upload") + App.loc.emptyString
+                Layout.minimumWidth: 80*appWindow.fontZoom
+            }
+
+            Item {
+                Layout.preferredWidth: colSpacing
+            }
+
+            DownloadsViewHeaderItem_V2 {
+                id: addedCol
+                text: qsTr("Added") + App.loc.emptyString
+                Layout.minimumWidth: fm.font.pixelSize*0 +
+                                     Math.max(fm.advanceWidth(App.loc.dateTimeToString_v2_maxString(false, true) + App.loc.emptyString),
+                                              80*appWindow.fontZoom)
+            }
+
+            Item {
+                Layout.preferredWidth: appWindow.theme_v2.mainWindowRightMargin*appWindow.zoom
+            }
         }
 
         Item {
-            Layout.preferredWidth: colSpacing
-        }
+            visible: batchDownload
 
-        DownloadsViewHeaderItem_V2 {
-            id: sizeCol
-            text: qsTr("Size") + App.loc.emptyString
-            Layout.minimumWidth: 64*appWindow.fontZoom
-        }
+            implicitWidth: batchDownloadHdr.implicitWidth
+            implicitHeight: batchDownloadHdr.implicitHeight
 
-        Item {
-            Layout.preferredWidth: colSpacing
-        }
+            Layout.fillWidth: true
+            Layout.topMargin: 8*appWindow.zoom
+            Layout.bottomMargin: Layout.topMargin
 
-        DownloadsViewHeaderItem_V2 {
-            id: statusCol
-            text: qsTr("Status") + App.loc.emptyString
-            Layout.minimumWidth: 161*appWindow.zoom
-            Layout.preferredWidth: Layout.minimumWidth
-        }
+            /*Rectangle {
+                id: batchDownloadGradient
 
-        Item {
-            Layout.preferredWidth: colSpacing
-        }
+                anchors.fill: parent
 
-        DownloadsViewHeaderItem_V2 {
-            id: dlCol
-            text: qsTr("Download") + App.loc.emptyString
-            Layout.minimumWidth: 80*appWindow.fontZoom
-        }
 
-        Item {
-            Layout.preferredWidth: colSpacing
-        }
+                property color baseColor: appWindow.theme_v2.isLightTheme ?
+                                              appWindow.theme_v2.bg200 :
+                                              Qt.lighter(appWindow.theme_v2.bg200, 1.2)
 
-        DownloadsViewHeaderItem_V2 {
-            id: uplCol
-            text: qsTr("Upload") + App.loc.emptyString
-            Layout.minimumWidth: 80*appWindow.fontZoom
-        }
+                gradient: Gradient {
+                    orientation: Gradient.Horizontal
+                    GradientStop { position: 0.0; color: batchDownloadGradient.baseColor }  // Start color
+                    GradientStop { position: 0.6; color: batchDownloadGradient.baseColor }  // 60% stop with solid color
+                    GradientStop { position: 1.0; color: Qt.rgba(Qt.color(batchDownloadGradient.baseColor).r,
+                                                                 Qt.color(batchDownloadGradient.baseColor).g,
+                                                                 Qt.color(batchDownloadGradient.baseColor).b,
+                                                                 appWindow.theme_v2.isLightTheme ? 0 : 0.5) }  // End color with transparency
+                }
+            }*/
 
-        Item {
-            Layout.preferredWidth: colSpacing
-        }
+            RowLayout {
+                id: batchDownloadHdr
 
-        DownloadsViewHeaderItem_V2 {
-            id: addedCol
-            text: qsTr("Added") + App.loc.emptyString
-            Layout.minimumWidth: fm.font.pixelSize*0 +
-                                 Math.max(fm.advanceWidth(App.loc.dateTimeToString_v2_maxString(false) + App.loc.emptyString),
-                                          80*appWindow.fontZoom)
-        }
+                anchors.fill: parent
 
-        Item {
-            Layout.preferredWidth: appWindow.theme_v2.mainWindowRightMargin*appWindow.zoom
+                spacing: 8*appWindow.zoom
+
+                SvgImage_V2 {
+                    source: Qt.resolvedUrl("level_up.svg")
+                    Layout.leftMargin: appWindow.theme_v2.mainWindowLeftMargin*appWindow.zoom
+                    MouseAreaWithHand_V2 {
+                        anchors.fill: parent
+                        onClicked: selectedDownloadsTools.selectDownloadItemById(downloadsViewTools.downloadsParentIdFilter)
+                    }
+                }
+
+                SvgImage_V2 {
+                    source: Qt.resolvedUrl("batch_download_icon.svg")
+                    imageColor: appWindow.theme_v2.primary
+                }
+
+                BaseLabel {
+                    elide: BaseLabel.ElideMiddle
+                    Component.onCompleted: text = downloadsViewTools.getParentDownloadTitle()
+                    Layout.fillWidth: true
+                }
+
+                Item {
+                    Layout.preferredWidth: appWindow.theme_v2.mainWindowRightMargin*appWindow.zoom
+                }
+            }
         }
     }
 }

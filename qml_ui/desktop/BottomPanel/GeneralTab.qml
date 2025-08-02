@@ -79,7 +79,7 @@ Flickable {
                     width: parent.width
 
                     BaseSelectableLabel {
-                        text: downloadsItemTools.tplTitle
+                        text: downloadsItemTools.title
                         font.pixelSize: (appWindow.smallWindow ? 15 : 18)*appWindow.fontZoom
                         width: parent.width
                     }

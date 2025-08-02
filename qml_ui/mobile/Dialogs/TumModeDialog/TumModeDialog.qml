@@ -17,9 +17,6 @@ Dialog
     height: Math.min(parent.height - 60, 520)
     width: 320
 
-    property int prevTum: TrafficUsageMode.High
-    property bool active: App.settings.tum.currentMode == TrafficUsageMode.Snail
-
     contentItem: Rectangle {
         anchors.fill: parent
         color: appWindow.theme.background

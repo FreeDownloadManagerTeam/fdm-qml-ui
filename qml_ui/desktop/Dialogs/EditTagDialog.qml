@@ -52,9 +52,10 @@ BaseDialog {
                 Rectangle {
                     id: marker
                     anchors.verticalCenter: parent.verticalCenter
-                    width: 11*appWindow.zoom
-                    height: 12*appWindow.zoom
+                    width: (appWindow.uiver === 1 ? 12 : appWindow.theme_v2.tagSquareSize)*appWindow.zoom
+                    height: (appWindow.uiver === 1 ? 11 : appWindow.theme_v2.tagSquareSize)*appWindow.zoom
                     color: tagsTools.editedTagColor
+                    radius: appWindow.uiver === 1 ? 0 : 4*appWindow.zoom
 
                     Component.onCompleted: {marker.color = tagsTools.editedTagColor}
 
@@ -243,6 +244,5 @@ BaseDialog {
         downloadFolder.model = m;
 
         downloadFolder.editText = App.toNativeSeparators(currentFolder);
-        downloadFolder.setPopupWidth();
     }
 }

@@ -350,4 +350,11 @@ Page {
             }
         }
     }
+
+    onVisibleChanged: queryBytesAvailable()
+
+    Connections {
+        target: Qt.application
+        onActiveChanged: queryBytesAvailable()
+    }
 }

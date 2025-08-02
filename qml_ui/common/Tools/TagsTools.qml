@@ -58,11 +58,13 @@ Item {
             t.push(App.downloads.tags.tag(tagIds[i]));
         }
 
-        systemTags = t.filter(e => e.id < 0);
-        systemTags.sort(sortByIdDesc);
+        let systemTags0 = t.filter(e => e.id < 0);
+        systemTags0.sort(sortByIdDesc);
+        systemTags = systemTags0;
 
-        customTags = t.filter(e => e.id > 0);
-        customTags.sort(sortByPopularityDesc);
+        let customTags0 = t.filter(e => e.id > 0);
+        customTags0.sort(appWindow.uiver === 1 ? sortByPopularityDesc : sortByNameAsc);
+        customTags = customTags0;
 
         //join all tags to common array
         allTags = systemTags.concat(customTags);
@@ -206,6 +208,14 @@ Item {
           return sortByIdAsc(a, b);
       }
       if (downloadsIds(a).length > downloadsIds(b).length) return -1;
+    }
+
+    function sortByNameAsc(a, b) {
+        if (a.name < b.name)
+            return -1;
+        else if (a.name > b.name)
+            return 1;
+        return 0;
     }
 
     function setViewTag(id) {
@@ -368,7 +378,7 @@ Item {
 
     Connections {
         target: App.downloads.tags
-        onNextTagId: {
+        onNextTagId: id => {
             if (typeof callbacks === "object") {
                 var arr = callbacks;
                 for (var i = 0; i < arr.length; i++) {

@@ -146,7 +146,7 @@ Item
         BaseLabel {
             id: titleLabel
             clip: true
-            property string elidedText: fmTitle.myElidedText(downloadsItemTools.tplTitle, width-leftPadding-rightPadding)
+            property string elidedText: fmTitle.myElidedText(downloadsItemTools.titleSingleLine, width-leftPadding-rightPadding)
             anchors.verticalCenter: parent.verticalCenter
             text: elidedText
             width: root.downloadsViewHeader.nameColumnFullWidth
@@ -163,7 +163,7 @@ Item
             }
 
             MouseArea {
-                enabled: titleLabel.text != downloadsItemTools.tplTitle
+                enabled: titleLabel.text != downloadsItemTools.titleSingleLine
                 propagateComposedEvents: true
                 anchors.left: parent.left
                 anchors.right: itemTags.width ? itemTags.left : parent.right
@@ -174,7 +174,7 @@ Item
                 onPressed: function (mouse) {mouse.accepted = false;}
 
                 BaseToolTip {
-                    text: downloadsItemTools.tplTitle
+                    text: downloadsItemTools.title
                     visible: parent.containsMouse
                 }
             }

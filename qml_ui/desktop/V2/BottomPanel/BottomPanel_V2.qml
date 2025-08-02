@@ -119,11 +119,5 @@ Item
                 anchors.fill: parent
             }
         }
-
-        Rectangle {
-            Layout.fillWidth: true
-            Layout.preferredHeight: 1
-            color: appWindow.theme_v2.bg200
-        }
     }
 }

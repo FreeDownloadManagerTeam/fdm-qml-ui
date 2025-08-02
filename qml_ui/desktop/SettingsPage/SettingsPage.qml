@@ -355,13 +355,6 @@ Page {
                             tab.y + tab.height - flick.contentY >= flick.height / 3;
                 }
             }
-
-            Rectangle {
-                visible: appWindow.uiver !== 1
-                color: meat.sideBarBgColor
-                Layout.fillWidth: true
-                Layout.preferredHeight: 1*appWindow.zoom
-            }
         }
     }
 }

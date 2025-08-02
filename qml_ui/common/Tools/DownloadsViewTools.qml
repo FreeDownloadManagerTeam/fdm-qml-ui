@@ -82,9 +82,10 @@ Item {
             var info = App.downloads.infos.info(App.downloads.model.parentDownloadIdFilter);
             if (!info)
                 return "";
+            let title = info.title.replace(/\n/g, " ");
             return appWindow.uiver === 1 ?
-                        (info.title + " (" + App.downloads.model.rowCount + ")") :
-                        (info.title + " — " + qsTr("Downloads: %1").arg(App.downloads.model.rowCount) + App.loc.emptyString);
+                        (title + " (" + App.downloads.model.rowCount + ")") :
+                        (title/* + " — " + qsTr("Downloads: %1").arg(App.downloads.model.rowCount) + App.loc.emptyString*/);
         });
     }
 

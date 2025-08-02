@@ -121,7 +121,7 @@ Flickable
             spacing: 0
 
             ElidedTextWithTooltip_V2 {
-                sourceText: downloadsItemTools.tplTitle
+                sourceText: downloadsItemTools.title
                 Layout.fillWidth: true
                 Layout.topMargin: 6*appWindow.zoom
                 font.pixelSize: 16*appWindow.fontZoom
@@ -213,7 +213,7 @@ Flickable
                     }
                     BaseText_V2 {
                         text: downloadsItemTools.added ?
-                                  App.loc.dateTimeToString_v2(downloadsItemTools.added, true) + App.loc.emptyString :
+                                  App.loc.dateTimeToString_v2(downloadsItemTools.added, true, true) + App.loc.emptyString :
                                   ""
                     }
                 }

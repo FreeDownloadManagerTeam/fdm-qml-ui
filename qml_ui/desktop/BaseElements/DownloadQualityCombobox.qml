@@ -8,5 +8,15 @@ BaseComboBox {
 
     popupVisibleRowsCount: 7
 
-    onActivated: index => downloadTools.selectQuality(index)
+    onActivated: apply()
+
+    function apply()
+    {
+        if (currentIndex !== -1)
+        {
+            let index = model[currentIndex].value;
+            downloadTools.selectQuality(index);
+            downloadTools.fileSizeValueChanged(downloadTools.versionSelector.size(index))
+        }
+    }
 }

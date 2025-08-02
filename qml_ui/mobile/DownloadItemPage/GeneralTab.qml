@@ -62,7 +62,7 @@ Flickable {
 
                     BaseLabel {
                         width: parent.width
-                        text: downloadsItemTools.tplTitle
+                        text: downloadsItemTools.title
                         elide: Text.ElideRight
                         font.pixelSize: 16
                         font.family: "Roboto"

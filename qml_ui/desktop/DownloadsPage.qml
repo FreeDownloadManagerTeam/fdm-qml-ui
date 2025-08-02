@@ -179,33 +179,6 @@ Page {
                         width: parent.width
                     }
 
-                    RowLayout {
-                        id: filtersBar2
-
-                        visible: appWindow.uiver !== 1 &&
-                                 downloadsViewTools.downloadsParentIdFilter > -1
-
-                        anchors.left: parent.left
-                        anchors.leftMargin: appWindow.theme_v2.mainWindowLeftMargin*appWindow.zoom
-                        anchors.right: parent.right
-                        anchors.rightMargin: appWindow.theme_v2.mainWindowRightMargin*appWindow.zoom
-
-                        BatchDownloadTitle_V2 {}
-
-                        BaseLabel {
-                            text: qsTr("Show all downloads") + App.loc.emptyString
-                            color: appWindow.theme_v2.bg800
-                            font.pixelSize: 12*appWindow.fontZoom
-                            font.capitalization: Font.AllUppercase
-                            Layout.alignment: Qt.AlignRight
-
-                            MouseAreaWithHand_V2 {
-                                anchors.fill: parent
-                                onClicked: selectedDownloadsTools.selectDownloadItemById(downloadsViewTools.downloadsParentIdFilter)
-                            }
-                        }
-                    }
-
                     Rectangle {
                         anchors.fill: parent
                         anchors.margins: appWindow.uiver === 1 ? 5 : 0
@@ -214,7 +187,7 @@ Page {
                                           "transparent"
                         border.width: 1*appWindow.zoom
                         color: "transparent"
-                        anchors.topMargin: filtersBar.visible ? filtersBar.height : filtersBar2.visible ? filtersBar2.height + 16*appWindow.zoom : 0
+                        anchors.topMargin: filtersBar.visible ? filtersBar.height : 0
 
                         DownloadPageBackground {visible: appWindow.uiver === 1}
 

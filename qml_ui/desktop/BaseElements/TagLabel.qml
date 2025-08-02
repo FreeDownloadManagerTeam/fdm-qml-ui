@@ -6,7 +6,7 @@ Rectangle {
     id: root
     width: btn.implicitWidth
     height: 18*appWindow.zoom
-    color: appWindow.theme.filterBtnBackground
+    color: appWindow.uiver === 1 ? appWindow.theme.filterBtnBackground : "transparent"
     property var tag
     property int downloadId
 
@@ -21,13 +21,16 @@ Rectangle {
         Rectangle {
             anchors.verticalCenter: parent.verticalCenter
             visible: tag ? !tag.readOnly : false
-            width: 8*appWindow.zoom
-            height: 8*appWindow.zoom
+            width: (appWindow.uiver === 1 ? 8 : 12)*appWindow.zoom
+            height: width
+            radius: appWindow.uiver === 1 ? 0 : 4*appWindow.zoom
             color: tag ? tag.color : "#000"
         }
-        Label {
+        BaseLabel {
             text: tag ? tag.name : ""
-            color: appWindow.theme.filterBtnText
+            color: appWindow.uiver === 1 ?
+                       appWindow.theme.filterBtnText :
+                       appWindow.theme_v2.textColor
             padding: 0
             font.pixelSize: 11*appWindow.fontZoom
             textFormat: Text.PlainText

@@ -1,5 +1,6 @@
-import QtQuick 2.0
-import QtQuick.Controls 2.4
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
 import "../../qt5compat"
 import "../../common"
 import "V2"
@@ -7,15 +8,21 @@ import "V2"
 MenuItem {
         id: menuItem
 
+        property bool showThreeDotsBtn: false
+        signal threeDotsClicked()
+        readonly property var threeDotsBtn: threeDotsButton
+        property color showRectWithColor: "transparent"
+        property int overrideRightPadding: 0
+
         visible: true
 
         height: visible ? undefined : 0
         topPadding: ((visible && appWindow.uiver === 1) ? 1 : 2)*appWindow.zoom
         bottomPadding: ((visible && appWindow.uiver === 1) ? 1 : 2)*appWindow.zoom
-        leftPadding: appWindow.uiver === 1 ? qtbug.leftPadding(20*appWindow.zoom, 10*appWindow.zoom) :
-                                             qtbug.leftPadding(20*appWindow.zoom, 12*appWindow.zoom)
-        rightPadding: appWindow.uiver === 1 ? qtbug.rightPadding(20*appWindow.zoom, 10*appWindow.zoom) :
-                                              qtbug.leftPadding(20*appWindow.zoom, 12*appWindow.zoom)
+        leftPadding: appWindow.uiver === 1 ? qtbug.leftPadding(20*appWindow.zoom, overrideRightPadding ? overrideRightPadding : 10*appWindow.zoom) :
+                                             qtbug.leftPadding(20*appWindow.zoom, overrideRightPadding ? overrideRightPadding : 12*appWindow.zoom)
+        rightPadding: appWindow.uiver === 1 ? qtbug.rightPadding(20*appWindow.zoom, overrideRightPadding ? overrideRightPadding : 10*appWindow.zoom) :
+                                              qtbug.rightPadding(20*appWindow.zoom, overrideRightPadding ? overrideRightPadding : 12*appWindow.zoom)
 
         property bool arrow_down: false
         property bool arrow_up: false
@@ -94,8 +101,31 @@ MenuItem {
             }
         }
 
-        contentItem: Loader {
-            sourceComponent: appWindow.uiver === 1 ? contentItem_v1 : contentItem_v2
+        contentItem: RowLayout {
+            spacing: 8*appWindow.zoom
+            Loader {
+                sourceComponent: appWindow.uiver === 1 ? contentItem_v1 : contentItem_v2
+                Layout.fillWidth: true
+            }
+            Rectangle {
+                visible: showRectWithColor.a
+                implicitWidth: appWindow.theme_v2.tagSquareSize*appWindow.zoom
+                implicitHeight: implicitWidth
+                color: showRectWithColor
+                radius: 4*appWindow.zoom
+            }
+            ToolbarFlatButton_V2 {
+                id: threeDotsButton
+                visible: showThreeDotsBtn
+                iconSource: Qt.resolvedUrl("../V2/menu_dots.svg")
+                iconColor: appWindow.theme_v2.bg1000
+                bgColor: "transparent"
+                leftPadding: 4*appWindow.zoom
+                rightPadding: leftPadding
+                topPadding: leftPadding
+                bottomPadding: leftPadding
+                onClicked: threeDotsClicked()
+            }
         }
 
         MouseArea {

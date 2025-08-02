@@ -196,7 +196,6 @@ ApplicationWindow {
         width: parent.width
         anchors.top: parent.top
         anchors.bottom: mainStatusBar.top
-        anchors.bottomMargin: uiver === 1 ? 0 : 3*appWindow.zoom
         onCurrentItemChanged: appWindowStateChanged()
     }
 
@@ -223,9 +222,8 @@ ApplicationWindow {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
-        anchors.leftMargin: (uiver === 1 ? 4 : theme_v2.mainWindowLeftMargin)*appWindow.zoom
-        anchors.rightMargin: (uiver === 1 ? 4 : theme_v2.mainWindowRightMargin)*appWindow.zoom
-        anchors.bottomMargin: (uiver === 1 ? 0 : theme_v2.mainWindowBottomMargin)*appWindow.zoom
+        anchors.leftMargin: (uiver === 1 ? 4 : 0)*appWindow.zoom
+        anchors.rightMargin: (uiver === 1 ? 4 : 0)*appWindow.zoom
         active: App.asyncLoadMgr.ready
         source: Qt.resolvedUrl(uiver === 1 ? "MainStatusBar.qml" : "V2/MainStatusBar_V2.qml")
     }
@@ -765,6 +763,20 @@ ApplicationWindow {
         id: tagsTools
     }
 
+    function removeTag(tagId) {
+        if (App.downloads.model.tagIdFilter == tagId)
+            downloadsViewTools.resetDownloadsTagFilter();
+        tagsTools.removeTag(tagId);
+    }
+
+    AppMessageDialog {
+        id: removeTagDlg
+        property int tagId
+        text: qsTr("OK to remove tag?") + App.loc.emptyString
+        buttons: AppMessageDialog.Ok | AppMessageDialog.Cancel
+        onAccepted: removeTag(tagId)
+    }
+
     Connections {
         target: appWindow
         onOpenScheduler: {
@@ -1172,4 +1184,6 @@ ApplicationWindow {
             appWindowInvalidateTimer.restart();
     }
     ////////////////////////////////////////////////////////////////////////////////
+
+    SnailTools {id: snailTools}
 }

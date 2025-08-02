@@ -9,11 +9,13 @@ import "../../../common"
 
 WaSvgImage
 {
-    property color imageColor: enabled ?
-                                   appWindow.theme_v2.bg1000 :
-                                   appWindow.theme_v2.bg600
+    readonly property color supposedImageColor: enabled ?
+                                                    appWindow.theme_v2.bg1000 :
+                                                    appWindow.theme_v2.bg600
+    property bool applyImageColor: true
+    property color imageColor: supposedImageColor
     zoom: appWindow.zoom
     layer.effect: ColorOverlay { color: imageColor }
     //layer.effect: MultiEffect {colorization: 1.0; colorizationColor: imageColor}
-    layer.enabled: true
+    layer.enabled: applyImageColor
 }

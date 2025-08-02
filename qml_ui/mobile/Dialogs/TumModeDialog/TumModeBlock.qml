@@ -91,16 +91,7 @@ Column {
         visible: tumMode === TrafficUsageMode.Snail
         description: qsTr("Snail mode") + App.loc.emptyString
         switchChecked: App.settings.tum.currentMode == TrafficUsageMode.Snail
-        onClicked: {
-            if (App.asyncLoadMgr.ready) {
-                if (App.settings.tum.currentMode == TrafficUsageMode.Snail) {
-                    App.settings.tum.currentMode = tumModeDialog.prevTum;
-                } else {
-                    tumModeDialog.prevTum = App.settings.tum.currentMode;
-                    App.settings.tum.currentMode = TrafficUsageMode.Snail;
-                }
-            }
-        }
+        onClicked: snailTools.toggleSnailMode()
     }
 
     BaseLabel {

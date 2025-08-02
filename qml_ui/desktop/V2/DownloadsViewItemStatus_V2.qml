@@ -91,12 +91,9 @@ Item
             value: downloadsItemTools.progress
             indeterminate: unkSize
             running: root.running
-            bgColor: highlighted ?
-                         appWindow.theme_v2.bg100 :
-                         (running ? appWindow.theme_v2.bg500 : appWindow.theme_v2.bg300)
-            progressColor: running ? appWindow.theme_v2.primary :
-                           downloadsItemTools.finished ? appWindow.theme_v2.bg500 :
-                           appWindow.theme_v2.bg600
+            bgColor: appWindow.theme_v2.bg400
+            progressColor: running ? appWindow.theme_v2.primary : appWindow.theme_v2.bg500
+            progressGradient: (snailTools.isSnail && running) ? appWindow.theme_v2.snailOnGradient : null
             Layout.fillWidth: true
             Layout.preferredHeight: 12*appWindow.zoom
             radius: 4*appWindow.zoom
@@ -169,7 +166,7 @@ Item
                                                           "supportsMirror": (item.flags & AbstractDownloadsUi.SupportsMirrors) != 0,
                                                           "batchDownload": downloadsItemTools.hasChildDownloads,
                                                           "endlessStream": (item.flags & AbstractDownloadsUi.EndlessStream) != 0,
-                                                          "hideDisabledItems": true
+                                                          "threeDotsMenu": true
                                                       });
                     menu.open();
                     menu.aboutToHide.connect(function(){menu.destroy();});

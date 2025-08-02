@@ -17,9 +17,10 @@ ColumnLayout {
         Layout.alignment: Qt.AlignHCenter
 
         Rectangle {
-            width: 12*appWindow.zoom
-            height: 12*appWindow.zoom
+            width: (appWindow.uiver === 1 ? 12 : appWindow.theme_v2.tagSquareSize)*appWindow.zoom
+            height: (appWindow.uiver === 1 ? 12 : appWindow.theme_v2.tagSquareSize)*appWindow.zoom
             color: selectedColor
+            radius: appWindow.uiver === 1 ? 0 : 4*appWindow.zoom
         }
 
         GridLayout {
@@ -29,9 +30,10 @@ ColumnLayout {
             Repeater {
                 model: tagsTools.defaultColors
                 Rectangle {
-                    width: 12*appWindow.zoom
-                    height: 12*appWindow.zoom
+                    width: (appWindow.uiver === 1 ? 12 : appWindow.theme_v2.tagSquareSize)*appWindow.zoom
+                    height: (appWindow.uiver === 1 ? 12 : appWindow.theme_v2.tagSquareSize)*appWindow.zoom
                     color: modelData
+                    radius: appWindow.uiver === 1 ? 0 : 4*appWindow.zoom
 
                     MouseArea {
                         anchors.fill: parent
@@ -58,7 +60,7 @@ ColumnLayout {
             rightPadding: 10*appWindow.zoom
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
-            font.pixelSize: 11*appWindow.fontZoom
+            font.pixelSize: (appWindow.uiver === 1 ? 11 : 13)*appWindow.fontZoom
         }
 
         MouseArea {

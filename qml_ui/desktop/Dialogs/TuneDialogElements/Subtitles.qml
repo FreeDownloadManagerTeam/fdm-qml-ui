@@ -7,7 +7,6 @@ import "../../../common"
 
 RowLayout {
     visible: downloadTools.subtitlesEnabled
-    Layout.preferredHeight: visible ? 40*appWindow.zoom : 0
 
     BaseCheckBox {
         id: subsCheckbox

@@ -1,9 +1,11 @@
-import QtQuick 2.10
-import QtQuick.Controls 2.3
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
 import org.freedownloadmanager.fdm 1.0
 import org.freedownloadmanager.fdm.appfeatures 1.0
 import org.freedownloadmanager.fdm.abstractdownloadsui 1.0
 import "BaseElements"
+import "BaseElements/V2"
 import "../common/Tools";
 
 BaseContextMenu {
@@ -15,7 +17,6 @@ BaseContextMenu {
     property bool batchDownload
     property bool supportsSequentialDownload: selectedDownloadsTools.sequentialDownloadAllowed()
     property bool supportsPlayAsap: selectedDownloadsTools.playAsapAllowed()
-    property bool supportsDisablePostFinishedTasks: false
     property bool supportsAddT: false
     property bool supportsForceReann: false
     property bool supportsIgnoreURatioLimit: false
@@ -26,7 +27,8 @@ BaseContextMenu {
     readonly property var error: info ? info.error : null
     readonly property bool showReportError: error && error.hasError
     readonly property bool showAllowAutoRetry: info && (showReportError || App.downloads.autoRetryMgr.isDownloadSetToAutoRetry(modelIds[0]))
-    property bool hideDisabledItems: false
+    property bool threeDotsMenu: false
+    property bool hideDisabledItems: threeDotsMenu
 
     height: Math.min(implicitHeight, appWindow.height-5*appWindow.zoom)
 
@@ -312,19 +314,23 @@ BaseContextMenu {
     }
 
     BaseContextMenu {
+        id: addTagMenu
+
         title: qsTr("Add tag") + App.loc.emptyString
-        enabled: tagsTools.customTags.length > 0
 
-        Repeater {
-            model: tagsTools.customTags
+        TagsMenuHelper {
+            menu: addTagMenu
+            tags: tagsTools.customTags
+        }
 
-            delegate: BaseContextMenuItem {
-                visible: !modelData.readOnly
-                text: modelData.name
-                checkable: true
-                checked: selectedDownloadsTools.getDownloadsTagChecked(modelData.id)
-                onTriggered: selectedDownloadsTools.setDownloadsTag(modelData.id, checked)
-            }
+        BaseContextMenuSeparator {
+            visible: appWindow.uiver !== 1 &&
+                     tagsTools.customTags.length > 0
+        }
+
+        AddNewTagMenuItem {
+            visible: appWindow.uiver !== 1
+            anchors.leftMargin: addTagMenu.leftPadding
         }
     }
 
@@ -339,23 +345,29 @@ BaseContextMenu {
 
     Component.onCompleted: {
         if (appWindow.btSupported) {
+            let downloadId = modelIds.length === 1 ?
+                    "downloadId: " + modelIds[0] :
+                    "";
             var index = 21;
             if (btTools.item.addTAllowed()) {
                 supportsAddT = true;
-                root.insertItem(index++, Qt.createQmlObject('import "../bt/desktop"; AddTMenuItem {}', root));
+                root.insertItem(index++, Qt.createQmlObject('import "../bt/desktop"; AddTMenuItem {%1}'.arg(downloadId), root));
             }
             if (btTools.item.disablePostFinishedTasksAllowed()) {
-                //Don't show menu - use pause/start button in speed column instead
-                /*supportsDisablePostFinishedTasks = true;
-                root.insertItem(index++, Qt.createQmlObject('import "../bt/desktop"; DisableSMenuItem {}', root));*/
+                if (appWindow.uiver === 1) {
+                    //Don't show menu - use pause/start button in speed column instead
+                }
+                else if (threeDotsMenu) {
+                    root.insertItem(index++, Qt.createQmlObject('import "../bt/desktop"; DisableSMenuItem {%1}'.arg(downloadId), root));
+                }
             }
             if (btTools.item.ignoreURatioLimitAllowed()) {
                 supportsIgnoreURatioLimit = true;
-                root.insertItem(index++, Qt.createQmlObject('import "../bt/desktop"; IgnoreURatioMenuItem {}', root));
+                root.insertItem(index++, Qt.createQmlObject('import "../bt/desktop"; IgnoreURatioMenuItem {%1}'.arg(downloadId), root));
             }
             if (btTools.item.forceReannounceAllowed()) {
                 supportsForceReann = true;
-                root.insertItem(index++, Qt.createQmlObject('import "../bt/desktop"; ForceReannMenuItem {}', root));
+                root.insertItem(index++, Qt.createQmlObject('import "../bt/desktop"; ForceReannMenuItem {%1}'.arg(downloadId), root));
             }
         }
     }

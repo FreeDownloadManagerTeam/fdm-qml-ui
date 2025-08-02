@@ -57,7 +57,8 @@ Item {
     property bool uploading: !item ? false : item.uploading
     property double uploadSpeed: (!item || !item.uploadSpeed) ? -1 : item.uploadSpeed
 
-    property string title: !item ? "" : item.title
+    readonly property string title: !item ? "" : item.title
+    readonly property string titleSingleLine: title.replace(/\n/g, " ")
     property string url: !item ? "" : (item.webPageUrl ? item.webPageUrl : item.resourceUrl)
     property string host: !url.length ? "" : App.tools.url(url).host()
     property string destinationPath: !item ? "" : item.destinationPath
@@ -70,9 +71,8 @@ Item {
     property bool isFolder: item && item.filesCount > 1 ? true : false
     property bool hasChildDownloads: item ? item.hasChildDownloads : false
 
-    property string tplTitle: !item ? "" : item.title
     property string tplPathAndTitle: hasChildDownloads ? destinationPath :
-                                     destinationPath + '/' + tplTitle
+                                     destinationPath + '/' + title
     property string tplPathAndTitle2: filesCount !== 1 ? destinationPath : tplPathAndTitle
 
     property var added: item ? item.added : null

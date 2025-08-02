@@ -31,8 +31,6 @@ Rectangle {
 
         Rectangle {
             id: snailBtn
-            property int prevTum: TrafficUsageMode.High
-            property bool checked: root.currentTumMode == TrafficUsageMode.Snail
             Layout.leftMargin: qtbug.leftMargin(5*appWindow.zoom, 0)
             Layout.rightMargin: qtbug.rightMargin(5*appWindow.zoom, 0)
             Layout.alignment: Qt.AlignVCenter
@@ -43,8 +41,8 @@ Rectangle {
             radius: 3*appWindow.zoom
 
             gradient: Gradient {
-                GradientStop { position: 0.0; color: snailBtn.checked ? appWindow.theme.snailBtnBackgroundStartChecked : appWindow.theme.snailBtnBackgroundStart }
-                GradientStop { position: 1.0; color: snailBtn.checked ? appWindow.theme.snailBtnBackgroundEndChecked : appWindow.theme.snailBtnBackgroundEnd }
+                GradientStop { position: 0.0; color: snailTools.isSnail ? appWindow.theme.snailBtnBackgroundStartChecked : appWindow.theme.snailBtnBackgroundStart }
+                GradientStop { position: 1.0; color: snailTools.isSnail ? appWindow.theme.snailBtnBackgroundEndChecked : appWindow.theme.snailBtnBackgroundEnd }
             }
 
             Item {
@@ -53,7 +51,7 @@ Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
                 WaSvgImage {
-                    source: appWindow.theme.elementsIconsRoot + (snailBtn.checked ? "/snail_on.svg" : "/snail_off.svg")
+                    source: appWindow.theme.elementsIconsRoot + (snailTools.isSnail ? "/snail_on.svg" : "/snail_off.svg")
                     zoom: appWindow.zoom
                     anchors.centerIn: parent
                 }
@@ -63,16 +61,7 @@ Rectangle {
                 anchors.fill: parent
                 cursorShape: Qt.PointingHandCursor
                 hoverEnabled: true
-                onClicked: {
-                    if (App.asyncLoadMgr.ready) {
-                        if (App.settings.tum.currentMode == TrafficUsageMode.Snail) {
-                            App.settings.tum.currentMode = snailBtn.prevTum;
-                        } else {
-                            snailBtn.prevTum = App.settings.tum.currentMode;
-                            App.settings.tum.currentMode = TrafficUsageMode.Snail;
-                        }
-                    }
-                }
+                onClicked: snailTools.toggleSnailMode()
 
                 BaseToolTip {
                     text: qsTr("Snail mode frees bandwidth without stopping downloads.") + App.loc.emptyString
@@ -179,7 +168,7 @@ Rectangle {
                                         qsTr("Total size:") + App.bytesAsText(total_size);
 
                         } else if (selectedDownloadsTools.currentDownloadId > 0) {
-                            statusBarTitle.myText = Qt.binding(function(){return App.downloads.infos.info(selectedDownloadsTools.currentDownloadId).title;});
+                            statusBarTitle.myText = Qt.binding(function(){return App.downloads.infos.info(selectedDownloadsTools.currentDownloadId).title.replace(/\n/g, " ");});
                         } else {
                             statusBarTitle.myText = "";
                         }

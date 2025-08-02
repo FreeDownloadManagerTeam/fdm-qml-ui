@@ -65,7 +65,7 @@ Column {
                 Layout.leftMargin: parent.columns === 1 ? 16*appWindow.zoom : 0
                 settingsStyle: true
                 model: [
-                    {text: qsTr("New (beta)") + App.loc.emptyString, value: 2},
+                    {text: qsTr("New") + App.loc.emptyString, value: 2},
                     {text: qsTr("Classic") + App.loc.emptyString, value: 1}
                 ]
                 currentIndex: {

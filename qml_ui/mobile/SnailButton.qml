@@ -7,15 +7,12 @@ import org.freedownloadmanager.fdm.tum 1.0
 
 RoundButton
 {
-    property int prevTum: TrafficUsageMode.High
-    property bool active: App.settings.tum.currentMode == TrafficUsageMode.Snail
-
     width: 58
     height: 58
     radius: Math.round(width/2)
 
     Material.elevation: 0
-    Material.background: active ? appWindow.theme.snailButtonActiveColor : appWindow.theme.snailButtonInactiveColor
+    Material.background: snailTools.isSnail ? appWindow.theme.snailButtonActiveColor : appWindow.theme.snailButtonInactiveColor
     display: AbstractButton.IconOnly
 
     icon.source: "../images/mobile/snail.png"
@@ -23,14 +20,5 @@ RoundButton
     icon.height: 20
     icon.color: "#fff"
 
-    onClicked: {
-        if (App.asyncLoadMgr.ready) {
-            if (App.settings.tum.currentMode == TrafficUsageMode.Snail) {
-                App.settings.tum.currentMode = prevTum;
-            } else {
-                prevTum = App.settings.tum.currentMode;
-                App.settings.tum.currentMode = TrafficUsageMode.Snail;
-            }
-        }
-    }
+    onClicked: snailTools.toggleSnailMode()
 }

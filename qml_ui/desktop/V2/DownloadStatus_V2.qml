@@ -54,8 +54,9 @@ Item
             value: downloadsItemTools.progress
             indeterminate: unkSize
             running: root.running
-            bgColor: appWindow.theme_v2.bg300
-            progressColor: appWindow.theme_v2.primary
+            bgColor: appWindow.theme_v2.bg400
+            progressColor: running ? appWindow.theme_v2.primary : appWindow.theme_v2.bg500
+            progressGradient: (snailTools.isSnail && running) ? appWindow.theme_v2.snailOnGradient : null
             Layout.fillWidth: true
             Layout.preferredHeight: 16*appWindow.zoom
             radius: 4*appWindow.zoom

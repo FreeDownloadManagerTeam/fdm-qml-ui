@@ -6,9 +6,6 @@ import "../../BaseElements"
 ColumnLayout {
     visible: downloadTools.preferredVideoHeight
 
-    anchors.verticalCenter: parent.verticalCenter
-    anchors.right: parent.right
-
     BaseLabel {
         Layout.topMargin: 6*appWindow.zoom
         text: qsTr("Max. video quality:") + App.loc.emptyString

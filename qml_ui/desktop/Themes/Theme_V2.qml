@@ -27,9 +27,9 @@ QtObject
     readonly property color light500: "#5A6677"
     readonly property color light600: "#929DAD"
     readonly property color light700: "#CED6E0"
-    readonly property color light800: "#DDE2E9"
+    readonly property color light800: "#E6EAEF"
     readonly property color light900: "#ECEFF3"
-    readonly property color light1000: "#F7FAFD"
+    readonly property color light1000: "#FDFDFD"
     readonly property color lightPrimary: "#3F80E0"
     readonly property color lightPrimaryOpacity: "#92B7ED"
     readonly property color lightSecondary: "#288F58"
@@ -81,6 +81,28 @@ QtObject
     readonly property int mainWindowBottomMargin: 4
     readonly property int mainWindowLeftMargin: 16
     readonly property int mainWindowRightMargin: 16
+
+    readonly property int tagSquareSize: 12
+
+    readonly property color lightSnailOnGradientStart: "#C29B4E"
+    readonly property color lightSnailOnGradientEnd: "#F9D876"
+    readonly property color darkSnailOnGradientStart: "#7C5300"
+    readonly property color darkSnailOnGradientEnd: "#C29B4E"
+    readonly property color snailOnGradientStart: isLightTheme ? lightSnailOnGradientStart : darkSnailOnGradientStart
+    readonly property color snailOnGradientEnd: isLightTheme ? lightSnailOnGradientEnd : darkSnailOnGradientEnd
+    readonly property color snailOnTextColor: light1000
+    readonly property var snailOnGradient: Gradient {
+        orientation: Gradient.Horizontal
+        GradientStop { position: 0.0; color: snailOnGradientStart }
+        GradientStop { position: 1.0; color: snailOnGradientEnd }
+    }
+
+    readonly property color lightHighlightedDownloadGradientStart: "#99DAE0E7"
+    readonly property color lightHighlightedDownloadGradientEnd: "#00DAE0E7"
+    readonly property color darkHighlightedDownloadGradientStart: Qt.lighter(dark200, 1.2)
+    readonly property color darkHighlightedDownloadGradientEnd: Qt.rgba(darkHighlightedDownloadGradientStart.r, darkHighlightedDownloadGradientStart.g, darkHighlightedDownloadGradientStart.b, 0.5)
+    readonly property color highlightedDownloadGradientStart: isLightTheme ? lightHighlightedDownloadGradientStart : darkHighlightedDownloadGradientStart
+    readonly property color highlightedDownloadGradientEnd: isLightTheme ? lightHighlightedDownloadGradientEnd : lightHighlightedDownloadGradientEnd
 
     function opacityColor(clr, opacity)
     {

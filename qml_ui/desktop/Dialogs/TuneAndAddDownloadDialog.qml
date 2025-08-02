@@ -99,19 +99,39 @@ BaseStandaloneCapableDialog {
 
                     VideoQuality {
                         id: videoQuality
+                        lngFilter: language.selectedLanguage
                     }
 
-                    Rectangle {
+                    LanguageSelection {
+                        id: language
+                    }
+
+                    RowLayout {
                         Layout.fillWidth: true
-                        Layout.preferredHeight: (fileType.visible || batchVideoQuality.visible) ? 70*appWindow.zoom : 0
-                        color: "transparent"
+                        Layout.preferredHeight: (fileType.visible || batchVideoQuality.visible || batchLanguage.visible) ? 70*appWindow.zoom : 0
 
                         FileType { id: fileType}
 
                         BatchVideoQuality {id: batchVideoQuality}
+
+                        BatchLanguage {id: batchLanguage}
                     }
 
-                    Subtitles {}
+                    Item {
+                        visible: subtitlesBlock.visible || addDate.visible
+                        implicitHeight: 10*appWindow.zoom
+                        implicitWidth: 1
+                    }
+
+                    Subtitles {
+                        id: subtitlesBlock
+                    }
+
+                    Item {
+                        visible: subtitlesBlock.visible && addDate.visible
+                        implicitHeight: 9*appWindow.zoom
+                        implicitWidth: 1
+                    }
 
                     AddDateToFileName {
                         id: addDate
@@ -193,8 +213,10 @@ BaseStandaloneCapableDialog {
         downloadTools.resetTuneParams();
         downloadTools.batchDownload = downloadTools.isBatchDownload(requestId);
         downloadTools.resumeSupport = downloadTools.getResumeSupport(requestId);
+        downloadTools.versionSelector = App.downloads.creator.resourceVersionSelector(requestId, 0);
         var downloadId = downloadTools.getNameAndPath();
         saveTo.initialization();
+        language.initialization();
         videoQuality.initialization();
         schedulerTools.buildScheduler([downloadId]);
         schedulerBlock.initialization();

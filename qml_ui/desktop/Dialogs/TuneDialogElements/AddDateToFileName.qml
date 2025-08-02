@@ -10,5 +10,15 @@ BaseCheckBox {
     text: qsTr("Add dates to files names") + App.loc.emptyString
     checkBoxStyle: "gray"
     xOffset: 0
-    onClicked: changedByUser = true
+    onClicked: {
+        changedByUser = true;
+
+        if (!downloadTools.batchDownload) {
+            App.downloads.creator.setDownloadOption(
+                        downloadTools.requestId,
+                        0,
+                        AbstractDownloadOption.AddDateToFileName,
+                        checked);
+        }
+    }
 }

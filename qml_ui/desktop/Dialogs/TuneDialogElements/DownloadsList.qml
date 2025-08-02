@@ -260,6 +260,7 @@ ColumnLayout {
     function loadRows() {
         var request;
         var preferredVideoHeightEnabled = false;
+        var preferredLanguageEnabled = false;
         var preferredFileTypeEnabled = false;
         var originFilesTypes = [];
         var addDateToFileNameEnabled = false;
@@ -281,6 +282,7 @@ ColumnLayout {
                 }
 
                 preferredVideoHeightEnabled = preferredVideoHeightEnabled || (request.supportedOptions & AbstractDownloadOption.PreferredVideoHeight) != 0;
+                preferredLanguageEnabled = preferredLanguageEnabled || (request.supportedOptions & AbstractDownloadOption.PreferredLanguageCode) != 0;
                 preferredFileTypeEnabled = preferredFileTypeEnabled || (request.supportedOptions & AbstractDownloadOption.PreferredFileType) != 0;
                 addDateToFileNameEnabled = addDateToFileNameEnabled || (request.supportedOptions & AbstractDownloadOption.AddDateToFileName) != 0;
                 subtitlesEnabled = subtitlesEnabled || (request.supportedOptions & AbstractDownloadOption.DownloadSubtitles) != 0;
@@ -305,6 +307,8 @@ ColumnLayout {
         if (!firstIndex) {
             if (preferredVideoHeightEnabled)
                 downloadTools.setPreferredVideoHeight(App.settings.downloadOptions.value(AbstractDownloadOption.PreferredVideoHeight) || downloadTools.defaultPreferredVideoHeight);
+            if (preferredLanguageEnabled)
+                downloadTools.setPreferredLanguage(App.settings.downloadOptions.value(AbstractDownloadOption.PreferredLanguageCode) || downloadTools.defaultPreferredLanguage);
             if (preferredFileTypeEnabled)
                 downloadTools.setPreferredFileType(App.settings.downloadOptions.value(AbstractDownloadOption.PreferredFileType) || AbstractDownloadsUi.VideoFile);
             downloadTools.setOriginFilesTypes(originFilesTypes);

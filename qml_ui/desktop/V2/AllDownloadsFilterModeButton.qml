@@ -1,4 +1,5 @@
 import QtQuick
+import "../BaseElements"
 import "../BaseElements/V2"
 import org.freedownloadmanager.fdm
 import org.freedownloadmanager.fdm.abstractdownloadsui
@@ -50,23 +51,25 @@ ToolbarFlatButton_V2
         }
 
         BaseMenuSeparator_V2 {
+            id: nonHiddenSystemTagsSeparator
             visible: tagsTools.nonHiddenSystemTags.length > 0
         }
-        Repeater {
-            model: tagsTools.nonHiddenSystemTags
-            AllDownloadsFilterTagMenuItem {
-                tag: modelData
-            }
+        TagsMenuHelper {
+            menu: dropDownMenu
+            insertAfter: nonHiddenSystemTagsSeparator
+            tags: tagsTools.nonHiddenSystemTags
+            checkable: false
         }
 
         BaseMenuSeparator_V2 {
+            id: customTagsSeparator
             visible: tagsTools.customTags.length > 0
         }
-        Repeater {
-            model: tagsTools.customTags
-            AllDownloadsFilterTagMenuItem {
-                tag: modelData
-            }
+        TagsMenuHelper {
+            menu: dropDownMenu
+            insertAfter: customTagsSeparator
+            tags: tagsTools.customTags
+            checkable: false
         }
     }
 

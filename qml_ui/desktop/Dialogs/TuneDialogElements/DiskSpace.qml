@@ -23,6 +23,13 @@ BaseLabel {
         App.storages.queryIfHasWriteAccess(saveToPath);
     }
 
+    onVisibleChanged: App.storages.queryBytesAvailable(saveToPath)
+
+    Connections {
+        target: Qt.application
+        onActiveChanged: App.storages.queryBytesAvailable(saveToPath)
+    }
+
     Connections {
         target: App.storages
         onBytesAvailableResult: (path, available) => {

@@ -7,6 +7,7 @@ ProgressBar
 
     property color bgColor: appWindow.theme_v2.bg300
     property color progressColor : appWindow.theme_v2.primary
+    property var progressGradient: null
     property bool running: false
     property int radius: height
 
@@ -33,6 +34,7 @@ ProgressBar
                 height: parent.height
                 radius: root.radius
                 color: root.progressColor
+                gradient: root.progressGradient
             }
         }
 
@@ -42,6 +44,7 @@ ProgressBar
             height: parent.height
             radius: root.radius
             color: root.progressColor
+            gradient: root.progressGradient
             XAnimator on x {
                 from: -parent.width
                 to: root.width

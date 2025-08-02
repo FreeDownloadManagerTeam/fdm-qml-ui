@@ -8,11 +8,15 @@ BaseContextMenu {
     id: root
     closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
 
+    signal aboutToOpenDialog()
+
     property var tag
+    property bool askRemoveConfirmation: true
 
     BaseContextMenuItem {
         text: qsTr("Edit") + App.loc.emptyString
         onTriggered: {
+            aboutToOpenDialog();
             tagsTools.startTagEditing(tag);
             editTagDlg.open();
         }
@@ -20,8 +24,13 @@ BaseContextMenu {
     BaseContextMenuItem {
         text: qsTr("Remove") + App.loc.emptyString
         onTriggered: {
-            removeTagDlg.tagId = tag.id;
-            removeTagDlg.open();
+            if (askRemoveConfirmation) {
+                aboutToOpenDialog();
+                removeTagDlg.tagId = tag.id;
+                removeTagDlg.open();
+            } else {
+                appWindow.removeTag(tag.id);
+            }
         }
     }
 }

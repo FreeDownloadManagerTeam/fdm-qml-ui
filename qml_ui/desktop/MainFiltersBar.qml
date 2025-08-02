@@ -85,18 +85,6 @@ Rectangle {
             TagsPanelActionButton {
                 id: tagPanelBtn
             }
-
-            AppMessageDialog {
-                id: removeTagDlg
-                property int tagId
-                text: qsTr("OK to remove tag?") + App.loc.emptyString
-                buttons: AppMessageDialog.Ok | AppMessageDialog.Cancel
-                onAccepted: {
-                    if (App.downloads.model.tagIdFilter == tagId)
-                        downloadsViewTools.resetDownloadsTagFilter();
-                    tagsTools.removeTag(tagId);
-                }
-            }
         }
     }
 
