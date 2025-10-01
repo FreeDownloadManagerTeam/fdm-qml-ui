@@ -60,7 +60,7 @@ BaseContextMenu {
     BaseContextMenuItem {
         visible: App.features.hasFeature(AppFeatures.Plugins) &&
                  !App.rc.client.active
-        text: qsTr("Add-ons...") + App.loc.emptyString
+        text: remove3dots(qsTr("Add-ons...")) + App.loc.emptyString
         enabled: pageId !== "plugins"
         onTriggered: appWindow.openPlugins()
     }    
@@ -71,7 +71,7 @@ BaseContextMenu {
 
     BaseContextMenuItem {
         visible: !App.rc.client.active
-        text: qsTr("Preferences...") + App.loc.emptyString
+        text: remove3dots(qsTr("Preferences...")) + App.loc.emptyString
         enabled: pageId !== "settings"
         onTriggered: appWindow.openSettings()
     }
@@ -81,6 +81,7 @@ BaseContextMenu {
 
     BaseContextMenuItem {
         text: qsTr("Contact support") + App.loc.emptyString
+        externalLink: true
         onTriggered: Qt.openUrlExternally('https://www.freedownloadmanager.org/support.htm?' + App.serverCommonGetParameters)
     }    
     BaseContextMenuItem {
@@ -169,13 +170,14 @@ BaseContextMenu {
 
     BaseContextMenuItem {
         visible: appWindow.updateSupported
-        text: qsTr("Check for updates...") + App.loc.emptyString
+        text: remove3dots(qsTr("Check for updates...")) + App.loc.emptyString
         onTriggered: appWindow.checkForUpdatesRequested()
     }
 
     BaseContextMenuItem {
-        text: qsTr("Join the Mosaic...") + App.loc.emptyString
+        text: remove3dots(qsTr("Join the Mosaic...")) + App.loc.emptyString
         offerIndicator: true
+        externalLink: true
         onTriggered: {
             Qt.openUrlExternally("https://up.freedownloadmanager.org/fdm6/js_stat.php?navigate_to_mosaic=1");
             mosaicClick();
@@ -259,6 +261,14 @@ BaseContextMenu {
                 shutdownTools.powerManagement.shutdownComputerWhenDownloadsFinished;
         root.visible = true;
         root.open();
+    }
+
+    function remove3dots(str) {
+        if (str.startsWith("..."))
+            return str.substring(3);
+        else if (str.endsWith("..."))
+            return str.substring(0, str.length-3);
+        return str;
     }
 
     Connections {

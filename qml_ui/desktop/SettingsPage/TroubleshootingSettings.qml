@@ -106,6 +106,28 @@ Column
 
     RowLayout {
         anchors.left: parent.left
+
+        BaseCheckBox
+        {
+            text: qsTr("Enable downloads management logging") + App.loc.emptyString
+            checked: App.isDownloadsManagementLoggingEnabled()
+            onClicked: App.setDownloadsManagementLoggingEnabled(checked)
+            anchors.leftMargin: 0
+            xOffset: 0
+            textColor: appWindow.theme.settingsItem
+            elideText: false
+        }
+        BaseLabel {
+            text: "*"
+            color: "red"
+            font.pixelSize: 14*appWindow.fontZoom
+            font.bold: true
+            Layout.alignment: Qt.AlignTop
+        }
+    }
+
+    RowLayout {
+        anchors.left: parent.left
         opacity: 0.5
         BaseLabel {
             text: "*"

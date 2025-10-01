@@ -123,7 +123,7 @@ Item
                 anchors.right: parent.right
             }
 
-            SvgImage_V2
+            /*SvgImage_V2
             {
                 id: restartBtn
                 visible: !progressText.visible &&
@@ -135,13 +135,13 @@ Item
                     anchors.fill: parent
                     onClicked: App.downloads.mgr.restartDownload([model.id])
                 }
-            }
+            }*/
 
             ToolbarFlatButton_V2
             {
-                visible: !progressText.visible &&
+                visible: !progressText.visible /*&&
                          !restartBtn.visible &&
-                         downloadsItemTools.finished
+                         downloadsItemTools.finished*/
                 iconSource: Qt.resolvedUrl("menu_dots.svg")
                 iconColor: appWindow.theme_v2.bg1000
                 bgColor: "transparent"
@@ -153,19 +153,12 @@ Item
                 anchors.right: parent.right
                 onClicked: {
                     var id = downloadsItemTools.itemId;
-                    var item = downloadsItemTools.item;
 
                     var component = Qt.createComponent(downloadsViewTools.showingDownloadsWithMissingFilesOnly ?
                                                            "../DownloadsViewItemContextMenu2.qml" :
                                                            "../DownloadsViewItemContextMenu.qml");
                     var menu = component.createObject(root, {
                                                           "modelIds": [id],
-                                                          "finished": downloadsItemTools.finished,
-                                                          "filesCount": item.filesCount,
-                                                          "canChangeUrl": (item.flags & AbstractDownloadsUi.AllowChangeSourceUrl) != 0,
-                                                          "supportsMirror": (item.flags & AbstractDownloadsUi.SupportsMirrors) != 0,
-                                                          "batchDownload": downloadsItemTools.hasChildDownloads,
-                                                          "endlessStream": (item.flags & AbstractDownloadsUi.EndlessStream) != 0,
                                                           "threeDotsMenu": true
                                                       });
                     menu.open();

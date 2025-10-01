@@ -43,8 +43,12 @@ Item {
         onCloseBtnPressed: App.appReview.reviewResult(true,false)
     }
 
+    function start() {
+        voteDialog.open();
+    }
+
     Connections {
         target: App.appReview
-        onRequestReview: voteDialog.open()
+        onRequestReview: start()
     }
 }

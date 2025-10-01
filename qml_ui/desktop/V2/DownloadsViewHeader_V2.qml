@@ -131,6 +131,8 @@ Item
                 text: qsTr("Added") + App.loc.emptyString
                 Layout.minimumWidth: fm.font.pixelSize*0 +
                                      Math.max(fm.advanceWidth(App.loc.dateTimeToString_v2_maxString(false, true) + App.loc.emptyString),
+                                              fm.advanceWidth(qsTr("Remaining") + " 23h 59m" + App.loc.emptyString),
+                                              fm.advanceWidth(qsTr("Stopped") + App.loc.emptyString),
                                               80*appWindow.fontZoom)
             }
 

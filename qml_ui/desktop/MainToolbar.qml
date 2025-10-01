@@ -193,7 +193,7 @@ ToolBar {
                     enabled: selectedDownloadsTools.currentDownloadId > 0
                              && !downloadsViewTools.emptySearchResults
                              && !selectedDownloadsTools.selectedDownloadsIsLocked()
-                    onClicked: movingFolderDlg.open()
+                    onClicked: movingFolderDlg.openForIds(selectedDownloadsTools.getCurrentDownloadIds())
                     tooltipText: qsTr("Move to...") + App.loc.emptyString
                     anchors.verticalCenter: parent.verticalCenter
                 }
@@ -205,7 +205,7 @@ ToolBar {
                     visible: !App.rc.client.active && selectedDownloadsTools.checkedDownloadsCount > 0
                     enabled: !downloadsViewTools.emptySearchResults
                              && !selectedDownloadsTools.selectedDownloadsIsLocked()
-                    onClicked: movingFolderDlg.open()
+                    onClicked: movingFolderDlg.openForIds(selectedDownloadsTools.getCurrentDownloadIds())
                     tooltipText: qsTr("Move to...") + App.loc.emptyString
                     anchors.verticalCenter: parent.verticalCenter
                 }

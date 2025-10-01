@@ -129,6 +129,7 @@ Item {
 
     readonly property bool canBeRestarted: item ? DownloadsTools.canBeRestarted(item) : false
 
+    readonly property int eta: running && !finished && !infinityIndicator ? estimatedTimeSec : -1
 
     onItemIdChanged: {
 

@@ -5,7 +5,7 @@ import "../../desktop/BaseElements"
 BaseContextMenuItem {
     property double downloadId: -1
     readonly property var downloadInfo: downloadId === -1 ? null : App.downloads.infos.info(downloadId)
-    enabled: !locked
+    enabled: !tools.locked
     text: App.my_BT_qsTranslate("DownloadContextMenu", "Disable seeding") + App.loc.emptyString
     checkable: true
     checked: downloadInfo ?

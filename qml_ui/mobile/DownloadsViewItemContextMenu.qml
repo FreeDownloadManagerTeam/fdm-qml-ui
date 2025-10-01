@@ -1,5 +1,5 @@
-import QtQuick 2.10
-import QtQuick.Controls 2.3
+import QtQuick
+import QtQuick.Controls
 import org.freedownloadmanager.fdm 1.0
 import org.freedownloadmanager.fdm.appfeatures 1.0
 import org.freedownloadmanager.fdm.abstractdownloadsui 1.0
@@ -37,6 +37,14 @@ Menu
     modal: true
     dim: false
     width: 260
+
+    //////////////////////////////////////////////////////////////////////
+    // QTBUG-139695 workaround
+    topMargin: appWindow.SafeArea.margins.top
+    leftMargin: appWindow.SafeArea.margins.left
+    bottomMargin: appWindow.SafeArea.margins.bottom
+    rightMargin: appWindow.SafeArea.margins.right
+    //////////////////////////////////////////////////////////////////////
 
     DownloadsItemContextMenuTools {
         id: contextMenuTools
@@ -176,7 +184,7 @@ Menu
     BaseMenuItem {
         text: qsTr("Rename file") + App.loc.emptyString
         visible: info ? (info.finished && info.filesCount === 1) : false
-        enabled: !locked && selectedDownloadsTools.checkRenameAllowed(true)
+        enabled: !locked && selectedDownloadsTools.checkRenameAllowed()
         onTriggered: stackView.waPush(Qt.resolvedUrl("RenameDownloadFilePage.qml"), {downloadId:modelIds[0]})
     }
     BaseMenuItem {

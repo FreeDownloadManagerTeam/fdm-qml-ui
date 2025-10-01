@@ -1,8 +1,8 @@
-import QtQuick 2.10
-import QtQuick.Controls 2.3
-import QtQuick.Layouts 1.3
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import QtQuick.Controls.Material
 import org.freedownloadmanager.fdm 1.0
-import QtQuick.Controls.Material 2.4
 import "../../qt5compat"
 import "../../common"
 import "../BaseElements"
@@ -14,10 +14,15 @@ Dialog
     parent: Overlay.overlay
 
     width: 320
-    height: Math.min(parent.height, langList.count * 30) - 40
+    height: Math.min(appWindow.contentItem.height, langList.count * 30)
 
-    x: Math.round((appWindow.width - width) / 2)
-    y: Math.round((appWindow.height - height) / 2)
+    x: Math.round((appWindow.contentItem.width - width) / 2)
+    y: Math.round((appWindow.contentItem.height - height) / 2)
+
+    topMargin: appWindow.SafeArea.margins.top
+    leftMargin: appWindow.SafeArea.margins.left
+    bottomMargin: appWindow.SafeArea.margins.bottom
+    rightMargin: appWindow.SafeArea.margins.right
 
     modal: true
 

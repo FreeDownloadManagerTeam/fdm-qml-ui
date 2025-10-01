@@ -9,7 +9,6 @@ import "../BaseElements"
 Drawer {
     id: root
     width: parent.width
-    height: 205
     edge: Qt.BottomEdge
     interactive: stackView.depth == 1
     Material.background: appWindow.theme.background
@@ -18,7 +17,7 @@ Drawer {
     ListView {
         id: sort
         width: 330
-        height: parent.height
+        implicitHeight: 205
         anchors.horizontalCenter: parent.horizontalCenter
 
         header: Pane {

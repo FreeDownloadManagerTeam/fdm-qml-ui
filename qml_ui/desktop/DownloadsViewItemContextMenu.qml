@@ -1,28 +1,19 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import org.freedownloadmanager.fdm 1.0
-import org.freedownloadmanager.fdm.appfeatures 1.0
-import org.freedownloadmanager.fdm.abstractdownloadsui 1.0
+import org.freedownloadmanager.fdm
+import org.freedownloadmanager.fdm.appfeatures
+import org.freedownloadmanager.fdm.abstractdownloadsui
 import "BaseElements"
 import "BaseElements/V2"
-import "../common/Tools";
+import "../common/Tools"
 
 BaseContextMenu {
     id: root
     property var modelIds: []
-    property bool finished
-    property bool canChangeUrl
-    property bool supportsMirror
-    property bool batchDownload
-    property bool supportsSequentialDownload: selectedDownloadsTools.sequentialDownloadAllowed()
-    property bool supportsPlayAsap: selectedDownloadsTools.playAsapAllowed()
     property bool supportsAddT: false
     property bool supportsForceReann: false
     property bool supportsIgnoreURatioLimit: false
-    readonly property bool endlessStream: false
-    property int filesCount: 0
-    property bool locked: selectedDownloadsTools.selectedDownloadsIsLocked()
     readonly property var info: modelIds.length === 1 ? App.downloads.infos.info(modelIds[0]) : null
     readonly property var error: info ? info.error : null
     readonly property bool showReportError: error && error.hasError
@@ -32,10 +23,15 @@ BaseContextMenu {
 
     height: Math.min(implicitHeight, appWindow.height-5*appWindow.zoom)
 
+    DownloadsItemsTools {
+        id: tools
+        ids: modelIds
+    }
+
     DownloadsItemContextMenuTools {
         id: contextMenuTools
         modelId: root.modelIds[0]
-        finished: root.finished
+        finished: tools.finished
         singleDownload: modelIds.length === 1
     }
 
@@ -44,9 +40,9 @@ BaseContextMenu {
     BaseContextMenuItem {
         id: finishDownloadingItem
         text: qsTr("Save and complete") + App.loc.emptyString
-        visible: selectedDownloadsTools.canBeFinalized() && (enabled || !hideDisabledItems)
-        enabled: !locked
-        onTriggered: selectedDownloadsTools.finalizeDownloads()
+        visible: tools.canBeFinalized && (enabled || !hideDisabledItems)
+        enabled: !tools.locked
+        onTriggered: tools.finalizeDownloads()
     }
     BaseContextMenuSeparator {
         visible: finishDownloadingItem.visible
@@ -55,15 +51,15 @@ BaseContextMenu {
     BaseContextMenuItem {
         id: restartItem
         text: qsTr("Restart") + App.loc.emptyString
-        visible: selectedDownloadsTools.canBeRestarted() && (enabled || !hideDisabledItems)
-        enabled: !locked
-        onTriggered: selectedDownloadsTools.restartDownloads()
+        visible: tools.canBeRestarted && (enabled || !hideDisabledItems)
+        enabled: !tools.locked
+        onTriggered: tools.restartDownloads()
     }
     BaseContextMenuItem {
         id: openItem
         text: qsTr("Open") + App.loc.emptyString
         visible: !App.rc.client.active && (enabled || !hideDisabledItems)
-        enabled: !locked && contextMenuTools.canBeOpened
+        enabled: !tools.locked && contextMenuTools.canBeOpened
         onTriggered: contextMenuTools.openClick()
     }
     BaseContextMenuItem {
@@ -82,7 +78,7 @@ BaseContextMenu {
         id: reportProblemItem
         visible: showReportError && (enabled || !hideDisabledItems)
         text: qsTr("Report problem") + App.loc.emptyString
-        enabled: !locked
+        enabled: !tools.locked
         onTriggered: contextMenuTools.reportProblem()
     }
     BaseContextMenuItem {
@@ -105,7 +101,7 @@ BaseContextMenu {
     BaseContextMenuItem {
         id: showDownloadsItem
         text: qsTr("Show downloads") + App.loc.emptyString
-        visible: modelIds.length === 1 && batchDownload
+        visible: tools.ids.length === 1 && tools.info.hasChildDownloads
         onTriggered: downloadsViewTools.setParentDownloadIdFilter(contextMenuTools.modelId)
     }
     BaseContextMenuSeparator {
@@ -115,7 +111,7 @@ BaseContextMenu {
     BaseContextMenuItem {
         id: chooseFilesItem
         text: qsTr("Choose files...") + App.loc.emptyString
-        visible: modelIds.length === 1 && filesCount > 1
+        visible: tools.ids.length === 1 && tools.info.filesCount > 1
         onTriggered: bottomPanelTools.openFilesTab()
     }
     BaseContextMenuSeparator {
@@ -124,7 +120,7 @@ BaseContextMenu {
 
     BaseContextMenu {
         title: qsTr("Set priority") + App.loc.emptyString
-        enabled: selectedDownloadsTools.changePriorityAllowed()
+        enabled: tools.canChangePriority
 
         ActionGroup {
             id: downloadPriorityGroup
@@ -133,22 +129,22 @@ BaseContextMenu {
         BaseContextMenuItem {
             text: qsTr("High") + App.loc.emptyString
             checkable: true
-            checked: selectedDownloadsTools.getDownloadsPriorityChecked(AbstractDownloadsUi.DownloadPriorityHigh)
-            onTriggered: selectedDownloadsTools.setDownloadsPriority(AbstractDownloadsUi.DownloadPriorityHigh)
+            checked: tools.highPriority
+            onTriggered: tools.setDownloadsPriority(AbstractDownloadsUi.DownloadPriorityHigh)
             ActionGroup.group: downloadPriorityGroup
         }
         BaseContextMenuItem {
             text: qsTr("Normal") + App.loc.emptyString
             checkable: true
-            checked: selectedDownloadsTools.getDownloadsPriorityChecked(AbstractDownloadsUi.DownloadPriorityNormal)
-            onTriggered: selectedDownloadsTools.setDownloadsPriority(AbstractDownloadsUi.DownloadPriorityNormal)
+            checked: tools.normalPriority
+            onTriggered: tools.setDownloadsPriority(AbstractDownloadsUi.DownloadPriorityNormal)
             ActionGroup.group: downloadPriorityGroup
         }
         BaseContextMenuItem {
             text: qsTr("Low") + App.loc.emptyString
             checkable: true
-            checked: selectedDownloadsTools.getDownloadsPriorityChecked(AbstractDownloadsUi.DownloadPriorityLow)
-            onTriggered: selectedDownloadsTools.setDownloadsPriority(AbstractDownloadsUi.DownloadPriorityLow)
+            checked: tools.lowPriority
+            onTriggered: tools.setDownloadsPriority(AbstractDownloadsUi.DownloadPriorityLow)
             ActionGroup.group: downloadPriorityGroup
         }
     }
@@ -157,8 +153,8 @@ BaseContextMenu {
     BaseContextMenuItem {
         id: renameFileItem
         text: qsTr("Rename file") + App.loc.emptyString
-        visible: root.finished === true && root.filesCount == 1 && (enabled || !hideDisabledItems)
-        enabled: !locked && selectedDownloadsTools.checkRenameAllowed(true)
+        visible: tools.ids.length === 1 && tools.finished && tools.info.filesCount === 1 && (enabled || !hideDisabledItems)
+        enabled: !tools.locked && tools.canRename
         onTriggered: {
             renameDownloadFileDlg.initialize(root.modelIds[0], 0);
             renameDownloadFileDlg.open();
@@ -168,22 +164,22 @@ BaseContextMenu {
         id: moveToItem
         text: qsTr("Move to...") + App.loc.emptyString
         visible: !App.rc.client.active && (enabled || !hideDisabledItems)
-        enabled: !locked && selectedDownloadsTools.checkMoveAllowed()
-        onTriggered: movingFolderDlg.open()
+        enabled: !tools.locked && tools.canMove
+        onTriggered: movingFolderDlg.openForIds(tools.ids)
     }
     BaseContextMenuItem {
         id: deleteFileItem
         text: qsTr("Delete file") + App.loc.emptyString
-        enabled: !locked
+        enabled: !tools.locked
         visible: enabled || !hideDisabledItems
-        onTriggered: selectedDownloadsTools.removeCurrentDownloadsSimple(modelIds)
+        onTriggered: deleteDownloadsDlgSimple.removeAction(tools.ids)
     }
     BaseContextMenuItem {
         id: removeFromListItem
         text: qsTr("Remove from list") + App.loc.emptyString
-        enabled: !locked
+        enabled: !tools.locked
         visible: enabled || !hideDisabledItems
-        onTriggered: selectedDownloadsTools.removeFromList(modelIds)
+        onTriggered: selectedDownloadsTools.removeFromList(tools.ids)
     }
     BaseContextMenuSeparator {
         visible: renameFileItem.visible || moveToItem.visible || deleteFileItem.visible || removeFromListItem.visible
@@ -191,26 +187,26 @@ BaseContextMenu {
 
     BaseContextMenuItem {
         id: sequentialDownloadItem
-        visible: supportsSequentialDownload && (enabled || !hideDisabledItems)
-        enabled: !locked
+        visible: tools.supportsSequentialDownload && (enabled || !hideDisabledItems)
+        enabled: !tools.locked
         text: qsTr("Sequential download") + App.loc.emptyString
         checkable: true
-        checked: selectedDownloadsTools.sequentialDownloadChecked()
-        onTriggered: selectedDownloadsTools.setSequentialDownload(checked)
+        checked: tools.sequentialDownload
+        onTriggered: tools.setSequentialDownload(checked)
     }
     BaseContextMenuItem {
         id: playFileWhileDownloadingItem
-        visible: supportsPlayAsap && (enabled || !hideDisabledItems)
-        enabled: !locked
+        visible: tools.supportsPlayAsap && (enabled || !hideDisabledItems)
+        enabled: !tools.locked
         text: qsTr("Play file while it is still downloading") + App.loc.emptyString
         checkable: true
-        checked: selectedDownloadsTools.playAsapChecked()
-        onTriggered: selectedDownloadsTools.setPlayAsap(checked)
+        checked: tools.playAsap
+        onTriggered: tools.setPlayAsap(checked)
     }
     BaseContextMenuItem {
         id: addMirrorItem
-        visible: modelIds.length === 1 && supportsMirror && (enabled || !hideDisabledItems)
-        enabled: !locked
+        visible: tools.ids.length === 1 && (tools.info.flags & AbstractDownloadsUi.SupportsMirrors) && (enabled || !hideDisabledItems)
+        enabled: !tools.locked
         text: qsTr("Add mirror") + App.loc.emptyString
         onTriggered: addMirrorDlg.showDialog(contextMenuTools.modelId)
     }
@@ -237,8 +233,8 @@ BaseContextMenu {
     BaseContextMenuItem {
         id: checkForUpdateItem
         text: qsTr("Check for update") + App.loc.emptyString
-        visible: selectedDownloadsTools.canCheckForUpdate() && (enabled || !hideDisabledItems)
-        onTriggered: selectedDownloadsTools.checkForUpdate()
+        visible: tools.canCheckForUpdate && (enabled || !hideDisabledItems)
+        onTriggered: tools.checkForUpdate()
     }
     BaseContextMenuItem {
         id: exportSelectedDownloadsItem
@@ -253,8 +249,8 @@ BaseContextMenu {
 
     BaseContextMenuItem {
         id: fileIntegrityItem
-        visible: root.finished === true && root.filesCount == 1 && (enabled || !hideDisabledItems)
-        enabled: !locked
+        visible: tools.ids.length === 1 && tools.finished && tools.info.filesCount === 1 && (enabled || !hideDisabledItems)
+        enabled: !tools.locked
         text: qsTr("File integrity") + App.loc.emptyString
         onTriggered: fileIntegrityDlg.showRequestData(contextMenuTools.modelId, 0)
     }
@@ -264,10 +260,10 @@ BaseContextMenu {
 
     BaseContextMenuItem {
         id: scheduleItem
-        enabled: !locked && selectedDownloadsTools.setUpSchedulerAllowed()
+        enabled: !tools.locked && tools.canSchedule
         visible: enabled || !hideDisabledItems
         text: qsTr("Schedule") + App.loc.emptyString
-        onTriggered: selectedDownloadsTools.setUpScheduler()
+        onTriggered: schedulerDlg.setUpSchedulerAction(tools.ids)
     }
     BaseContextMenuSeparator {
         visible: scheduleItem.visible
@@ -275,8 +271,8 @@ BaseContextMenu {
 
     BaseContextMenuItem {
         id: changeUrlItem
-        visible: modelIds.length === 1 && (enabled || !hideDisabledItems)
-        enabled: !locked && canChangeUrl
+        visible: tools.ids.length === 1 && (enabled || !hideDisabledItems)
+        enabled: !tools.locked && (tools.info.flags & AbstractDownloadsUi.AllowChangeSourceUrl)
         text: qsTr("Change URL") + App.loc.emptyString
         onTriggered: changeUrlDlg.showDialog(contextMenuTools.modelId)
     }
@@ -286,17 +282,17 @@ BaseContextMenu {
 
     BaseContextMenuItem {
         id: convertToMp3Item
-        enabled: !locked && selectedDownloadsTools.convertationToMp3Allowed()
+        enabled: !tools.locked && tools.canConvertToMp3
         visible: enabled || !hideDisabledItems
         text: qsTr("Convert to mp3") + App.loc.emptyString
-        onTriggered: selectedDownloadsTools.openMp3ConverterDialog()
+        onTriggered: mp3ConverterDlg.open(tools.ids, [])
     }
     BaseContextMenuItem {
         id: convertToMp4Item
-        enabled: !locked && selectedDownloadsTools.convertationToMp4Allowed()
+        enabled: !tools.locked && tools.canConvertToMp4
         visible: enabled || !hideDisabledItems
         text: qsTr("Convert to mp4") + App.loc.emptyString
-        onTriggered: selectedDownloadsTools.openMp4ConverterDialog()
+        onTriggered: mp4ConverterDlg.open(tools.ids, [])
     }
     BaseContextMenuSeparator {
         visible: convertToMp3Item.visible || convertToMp4Item.visible
@@ -304,10 +300,15 @@ BaseContextMenu {
 
     BaseContextMenuItem {
         id: performVirusCheckItem
-        enabled: !locked && selectedDownloadsTools.allowedVirusCheck()
+        enabled: !tools.locked && tools.canPerformVirusCheck
         visible: enabled || !hideDisabledItems
         text: qsTr("Perform virus check") + App.loc.emptyString
-        onTriggered: selectedDownloadsTools.performVirusCheck()
+        onTriggered: {
+            if (DownloadsTools.isAntivirusSettingsOk())
+                App.downloads.mgr.performVirusCheck(tools.ids);
+            else
+                antivirusSettingsDialog.open();
+        }
     }
     BaseContextMenuSeparator {
         visible: performVirusCheckItem.visible
@@ -348,7 +349,13 @@ BaseContextMenu {
             let downloadId = modelIds.length === 1 ?
                     "downloadId: " + modelIds[0] :
                     "";
-            var index = 21;
+            let index = 0;
+            for (let i = 0; i < root.count; ++i) {
+                if (root.itemAt(i) == sequentialDownloadItem) {
+                    index = i;
+                    break;
+                }
+            }
             if (btTools.item.addTAllowed()) {
                 supportsAddT = true;
                 root.insertItem(index++, Qt.createQmlObject('import "../bt/desktop"; AddTMenuItem {%1}'.arg(downloadId), root));

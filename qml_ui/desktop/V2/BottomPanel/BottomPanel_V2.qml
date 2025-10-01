@@ -43,17 +43,25 @@ Item
                     id: tabs
                     model: bottomPanelTools.currentTabsModel
 
-                    BaseText_V2 {
-                        text: modelData.name
-                        color: bottomPanelTools.currentTab === modelData.id ? appWindow.theme_v2.bg1000 : appWindow.theme_v2.bg700
-                        font.weight: 600
-                        font.pixelSize: 10*appWindow.fontZoom
-                        font.capitalization: Font.AllUppercase
+                    Rectangle {
+                        readonly property bool isCurrent: bottomPanelTools.currentTab === modelData.id
 
-                        Layout.leftMargin: 8*appWindow.zoom
-                        Layout.rightMargin: 8*appWindow.zoom
-                        Layout.topMargin: 7*appWindow.zoom
-                        Layout.bottomMargin: 7*appWindow.zoom
+                        radius: 4*appWindow.zoom
+                        implicitHeight: tabNameText.implicitHeight + 2*2*appWindow.zoom
+                        implicitWidth: tabNameText.implicitWidth + 8*2*appWindow.zoom
+                        color: isCurrent ? appWindow.theme_v2.bg600 : "transparent"
+                        Layout.topMargin: 6*appWindow.zoom
+                        Layout.bottomMargin: 6*appWindow.zoom
+
+                        BaseText_V2 {
+                            id: tabNameText
+                            text: modelData.name
+                            color: parent.isCurrent ? appWindow.theme_v2.dark1000 : appWindow.theme_v2.bg700
+                            font.weight: 600
+                            font.pixelSize: 10*appWindow.fontZoom
+                            font.capitalization: Font.AllUppercase
+                            anchors.centerIn: parent
+                        }
 
                         MouseAreaWithHand_V2 {
                             anchors.fill: parent

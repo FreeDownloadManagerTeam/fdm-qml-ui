@@ -49,6 +49,8 @@ Rectangle {
             contentWidth: width
             contentHeight: all.height
 
+            clip: true
+
             ColumnLayout
             {
                 id: all

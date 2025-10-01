@@ -1,7 +1,7 @@
-import QtQuick 2.15
-import QtQuick.Window 2.15
-import QtQuick.Controls 2.15
-import QtQuick.Controls.Material 2.4
+import QtQuick
+import QtQuick.Window
+import QtQuick.Controls
+import QtQuick.Controls.Material
 import "../qt5compat"
 import "../common"
 import "../common/Tools"
@@ -87,9 +87,19 @@ ApplicationWindow
         }
     }
 
+    background: Rectangle {
+        color: theme.primary
+        anchors.fill: parent
+    }
+
     WaStackView {
         id: stackView
         anchors.fill: parent
+        // Qt 6.9.2+ does not require this
+        /*anchors.leftMargin: App.systemWindowInsets ? App.systemWindowInsets.left / Screen.devicePixelRatio : 0
+        anchors.topMargin: App.systemWindowInsets ? App.systemWindowInsets.top / Screen.devicePixelRatio : 0
+        anchors.rightMargin: App.systemWindowInsets ? App.systemWindowInsets.right / Screen.devicePixelRatio : 0
+        anchors.bottomMargin: App.systemWindowInsets ? App.systemWindowInsets.bottom / Screen.devicePixelRatio : 0*/
         onCurrentItemChanged: appWindowStateChanged()
     }
 
@@ -578,4 +588,29 @@ ApplicationWindow
     }
 
     SnailTools {id: snailTools}
+
+    //////////////////////////////////////////////////////////////////////////////
+    // QTBUG-139724 workaround
+    //
+    Item {
+        id: appWindowInvalidateItem
+    }
+
+    Timer {
+        id: appWindowInvalidateTimer
+        interval: 50
+        onTriggered: {
+            ++appWindowInvalidateItem.width;
+            --appWindowInvalidateItem.width;
+        }
+    }
+
+    Connections {
+        target: Qt.application
+        onStateChanged: {
+            if (Qt.application.state == Qt.ApplicationActive)
+                appWindowInvalidateTimer.restart();
+        }
+    }
+    //////////////////////////////////////////////////////////////////////////////
 }

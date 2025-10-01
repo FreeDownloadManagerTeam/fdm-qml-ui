@@ -47,6 +47,8 @@ Page {
             //contentWidth: contentColumn.width
             contentHeight: contentColumn.height
 
+            clip: true
+
             Item {
                 id: contentColumn
 

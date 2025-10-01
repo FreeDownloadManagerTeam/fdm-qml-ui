@@ -1,6 +1,6 @@
-import QtQuick 2.12
-import QtQuick.Controls 2.3
-import QtQuick.Controls.Material 2.4
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Controls.Material
 import "../../qt5compat"
 import org.freedownloadmanager.fdm 1.0
 
@@ -20,9 +20,12 @@ Item {
     signal laterBtnPressed
     signal closeBtnPressed
 
+    visible: opened
+
     Item {
         id: actionElement
-        width: btnWrapper.width + (laterBtnText.length > 0 ? 40 : 30 + 30 + 20)
+        width: Math.max(btnWrapper.width + (laterBtnText.length > 0 ? 40 : 30 + 30 + 20),
+                        Math.min(label.implicitWidth + 110, appWindow.contentItem.width))
         height: content.height + 20
         x: LayoutMirroring.enabled ?
                parent.width + width :
@@ -74,6 +77,7 @@ Item {
                         }
 
                         Label {
+                            id: label
                             text: labelText
                             font.pixelSize: 18
                             color: appWindow.theme.voteDialogText
@@ -85,15 +89,8 @@ Item {
 
                     Row {
                         id: btnWrapper
-                        spacing: 10
+                        spacing: 8
                         anchors.left: parent.left
-
-                        onWidthChanged: {
-                            actionElement.width = btnWrapper.width + (laterBtnText.length > 0 ? 40 : 30 + 30 + 20);
-                            if (!root.opened) {
-                                actionElement.x = - actionElement.width;
-                            }
-                        }
 
                         VoteDialogButton {
                             visible: laterBtnText.length > 0
@@ -161,7 +158,6 @@ Item {
                     actionElement.parent.width - actionElement.width + 20 :
                     -20
             duration: 500
-            onStarted: { root.opened = true; }
         }
 
         OpacityAnimator on opacity{
@@ -178,6 +174,7 @@ Item {
         }
 
         function open() {
+            opened = true;
             moveIn.start()
         }
 
@@ -195,12 +192,4 @@ Item {
     function close() {
         actionElement.close();
     }
-
-//    Connections {
-//        target: App.loc
-//        onCurrentTranslationChanged: {
-//            actionElement.width = btnWrapper.width + 30 + 30 + 20;
-//            actionElement.x = - actionElement.width;
-//        }
-//    }
 }

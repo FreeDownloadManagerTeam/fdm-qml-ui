@@ -214,6 +214,7 @@ BaseStandaloneCapableDialog {
         downloadTools.batchDownload = downloadTools.isBatchDownload(requestId);
         downloadTools.resumeSupport = downloadTools.getResumeSupport(requestId);
         downloadTools.versionSelector = App.downloads.creator.resourceVersionSelector(requestId, 0);
+        downloadTools.initSubtitlesDefaults();
         var downloadId = downloadTools.getNameAndPath();
         saveTo.initialization();
         language.initialization();

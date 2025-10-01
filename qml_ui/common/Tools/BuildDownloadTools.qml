@@ -93,12 +93,6 @@ Item {
 
     property var defaultSubtitlesList: [{languageCode: "af", languageName: "Afrikaans"},{languageCode: "sq", languageName: "Albanian"},{languageCode: "am", languageName: "Amharic"},{languageCode: "ar", languageName: "Arabic"},{languageCode: "hy", languageName: "Armenian"},{languageCode: "az", languageName: "Azerbaijani"},{languageCode: "bn", languageName: "Bangla"},{languageCode: "eu", languageName: "Basque"},{languageCode: "be", languageName: "Belarusian"},{languageCode: "bs", languageName: "Bosnian"},{languageCode: "bg", languageName: "Bulgarian"},{languageCode: "my", languageName: "Burmese"},{languageCode: "ca", languageName: "Catalan"},{languageCode: "ceb", languageName: "Cebuano"},{languageCode: "zh-Hans", languageName: "Chinese (Simplified)"},{languageCode: "zh-Hant", languageName: "Chinese (Traditional)"},{languageCode: "co", languageName: "Corsican"},{languageCode: "hr", languageName: "Croatian"},{languageCode: "cs", languageName: "Czech"},{languageCode: "da", languageName: "Danish"},{languageCode: "nl", languageName: "Dutch"},{languageCode: "en", languageName: "English"},{languageCode: "eo", languageName: "Esperanto"},{languageCode: "et", languageName: "Estonian"},{languageCode: "fil", languageName: "Filipino"},{languageCode: "fi", languageName: "Finnish"},{languageCode: "fr", languageName: "French"},{languageCode: "gl", languageName: "Galician"},{languageCode: "ka", languageName: "Georgian"},{languageCode: "de", languageName: "German"},{languageCode: "el", languageName: "Greek"},{languageCode: "gu", languageName: "Gujarati"},{languageCode: "ht", languageName: "Haitian Creole"},{languageCode: "ha", languageName: "Hausa"},{languageCode: "haw", languageName: "Hawaiian"},{languageCode: "iw", languageName: "Hebrew"},{languageCode: "hi", languageName: "Hindi"},{languageCode: "hmn", languageName: "Hmong"},{languageCode: "hu", languageName: "Hungarian"},{languageCode: "is", languageName: "Icelandic"},{languageCode: "ig", languageName: "Igbo"},{languageCode: "id", languageName: "Indonesian"},{languageCode: "ga", languageName: "Irish"},{languageCode: "it", languageName: "Italian"},{languageCode: "ja", languageName: "Japanese"},{languageCode: "jv", languageName: "Javanese"},{languageCode: "kn", languageName: "Kannada"},{languageCode: "kk", languageName: "Kazakh"},{languageCode: "km", languageName: "Khmer"},{languageCode: "rw", languageName: "Kinyarwanda"},{languageCode: "ko", languageName: "Korean"},{languageCode: "ku", languageName: "Kurdish"},{languageCode: "ky", languageName: "Kyrgyz"},{languageCode: "lo", languageName: "Lao"},{languageCode: "la", languageName: "Latin"},{languageCode: "lv", languageName: "Latvian"},{languageCode: "lt", languageName: "Lithuanian"},{languageCode: "lb", languageName: "Luxembourgish"},{languageCode: "mk", languageName: "Macedonian"},{languageCode: "mg", languageName: "Malagasy"},{languageCode: "ms", languageName: "Malay"},{languageCode: "ml", languageName: "Malayalam"},{languageCode: "mt", languageName: "Maltese"},{languageCode: "mi", languageName: "Maori"},{languageCode: "mr", languageName: "Marathi"},{languageCode: "mn", languageName: "Mongolian"},{languageCode: "ne", languageName: "Nepali"},{languageCode: "no", languageName: "Norwegian"},{languageCode: "ny", languageName: "Nyanja"},{languageCode: "or", languageName: "Odia"},{languageCode: "ps", languageName: "Pashto"},{languageCode: "fa", languageName: "Persian"},{languageCode: "pl", languageName: "Polish"},{languageCode: "pt", languageName: "Portuguese"},{languageCode: "pa", languageName: "Punjabi"},{languageCode: "ro", languageName: "Romanian"},{languageCode: "ru", languageName: "Russian"},{languageCode: "sm", languageName: "Samoan"},{languageCode: "gd", languageName: "Scottish Gaelic"},{languageCode: "sr", languageName: "Serbian"},{languageCode: "sn", languageName: "Shona"},{languageCode: "sd", languageName: "Sindhi"},{languageCode: "si", languageName: "Sinhala"},{languageCode: "sk", languageName: "Slovak"},{languageCode: "sl", languageName: "Slovenian"},{languageCode: "so", languageName: "Somali"},{languageCode: "st", languageName: "Southern Sotho"},{languageCode: "es", languageName: "Spanish"},{languageCode: "su", languageName: "Sundanese"},{languageCode: "sw", languageName: "Swahili"},{languageCode: "sv", languageName: "Swedish"},{languageCode: "tg", languageName: "Tajik"},{languageCode: "ta", languageName: "Tamil"},{languageCode: "tt", languageName: "Tatar"},{languageCode: "te", languageName: "Telugu"},{languageCode: "th", languageName: "Thai"},{languageCode: "tr", languageName: "Turkish"},{languageCode: "tk", languageName: "Turkmen"},{languageCode: "uk", languageName: "Ukrainian"},{languageCode: "ur", languageName: "Urdu"},{languageCode: "ug", languageName: "Uyghur"},{languageCode: "uz", languageName: "Uzbek"},{languageCode: "vi", languageName: "Vietnamese"},{languageCode: "cy", languageName: "Welsh"},{languageCode: "fy", languageName: "Western Frisian"},{languageCode: "xh", languageName: "Xhosa"},{languageCode: "yi", languageName: "Yiddish"},{languageCode: "yo", languageName: "Yoruba"},{languageCode: "zu", languageName: "Zulu"}]
 
-    readonly property var singleDownloadInfo: (requestId === -1 || batchDownload) ? null : App.downloads.creator.downloadInfo(requestId, 0)
-    readonly property var singleDownloadFileInfo: singleDownloadInfo && singleDownloadInfo.filesCount ?
-                                                      App.downloads.creator.downloadInfo(requestId, 0).fileInfo(0) :
-                                                      null
-    readonly property string singleDownloadFileName: singleDownloadFileInfo ? singleDownloadFileInfo.path : ""
-
     onCreateDownloadFromDialog: appWindow.startDownload()
     onCreateDownloadBeforeRequest: appWindow.startDownload()
     onCreateSilentDownload: appWindow.startDownload()
@@ -523,22 +517,53 @@ Item {
         lastFailedRequestId = -1;
     }
 
+    property var __singleDownloadFileInfo: null
+
+    function connectToPathChangedSignal()
+    {
+        if (__singleDownloadFileInfo)
+            return;
+        if (App.downloads.creator.downloadCount(requestId) == 1)
+        {
+            let info = App.downloads.creator.downloadInfo(requestId, 0);
+            if (info.filesCount)
+            {
+                __singleDownloadFileInfo = info.fileInfo(0);
+                let id = requestId;
+                __singleDownloadFileInfo.pathChanged.connect(
+                            () => {
+                                if (id === requestId)
+                                    getNameAndPath();
+                            });
+            }
+        }
+    }
+
+    onRequestIdChanged: {
+        __singleDownloadFileInfo = null;
+        connectToPathChangedSignal();
+    }
+
     Connections
     {
         target: App.downloads.creator
+
         onBuilt: (id) => {
-            if (id === requestId)
-            {
+            if (id === requestId) {
                 buildingDownload = false;
                 buildingDownloadFinished = true;
+                __singleDownloadFileInfo = null;
+                connectToPathChangedSignal();
                 root.createRequestSuccess(requestId);
             }
         }
+
         onFailed: (id, error, allowedToReport) => {
             if (id === requestId)
             {
                 buildingDownload = false;
                 buildingDownloadFinished = false;
+                __singleDownloadFileInfo = null;
                 lastError = error.clone();
                 allowedToReportLastError = allowedToReport;
                 lastFailedRequestId = requestId;
@@ -546,19 +571,21 @@ Item {
                 updateState();
             }
         }
-    }
 
+        onAborted: __singleDownloadFileInfo = null
+
+        onAdded: __singleDownloadFileInfo = null
+
+        onTagIdChanged: id => {
+            var tagId = App.downloads.creator.tagId(id);
+            relatedTag = tagId > 0 ? App.downloads.tags.tag(tagId) : null;
+        }
+    }
 
     // add download dialog
     function getNameAndPath()
     {
         var info = App.downloads.creator.downloadInfo(requestId, 0);
-
-        preferredSubtitlesLanguagesCodes = App.settings.downloadOptions.value(
-                    AbstractDownloadOption.PreferredSubtitlesLanguagesCodes) || [];
-
-        needDownloadSubtitles = App.settings.downloadOptions.value(
-                    AbstractDownloadOption.DownloadSubtitles) || false;
 
         var tagId = App.downloads.creator.tagId(requestId);
         relatedTag = tagId > 0 ? App.downloads.tags.tag(tagId) : null;
@@ -582,6 +609,15 @@ Item {
         }
 
         return info.id;
+    }
+
+    function initSubtitlesDefaults()
+    {
+        preferredSubtitlesLanguagesCodes = App.settings.downloadOptions.value(
+                    AbstractDownloadOption.PreferredSubtitlesLanguagesCodes) || [];
+
+        needDownloadSubtitles = App.settings.downloadOptions.value(
+                    AbstractDownloadOption.DownloadSubtitles) || false;
     }
 
     function setPreferredSubtitlesLanguagesCodes(languageCode, byUser) {
@@ -678,16 +714,6 @@ Item {
         target: versionSelector
         onSelectedVersionChanged: {
             getNameAndPath();
-        }
-    }
-
-    onSingleDownloadFileNameChanged: getNameAndPath()
-
-    Connections {
-        target: App.downloads.creator
-        onTagIdChanged: id => {
-            var tagId = App.downloads.creator.tagId(id);
-            relatedTag = tagId > 0 ? App.downloads.tags.tag(tagId) : null;
         }
     }
 

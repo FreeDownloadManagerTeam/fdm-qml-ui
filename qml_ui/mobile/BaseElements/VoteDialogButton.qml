@@ -1,8 +1,11 @@
-import QtQuick 2.12
-import QtQuick.Controls 2.3
+import QtQuick
+import QtQuick.Controls
 
 Button {
     id: control
+
+    leftPadding: 16
+    rightPadding: 16
 
     property bool yesBtn: false
     property color textColor: yesBtn ? appWindow.theme.voteDialogYesBtnText : appWindow.theme.voteDialogNoBtnText
@@ -12,7 +15,7 @@ Button {
     contentItem: Text {
         text: control.text
         font.capitalization: Font.MixedCase
-        font.pixelSize: 18
+        font.pixelSize: 14
         font.weight: yesBtn ? Font.Normal : Font.Light
         opacity: enabled ? 1.0 : 0.3
         color: control.down ? textColor : textColor
@@ -22,8 +25,6 @@ Button {
     }
 
     background: Rectangle {
-        implicitWidth: 92
-        implicitHeight: 30
         opacity: enabled ? 1 : 0.3
         border.color: control.down ? borderColor : borderColor
         border.width: yesBtn ? 2 : 1

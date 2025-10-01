@@ -59,7 +59,7 @@ Page {
             }
             else if (event.key === Qt.Key_F2)
             {
-                if (selectedDownloadsTools.checkRenameAllowed(true) &&
+                if (selectedDownloadsTools.checkRenameAllowed() &&
                         selectedDownloadsTools.currentDownloadId)
                 {
                     renameDownloadFileDlg.initialize(selectedDownloadsTools.currentDownloadId, 0);

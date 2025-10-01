@@ -141,7 +141,7 @@ ToolBar {
                         iconSource: Qt.resolvedUrl("V2/file_move.svg")
                         enabled: !downloadsViewTools.emptySearchResults
                                  && !selectedDownloadsTools.selectedDownloadsIsLocked()
-                        onClicked: movingFolderDlg.open()
+                        onClicked: movingFolderDlg.openForIds(selectedDownloadsTools.getCurrentDownloadIds())
                         tooltipText: qsTr("Move files") + App.loc.emptyString
                     }
                 }
@@ -159,6 +159,7 @@ ToolBar {
                     buttonType: ToolbarFlatButton_V2.PrimaryButton
                     title: qsTr("Add download") + App.loc.emptyString
                     iconSource: Qt.resolvedUrl("V2/plus_icon.svg")
+                    useUppercase: false
                     Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                     onClicked: buildDownloadDlg.newDownload()
                 }

@@ -105,6 +105,22 @@ Page
             }
 
             RowLayout {
+                BaseCheckBox
+                {
+                    text: qsTr("Enable downloads management logging") + App.loc.emptyString
+                    checked: App.isDownloadsManagementLoggingEnabled()
+                    onClicked: App.setDownloadsManagementLoggingEnabled(checked)
+                }
+                BaseLabel {
+                    text: "*"
+                    color: "red"
+                    font.pixelSize: 14
+                    font.bold: true
+                    Layout.alignment: Qt.AlignTop
+                }
+            }
+
+            RowLayout {
                 opacity: 0.5
                 BaseLabel {
                     text: "*"
@@ -116,6 +132,11 @@ Page
                 BaseLabel {
                     text: qsTr("Restart is required") + App.loc.emptyString
                 }
+            }
+
+            BaseLabel {
+                text: "<a href='#'>" + "Show GP vote offer UI" + App.loc.emptyString + "</a>"
+                onLinkActivated: voteBlock.start()
             }
 
             BaseLabel {

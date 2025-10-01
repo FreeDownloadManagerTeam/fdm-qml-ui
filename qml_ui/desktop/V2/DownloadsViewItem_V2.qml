@@ -333,9 +333,30 @@ Item
         width: downloadsViewHeader.addedColWidth
 
         BaseText_V2 {
-            text: model.added ?
-                      (App.loc.dateTimeToString_v2(model.added, false, false) + App.loc.emptyString + (downloadsViewHeader.minuteUpdate ? "" : "")) :
-                      ""
+            id: stoppedText
+            visible: !downloadsItemTools.running && !downloadsItemTools.finished
+            text: qsTr("Stopped")
+            color: appWindow.theme_v2.bg500
+        }
+
+        BaseText_V2 {
+            visible: !stoppedText.visible && downloadsItemTools.eta >= 0
+            text: qsTr("Remaining")
+        }
+
+        /*SvgImage_V2 {
+            visible: downloadsItemTools.eta >= 0
+            source: visible ? Qt.resolvedUrl("hourglass.svg") : ""
+        }*/
+
+        BaseText_V2 {
+            visible: !stoppedText.visible
+            text: downloadsItemTools.eta >= 0 ?
+                      JsTools.timeUtils.remainingTime(downloadsItemTools.eta) :
+                      (model.added ?
+                           (App.loc.dateTimeToString_v2(model.added, false, false) + App.loc.emptyString + (downloadsViewHeader.minuteUpdate ? "" : "")) :
+                           "")
+            Layout.fillWidth: true
         }
     }
 }

@@ -1,5 +1,5 @@
-import QtQuick 2.12
-import QtQuick.Controls 2.12
+import QtQuick
+import QtQuick.Controls
 import "../../qt5compat"
 
 ComboBox
@@ -74,5 +74,15 @@ ComboBox
                 combo.activated(index);
             }
         }
+    }
+
+    Component.onCompleted: {
+        //////////////////////////////////////////////////////////////////////
+        // QTBUG-139694 workaround
+        popup.topMargin = Qt.binding(() => appWindow.SafeArea.margins.top);
+        popup.leftMargin = Qt.binding(() => appWindow.SafeArea.margins.left);
+        popup.bottomMargin = Qt.binding(() => appWindow.SafeArea.margins.bottom);
+        popup.rightMargin = Qt.binding(() => appWindow.SafeArea.margins.right);
+        //////////////////////////////////////////////////////////////////////
     }
 }

@@ -4,7 +4,7 @@ import "../../desktop/BaseElements"
 
 BaseContextMenuItem {
     property double downloadId: -1
-    enabled: !locked
+    enabled: !tools.locked
     text: App.my_BT_qsTranslate("DownloadContextMenu", "Ignore upload ratio limit") + App.loc.emptyString
     checkable: true
     checked: downloadId === -1 ?

@@ -29,6 +29,8 @@ Page {
 
             contentHeight: contentColumn.height
 
+            clip: true
+
             Column {
                 id: contentColumn
                 anchors.left: parent.left

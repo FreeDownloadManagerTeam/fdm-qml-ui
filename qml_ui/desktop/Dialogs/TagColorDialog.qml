@@ -6,7 +6,6 @@ import "../../qt5compat"
 
 Popup {
     id: root
-    width: (appWindow.uiver === 1 ? 130 : 160)*appWindow.zoom
     padding: 0
     focus: false
     closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
@@ -15,26 +14,18 @@ Popup {
     property color tagColor: "#000"
     property string tagName
 
-    leftPadding: (appWindow.uiver === 1 ? 1 : 16)*appWindow.zoom
+    leftPadding: 16*appWindow.zoom
     rightPadding: leftPadding
-    topPadding: (appWindow.uiver === 1 ? 6 : 16)*appWindow.zoom
+    topPadding: 16*appWindow.zoom
     bottomPadding: topPadding
 
-    contentItem: Column {
-        spacing: 5*appWindow.zoom
-        width: parent.width - 2*appWindow.zoom
-
-        TagPalette {
-            selectedColor: tagColor
-            width: parent.width - 2*appWindow.zoom
-
-            onColorSelected: {
-                root.tagColor = selectedColor;
-                console.log("selectedColor", selectedColor);
-                tagsTools.changeTagColor(tagId, selectedColor)
-            }
-            onCloseTagColorDialog: root.close()
+    contentItem: TagPalette {
+        selectedColor: tagColor
+        onColorSelected: (selectedColor) => {
+            root.tagColor = selectedColor;
+            tagsTools.changeTagColor(tagId, selectedColor)
         }
+        onCloseTagColorDialog: root.close()
     }
 
     background: Item {

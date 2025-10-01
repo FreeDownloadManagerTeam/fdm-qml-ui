@@ -48,6 +48,8 @@ Page {
             //contentWidth: contentColumn.width
             contentHeight: contentColumn.height + 20
 
+            clip: true
+
             ColumnLayout {
                 id: contentColumn
                 anchors.left: parent.left

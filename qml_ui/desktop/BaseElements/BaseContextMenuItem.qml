@@ -13,6 +13,7 @@ MenuItem {
         readonly property var threeDotsBtn: threeDotsButton
         property color showRectWithColor: "transparent"
         property int overrideRightPadding: 0
+        property bool externalLink: false
 
         visible: true
 
@@ -105,6 +106,16 @@ MenuItem {
             spacing: 8*appWindow.zoom
             Loader {
                 sourceComponent: appWindow.uiver === 1 ? contentItem_v1 : contentItem_v2
+                Layout.fillWidth: !externalLink
+            }
+            SvgImage_V2 {
+                visible: externalLink
+                source: Qt.resolvedUrl("../../images/external_link.svg")
+            }
+            Item {
+                visible: externalLink
+                implicitWidth: 1
+                implicitHeight: 1
                 Layout.fillWidth: true
             }
             Rectangle {

@@ -94,6 +94,23 @@ Item
 
             Item {implicitWidth: 12*appWindow.zoom; implicitHeight: 1}
 
+            SvgImage_V2 {
+                visible: snailTools.isSnail
+                source: Qt.resolvedUrl("../../images/circle-question-mark.svg")
+                imageColor: appWindow.theme_v2.snailOnTextColor
+                MouseArea {
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    BaseToolTip_V2 {
+                        text: qsTr("Snail Mode puts active downloads into sleep mode, freeing up as much Internet bandwidth as possible. When you turn it off, all active downloads will resume at normal speed. Snail Mode is especially useful when your Internet is slow and you need to make a call, for example.") + App.loc.emptyString
+                        visible: parent.containsMouse
+                        timeout: -1
+                    }
+                }
+            }
+
+            Item {visible: snailTools.isSnail; implicitWidth: 12*appWindow.zoom; implicitHeight: 1}
+
             BaseText_V2 {
                 visible: snailTools.isSnail
                 text: qsTr("Snail mode") + App.loc.emptyString

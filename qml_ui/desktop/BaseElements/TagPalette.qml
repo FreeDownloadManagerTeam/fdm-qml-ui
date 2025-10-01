@@ -4,23 +4,29 @@ import QtQuick.Layouts 1.2
 import "../../qt5compat"
 import org.freedownloadmanager.fdm 1.0
 
-ColumnLayout {
-    spacing: 8*appWindow.zoom
+Item {
+    implicitWidth: core.implicitWidth
+    implicitHeight: core.implicitHeight
 
     property color selectedColor
 
     signal closeTagColorDialog()
     signal colorSelected(color selectedColor)
 
-    Column {
-        spacing: 6*appWindow.zoom
-        Layout.alignment: Qt.AlignHCenter
+    ColumnLayout {
+        id: core
 
-        Rectangle {
-            width: (appWindow.uiver === 1 ? 12 : appWindow.theme_v2.tagSquareSize)*appWindow.zoom
-            height: (appWindow.uiver === 1 ? 12 : appWindow.theme_v2.tagSquareSize)*appWindow.zoom
-            color: selectedColor
+        spacing: 8*appWindow.zoom
+
+        component TagRectangle : Rectangle {
+            implicitWidth: (appWindow.uiver === 1 ? 12 : appWindow.theme_v2.tagSquareSize)*appWindow.zoom
+            implicitHeight: (appWindow.uiver === 1 ? 12 : appWindow.theme_v2.tagSquareSize)*appWindow.zoom
             radius: appWindow.uiver === 1 ? 0 : 4*appWindow.zoom
+        }
+
+        TagRectangle {
+            visible: appWindow.uiver === 1
+            color: selectedColor
         }
 
         GridLayout {
@@ -29,46 +35,34 @@ ColumnLayout {
             columnSpacing: 6*appWindow.zoom
             Repeater {
                 model: tagsTools.defaultColors
-                Rectangle {
-                    width: (appWindow.uiver === 1 ? 12 : appWindow.theme_v2.tagSquareSize)*appWindow.zoom
-                    height: (appWindow.uiver === 1 ? 12 : appWindow.theme_v2.tagSquareSize)*appWindow.zoom
+                TagRectangle {
                     color: modelData
-                    radius: appWindow.uiver === 1 ? 0 : 4*appWindow.zoom
-
                     MouseArea {
                         anchors.fill: parent
-                        onClicked: {
-                            changeSelectedColor(modelData);
-                        }
+                        onClicked: changeSelectedColor(modelData)
                     }
                 }
             }
         }
-    }
 
-    Rectangle {
-        Layout.fillWidth: true
-        Layout.preferredHeight: lbl.contentHeight + 4*appWindow.zoom
-        color: removeBtnMouseArea.containsMouse ? appWindow.theme.menuHighlight : "transparent"
+        Rectangle {
+            Layout.fillWidth: true
+            implicitWidth: lbl.implicitWidth
+            implicitHeight: lbl.implicitHeight
+            color: removeBtnMouseArea.containsMouse ? appWindow.theme.menuHighlight : "transparent"
 
-        BaseLabel {
-            id: lbl
-            text: qsTr("Customize color") + App.loc.emptyString
-            width: parent.width
-            wrapMode: Label.Wrap
-            leftPadding: 10*appWindow.zoom
-            rightPadding: 10*appWindow.zoom
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-            font.pixelSize: (appWindow.uiver === 1 ? 11 : 13)*appWindow.fontZoom
-        }
+            BaseLabel {
+                id: lbl
+                text: qsTr("Customize color") + App.loc.emptyString
+                anchors.centerIn: parent
+                font.pixelSize: 13*appWindow.fontZoom
+            }
 
-        MouseArea {
-            id: removeBtnMouseArea
-            anchors.fill: parent
-            hoverEnabled: true
-            onClicked: {
-                colorDialog.open();
+            MouseArea {
+                id: removeBtnMouseArea
+                anchors.fill: parent
+                hoverEnabled: true
+                onClicked: colorDialog.open()
             }
         }
     }

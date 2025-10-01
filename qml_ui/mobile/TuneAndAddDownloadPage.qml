@@ -280,6 +280,7 @@ Page {
 
     Component.onCompleted: {
         defineStorages();
+        downloadTools.initSubtitlesDefaults();
         downloadTools.getNameAndPath();
         defineFolderList();
 //        if (forceDownload) {

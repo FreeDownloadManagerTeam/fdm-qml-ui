@@ -117,20 +117,11 @@ MouseArea {
         if (!current_ids.length)
             return;
 
-        var id = current_ids[0];
-        var item = App.downloads.infos.info(id);
-
         var component = Qt.createComponent(downloadsViewTools.showingDownloadsWithMissingFilesOnly ?
                                                "DownloadsViewItemContextMenu2.qml" :
                                                "DownloadsViewItemContextMenu.qml");
         var menu = component.createObject(root, {
-                                              "modelIds": current_ids,
-                                              "finished": downloadModel.finished,
-                                              "filesCount": item.filesCount,
-                                              "canChangeUrl": (item.flags & AbstractDownloadsUi.AllowChangeSourceUrl) != 0,
-                                              "supportsMirror": (item.flags & AbstractDownloadsUi.SupportsMirrors) != 0,
-                                              "batchDownload": downloadModel.hasChildDownloads,
-                                              "endlessStream": (item.flags & AbstractDownloadsUi.EndlessStream) != 0
+                                              "modelIds": current_ids
                                           });
         menu.x = Math.round(mouse.x);
         menu.y = Math.round(mouse.y);

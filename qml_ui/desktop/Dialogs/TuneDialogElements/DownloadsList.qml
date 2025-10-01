@@ -107,10 +107,10 @@ ColumnLayout {
             clip: true
             anchors.topMargin: 5*appWindow.zoom
             anchors.bottomMargin: 5*appWindow.zoom
-            anchors.rightMargin: 5*appWindow.zoom
 
             flickableDirection: Flickable.VerticalFlick
-            ScrollBar.vertical: ScrollBar{
+            ScrollBar.vertical: BaseScrollBar_V2 {
+                id: lvsb
                 minimumSize: 0.2*appWindow.zoom
 
                 onVisualPositionChanged: {
@@ -132,7 +132,7 @@ ColumnLayout {
             model: ListModel {}
 
             delegate: RowLayout {
-                width: parent.width
+                width: parent.width - lvsb.myWrapSize
                 spacing: 10*appWindow.zoom
 
                 BaseCheckBox {

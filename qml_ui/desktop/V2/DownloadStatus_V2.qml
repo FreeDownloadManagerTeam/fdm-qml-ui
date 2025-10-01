@@ -23,10 +23,6 @@ Item
 
     readonly property string n_a: qsTr("n/a") + App.loc.emptyString
 
-    readonly property int eta: running && !unkSize ?
-                                   downloadsItemTools.estimatedTimeSec :
-                                   -1
-
     implicitWidth: p.visible ? p.implicitWidth : e.implicitWidth
     implicitHeight: p.visible ? p.implicitHeight : e.implicitHeight
 
@@ -88,8 +84,8 @@ Item
         BaseLabel
         {
             visible: text
-            text: root.eta >= 0 ?
-                      "(" + JsTools.timeUtils.remainingTime(root.eta) + ")" + App.loc.emptyString :
+            text: downloadsItemTools.eta >= 0 ?
+                      "(" + JsTools.timeUtils.remainingTime(downloadsItemTools.eta) + ")" + App.loc.emptyString :
                       ""
         }
     }

@@ -156,12 +156,7 @@ Item {
 
     function setDownloadsPriority(priority)
     {
-        var ids = getCurrentDownloadIds();
-        if (ids.length > 0) {
-            for (var i = 0; i < ids.length; i++) {
-                App.downloads.infos.info(ids[i]).priority = priority;
-            }
-        }
+        DownloadsTools.setDownloadsPriority(getCurrentDownloadIds(), priority);
     }
 
     function getDownloadsPriorityChecked(priority)
@@ -209,7 +204,7 @@ Item {
         if (ids.length > 0) {
             for (var i = 0; i < ids.length; i++) {
                 download = App.downloads.infos.info(ids[i]);
-                if (download.finished) {
+                if (!DownloadsTools.canChangePriority(download)) {
                     allowed = false;
                     break;
                 }
@@ -235,20 +230,11 @@ Item {
         return checkFilesLoAllowed();
     }
 
-    function checkRenameAllowed(wholeDownload)
+    function checkRenameAllowed()
     {
-        if (checkedDownloadsCount > 0)
-        {
-            if (checkedDownloadsCount > 1 ||
-                    !App.downloads.model.isChecked(currentDownloadId))
-            {
-                return false;
-            }
-        }
-        let info = App.downloads.infos.info(currentDownloadId);
-        if (wholeDownload && info.filesCount > 1)
+        if (currentDownloadId === -1 || checkedDownloadsCount > 1)
             return false;
-        return info.finished && checkFilesLoAllowed();
+        return DownloadsTools.canRename(App.downloads.infos.info(currentDownloadId));
     }
 
     function sequentialDownloadAllowed()
@@ -259,7 +245,7 @@ Item {
         if (ids.length > 0) {
             for (var i = 0; i < ids.length; i++) {
                 download = App.downloads.infos.info(ids[i]);
-                if (download.finished || !(download.flags & AbstractDownloadsUi.SupportsSequentialDownload)) {
+                if (!DownloadsTools.supportsSequentialDownload(download)) {
                     allowed = false;
                     break;
                 }
@@ -287,12 +273,7 @@ Item {
 
     function setSequentialDownload(checked)
     {
-        var ids = getCurrentDownloadIds();
-        if (ids.length > 0) {
-            for (var i = 0; i < ids.length; i++) {
-                App.downloads.infos.info(ids[i]).sequentialDownload = checked;
-            }
-        }
+        DownloadsTools.setSequentialDownload(getCurrentDownloadIds(), checked);
     }
 
     function playAsapAllowed()
@@ -303,7 +284,7 @@ Item {
         if (ids.length > 0) {
             for (var i = 0; i < ids.length; i++) {
                 download = App.downloads.infos.info(ids[i]);
-                if (download.finished || !(download.flags & AbstractDownloadsUi.SupportsMediaDownloadToPlayAsap)) {
+                if (!DownloadsTools.supportsPlayAsap(download)) {
                     allowed = false;
                     break;
                 }
@@ -331,15 +312,7 @@ Item {
 
     function setPlayAsap(checked)
     {
-        var ids = getCurrentDownloadIds();
-        if (ids.length > 0) {
-            for (var i = 0; i < ids.length; i++) {
-                let info = App.downloads.infos.info(ids[i]);
-                info.flags = checked ?
-                            info.flags | AbstractDownloadsUi.EnableMediaDownloadToPlayAsap :
-                            info.flags & ~AbstractDownloadsUi.EnableMediaDownloadToPlayAsap;
-            }
-        }
+        DownloadsTools.setPlayAsap(getCurrentDownloadIds(), checked);
     }
 
     function canBeRestarted()
@@ -358,12 +331,7 @@ Item {
 
     function restartDownloads()
     {
-        var ids = getCurrentDownloadIds();
-        if (ids.length > 0) {
-            for (var i = 0; i < ids.length; i++) {
-                App.downloads.mgr.restartDownload(ids[i]);
-            }
-        }
+        DownloadsTools.restartDownloads(getCurrentDownloadIds());
     }
 
     function canBeFinalized()
@@ -376,8 +344,7 @@ Item {
             for (var i = 0; i < ids.length; i++)
             {
                 download = App.downloads.infos.info(ids[i]);
-                if (download.finished || !(download.flags & AbstractDownloadsUi.EndlessStream) ||
-                        download.lockReason || download.stopping)
+                if (!DownloadsTools.canBeFinalized(download))
                 {
                     allowed = false;
                     break;
@@ -389,12 +356,7 @@ Item {
 
     function finalizeDownloads()
     {
-        var ids = getCurrentDownloadIds();
-        if (ids.length > 0) {
-            for (var i = 0; i < ids.length; i++) {
-                App.downloads.mgr.finalizeDownload(ids[i]);
-            }
-        }
+        DownloadsTools.finalizeDownloads(getCurrentDownloadIds());
     }
 
     function canCheckForUpdate()
@@ -405,9 +367,7 @@ Item {
         if (ids.length > 0) {
             for (var i = 0; i < ids.length; i++) {
                 download = App.downloads.infos.info(ids[i]);
-                if (!(download.finished
-                      && (download.flags & AbstractDownloadsUi.CanDetectRemoteResourceChanges) != 0
-                      && download.lockReason == "")) {
+                if (!DownloadsTools.canCheckForUpdate(download)) {
                     allowed = false;
                     break;
                 }
@@ -418,13 +378,7 @@ Item {
 
     function checkForUpdate()
     {
-        var ids = getCurrentDownloadIds();
-
-        if (ids.length > 0) {
-            for (var i = 0; i < ids.length; i++) {
-                App.downloads.mgr.checkIfRemoteResourceChanged(ids[i]);
-            }
-        }
+        DownloadsTools.checkForUpdate(getCurrentDownloadIds());
     }
 
     function stopDownloads(ids) {
@@ -688,15 +642,6 @@ Item {
         }
     }
 
-    function removeCurrentDownloadsSimple()
-    {
-        var ids = getCurrentDownloadIds();
-        ids = ids.filter(el => !downloadIsLocked(el));
-        if (ids.length > 0) {
-            deleteDownloadsDlgSimple.removeAction(ids);
-        }
-    }
-
     function moveCurrentDownloads(path)
     {
         var ids = getCurrentDownloadIds();
@@ -705,10 +650,7 @@ Item {
 
     function moveDownloads(ids, path)
     {
-        ids = ids.filter(el => App.downloads.logics.isFilesLoAllowed(el));
-        for (var i = 0; i < ids.length; i++) {
-            App.downloads.moveFilesMgr.moveFiles(ids[i], path);
-        }
+        DownloadsTools.moveDownloads(ids, path);
         checkAll(false);
     }
 
@@ -720,7 +662,7 @@ Item {
         if (ids.length > 0) {
             for (var i = 0; i < ids.length; i++) {
                 download = App.downloads.infos.info(ids[i]);
-                if (download.finished || download.error.hasError) {
+                if (!DownloadsTools.canSchedule(download)) {
                     allowed = false;
                     break;
                 }
@@ -747,9 +689,7 @@ Item {
         if (ids.length > 0) {
             for (var i = 0; i < ids.length; i++) {
                 download = App.downloads.infos.info(ids[i]);
-                if (!download.finished || download.error.hasError || download.missingFiles || download.missingStorage
-                    || !((download.allFilesTypes
-                          & ((1 << AbstractDownloadsUi.VideoFile) | (1 << AbstractDownloadsUi.AudioFile))) != 0)) {
+                if (!DownloadsTools.canConvertToMp3(download)) {
                     allowed = false;
                     break;
                 }
@@ -765,40 +705,13 @@ Item {
         if (ids.length > 0) {
             for (var i = 0; i < ids.length; i++) {
                 download = App.downloads.infos.info(ids[i]);
-                if (!download.finished || download.error.hasError || download.missingFiles || download.missingStorage
-                    || !((download.allFilesTypes
-                          & (1 << AbstractDownloadsUi.VideoFile)) != 0)) {
-                    allowed = false;
-                    break;
-                }
-                var hasNonMp4Video = false;
-                for (var fi = 0; fi < download.filesCount; ++fi) {
-                    var fileInfo = download.fileInfo(fi);
-                    if (fileInfo.fileType == AbstractDownloadsUi.VideoFile &&
-                            fileInfo.suffix.toUpperCase() !== "MP4") {
-                        hasNonMp4Video = true;
-                        break;
-                    }
-                }
-                if (!hasNonMp4Video) {
+                if (!DownloadsTools.canConvertToMp4(download)) {
                     allowed = false;
                     break;
                 }
             }
         }
         return allowed;
-    }
-
-    function openMp3ConverterDialog()
-    {
-        var ids = getCurrentDownloadIds();
-        mp3ConverterDlg.open(ids, []);
-    }
-
-    function openMp4ConverterDialog()
-    {
-        var ids = getCurrentDownloadIds();
-        mp4ConverterDlg.open(ids, []);
     }
 
     function quickLookFile() {
@@ -807,40 +720,6 @@ Item {
             if (download) {
                 App.tools.quickLookFile(download.hasChildDownloads ? download.destinationPath : download.destinationPath + '/' + download.title);
             }
-        }
-    }
-
-    function isAntivirusSettingsOk()
-    {
-        return App.settings.dmcore.value(DmCoreSettings.AntivirusUid) != "" ||
-                (App.settings.dmcore.value(DmCoreSettings.AntivirusPath).length > 0
-                   && App.settings.isValidCustomAntivirusArgs(App.settings.dmcore.value(DmCoreSettings.AntivirusArgs)) == '');
-    }
-
-    function allowedVirusCheck() {
-        // we have no UI to setup antivirus settings on a remote machine
-        if (App.rc.client.active && !isAntivirusSettingsOk())
-            return false;
-
-        var allowed = true;
-        var ids = getCurrentDownloadIds();
-        var download = null;
-        for (var i = 0; i < ids.length; i++) {
-            download = App.downloads.infos.info(ids[i]);
-            if (!download.finished || download.missingFiles || download.missingStorage) {
-                allowed = false;
-                break;
-            }
-        }
-        return allowed;
-    }
-
-    function performVirusCheck() {
-        if (isAntivirusSettingsOk()) {
-            var ids = getCurrentDownloadIds();
-            App.downloads.mgr.performVirusCheck(ids);
-        } else {
-            antivirusSettingsDialog.open();
         }
     }
 

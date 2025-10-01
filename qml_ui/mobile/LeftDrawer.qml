@@ -15,6 +15,15 @@ Drawer {
 
     edge: appWindow.LayoutMirroring.enabled ? Qt.RightEdge : Qt.LeftEdge
 
+    // Qt 6.9.2+ does not require this
+    /*topPadding: App.systemWindowInsets ?
+                    App.systemWindowInsets.top / Screen.devicePixelRatio + 5 :
+                    16
+
+    bottomPadding: App.systemWindowInsets ?
+                       App.systemWindowInsets.bottom / Screen.devicePixelRatio + 5 :
+                       16*/
+
     ListView {
         id: listview
         focus: true
