@@ -209,4 +209,24 @@ QtObject
         for (var i = 0; i < ids.length; ++i)
              App.downloads.mgr.checkIfRemoteResourceChanged(ids[i]);
     }
+
+    function isDownloadsTagChecked(ids, tagId)
+    {
+        if (ids.length > 0)
+        {
+            for (let i = 0; i < ids.length; i++)
+            {
+                let itemTags = App.downloads.tags.downloadTags(ids[i]);
+                if (!itemTags.includes(tagId))
+                    return false;
+            }
+        }
+        return true;
+    }
+
+    function setDownloadsTag(ids, tagId, setTag)
+    {
+        if (ids.length > 0)
+            App.downloads.tags.changeDownloadsTag(ids, tagId, setTag);
+    }
 }

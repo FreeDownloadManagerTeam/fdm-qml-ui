@@ -47,9 +47,6 @@ Page {
 
         MainToolbar {
             pageId: "settings"
-            leftPadding: 0
-            rightPadding: 0
-            bottomPadding: 0
         }
     }
 
@@ -58,9 +55,6 @@ Page {
 
         MainToolbar_V2 {
             pageId: "settings"
-            leftPadding: 0
-            rightPadding: 0
-            bottomPadding: 0
         }
     }
 

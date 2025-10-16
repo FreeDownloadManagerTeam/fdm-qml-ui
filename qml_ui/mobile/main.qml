@@ -60,6 +60,10 @@ ApplicationWindow
 //    visibility: Window.FullScreen
     title: App.displayName
 
+    flags: flags | Qt.ExpandedClientAreaHint
+
+    //TODO: FIX SYSTEM THEME
+
     SystemPalette {id: sp; colorGroup: SystemPalette.Active}
     readonly property bool systemlightMode: sp.text.r < 0.2 && sp.text.g < 0.2 && sp.text.b < 0.2
 

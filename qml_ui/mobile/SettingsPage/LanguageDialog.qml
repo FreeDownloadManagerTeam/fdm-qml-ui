@@ -13,9 +13,6 @@ Dialog
 
     parent: Overlay.overlay
 
-    width: 320
-    height: Math.min(appWindow.contentItem.height, langList.count * 30)
-
     x: Math.round((appWindow.contentItem.width - width) / 2)
     y: Math.round((appWindow.contentItem.height - height) / 2)
 
@@ -26,118 +23,109 @@ Dialog
 
     modal: true
 
-    contentItem: Item {
-        anchors.fill: parent
+    contentItem: ColumnLayout {
+        spacing: 0
 
+        BaseLabel {
+            adaptive: true
+            labelSize: adaptiveTools.labelSize.highSize
+            text: qsTr("Language") + App.loc.emptyString
+            Layout.alignment: Qt.AlignHCenter
+            Layout.bottomMargin: root.topPadding
+            font.pixelSize: 19
+            font.weight: Font.Medium
+        }
         Rectangle {
-            width: parent.width
-            height: 36
-            color: "transparent"
-            anchors.top: parent.top
-
-            BaseLabel {
-                adaptive: true
-                labelSize: adaptiveTools.labelSize.highSize
-                text: qsTr("Language") + App.loc.emptyString
-                anchors.centerIn: parent
-                font.pixelSize: 19
-                font.weight: Font.Medium
-            }
-            Rectangle {
-                width: parent.width
-                height: 1
-                anchors.bottom: parent.bottom
-                color: appWindow.theme.generalSettingsBorder
-            }
+            Layout.fillWidth: true
+            Layout.preferredHeight: 1
+            color: appWindow.theme.generalSettingsBorder
         }
 
-        Rectangle {
-            width: parent.width
-            height: parent.height - 36
-            anchors.top: parent.top
-            anchors.topMargin: 36
-            color: "transparent"
+        ListView {
+            id: langList
+
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+
+            property double bckgRatio: 30 / 10
+
+            flickableDirection: Flickable.VerticalFlick
+            boundsBehavior: Flickable.StopAtBounds
+
+            model: App.loc.installedTranslations
+
+            implicitHeight: 30 * count
+            implicitWidth: 300
+
             clip: true
 
-            ListView {
-                id: langList
-                anchors.fill: parent
+            delegate: Rectangle {
+                id: listItem
+                height: 30
+                width: langList.width
+                color: "transparent"
+                clip: true
+                readonly property bool isCurrentLang: App.loc.currentTranslation == modelData
 
-                property double bckgRatio: 30 / 10
-
-                flickableDirection: Flickable.VerticalFlick
-                boundsBehavior: Flickable.StopAtBounds
-
-                model: App.loc.installedTranslations
-
-                delegate: Rectangle {
-                    id: listItem
-                    height: 30
-                    width: langList.width
-                    color: "transparent"
+                Rectangle {
                     clip: true
-                    readonly property bool isCurrentLang: App.loc.currentTranslation == modelData
+                    color: "transparent"
+                    width: 18 * langList.bckgRatio
+                    height: parent.height
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.left: parent.left
+                    anchors.leftMargin: 35
+                    visible: listItem.isCurrentLang
 
-                    Rectangle {
-                        clip: true
-                        color: "transparent"
-                        width: 18 * langList.bckgRatio
-                        height: parent.height
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.left: parent.left
-                        anchors.leftMargin: 35
-                        visible: listItem.isCurrentLang
-
-                        WaSvgImage {
-                            zoom: langList.bckgRatio
-                            source: Qt.resolvedUrl("../../images/flags/" + modelData + ".svg")
-                            opacity: 0.3
-                            layer{
-                                effect: FastBlur {
-                                    radius: 16
-                                    transparentBorder: true
-                                }
-                                enabled: true
+                    WaSvgImage {
+                        zoom: langList.bckgRatio
+                        source: Qt.resolvedUrl("../../images/flags/" + modelData + ".svg")
+                        opacity: 0.3
+                        layer{
+                            effect: FastBlur {
+                                radius: 16
+                                transparentBorder: true
                             }
+                            enabled: true
                         }
                     }
+                }
 
-                    Rectangle {
-                        id: icon
-                        clip: true
-                        color: "transparent"
-                        width: 18
-                        height: 10
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.left: parent.left
-                        anchors.leftMargin: 70
+                Rectangle {
+                    id: icon
+                    clip: true
+                    color: "transparent"
+                    width: 18
+                    height: 10
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.left: parent.left
+                    anchors.leftMargin: 70
 
-                        WaSvgImage {
-                            source: Qt.resolvedUrl("../../images/flags/" + modelData + ".svg")
-                        }
+                    WaSvgImage {
+                        source: Qt.resolvedUrl("../../images/flags/" + modelData + ".svg")
                     }
+                }
 
-                    BaseLabel {
-                        leftPadding: qtbug.leftPadding(15 + 18 + 70, 0)
-                        rightPadding: qtbug.rightPadding(15 + 18 + 70, 0)
-                        anchors.left: parent.left
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: App.loc.translationLanguageString(modelData) + " (" + App.loc.translationCountryString(modelData) + ")"
-                        font.capitalization: Font.Capitalize
-                        font.pixelSize: 14
-                    }
+                BaseLabel {
+                    leftPadding: qtbug.leftPadding(15 + 18 + 70, 0)
+                    rightPadding: qtbug.rightPadding(15 + 18 + 70, 0)
+                    anchors.left: parent.left
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: App.loc.translationLanguageString(modelData) + " (" + App.loc.translationCountryString(modelData) + ")"
+                    font.capitalization: Font.Capitalize
+                    font.pixelSize: 14
+                }
 
-                    SettingsSeparator{
-                        anchors.bottom: parent.bottom
-                    }
+                SettingsSeparator{
+                    anchors.bottom: parent.bottom
+                }
 
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked: {
-                            let name = modelData;
-                            root.close();
-                            App.loc.load(name);
-                        }
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        let name = modelData;
+                        root.close();
+                        App.loc.load(name);
                     }
                 }
             }

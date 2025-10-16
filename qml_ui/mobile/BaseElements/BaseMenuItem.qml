@@ -5,8 +5,7 @@ import "../../qt5compat"
 MenuItem {
     id: menuItem
 
-    width: parent ? parent.width : undefined
-    height: visible ? contentItem.lineCount * 20 + 10 : 0
+    height: visible ? contentItem.implicitHeight + 2 : 0
 
     indicator: Item {
         implicitWidth: 30

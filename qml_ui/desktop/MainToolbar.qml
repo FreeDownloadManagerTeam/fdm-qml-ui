@@ -15,6 +15,11 @@ ToolBar {
 
     property string pageId
 
+    topPadding: 0
+    leftPadding: 0
+    rightPadding: 0
+    bottomPadding: 0
+
     Rectangle {
         anchors.fill: parent
         visible: !(appWindow.macVersion && appWindow.theme === lightTheme)

@@ -15,6 +15,8 @@ ListView
 
     boundsBehavior: Flickable.StopAtBounds
 
+    clip: true
+
     header: Rectangle
     {
         color: appWindow.theme.border

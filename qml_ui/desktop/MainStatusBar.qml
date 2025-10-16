@@ -41,8 +41,8 @@ Rectangle {
             radius: 3*appWindow.zoom
 
             gradient: Gradient {
-                GradientStop { position: 0.0; color: snailTools.isSnail ? appWindow.theme.snailBtnBackgroundStartChecked : appWindow.theme.snailBtnBackgroundStart }
-                GradientStop { position: 1.0; color: snailTools.isSnail ? appWindow.theme.snailBtnBackgroundEndChecked : appWindow.theme.snailBtnBackgroundEnd }
+                GradientStop { position: 0.0; color: uicore.snailTools.isSnail ? appWindow.theme.snailBtnBackgroundStartChecked : appWindow.theme.snailBtnBackgroundStart }
+                GradientStop { position: 1.0; color: uicore.snailTools.isSnail ? appWindow.theme.snailBtnBackgroundEndChecked : appWindow.theme.snailBtnBackgroundEnd }
             }
 
             Item {
@@ -51,7 +51,7 @@ Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
                 WaSvgImage {
-                    source: appWindow.theme.elementsIconsRoot + (snailTools.isSnail ? "/snail_on.svg" : "/snail_off.svg")
+                    source: appWindow.theme.elementsIconsRoot + (uicore.snailTools.isSnail ? "/snail_on.svg" : "/snail_off.svg")
                     zoom: appWindow.zoom
                     anchors.centerIn: parent
                 }
@@ -61,7 +61,7 @@ Rectangle {
                 anchors.fill: parent
                 cursorShape: Qt.PointingHandCursor
                 hoverEnabled: true
-                onClicked: snailTools.toggleSnailMode()
+                onClicked: uicore.snailTools.toggleSnailMode()
 
                 BaseToolTip {
                     text: qsTr("Snail mode frees bandwidth without stopping downloads.") + App.loc.emptyString

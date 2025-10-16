@@ -109,21 +109,13 @@ Page {
     Component {
         id: mainToolbar_v1
 
-        MainToolbar {
-            leftPadding: 0
-            rightPadding: 0
-            bottomPadding: 0
-        }
+        MainToolbar {}
     }
 
     Component {
         id: mainToolbar_v2
 
-        MainToolbar_V2 {
-            leftPadding: 0
-            rightPadding: 0
-            bottomPadding: 0
-        }
+        MainToolbar_V2 {}
     }
 
     header: Loader {

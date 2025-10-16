@@ -64,6 +64,7 @@ Item
             }
             color: runningStatusText ? appWindow.theme_v2.primary :
                    downloadsItemTools.inQueue ? appWindow.theme_v2.bg1000 :
+                   (downloadsItemTools.finished && JsTools.timeUtils.isWithin24Hours(uicore.minuteUpdate ? model.finishedTime : model.finishedTime)) ? appWindow.theme_v2.primary :
                    appWindow.theme_v2.bg500
             elide: Qt.ElideRight
             Layout.fillWidth: true
@@ -93,7 +94,7 @@ Item
             running: root.running
             bgColor: appWindow.theme_v2.bg400
             progressColor: running ? appWindow.theme_v2.primary : appWindow.theme_v2.bg500
-            progressGradient: (snailTools.isSnail && running) ? appWindow.theme_v2.snailOnGradient : null
+            progressGradient: (uicore.snailTools.isSnail && running) ? appWindow.theme_v2.snailOnGradient : null
             Layout.fillWidth: true
             Layout.preferredHeight: 12*appWindow.zoom
             radius: 4*appWindow.zoom

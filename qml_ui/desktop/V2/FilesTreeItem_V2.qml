@@ -153,7 +153,7 @@ Item
                 id: prioritySelector
 
                 BaseText_V2 {
-                    text: priorityCol.priorityDisplayName(model.priority) + App.loc.emptyString
+                    text: uicore.priorityText(model.priority) + App.loc.emptyString
 
                     Layout.minimumWidth: header.priorityTextMaxWidth + 5*appWindow.fontZoom
 
@@ -193,7 +193,7 @@ Item
                                         id: prioritySelectorPopupItemText
                                         x: 8
                                         y: 8
-                                        text: priorityCol.priorityDisplayName(modelData)
+                                        text: uicore.priorityText(modelData)
                                     }
                                     MouseAreaWithHand_V2 {
                                         id: prioritySelectorPopupItemMa
@@ -255,14 +255,6 @@ Item
             }
         }
 
-        function priorityDisplayName(priority)
-        {
-            switch (priority) {
-            case AbstractDownloadsUi.DownloadPriorityLow: return qsTr("Low");
-            case AbstractDownloadsUi.DownloadPriorityNormal: return qsTr("Normal");
-            case AbstractDownloadsUi.DownloadPriorityHigh: return qsTr("High");
-            }
-        }
         function setPriority(priority)
         {
             model.priority = priority;

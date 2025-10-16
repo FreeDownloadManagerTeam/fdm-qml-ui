@@ -176,24 +176,14 @@ Item {
 
     function setDownloadsTag(tagId, setTag)
     {
-        var ids = getCurrentDownloadIds();
-        if (ids.length > 0) {
-            tagsTools.changeDownloadsTag(ids, tagId, setTag);
-        }
+        DownloadsTools.setDownloadsTag(getCurrentDownloadIds(), tagId, setTag);
     }
 
     function getDownloadsTagChecked(tagId)
     {
-        var ids = getCurrentDownloadIds();
-        if (ids.length > 0) {
-            for (var i = 0; i < ids.length; i++) {
-                var itemTags = App.downloads.tags.downloadTags(ids[i]);
-                if (!itemTags.includes(tagId)) {
-                    return false;
-                }
-            }
-        }
-        return true;
+        return DownloadsTools.isDownloadsTagChecked(
+                    getCurrentDownloadIds(),
+                    tagId);
     }
 
     function changePriorityAllowed()

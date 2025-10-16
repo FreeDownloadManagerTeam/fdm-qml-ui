@@ -57,6 +57,16 @@ Item
         DownloadsTools.checkForUpdate(ids);
     }
 
+    function isDownloadsTagChecked(tagId)
+    {
+        return DownloadsTools.isDownloadsTagChecked(ids, tagId);
+    }
+
+    function setDownloadsTag(tagId, setTag)
+    {
+        DownloadsTools.setDownloadsTag(ids, tagId, setTag);
+    }
+
     QtObject
     {
         id: d

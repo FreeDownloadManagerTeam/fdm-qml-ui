@@ -127,21 +127,21 @@ BaseContextMenu {
         }
 
         BaseContextMenuItem {
-            text: qsTr("High") + App.loc.emptyString
+            text: uicore.priorityText(AbstractDownloadsUi.DownloadPriorityHigh) + App.loc.emptyString
             checkable: true
             checked: tools.highPriority
             onTriggered: tools.setDownloadsPriority(AbstractDownloadsUi.DownloadPriorityHigh)
             ActionGroup.group: downloadPriorityGroup
         }
         BaseContextMenuItem {
-            text: qsTr("Normal") + App.loc.emptyString
+            text: uicore.priorityText(AbstractDownloadsUi.DownloadPriorityNormal) + App.loc.emptyString
             checkable: true
             checked: tools.normalPriority
             onTriggered: tools.setDownloadsPriority(AbstractDownloadsUi.DownloadPriorityNormal)
             ActionGroup.group: downloadPriorityGroup
         }
         BaseContextMenuItem {
-            text: qsTr("Low") + App.loc.emptyString
+            text: uicore.priorityText(AbstractDownloadsUi.DownloadPriorityLow) + App.loc.emptyString
             checkable: true
             checked: tools.lowPriority
             onTriggered: tools.setDownloadsPriority(AbstractDownloadsUi.DownloadPriorityLow)
@@ -322,6 +322,7 @@ BaseContextMenu {
         TagsMenuHelper {
             menu: addTagMenu
             tags: tagsTools.customTags
+            downloadsItemsTools: tools
         }
 
         BaseContextMenuSeparator {

@@ -7,6 +7,7 @@ QtObject
     property var insertAfter: null
     property var tags: null
     property bool checkable: true
+    property var downloadsItemsTools: null
 
     property int __countAdded: 0
     property var __menuItemComponent: Qt.createComponent(Qt.resolvedUrl("BaseContextMenuItem.qml"));
@@ -29,15 +30,24 @@ QtObject
                         overrideRightPadding: 5*appWindow.zoom,
                         text: tag.readOnly ? (App.loc.tr(tag.name) + App.loc.emptyString) : tag.name,
                         checkable: checkable,
-                        checked: checkable ? selectedDownloadsTools.getDownloadsTagChecked(tag.id) : false
+                        checked: checkable ?
+                                     (downloadsItemsTools ?
+                                          downloadsItemsTools.isDownloadsTagChecked(tag.id) :
+                                          selectedDownloadsTools.getDownloadsTagChecked(tag.id)) :
+                                     false
                     });
 
             item.triggered.connect(
                         () => {
-                            if (checkable)
-                                selectedDownloadsTools.setDownloadsTag(tag.id, item.checked);
-                            else
+                            if (checkable) {
+                                if (downloadsItemsTools)
+                                    downloadsItemsTools.setDownloadsTag(tag.id, item.checked);
+                                else
+                                    selectedDownloadsTools.setDownloadsTag(tag.id, item.checked);
+                            }
+                            else {
                                 downloadsViewTools.setDownloadsTagFilter(tag.id);
+                            }
                         });
 
             item.threeDotsClicked.connect(

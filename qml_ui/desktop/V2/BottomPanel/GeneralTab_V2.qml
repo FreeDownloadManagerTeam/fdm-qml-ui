@@ -166,7 +166,6 @@ Flickable
                 id: statusItem
                 visible: !absolutelyFinished
                 Layout.fillWidth: true
-                Layout.maximumWidth: 524*appWindow.zoom
             }
 
             Item {visible: statusItem.visible; implicitHeight: 11*appWindow.zoom; implicitWidth: 1}
@@ -241,9 +240,22 @@ Flickable
                         text: App.speedAsText(downloadsItemTools.uploadSpeed) + App.loc.emptyString
                     }
                 }
-            }
 
-            Item {implicitHeight: 7*appWindow.zoom; implicitWidth: 1}
+                RowLayout {
+                    spacing: 8*appWindow.zoom
+                    BaseText_V2 {
+                        text: qsTr("Priority") + ':' + App.loc.emptyString
+                        color: appWindow.theme_v2.bg700
+                    }
+                    BaseText_V2 {
+                        text: uicore.priorityText(downloadsItemTools.item.priority) + App.loc.emptyString
+                        font.capitalization: Font.AllLowercase
+                        color: downloadsItemTools.running ?
+                                   uicore.priorityAndSnailColor(downloadsItemTools.item.priority) :
+                                   uicore.priorityColor(downloadsItemTools.item.priority)
+                    }
+                }
+            }
 
             component UrlField : RowLayout {
                 property string url
@@ -282,14 +294,18 @@ Flickable
                 }
             }
 
+            Item {visible: webPageUrlField.visible; implicitHeight: 7*appWindow.zoom; implicitWidth: 1}
+
             UrlField {
+                id: webPageUrlField
                 title: qsTr("Web page") + App.loc.emptyString
                 url: downloadsItemTools.webPageUrl
             }
 
-            Item {implicitHeight: 7*appWindow.zoom; implicitWidth: 1}
+            Item {visible: fileUrlField.visible; implicitHeight: 7*appWindow.zoom; implicitWidth: 1}
 
             UrlField {
+                id: fileUrlField
                 title: qsTr("File") + App.loc.emptyString
                 url: downloadsItemTools.resourceUrl
             }

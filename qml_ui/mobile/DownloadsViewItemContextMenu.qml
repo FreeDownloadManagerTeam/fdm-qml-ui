@@ -209,6 +209,7 @@ Menu
     BaseMenuSeparator {}
 
     BaseMenuItem {
+        id: sequentialDownloadItem
         visible: supportsSequentialDownload
         enabled: !locked
         text: qsTr("Sequential download") + App.loc.emptyString
@@ -302,7 +303,13 @@ Menu
 
     Component.onCompleted: {
         if (appWindow.btSupported) {
-            var index = 23;
+            let index = 0;
+            for (let i = 0; i < root.count; ++i) {
+                if (root.itemAt(i) == sequentialDownloadItem) {
+                    index = i;
+                    break;
+                }
+            }
             if (btTools.item.addTAllowed()) {
                 supportsAddT = true;
                 root.insertItem(index++, Qt.createQmlObject('import "../bt/mobile"; AddTMenuItem {}', root));

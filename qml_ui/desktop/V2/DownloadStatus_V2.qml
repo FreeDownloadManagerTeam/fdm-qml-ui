@@ -52,8 +52,9 @@ Item
             running: root.running
             bgColor: appWindow.theme_v2.bg400
             progressColor: running ? appWindow.theme_v2.primary : appWindow.theme_v2.bg500
-            progressGradient: (snailTools.isSnail && running) ? appWindow.theme_v2.snailOnGradient : null
+            progressGradient: (uicore.snailTools.isSnail && running) ? appWindow.theme_v2.snailOnGradient : null
             Layout.fillWidth: true
+            Layout.maximumWidth: 524*appWindow.zoom
             Layout.preferredHeight: 16*appWindow.zoom
             radius: 4*appWindow.zoom
         }
@@ -83,10 +84,20 @@ Item
 
         BaseLabel
         {
-            visible: text
-            text: downloadsItemTools.eta >= 0 ?
-                      "(" + JsTools.timeUtils.remainingTime(downloadsItemTools.eta) + ")" + App.loc.emptyString :
-                      ""
+            visible: downloadsItemTools.eta >= 0
+            text: qsTr("Remaining") + ':'
+            color: appWindow.theme_v2.bg700
         }
+
+        BaseLabel
+        {
+            visible: downloadsItemTools.eta >= 0
+            text: downloadsItemTools.eta >= 0 ?
+                      JsTools.timeUtils.remainingTime(downloadsItemTools.eta) + App.loc.emptyString :
+                      ""
+            color: uicore.snailTools.isSnail ? appWindow.theme_v2.amber : appWindow.theme_v2.textColor
+        }
+
+        Item {Layout.fillWidth: true}
     }
 }

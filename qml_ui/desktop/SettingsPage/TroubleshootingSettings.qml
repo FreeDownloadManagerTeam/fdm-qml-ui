@@ -147,6 +147,12 @@ Column
         onLinkActivated: App.crashSelf()
     }
 
+    BaseLabel {
+        text: "[Graphics Info] api:" + GraphicsInfo.api +
+              ", majorVersion:" + GraphicsInfo.majorVersion +
+              ", minorVersion: " + GraphicsInfo.minorVersion
+    }
+
     BaseHandCursorLabel {
         anchors.left: parent.left
         text: "<a href='#'>" + qsTr("Hide") + App.loc.emptyString + "</a>"

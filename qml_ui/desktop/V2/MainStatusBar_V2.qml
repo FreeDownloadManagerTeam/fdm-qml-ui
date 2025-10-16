@@ -44,7 +44,7 @@ Item
 
     Rectangle
     {
-        visible: snailTools.isSnail
+        visible: uicore.snailTools.isSnail
         anchors.fill: parent
         gradient: appWindow.theme_v2.snailOnGradient
     }
@@ -79,12 +79,12 @@ Item
 
             WaSvgImage {
                 id: snailBtn
-                source: Qt.resolvedUrl("snail_" + (snailTools.isSnail ? "on_" : "off_") + (appWindow.theme_v2.isLightTheme ? "light" : "dark") + ".svg")
+                source: Qt.resolvedUrl("snail_" + (uicore.snailTools.isSnail ? "on_" : "off_") + (appWindow.theme_v2.isLightTheme ? "light" : "dark") + ".svg")
                 zoom: appWindow.zoom
                 MouseAreaWithHand_V2 {
                     anchors.fill: parent
                     hoverEnabled: true
-                    onClicked: snailTools.toggleSnailMode()
+                    onClicked: uicore.snailTools.toggleSnailMode()
                     BaseToolTip_V2 {
                         text: qsTr("Snail mode frees bandwidth without stopping downloads.") + App.loc.emptyString
                         visible: parent.containsMouse
@@ -95,7 +95,7 @@ Item
             Item {implicitWidth: 12*appWindow.zoom; implicitHeight: 1}
 
             SvgImage_V2 {
-                visible: snailTools.isSnail
+                visible: uicore.snailTools.isSnail
                 source: Qt.resolvedUrl("../../images/circle-question-mark.svg")
                 imageColor: appWindow.theme_v2.snailOnTextColor
                 MouseArea {
@@ -109,17 +109,16 @@ Item
                 }
             }
 
-            Item {visible: snailTools.isSnail; implicitWidth: 12*appWindow.zoom; implicitHeight: 1}
+            Item {visible: uicore.snailTools.isSnail; implicitWidth: 12*appWindow.zoom; implicitHeight: 1}
 
             BaseText_V2 {
-                visible: snailTools.isSnail
+                visible: uicore.snailTools.isSnail
                 text: qsTr("Snail mode") + App.loc.emptyString
                 color: appWindow.theme_v2.snailOnTextColor
-                font.capitalization: Font.AllUppercase
             }
 
             Item {
-                visible: !snailTools.isSnail
+                visible: !uicore.snailTools.isSnail
 
                 implicitWidth: tumLayout.implicitWidth + tumLayout.x*2
                 implicitHeight: Math.max(tumLayout.implicitHeight, snailBtn.implicitHeight + 2*appWindow.zoom)
@@ -280,7 +279,7 @@ Item
 
             RowLayout
             {
-                visible: !snailTools.isSnail
+                visible: !uicore.snailTools.isSnail
 
                 spacing: 0
 

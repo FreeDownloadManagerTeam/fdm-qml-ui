@@ -33,14 +33,6 @@ Item
     readonly property alias addedColX: addedCol.x
     readonly property alias addedColWidth: addedCol.width
 
-    property bool minuteUpdate: false // to update "Today"/"Yestarday" date strings
-    Timer {
-        interval: 60*1000
-        repeat: true
-        running: true
-        onTriggered: minuteUpdate = !minuteUpdate
-    }
-
     FontMetrics {
         id: fm
         font: nCol.font

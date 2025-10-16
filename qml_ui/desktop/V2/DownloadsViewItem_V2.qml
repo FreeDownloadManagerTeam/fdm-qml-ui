@@ -207,7 +207,9 @@ Item
 
         BaseText_V2 {
             text: App.speedAsText(downloadsItemTools.downloadSpeed) + App.loc.emptyString
-            color: priorityColor(model.priority)
+            color: model.running ?
+                       uicore.priorityAndSnailColor(model.priority) :
+                       uicore.priorityColor(model.priority)
         }
     }
 
@@ -222,7 +224,9 @@ Item
 
         BaseText_V2 {
             text: App.speedAsText(downloadsItemTools.uploadSpeed) + App.loc.emptyString
-            color: priorityColor(model.priority)
+            color: model.running ?
+                       uicore.priorityAndSnailColor(model.priority) :
+                       uicore.priorityColor(model.priority)
         }
     }
 
@@ -281,13 +285,6 @@ Item
         }
     }
 
-    function priorityColor(priority)
-    {
-        return priority == AbstractDownloadsUi.DownloadPriorityHigh ? appWindow.theme_v2.secondary :
-               priority == AbstractDownloadsUi.DownloadPriorityLow ? appWindow.theme_v2.danger :
-               appWindow.theme_v2.textColor;
-    }
-
     MyCellBase
     {
         id: priorityBlock
@@ -311,7 +308,9 @@ Item
         BaseText_V2
         {
             text: qsTr("Priority") + App.loc.emptyString
-            color: priorityColor(model.priority)
+            color: model.running ?
+                       uicore.priorityAndSnailColor(model.priority) :
+                       uicore.priorityColor(model.priority)
             Layout.fillWidth: true
             Layout.maximumWidth: implicitWidth
         }
@@ -341,7 +340,8 @@ Item
 
         BaseText_V2 {
             visible: !stoppedText.visible && downloadsItemTools.eta >= 0
-            text: qsTr("Remaining")
+            text: qsTr("Remaining") + App.loc.emptyString
+            color: uicore.snailTools.isSnail ? appWindow.theme_v2.amber : appWindow.theme_v2.textColor
         }
 
         /*SvgImage_V2 {
@@ -354,8 +354,11 @@ Item
             text: downloadsItemTools.eta >= 0 ?
                       JsTools.timeUtils.remainingTime(downloadsItemTools.eta) :
                       (model.added ?
-                           (App.loc.dateTimeToString_v2(model.added, false, false) + App.loc.emptyString + (downloadsViewHeader.minuteUpdate ? "" : "")) :
+                           (App.loc.dateTimeToString_v2(model.added, false, false) + App.loc.emptyString + (uicore.minuteUpdate ? "" : "")) :
                            "")
+            color: (downloadsItemTools.eta >= 0 && uicore.snailTools.isSnail) ?
+                       appWindow.theme_v2.amber :
+                       appWindow.theme_v2.textColor
             Layout.fillWidth: true
         }
     }

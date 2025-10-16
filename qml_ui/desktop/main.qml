@@ -180,6 +180,10 @@ ApplicationWindow {
         font: defaultLabel.font
     }
 
+    UiCore {
+        id: uicore
+    }
+
     UiReadyTools {
         id: uiReadyTools
         firstPageComponent: Component {
@@ -910,8 +914,10 @@ ApplicationWindow {
     }
 
     Component.onCompleted: {
-        if (Qt.platform.os === "osx")
+        if (Qt.platform.os === "osx") {
             flags |= Qt.WindowFullscreenButtonHint;
+            try {topPadding = 0;}catch(e){}  // Qt 6.9+
+        }
         uiReadyTools.onReady(updateMacVersionWorkaround);
 
         App.useDarkTheme = Qt.binding(function(){ return useDarkTheme;});
@@ -1184,6 +1190,4 @@ ApplicationWindow {
             appWindowInvalidateTimer.restart();
     }
     ////////////////////////////////////////////////////////////////////////////////
-
-    SnailTools {id: snailTools}
 }

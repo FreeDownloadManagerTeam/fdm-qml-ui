@@ -112,6 +112,12 @@ QtObject {
             minutes = minutes > 59 ? 59 : minutes;
             return hours * 60 + minutes;
         }
+        function isWithin24Hours(date) {
+            const now = new Date();
+            const twentyFourHoursInMs = 24 * 3600 * 1000; // 24 hours in milliseconds
+            const timeDifference = Math.abs(date.getTime() - now.getTime());
+            return timeDifference <= twentyFourHoursInMs;
+        }
     }
 
     property var mathUtils: QtObject {
