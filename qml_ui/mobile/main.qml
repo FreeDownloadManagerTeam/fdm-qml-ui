@@ -62,16 +62,18 @@ ApplicationWindow
 
     flags: flags | Qt.ExpandedClientAreaHint
 
-    //TODO: FIX SYSTEM THEME
-
     SystemPalette {id: sp; colorGroup: SystemPalette.Active}
-    readonly property bool systemlightMode: sp.text.r < 0.2 && sp.text.g < 0.2 && sp.text.b < 0.2
+    readonly property bool isSystemPaletteLight: sp.text.r < 0.2 && sp.text.g < 0.2 && sp.text.b < 0.2
+
+    readonly property bool isSystemThemeDark: (Qt.application.active || !Qt.application.active) && // re-check on app activate
+                                              App.systemTheme == QtSystemTheme.Dark
+
+    readonly property bool useDarkTheme: (uiSettingsTools.settings.theme === 'dark') ||
+                                         (uiSettingsTools.settings.theme === 'system' && (isSystemThemeDark || !isSystemPaletteLight))
 
     DarkTheme {id: darkTheme}
     LightTheme {id: lightTheme}
-    readonly property var theme: (uiSettingsTools.settings.theme === 'dark' ||
-                             (uiSettingsTools.settings.theme === 'system' && !systemlightMode)) ?
-                                darkTheme : lightTheme
+    readonly property var theme: useDarkTheme ? darkTheme : lightTheme
 
     Material.theme: Material.Light
     Material.background: theme.background

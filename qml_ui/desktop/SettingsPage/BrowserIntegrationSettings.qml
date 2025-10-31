@@ -20,8 +20,8 @@ Column {
 
     property var browsers: [
         {id: KnownWebBrowsers.Edge, title: "Edge", icon: Qt.resolvedUrl("../../images/desktop/edge_logo.svg"), supported: App.integration.isBrowserSupported(KnownWebBrowsers.Edge), installed: App.integration.isBrowserInstalled(KnownWebBrowsers.Edge)},
-        {id: KnownWebBrowsers.Chrome, title: "Google Chrome", icon: Qt.resolvedUrl("../../images/desktop/chrome_logo.svg"), supported: App.integration.isBrowserSupported(KnownWebBrowsers.Chrome), installed: App.integration.isBrowserInstalled(KnownWebBrowsers.Chrome)},
-        {id: KnownWebBrowsers.Firefox, title: "Firefox", icon: Qt.resolvedUrl("../../images/desktop/firefox_logo.svg"), supported: App.integration.isBrowserSupported(KnownWebBrowsers.Firefox), installed: App.integration.isBrowserInstalled(KnownWebBrowsers.Firefox)},
+        {id: KnownWebBrowsers.Chrome, title: "Google Chrome", icon: Qt.resolvedUrl("../../images/desktop/chrome_logo_qtbug_141382.svg"), supported: App.integration.isBrowserSupported(KnownWebBrowsers.Chrome), installed: App.integration.isBrowserInstalled(KnownWebBrowsers.Chrome)},
+        {id: KnownWebBrowsers.Firefox, title: "Firefox", icon: Qt.resolvedUrl("../../images/desktop/firefox_logo_qtbug_141382.svg"), supported: App.integration.isBrowserSupported(KnownWebBrowsers.Firefox), installed: App.integration.isBrowserInstalled(KnownWebBrowsers.Firefox)},
         {id: KnownWebBrowsers.Vivaldi, title: "Vivaldi", icon: "", supported: App.integration.isBrowserSupported(KnownWebBrowsers.Vivaldi), installed: App.integration.isBrowserInstalled(KnownWebBrowsers.Vivaldi)},
         {id: KnownWebBrowsers.Opera, title: "Opera", icon: "", supported: App.integration.isBrowserSupported(KnownWebBrowsers.Opera), installed: App.integration.isBrowserInstalled(KnownWebBrowsers.Opera)},
         {id: KnownWebBrowsers.Brave, title: "Brave", icon: "", supported: App.integration.isBrowserSupported(KnownWebBrowsers.Brave), installed: App.integration.isBrowserInstalled(KnownWebBrowsers.Brave)}

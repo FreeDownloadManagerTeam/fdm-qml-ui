@@ -154,6 +154,9 @@ Item
 
                 BaseText_V2 {
                     text: uicore.priorityText(model.priority) + App.loc.emptyString
+                    color: uicore.priorityColor(model.progress == 100 ?
+                                                    AbstractDownloadsUi.DownloadPriorityNormal :
+                                                    model.priority)
 
                     Layout.minimumWidth: header.priorityTextMaxWidth + 5*appWindow.fontZoom
 
