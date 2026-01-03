@@ -32,7 +32,6 @@ Button {
         text: parent.text
         color: appWindow.uiver === 1 ? "#000" : appWindow.theme_v2.bg700
         font.pixelSize: (appWindow.uiver === 1 ? 13 : 12)*appWindow.fontZoom
-        font.weight: appWindow.uiver === 1 ? 400 : 500
     }
 
     MouseArea {

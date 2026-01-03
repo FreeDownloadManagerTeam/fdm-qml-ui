@@ -92,6 +92,11 @@ Page {
                 font.pixelSize: appWindow.uiver === 1 ?
                                     (smallPage ? 18 : 24)*appWindow.fontZoom :
                                     20**appWindow.fontZoom
+
+                NClicksTrigger {
+                    anchors.fill: parent
+                    onTriggered: uiSettingsTools.settings.showPluginsDeveloperUi = true
+                }
             }
 
             GearButton
@@ -180,6 +185,62 @@ Page {
                 visible: text
                 text: root.updateAllResult
                 color: root.updateAllFailed ? appWindow.theme.errorMessage : appWindow.theme.foreground
+            }
+        }
+
+        ColumnLayout
+        {
+            visible: uiSettingsTools.settings.showPluginsDeveloperUi
+            Layout.leftMargin: 16*appWindow.zoom
+            Layout.bottomMargin: appWindow.uiver === 1 ?
+                                     (smallPage ? 6 : 18)*appWindow.zoom :
+                                     16*appWindow.zoom
+
+            BaseLabel {
+                text: qsTr("Developer options") + App.loc.emptyString
+                font.bold: true
+            }
+
+            // developer options
+            ColumnLayout
+            {
+                Layout.leftMargin: 16*appWindow.zoom
+
+                RowLayout {
+                    BaseCheckBox
+                    {
+                        xOffset: 0
+                        text: qsTr("Allow unsigned add-ons to access external directories") + App.loc.emptyString
+                        checked: uiSettingsTools.settings.pluginsDevAllowedPathsIgnoreSign
+                        onClicked: uiSettingsTools.settings.pluginsDevAllowedPathsIgnoreSign = checked
+                    }
+                    BaseLabel {
+                        text: "*"
+                        color: "red"
+                        font.pixelSize: 14*appWindow.fontZoom
+                        font.bold: true
+                        Layout.alignment: Qt.AlignTop
+                    }
+                }
+
+                RowLayout {
+                    opacity: 0.5
+                    BaseLabel {
+                        text: "*"
+                        color: "red"
+                        font.pixelSize: 14*appWindow.fontZoom
+                        font.bold: true
+                        Layout.alignment: Qt.AlignTop
+                    }
+                    BaseLabel {
+                        text: qsTr("Restart is required") + App.loc.emptyString
+                    }
+                }
+
+                BaseHandCursorLabel {
+                    text: "<a href='#'>" + qsTr("Hide developer options") + App.loc.emptyString + "</a>"
+                    onLinkActivated: uiSettingsTools.settings.showPluginsDeveloperUi = false
+                }
             }
         }
 

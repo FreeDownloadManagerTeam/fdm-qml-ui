@@ -174,7 +174,7 @@ Item
                     verticalAlignment: Text.AlignVCenter
                     text: root.title
                     color: root.textColor
-                    font.weight: root.useUppercase ? 600 : 500
+                    font.weight: root.useUppercase ? appWindow.theme_v2.fontWeight+100 : appWindow.theme_v2.fontWeight
                     font.pixelSize: (root.useUppercase ? 11 : appWindow.theme_v2.fontSize)*appWindow.fontZoom
                     font.capitalization: root.useUppercase ? Font.AllUppercase : Font.MixedCase
                 }

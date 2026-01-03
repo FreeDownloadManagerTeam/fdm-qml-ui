@@ -31,7 +31,6 @@ BannerStrip {
         BaseLabel {
             text: App.my_BT_qsTranslate("IntegrationBanner", "Would you like to make %1 the default torrent client?").arg(App.shortDisplayName) + App.loc.emptyString
             font.pixelSize: 13*appWindow.fontZoom
-            font.weight: appWindow.uiver === 1 ? 400 : 500
             elide: Text.ElideRight
             color: appWindow.uiver === 1 ? appWindow.theme.foreground : appWindow.theme_v2.secondary
         }

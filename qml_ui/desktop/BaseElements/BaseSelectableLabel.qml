@@ -13,7 +13,7 @@ TextEdit {
                      (Qt.platform.os === "osx" ? font.family : "Arial") :
                      appWindow.theme_v2.fontFamily
 
-    font.weight: appWindow.uiver === 1 ? 400 : 500
+    font.weight: appWindow.uiver === 1 ? 400 : appWindow.theme_v2.fontWeight
 
     color: appWindow.uiver === 1 ?
                appWindow.theme.foreground :

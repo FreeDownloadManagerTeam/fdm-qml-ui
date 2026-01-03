@@ -57,7 +57,7 @@ Item
                             id: tabNameText
                             text: modelData.name
                             color: parent.isCurrent ? appWindow.theme_v2.dark1000 : appWindow.theme_v2.bg700
-                            font.weight: 600
+                            font.weight: appWindow.theme_v2.fontWeight+100
                             font.pixelSize: 10*appWindow.fontZoom
                             font.capitalization: Font.AllUppercase
                             anchors.centerIn: parent

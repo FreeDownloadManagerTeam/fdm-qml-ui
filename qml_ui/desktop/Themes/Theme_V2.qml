@@ -55,6 +55,7 @@ QtObject
 
     readonly property string fontFamily: "IBM Plex Sans"
     readonly property int fontSize: 13
+    readonly property int fontWeight: 500
     readonly property int tooltipFontSize: 12
 
     readonly property color textColor: bg1000

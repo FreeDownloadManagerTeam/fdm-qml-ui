@@ -35,7 +35,6 @@ BannerStrip {
                   (shutdownTools.powerManagement.shutdownType == VmsQt.HibernateComputer ? qsTr("Computer will be hibernate after all downloads are completed.") :
                   (shutdownTools.powerManagement.shutdownType == VmsQt.ShutdownComputer  ? qsTr("Computer will be shutdown after all downloads are completed.") : "")) + App.loc.emptyString
             font.pixelSize: 13*appWindow.fontZoom
-            font.weight: appWindow.uiver === 1 ? 400 : 500
             color: appWindow.uiver === 1 ? "#ffffff" : appWindow.theme_v2.secondary
         }
 

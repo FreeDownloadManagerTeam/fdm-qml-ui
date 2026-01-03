@@ -38,7 +38,7 @@ Rectangle
             background: Item {}
             font.family: appWindow.theme_v2.fontFamily
             font.pixelSize: appWindow.theme_v2.fontSize*appWindow.fontZoom
-            font.weight: 500
+            font.weight: appWindow.theme_v2.fontWeight
             color: appWindow.theme_v2.textColor
 
             placeholderText: qsTr("Search in downloads...") + App.loc.emptyString

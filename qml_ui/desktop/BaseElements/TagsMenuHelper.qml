@@ -102,5 +102,8 @@ QtObject
 
     onTagsChanged: addTags()
 
-    Component.onCompleted: addTags()
+    Component.onCompleted: {
+        App.loc.currentTranslationChanged.connect(addTags);
+        addTags();
+    }
 }

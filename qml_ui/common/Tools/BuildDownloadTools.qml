@@ -518,6 +518,7 @@ Item {
     }
 
     property var __singleDownloadFileInfo: null
+    property var __singleDownloadFileInfoPathChangedSlotFn: null
 
     function connectToPathChangedSignal()
     {
@@ -530,17 +531,27 @@ Item {
             {
                 __singleDownloadFileInfo = info.fileInfo(0);
                 let id = requestId;
-                __singleDownloadFileInfo.pathChanged.connect(
-                            () => {
-                                if (id === requestId)
-                                    getNameAndPath();
-                            });
+                __singleDownloadFileInfoPathChangedSlotFn = () => {
+                    if (id === requestId)
+                    getNameAndPath();
+                };
+                __singleDownloadFileInfo.pathChanged.connect(__singleDownloadFileInfoPathChangedSlotFn);
             }
         }
     }
 
+    function disconnectFromPathChangedSignal()
+    {
+        if (__singleDownloadFileInfo)
+        {
+            __singleDownloadFileInfo.pathChanged.disconnect(__singleDownloadFileInfoPathChangedSlotFn);
+            __singleDownloadFileInfoPathChangedSlotFn = null;
+            __singleDownloadFileInfo = null;
+        }
+    }
+
     onRequestIdChanged: {
-        __singleDownloadFileInfo = null;
+        disconnectFromPathChangedSignal();
         connectToPathChangedSignal();
     }
 
@@ -552,7 +563,7 @@ Item {
             if (id === requestId) {
                 buildingDownload = false;
                 buildingDownloadFinished = true;
-                __singleDownloadFileInfo = null;
+                disconnectFromPathChangedSignal();
                 connectToPathChangedSignal();
                 root.createRequestSuccess(requestId);
             }
@@ -563,7 +574,7 @@ Item {
             {
                 buildingDownload = false;
                 buildingDownloadFinished = false;
-                __singleDownloadFileInfo = null;
+                disconnectFromPathChangedSignal();
                 lastError = error.clone();
                 allowedToReportLastError = allowedToReport;
                 lastFailedRequestId = requestId;
@@ -572,9 +583,9 @@ Item {
             }
         }
 
-        onAborted: __singleDownloadFileInfo = null
+        onAborted: disconnectFromPathChangedSignal()
 
-        onAdded: __singleDownloadFileInfo = null
+        onAdded: disconnectFromPathChangedSignal()
 
         onTagIdChanged: id => {
             var tagId = App.downloads.creator.tagId(id);

@@ -13,7 +13,7 @@ ToolTip {
     contentItem: BaseLabel {
         text: root.text
         font.pixelSize: fontSize
-        font.weight: appWindow.uiver === 1 ? Font.Light : 500
+        font.weight: appWindow.uiver === 1 ? Font.Light : appWindow.theme_v2.fontWeight
         wrapMode: Text.Wrap
         color: appWindow.uiver === 1 ?
                    appWindow.theme.toolTipText :

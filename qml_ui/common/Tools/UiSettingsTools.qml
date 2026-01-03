@@ -61,6 +61,8 @@ Item {
         property bool closeButtonHidesApp: true
         property int uiVersion: App.uiDefaultVersion()
         property bool showUiUpdatedBanner: false
+        property bool showPluginsDeveloperUi: false
+        property bool pluginsDevAllowedPathsIgnoreSign: false
     }
 
     readonly property bool hasNonDefaultValues:

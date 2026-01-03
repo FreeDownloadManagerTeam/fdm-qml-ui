@@ -27,7 +27,6 @@ Page {
                 anchors.leftMargin: 10*appWindow.zoom
                 anchors.verticalCenter: parent.verticalCenter
                 font.pixelSize: 20*appWindow.fontZoom
-                font.family: "Roboto"
                 horizontalAlignment: Text.AlignHCenter
                 font.weight: Font.DemiBold
             }

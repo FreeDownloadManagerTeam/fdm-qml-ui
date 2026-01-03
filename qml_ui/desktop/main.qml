@@ -104,9 +104,8 @@ ApplicationWindow {
 
     DarkTheme {id: darkTheme}
     LightTheme {id: lightTheme}
-    property var systemTheme: App.systemTheme
     readonly property bool useDarkTheme: (uiSettingsTools.settings.theme === 'dark') ||
-                                         (uiSettingsTools.settings.theme === 'system' && systemTheme == QtSystemTheme.Dark)
+                                         (uiSettingsTools.settings.theme === 'system' && App.systemTheme == QtSystemTheme.Dark)
     property var theme: useDarkTheme ? darkTheme : lightTheme
 
     property var theme_v2: Theme_V2 {isLightTheme: !appWindow.useDarkTheme}
@@ -123,7 +122,6 @@ ApplicationWindow {
         stopDownloadDlg.show(downloadIds)
     }
     onActiveChanged: {
-        systemTheme = App.systemTheme
         if (active)
         {
             appWindowStateSaver.scheduleCheckWindowPos();
@@ -937,6 +935,15 @@ ApplicationWindow {
                 showWindow(true);
             }
         });
+    }
+
+    onActiveFocusItemChanged: {
+        for (let item = contentItem; item; item = item.parent) {
+            if (activeFocusItem == item) {
+                stackView.currentItem.forceActiveFocus();
+                break;
+            }
+        }
     }
 
     Connections {

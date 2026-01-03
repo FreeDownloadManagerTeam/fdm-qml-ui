@@ -32,7 +32,6 @@ BannerStrip
                       qsTr("The new interface is turned on.")) + App.loc.emptyString
             color: appWindow.uiver === 1 ? appWindow.theme.foreground : appWindow.theme_v2.secondary
             font.pixelSize: 13*appWindow.fontZoom
-            font.weight: appWindow.uiver === 1 ? 400 : 500
         }
 
         Item {
