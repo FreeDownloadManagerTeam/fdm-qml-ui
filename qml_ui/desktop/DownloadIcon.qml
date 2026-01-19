@@ -1,6 +1,6 @@
-import QtQuick 2.10
-import QtQuick.Window 2.12
-import org.freedownloadmanager.fdm 1.0
+import QtQuick
+import QtQuick.Window
+import org.freedownloadmanager.fdm
 import "../common"
 
 Item

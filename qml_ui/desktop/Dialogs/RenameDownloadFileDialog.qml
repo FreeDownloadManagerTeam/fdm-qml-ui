@@ -1,9 +1,9 @@
-import QtQuick 2.12
-import QtQuick.Controls 2.12
-import QtQuick.Layouts 1.12
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
 import "../BaseElements"
 import "../../common/Tools"
-import org.freedownloadmanager.fdm 1.0
+import org.freedownloadmanager.fdm
 
 BaseDialog
 {

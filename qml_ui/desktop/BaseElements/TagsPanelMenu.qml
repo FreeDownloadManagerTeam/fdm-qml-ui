@@ -1,7 +1,7 @@
-import QtQuick 2.11
-import QtQuick.Controls 2.3
-import "../../qt5compat"
-import org.freedownloadmanager.fdm 1.0
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Effects
+import org.freedownloadmanager.fdm
 import "../BaseElements"
 
 Popup {
@@ -44,12 +44,12 @@ Popup {
             }
         }
 
-        RectangularGlow {
+        MultiEffect {
             anchors.fill: menuBackground
-            color: "gray"
-            glowRadius: 0
-            spread: 0
-            cornerRadius: 20*appWindow.zoom
+            source: menuBackground
+            shadowEnabled: true
+            shadowBlur: 0.5
+            shadowColor: "gray"
         }
 
         Rectangle {

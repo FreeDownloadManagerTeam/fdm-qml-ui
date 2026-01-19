@@ -1,10 +1,10 @@
-import org.freedownloadmanager.fdm 1.0
-import org.freedownloadmanager.fdm.dmcoresettings 1.0
-import org.freedownloadmanager.fdm.tum 1.0
-import QtQuick 2.10
-import QtQuick.Controls 2.3
-import QtQuick.Layouts 1.3
-import "../../qt5compat"
+import org.freedownloadmanager.fdm
+import org.freedownloadmanager.fdm.dmcoresettings
+import org.freedownloadmanager.fdm.tum
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import QtQuick.Effects
 import "../../common"
 import "../BaseElements"
 
@@ -71,7 +71,7 @@ Item {
                 id: value
                 Layout.fillWidth: true
                 inputMethodHints: Qt.ImhDigitsOnly
-                validator: QtRegExpValidator { regExp: /^[\d\.,]+$/ }
+                validator: RegularExpressionValidator { regularExpression: /^[\d\.,]+$/ }
                 onAccepted: custom.tryAcceptValue()
                 Keys.onEscapePressed: custom.reject()
                 onTextChanged: custom.inError = false;
@@ -102,8 +102,9 @@ Item {
                     source: Qt.resolvedUrl("../../images/desktop/ok_white.svg")
                     zoom: appWindow.zoom
                     layer {
-                        effect: ColorOverlay {
-                            color: appWindow.uiver === 1 ?
+                        effect: MultiEffect {
+                            colorization: 1.0
+                            colorizationColor: appWindow.uiver === 1 ?
                                        (okBtn.alternateBtnPressed ? okBtn.secondaryTextColor : okBtn.primaryTextColor) :
                                        appWindow.theme_v2.bg100
                         }
@@ -124,8 +125,9 @@ Item {
                     source: Qt.resolvedUrl("../../images/desktop/clean.svg")
                     zoom: appWindow.zoom
                     layer {
-                        effect: ColorOverlay {
-                            color: appWindow.uiver === 1 ?
+                        effect: MultiEffect {
+                            colorization: 1.0
+                            colorizationColor: appWindow.uiver === 1 ?
                                        (cnclBtn.isPressed ? cnclBtn.secondaryTextColor : cnclBtn.primaryTextColor) :
                                        appWindow.theme_v2.bg1000
                         }

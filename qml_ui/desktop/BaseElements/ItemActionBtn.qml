@@ -1,5 +1,5 @@
-import QtQuick 2.12
-import org.freedownloadmanager.fdm 1.0
+import QtQuick
+import org.freedownloadmanager.fdm
 import "../../common"
 
 WaSvgImage

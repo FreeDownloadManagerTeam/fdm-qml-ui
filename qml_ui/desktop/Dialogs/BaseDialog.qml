@@ -1,6 +1,6 @@
-import QtQuick 2.0
-import QtQuick.Controls 2.3
-import "../../qt5compat"
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Effects
 
 Dialog {
     id: root
@@ -37,19 +37,15 @@ Dialog {
     }
 
     background: Item {
-        RectangularGlow {
+        MultiEffect {
             visible: appWindow.uiver === 1 || appWindow.theme_v2.useGlow
-            anchors.fill: parent
-            color: appWindow.uiver === 1 ?
-                       appWindow.theme.dialogGlow :
-                       appWindow.theme_v2.glowColor
-            glowRadius: appWindow.uiver === 1 ?
-                            4*appWindow.zoom :
-                            0
-            spread: 0
-            cornerRadius: appWindow.uiver === 1 ?
-                              4*appWindow.zoom :
-                              bgr.radius
+            anchors.fill: bgr
+            source: bgr
+            shadowEnabled: true
+            shadowBlur: appWindow.uiver === 1 ? 0.5 : 0.3
+            shadowColor: appWindow.uiver === 1 ?
+                             appWindow.theme.dialogGlow :
+                             appWindow.theme_v2.glowColor
         }
 
         Rectangle {

@@ -1,15 +1,15 @@
-import QtQuick 2.0
-import Qt.labs.platform 1.1 as QtLabs
-import org.freedownloadmanager.fdm 1.0
+import QtQuick
+import QtQuick.Dialogs
+import org.freedownloadmanager.fdm
 
-QtLabs.FileDialog {
+FileDialog {
     property bool opened: visible
     property string action
 
     acceptLabel: qsTr("Import") + App.loc.emptyString
     rejectLabel: qsTr("Cancel") + App.loc.emptyString
 
-    folder: App.tools.urlFromLocalFile(uiSettingsTools.settings.exportImportPath).url
+    currentFolder: App.tools.urlFromLocalFile(uiSettingsTools.settings.exportImportPath).url
 
     property string filter
 
@@ -17,13 +17,13 @@ QtLabs.FileDialog {
 
     onAccepted: {
         if (action === 'importListOfUrlsFromFile') {
-            App.importListOfUrlsFromFile(App.tools.url(file).toLocalFile());
+            App.importListOfUrlsFromFile(App.tools.url(selectedFile).toLocalFile());
         } else if (action === 'importDownloads') {
-            App.exportImport.importDownloads(App.tools.url(file).toLocalFile());
+            App.exportImport.importDownloads(App.tools.url(selectedFile).toLocalFile());
         } else if (action === 'importSettings') {
-            App.exportImport.importSettings(App.tools.url(file).toLocalFile());
+            App.exportImport.importSettings(App.tools.url(selectedFile).toLocalFile());
         }
-        uiSettingsTools.settings.exportImportPath = App.tools.url(folder).toLocalFile();
+        uiSettingsTools.settings.exportImportPath = App.tools.url(currentFolder).toLocalFile();
     }
 
     function openDialog(actionValue) {

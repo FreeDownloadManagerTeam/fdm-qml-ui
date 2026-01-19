@@ -1,15 +1,14 @@
-import QtQuick 2.12
-import QtQuick.Controls 2.3
-import QtQuick.Layouts 1.3
-import "../../qt5compat"
-import org.freedownloadmanager.fdm 1.0
-import org.freedownloadmanager.fdm.abstractdownloadsui 1.0
-import org.freedownloadmanager.fdm.dmcoresettings 1.0
-import org.freedownloadmanager.fdm.appsettings 1.0
-import org.freedownloadmanager.fdm.appfeatures 1.0
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import QtQuick.Dialogs
+import org.freedownloadmanager.fdm
+import org.freedownloadmanager.fdm.abstractdownloadsui 
+import org.freedownloadmanager.fdm.dmcoresettings
+import org.freedownloadmanager.fdm.appsettings
+import org.freedownloadmanager.fdm.appfeatures
 import "../../desktop/BaseElements"
 import "../../desktop/SettingsPage"
-import Qt.labs.platform 1.0 as QtLabs
 
 Column
 {
@@ -106,12 +105,12 @@ Column
                     Layout.alignment: Qt.AlignRight
                     Layout.preferredHeight: torrentFolder.implicitHeight
                     onClicked: browseDlg.open()
-                    QtLabs.FolderDialog {
+                    FolderDialog {
                         id: browseDlg
-                        folder: App.tools.urlFromLocalFile(torrentFolder.text).url
+                        currentFolder: App.tools.urlFromLocalFile(torrentFolder.text).url
                         acceptLabel: qsTr("Open") + App.loc.emptyString
                         rejectLabel: qsTr("Cancel") + App.loc.emptyString
-                        onAccepted: torrentFolder.text = App.tools.url(folder).toLocalFile()
+                        onAccepted: torrentFolder.text = App.toNativeSeparators(App.tools.url(currentFolder).toLocalFile())
                     }
                 }
             }
@@ -277,7 +276,7 @@ Column
                 id: customPortText
                 implicitWidth: 60*appWindow.zoom
                 inputMethodHints: Qt.ImhDigitsOnly
-                validator: QtRegExpValidator { regExp: /\d+/ }
+                validator: RegularExpressionValidator { regularExpression: /\d+/ }
                 text: App.settings.dmcore.value(DmCoreSettings.BtSessionPort)
                 onTextChanged: applyAdvancedBtSettings()
             }

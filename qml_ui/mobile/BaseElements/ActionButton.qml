@@ -1,8 +1,8 @@
-import QtQuick 2.10
-import QtQuick.Controls 2.3
-import QtQuick.Controls.Material 2.4
-import org.freedownloadmanager.fdm 1.0
-import org.freedownloadmanager.fdm.appfeatures 1.0
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Controls.Material
+import org.freedownloadmanager.fdm
+import org.freedownloadmanager.fdm.appfeatures
 
 RoundButton {
     visible: !App.rc.client.active || downloadsItemTools.buttonType !== "showInFolder"

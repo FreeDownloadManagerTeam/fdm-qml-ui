@@ -1,11 +1,10 @@
-import QtQuick 2.11
-import QtQuick.Controls 2.3
-import QtQuick.Layouts 1.3
-import "../../qt5compat"
-import org.freedownloadmanager.fdm 1.0
-import org.freedownloadmanager.fdm.appsettings 1.0
-import org.freedownloadmanager.fdm.appfeatures 1.0
-import org.freedownloadmanager.fdm.dmcoresettings 1.0
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import org.freedownloadmanager.fdm
+import org.freedownloadmanager.fdm.appsettings
+import org.freedownloadmanager.fdm.appfeatures
+import org.freedownloadmanager.fdm.dmcoresettings
 import "."
 import "../BaseElements/"
 
@@ -129,7 +128,7 @@ Page {
                                   ""
                         implicitWidth: 40
                         inputMethodHints: Qt.ImhDigitsOnly
-                        validator: QtRegExpValidator { regExp: /[1-9]\d*/ }
+                        validator: RegularExpressionValidator { regularExpression: /[1-9]\d*/ }
                         anchors.verticalCenter: parent.verticalCenter
                         onActiveFocusChanged: {
                             if (!activeFocus && removeFinishedIn.checked && text)

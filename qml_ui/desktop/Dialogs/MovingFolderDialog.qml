@@ -1,17 +1,17 @@
-import QtQuick 2.0
-import Qt.labs.platform 1.0 as QtLabs
-import org.freedownloadmanager.fdm 1.0
+import QtQuick
+import QtQuick.Dialogs
+import org.freedownloadmanager.fdm
 import "../../common/Tools"
 
-QtLabs.FolderDialog {
+FolderDialog {
     property var ids: []
     acceptLabel: qsTr("Move") + App.loc.emptyString
     rejectLabel: qsTr("Cancel") + App.loc.emptyString
-    folder: uiSettingsTools.settings.lastMovePath
+    currentFolder: uiSettingsTools.settings.lastMovePath
     onAccepted: {
         if (ids.length) {
-            uiSettingsTools.settings.lastMovePath = folder;
-            DownloadsTools.moveDownloads(ids, App.tools.url(folder).toLocalFile());
+            uiSettingsTools.settings.lastMovePath = currentFolder;
+            DownloadsTools.moveDownloads(ids, App.tools.url(currentFolder).toLocalFile());
         }
         ids = [];
     }

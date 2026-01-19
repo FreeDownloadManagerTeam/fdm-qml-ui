@@ -1,6 +1,6 @@
-import QtQuick 2.12
-import QtQuick.Layouts 2.12
-import org.freedownloadmanager.fdm 1.0
+import QtQuick
+import QtQuick.Layouts
+import org.freedownloadmanager.fdm
 import "../../desktop/BaseElements"
 import "../../desktop/BaseElements/V2"
 import "../../desktop/Banners"

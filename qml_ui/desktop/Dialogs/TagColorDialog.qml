@@ -1,8 +1,8 @@
-import QtQuick 2.10
-import QtQuick.Controls 2.3
-import org.freedownloadmanager.fdm 1.0
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Effects
+import org.freedownloadmanager.fdm
 import "../BaseElements"
-import "../../qt5compat"
 
 Popup {
     id: root
@@ -30,13 +30,13 @@ Popup {
 
     background: Item {
 
-        RectangularGlow {
+        MultiEffect {
             visible: appWindow.uiver !== 1 && appWindow.theme_v2.useGlow
-            anchors.fill: parent
-            color: appWindow.theme_v2.glowColor
-            glowRadius: 0
-            spread: 0
-            cornerRadius: bgr.radius
+            anchors.fill: bgr
+            source: bgr
+            shadowEnabled: true
+            shadowBlur: 0.3
+            shadowColor: appWindow.theme_v2.glowColor
         }
 
         Rectangle {

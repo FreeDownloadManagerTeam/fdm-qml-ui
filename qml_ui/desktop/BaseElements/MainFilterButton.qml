@@ -1,7 +1,7 @@
-import QtQuick 2.10
-import QtQuick.Controls 2.3
+import QtQuick
+import QtQuick.Controls
 import "../BaseElements"
-import org.freedownloadmanager.fdm.abstractdownloadsui 1.0
+import org.freedownloadmanager.fdm.abstractdownloadsui 
 
 BaseFilterButton {
     selected: !downloadsViewTools.downloadsTagFilter &&

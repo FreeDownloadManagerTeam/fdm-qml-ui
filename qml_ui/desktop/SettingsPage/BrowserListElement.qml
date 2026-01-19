@@ -1,7 +1,7 @@
-import QtQuick 2.0
-import QtQuick.Controls 2.4
-import "../../qt5compat"
-import org.freedownloadmanager.fdm 1.0
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Effects
+import org.freedownloadmanager.fdm
 import "../BaseElements"
 import "../BaseElements/V2"
 import "../../common"
@@ -27,8 +27,9 @@ Row {
                 zoom: appWindow.zoom
                 anchors.centerIn: parent
                 layer {
-                    effect: ColorOverlay {
-                        color: appWindow.theme.inactiveControl
+                    effect: MultiEffect {
+                        colorization: 1.0
+                        colorizationColor: appWindow.theme.inactiveControl
                     }
                     enabled: !appWindow.active
                 }

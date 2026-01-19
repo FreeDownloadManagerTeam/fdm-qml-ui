@@ -1,6 +1,6 @@
-import QtQuick 2.0
-import QtQuick.Controls 2.3
-import "../../qt5compat"
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Effects
 
 ToolTip {
     id: root
@@ -21,13 +21,13 @@ ToolTip {
     }
 
     background: Item {
-        RectangularGlow {
+        MultiEffect {
             visible: appWindow.uiver !== 1 && appWindow.theme_v2.useGlow
             anchors.fill: tooltipBackground
-            color: appWindow.theme_v2.glowColor
-            glowRadius: 0
-            spread: 0
-            cornerRadius: tooltipBackground.radius
+            source: tooltipBackground
+            shadowEnabled: true
+            shadowBlur: 0.5
+            shadowColor: appWindow.theme_v2.glowColor
         }
         Rectangle {
             id: tooltipBackground

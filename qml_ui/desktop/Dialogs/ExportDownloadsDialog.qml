@@ -1,15 +1,12 @@
-import QtQuick 2.0
-import QtQuick.Controls 2.3
-import QtQuick.Layouts 1.11
-import Qt.labs.platform 1.1
-import "../../qt5compat"
-import org.freedownloadmanager.fdm 1.0
-import org.freedownloadmanager.fdm.abstractdownloadsui 1.0
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import QtQuick.Dialogs
+import org.freedownloadmanager.fdm
+import org.freedownloadmanager.fdm.abstractdownloadsui 
 import "../BaseElements"
 import "../../common"
 import "../../common/Tools"
-
-import Qt.labs.platform 1.0 as QtLabs
 
 BaseDialog {
     id: root
@@ -56,15 +53,15 @@ BaseDialog {
 
                     onClicked: browseDlg.open()
 
-                    QtLabs.FileDialog {
+                    FileDialog {
                         id: browseDlg
-                        fileMode: QtLabs.FileDialog.SaveFile
+                        fileMode: FileDialog.SaveFile
                         acceptLabel: qsTr("Open") + App.loc.emptyString
                         rejectLabel: qsTr("Cancel") + App.loc.emptyString
                         nameFilters: [ typeCombo.filter, qsTr("All files (%1)").arg("*") + App.loc.emptyString ]
                         defaultSuffix: typeCombo.extension
                         onAccepted: {
-                            path.text = App.toNativeSeparators(App.tools.url(file).toLocalFile());
+                            path.text = App.toNativeSeparators(App.tools.url(selectedFile).toLocalFile());
                         }
                     }
                 }

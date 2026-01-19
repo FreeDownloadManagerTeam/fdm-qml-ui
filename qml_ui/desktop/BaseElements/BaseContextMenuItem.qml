@@ -1,7 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import "../../qt5compat"
+import QtQuick.Effects
 import "../../common"
 import "V2"
 
@@ -53,8 +53,11 @@ MenuItem {
                 opacity: enabled ? 1 : 0.5
                 mirror: LayoutMirroring.enabled
                 layer {
-                    effect: ColorOverlay {
-                        color: appWindow.theme.foreground
+                    effect: MultiEffect {
+                        colorization: 1.0
+                        colorizationColor: appWindow.uiver === 1 ?
+                                               appWindow.theme.foreground :
+                                               appWindow.theme_v2.textColor
                     }
                     enabled: true
                 }
@@ -72,8 +75,11 @@ MenuItem {
                 anchors.horizontalCenter: parent.horizontalCenter
                 y: (parent.height - height) / 2 + 1*zoom
                 layer {
-                    effect: ColorOverlay {
-                        color: appWindow.theme.foreground
+                    effect: MultiEffect {
+                        colorization: 1.0
+                        colorizationColor: appWindow.uiver === 1 ?
+                                               appWindow.theme.foreground :
+                                               appWindow.theme_v2.textColor
                     }
                     enabled: true
                 }

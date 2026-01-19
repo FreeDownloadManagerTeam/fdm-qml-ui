@@ -1,9 +1,9 @@
-import QtQuick 2.10
-import QtQuick.Controls 2.4
-import QtQuick.Layouts 1.3
-import "../../qt5compat"
-import org.freedownloadmanager.fdm 1.0
-import org.freedownloadmanager.fdm.appconstants 1.0
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import "../Dialogs"
+import org.freedownloadmanager.fdm
+import org.freedownloadmanager.fdm.appconstants
 import "../BaseElements"
 
 Item
@@ -130,7 +130,7 @@ Item
         }
     }
 
-    MessageDialog
+    AppMessageDialog
     {
         id: invalidValueDlg
         title: qsTr("Invalid value") + App.loc.emptyString

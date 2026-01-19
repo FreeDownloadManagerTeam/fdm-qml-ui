@@ -1,10 +1,9 @@
-import QtQuick 2.12
-import QtQuick.Controls 2.3
-import QtQuick.Layouts 1.3
-import QtQuick.Window 2.12
-import "../qt5compat"
-import org.freedownloadmanager.fdm 1.0
-import org.freedownloadmanager.fdm.abstractdownloadsui 1.0
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import QtQuick.Window
+import org.freedownloadmanager.fdm
+import org.freedownloadmanager.fdm.abstractdownloadsui 
 import CppControls 1.0 as CppControls
 
 import "../common"

@@ -1,8 +1,8 @@
-import QtQuick 2.0
-import "../../qt5compat"
-import org.freedownloadmanager.fdm 1.0
+import QtQuick
+import "../Dialogs"
+import org.freedownloadmanager.fdm
 
-MessageDialog
+AppMessageDialog
 {
     id: root
     signal popPage()

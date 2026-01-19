@@ -1,6 +1,5 @@
-import QtQuick 2.11
-import QtQuick.Controls 2.5
-import "../../qt5compat"
+import QtQuick
+import QtQuick.Controls
 
 RadioButton
 {

@@ -1,11 +1,11 @@
-import QtQuick 2.0
-import QtQuick.Controls 2.1
-import Qt.labs.folderlistmodel 2.11
-import QtQuick.Window 2.0
-import QtQuick.Layouts 1.3
-import "../../qt5compat"
-import QtQuick.Controls.Material 2.4
-import org.freedownloadmanager.fdm 1.0
+import QtQuick
+import QtQuick.Controls
+import Qt.labs.folderlistmodel
+import QtQuick.Window
+import QtQuick.Layouts
+import QtQuick.Effects
+import QtQuick.Controls.Material
+import org.freedownloadmanager.fdm
 import ".."
 import "../BaseElements"
 import "../Dialogs"
@@ -182,8 +182,9 @@ Page {
                             sourceSize.height: 8
                             mirror: LayoutMirroring.enabled
                             layer {
-                                effect: ColorOverlay {
-                                    color: appWindow.theme.foreground
+                                effect: MultiEffect {
+                                    colorization: 1.0
+                                    colorizationColor: appWindow.theme.foreground
                                 }
                                 enabled: true
                             }
@@ -245,8 +246,9 @@ Page {
                     fillMode: Image.PreserveAspectFit
                     visible: folderListModel.isFolder(index)
                     layer {
-                        effect: ColorOverlay {
-                            color: appWindow.theme.foreground
+                        effect: MultiEffect {
+                            colorization: 1.0
+                            colorizationColor: appWindow.theme.foreground
                         }
                         enabled: true
                     }
@@ -289,8 +291,9 @@ Page {
                         visible: folderListModel.isFolder(index)
                         mirror: LayoutMirroring.enabled
                         layer {
-                            effect: ColorOverlay {
-                                color: appWindow.theme.foreground
+                            effect: MultiEffect {
+                                colorization: 1.0
+                                colorizationColor: appWindow.theme.foreground
                             }
                             enabled: true
                         }

@@ -1,15 +1,14 @@
-import QtQuick 2.11
-import QtQuick.Controls 2.3
-import QtQuick.Layouts 1.12
-import org.freedownloadmanager.fdm 1.0
-import org.freedownloadmanager.fdm.abstractdownloadsui 1.0
-import org.freedownloadmanager.fdm.appsettings 1.0
-import org.freedownloadmanager.fdm.appfeatures 1.0
-import org.freedownloadmanager.fdm.dmcoresettings 1.0
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import org.freedownloadmanager.fdm
+import org.freedownloadmanager.fdm.abstractdownloadsui 
+import org.freedownloadmanager.fdm.appsettings
+import org.freedownloadmanager.fdm.appfeatures
+import org.freedownloadmanager.fdm.dmcoresettings
 import "."
 import "../../mobile/BaseElements"
 import "../../mobile/SettingsPage"
-import "../../qt5compat"
 
 Page {
     id: root
@@ -189,7 +188,7 @@ Page {
                         id: customPortText
                         implicitWidth: 60
                         inputMethodHints: Qt.ImhDigitsOnly
-                        validator: QtRegExpValidator { regExp: /\d+/ }
+                        validator: RegularExpressionValidator { regularExpression: /\d+/ }
                         text: App.settings.dmcore.value(DmCoreSettings.BtSessionPort)
                         onTextChanged: applySettings()
                     }

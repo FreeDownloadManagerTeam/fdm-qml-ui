@@ -1,15 +1,15 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import org.freedownloadmanager.fdm 1.0
-import org.freedownloadmanager.vmsqt 1.0
-import org.freedownloadmanager.fdm.abstractdownloadsui 1.0
+import QtQuick.Effects
+import org.freedownloadmanager.fdm
+import org.freedownloadmanager.vmsqt
+import org.freedownloadmanager.fdm.abstractdownloadsui 
 import "../common"
 import "./BaseElements"
 import "./BaseElements/V2"
 import "./Dialogs"
 import "V2"
-import "../qt5compat"
 import "Banners"
 
 ToolBar {
@@ -204,7 +204,7 @@ ToolBar {
             WaSvgImage {
                 zoom: appWindow.zoom
                 source: Qt.resolvedUrl("V2/main_menu_btn.svg")
-                layer.effect: ColorOverlay { color: appWindow.theme_v2.bg1000 }
+                layer.effect: MultiEffect { colorization: 1.0; colorizationColor: appWindow.theme_v2.bg1000 }
                 layer.enabled: true
                 Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                 Layout.margins: 4*appWindow.zoom

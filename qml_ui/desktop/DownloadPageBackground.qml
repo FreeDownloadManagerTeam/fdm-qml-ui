@@ -1,8 +1,8 @@
-import QtQuick 2.11
-import QtQuick.Controls 2.3
-import org.freedownloadmanager.fdm 1.0
-import org.freedownloadmanager.fdm.tum 1.0
-import org.freedownloadmanager.fdm.dmcoresettings 1.0
+import QtQuick
+import QtQuick.Controls
+import org.freedownloadmanager.fdm
+import org.freedownloadmanager.fdm.tum
+import org.freedownloadmanager.fdm.dmcoresettings
 
 Item {
     anchors.fill: parent

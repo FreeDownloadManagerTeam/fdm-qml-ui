@@ -1,8 +1,8 @@
-import QtQuick 2.0
-import QtQuick.Layouts 1.3
+import QtQuick
+import QtQuick.Layouts
 import "../../../common/Tools"
-import org.freedownloadmanager.fdm 1.0
-import org.freedownloadmanager.fdm.abstractdownloadsui 1.0
+import org.freedownloadmanager.fdm
+import org.freedownloadmanager.fdm.abstractdownloadsui 
 import "../../BaseElements"
 
 ColumnLayout {

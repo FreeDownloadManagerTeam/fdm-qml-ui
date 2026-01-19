@@ -1,10 +1,10 @@
-import QtQuick 2.11
-import QtQuick.Controls 2.3
-import QtQuick.Layouts 1.3
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
 import "../../common/Tools"
 import "../BaseElements"
 import "../../common"
-import org.freedownloadmanager.fdm 1.0
+import org.freedownloadmanager.fdm
 
 Item {
     id: root

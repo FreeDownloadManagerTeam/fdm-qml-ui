@@ -1,6 +1,6 @@
-import QtQuick 2.0
-import QtQuick.Controls 2.4
-import "../../qt5compat"
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Effects
 import "../../common"
 
 Menu {
@@ -41,17 +41,15 @@ Menu {
     }
 
     background: Item {
-        RectangularGlow {
+        MultiEffect {
             visible: appWindow.uiver === 1 || appWindow.theme_v2.useGlow
             anchors.fill: menuBackground
-            color: appWindow.uiver === 1 ?
-                       "black" :
-                       appWindow.theme_v2.glowColor
-            glowRadius: 0
-            spread: 0
-            cornerRadius: appWindow.uiver === 1 ?
-                              20*appWindow.zoom :
-                              menuBackground.radius
+            source: menuBackground
+            shadowEnabled: true
+            shadowBlur: 0.5
+            shadowColor: appWindow.uiver === 1 ?
+                             "black" :
+                             appWindow.theme_v2.glowColor
         }
         Rectangle {
             id: menuBackground

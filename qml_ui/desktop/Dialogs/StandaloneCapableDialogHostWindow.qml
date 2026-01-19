@@ -1,7 +1,7 @@
-import QtQuick 2.12
-import QtQuick.Controls 2.12
-import QtQuick.Window 2.12
-import org.freedownloadmanager.fdm 1.0
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Window
+import org.freedownloadmanager.fdm
 import CppControls 1.0 as CppControls
 
 ApplicationWindow

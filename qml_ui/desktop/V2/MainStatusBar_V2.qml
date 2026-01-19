@@ -1,9 +1,9 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
+import QtQuick.Effects
 import "../BaseElements/V2"
 import "../../common"
-import "../../qt5compat"
 import org.freedownloadmanager.fdm
 import org.freedownloadmanager.fdm.appsettings
 import org.freedownloadmanager.fdm.dmcoresettings
@@ -226,13 +226,13 @@ Item
                             id: tumSelectorPopup
                             y: -height
                             background: Item {
-                                RectangularGlow {
+                                MultiEffect {
                                     visible: appWindow.theme_v2.useGlow
                                     anchors.fill: tumSelectorPopupBg
-                                    color: appWindow.theme_v2.glowColor
-                                    glowRadius: 0
-                                    spread: 0
-                                    cornerRadius: tumSelectorPopupBg.radius
+                                    source: tumSelectorPopupBg
+                                    shadowEnabled: true
+                                    shadowBlur: 0.3
+                                    shadowColor: appWindow.theme_v2.glowColor
                                 }
                                 Rectangle {
                                     id: tumSelectorPopupBg

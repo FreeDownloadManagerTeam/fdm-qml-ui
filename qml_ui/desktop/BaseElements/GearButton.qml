@@ -1,6 +1,6 @@
-import QtQuick 2.0
+import QtQuick
+import QtQuick.Effects
 import "../../common"
-import "../../qt5compat"
 
 Rectangle
 {
@@ -35,8 +35,9 @@ Rectangle
         anchors.centerIn: parent
 
         layer {
-            effect: ColorOverlay {
-                color: appWindow.theme.foreground
+            effect: MultiEffect {
+                colorization: 1.0
+                colorizationColor: appWindow.uiver === 1 ? appWindow.theme.foreground : appWindow.theme_v2.textColor
             }
             enabled: true
         }

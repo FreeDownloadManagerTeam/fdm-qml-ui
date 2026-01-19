@@ -1,7 +1,7 @@
-import QtQuick 2.10
-import QtQuick.Controls 2.3
-import "../../qt5compat"
-import org.freedownloadmanager.fdm 1.0
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Effects
+import org.freedownloadmanager.fdm
 
 Rectangle {
     width: 46
@@ -24,8 +24,9 @@ Rectangle {
         anchors.margins: 0
         visible: hasPreview
         layer {
-            effect: ColorOverlay {
-                color: appWindow.theme.previewOverlay
+            effect: MultiEffect {
+                colorization: 1.0
+                colorizationColor: appWindow.theme.previewOverlay
             }
             enabled: true
         }
@@ -62,8 +63,9 @@ Rectangle {
         sourceSize.height: 45
         fillMode: Image.PreserveAspectFit
         layer {
-            effect: ColorOverlay {
-                color: appWindow.theme.toolbarBackground
+            effect: MultiEffect {
+                colorization: 1.0
+                colorizationColor: appWindow.theme.toolbarBackground
             }
             enabled: true
         }
@@ -81,8 +83,9 @@ Rectangle {
         sourceSize.height: 45
         fillMode: Image.PreserveAspectFit
         layer {
-            effect: ColorOverlay {
-                color: appWindow.theme.toolbarBackground
+            effect: MultiEffect {
+                colorization: 1.0
+                colorizationColor: appWindow.theme.toolbarBackground
             }
             enabled: true
         }

@@ -1,12 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
-import Qt5Compat.GraphicalEffects
-//MultiEffect can be used instead of ColorOverlay; however it's not supported by Qt 6.4.3 which is used at the moment
-//Warning: MultiEffect requires SVG image to be in white color OR "brightness: 1.0" should be applied too
-// for its colorization effect to work properly.
-// https://forum.qt.io/topic/144070/qt6-color-svg-using-multieffect
-//import QtQuick.Effects
+import QtQuick.Effects
 import "../../../common"
 
 Item
@@ -134,8 +129,7 @@ Item
                     id: iconImg
                     source: root.iconSource
                     zoom: appWindow.zoom
-                    layer.effect: ColorOverlay { color: root.iconColor }
-                    //layer.effect: MultiEffect {colorization: 1.0; colorizationColor: root.iconColor}
+                    layer.effect: MultiEffect {colorization: 1.0; colorizationColor: root.iconColor}
                     layer.enabled: root.applyIconColor
                     opacity: enabled ? 1.0 : appWindow.theme_v2.opacityDisabled
                     anchors.centerIn: parent
@@ -184,7 +178,7 @@ Item
                 visible: root.dropDownMenu
                 zoom: appWindow.zoom
                 source: Qt.resolvedUrl(dropDownMenu && dropDownMenu.opened ? "vertical_collapse_arrow.svg" : "vertical_expand_arrow.svg")
-                layer.effect: ColorOverlay { color: root.textColor }
+                layer.effect: MultiEffect {colorization: 1.0; colorizationColor: root.textColor}
                 layer.enabled: true
                 Layout.alignment: Qt.AlignVCenter
             }

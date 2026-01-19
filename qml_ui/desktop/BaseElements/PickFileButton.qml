@@ -1,6 +1,6 @@
-import QtQuick 2.12
+import QtQuick
+import QtQuick.Effects
 import "../../common"
-import "../../qt5compat"
 import "V2"
 import org.freedownloadmanager.fdm
 
@@ -38,8 +38,9 @@ Item
             anchors.centerIn: parent
 
             layer {
-                effect: ColorOverlay {
-                    color: v1.isPressed ? v1.secondaryTextColor : v1.primaryTextColor
+                effect: MultiEffect {
+                    colorization: 1.0
+                    colorizationColor: v1.isPressed ? v1.secondaryTextColor : v1.primaryTextColor
                 }
                 enabled: true
             }

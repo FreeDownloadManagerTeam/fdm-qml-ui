@@ -1,9 +1,9 @@
-import QtQuick 2.0
-import QtQuick.Controls 2.3
-import QtQuick.Layouts 1.3
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
 import "../../desktop/BaseElements"
 import "../../desktop/Dialogs"
-import org.freedownloadmanager.fdm 1.0
+import org.freedownloadmanager.fdm
 
 BaseDialog {
     id: root

@@ -1,6 +1,6 @@
 import QtQuick
 import QtQuick.Controls
-import org.freedownloadmanager.fdm 1.0
+import org.freedownloadmanager.fdm
 import "../../../common/Tools"
 
 ProgressBar

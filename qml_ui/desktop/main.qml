@@ -1,20 +1,19 @@
-import QtQuick 2.10
-import QtQuick.Window 2.10
-import QtQuick.Controls 2.4
+import QtQuick
+import QtQuick.Window
+import QtQuick.Controls
 import "../common"
 import "../common/Tools"
 import "./Tools"
 import "./Dialogs"
 import "./BaseElements"
 import "./Banners"
-import org.freedownloadmanager.fdm 1.0
-import org.freedownloadmanager.vmsqt 1.0
-import org.freedownloadmanager.fdm.appfeatures 1.0
-import org.freedownloadmanager.fdm.qtsystemtheme 1.0
-import org.freedownloadmanager.fdm.dmcoresettings 1.0
-import org.freedownloadmanager.fdm.abstractdownloadsui 1.0
+import org.freedownloadmanager.fdm
+import org.freedownloadmanager.vmsqt
+import org.freedownloadmanager.fdm.appfeatures
+import org.freedownloadmanager.fdm.qtsystemtheme
+import org.freedownloadmanager.fdm.dmcoresettings
+import org.freedownloadmanager.fdm.abstractdownloadsui 
 import "./Themes"
-import "../qt5compat"
 
 ApplicationWindow {
 

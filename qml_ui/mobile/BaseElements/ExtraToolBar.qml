@@ -1,5 +1,5 @@
-import QtQuick 2.0
-import QtQuick.Controls.Material 2.4
+import QtQuick
+import QtQuick.Controls.Material
 
 Rectangle {
     color: appWindow.theme.toolbarBackground

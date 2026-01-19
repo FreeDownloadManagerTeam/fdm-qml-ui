@@ -1,15 +1,13 @@
-import QtQuick 2.12
-import QtQuick.Controls 2.12
-import QtQuick.Layouts 1.12
-import "../../qt5compat"
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import QtQuick.Dialogs
 import "../../common"
-import org.freedownloadmanager.fdm 1.0
-import org.freedownloadmanager.fdm.dmcoresettings 1.0
-import org.freedownloadmanager.fdm.appsettings 1.0
-import org.freedownloadmanager.fdm.appfeatures 1.0
+import org.freedownloadmanager.fdm
+import org.freedownloadmanager.fdm.dmcoresettings
+import org.freedownloadmanager.fdm.appsettings
+import org.freedownloadmanager.fdm.appfeatures
 import "../BaseElements"
-
-import Qt.labs.platform 1.1 as QtLabs
 
 Column {
     spacing: 0
@@ -208,12 +206,12 @@ Column {
                 enabled: fixedFolderRadioBtn.checked
                 Layout.preferredHeight: fixedDownloadFolder.height
                 onClicked: browseDlg.open()
-                QtLabs.FolderDialog {
+                FolderDialog {
                     id: browseDlg
-                    folder: App.tools.urlFromLocalFile(App.localDecodePath(App.settings.dmcore.value(DmCoreSettings.FixedDownloadPath))).url
+                    currentFolder: App.tools.urlFromLocalFile(App.localDecodePath(App.settings.dmcore.value(DmCoreSettings.FixedDownloadPath))).url
                     acceptLabel: qsTr("Open") + App.loc.emptyString
                     rejectLabel: qsTr("Cancel") + App.loc.emptyString
-                    onAccepted: fixedDownloadFolder.editText = App.tools.url(folder).toLocalFile()
+                    onAccepted: fixedDownloadFolder.editText = App.toNativeSeparators(App.tools.url(currentFolder).toLocalFile())
                 }
             }
 
@@ -326,7 +324,7 @@ Column {
                           ""
                 implicitWidth: 40*appWindow.fontZoom
                 inputMethodHints: Qt.ImhDigitsOnly
-                validator: QtRegExpValidator { regExp: /[1-9]\d*/ }
+                validator: RegularExpressionValidator { regularExpression: /[1-9]\d*/ }
                 anchors.verticalCenter: parent.verticalCenter
                 onActiveFocusChanged: {
                     if (!activeFocus && removeFinishedIn.checked && text)
@@ -424,7 +422,7 @@ Column {
             SettingsTextField {
                 implicitWidth: 60*appWindow.fontZoom
                 inputMethodHints: Qt.ImhDigitsOnly
-                validator: QtRegExpValidator { regExp: /[1-9]\d*/ }
+                validator: RegularExpressionValidator { regularExpression: /[1-9]\d*/ }
                 text: uiSettingsTools.settings.batchDownloadMaxUrlsCount
                 onTextChanged: {
                     let val = parseInt(text) || 0;

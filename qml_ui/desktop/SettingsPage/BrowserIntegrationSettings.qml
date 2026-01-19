@@ -1,14 +1,14 @@
-import QtQuick 2.10
-import QtQuick.Controls 2.3
-import QtQuick.Layouts 1.3
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import QtQuick.Effects
 import "../../common"
-import "../../qt5compat"
-import org.freedownloadmanager.fdm 1.0
-import org.freedownloadmanager.fdm.dmcoresettings 1.0
-import org.freedownloadmanager.fdm.appsettings 1.0
-import org.freedownloadmanager.fdm.appfeatures 1.0
-import org.freedownloadmanager.fdm.knownwebbrowsers 1.0
-import org.freedownloadmanager.fdm.appconstants 1.0
+import org.freedownloadmanager.fdm
+import org.freedownloadmanager.fdm.dmcoresettings
+import org.freedownloadmanager.fdm.appsettings
+import org.freedownloadmanager.fdm.appfeatures
+import org.freedownloadmanager.fdm.knownwebbrowsers
+import org.freedownloadmanager.fdm.appconstants
 
 import "../BaseElements"
 
@@ -142,8 +142,9 @@ Column {
                         zoom: appWindow.zoom
                         anchors.centerIn: parent
                         layer {
-                            effect: ColorOverlay {
-                                color: appWindow.uiver === 1 ? appWindow.theme.settingsSubgroupHeader : appWindow.theme_v2.settingsSubgroupHeader
+                            effect: MultiEffect {
+                                colorization: 1.0
+                                colorizationColor: appWindow.uiver === 1 ? appWindow.theme.settingsSubgroupHeader : appWindow.theme_v2.settingsSubgroupHeader
                             }
                             enabled: true
                         }
@@ -231,8 +232,9 @@ Column {
                     source: Qt.resolvedUrl(appWindow.uiver === 1 ? "../../images/desktop/edit_list.svg" : "V2/edit.svg")
                     opacity: skipDomains.checked ? 1 : 0.5
                     layer {
-                        effect: ColorOverlay {
-                            color: appWindow.uiver === 1 ? appWindow.theme.foreground : appWindow.theme_v2.textColor
+                        effect: MultiEffect {
+                            colorization: 1.0
+                            colorizationColor: appWindow.uiver === 1 ? appWindow.theme.foreground : appWindow.theme_v2.textColor
                         }
                         enabled: true
                     }
@@ -305,8 +307,9 @@ Column {
                     source: Qt.resolvedUrl(appWindow.uiver === 1 ? "../../images/desktop/edit_list.svg" : "V2/edit.svg")
                     opacity: skipCheckBox.checked ? 1 : 0.5
                     layer {
-                        effect: ColorOverlay {
-                            color: appWindow.uiver === 1 ? appWindow.theme.foreground : appWindow.theme_v2.textColor
+                        effect: MultiEffect {
+                            colorization: 1.0
+                            colorizationColor: appWindow.uiver === 1 ? appWindow.theme.foreground : appWindow.theme_v2.textColor
                         }
                         enabled: true
                     }
@@ -379,8 +382,9 @@ Column {
                     source: Qt.resolvedUrl(appWindow.uiver === 1 ? "../../images/desktop/edit_list.svg" : "V2/edit.svg")
                     opacity: catchCheckBox.checked ? 1 : 0.5
                     layer {
-                        effect: ColorOverlay {
-                            color: appWindow.uiver === 1 ? appWindow.theme.foreground : appWindow.theme_v2.textColor
+                        effect: MultiEffect {
+                            colorization: 1.0
+                            colorizationColor: appWindow.uiver === 1 ? appWindow.theme.foreground : appWindow.theme_v2.textColor
                         }
                         enabled: true
                     }
@@ -452,7 +456,7 @@ Column {
                 text: parseInt(App.settings.app.value(AppSettings.WbDownloadsTooSmallSizeValue)/AppConstants.BytesInKB/AppConstants.BytesInKB)
                 onTextChanged: tryBrowserSettingsTimer.restart()
                 inputMethodHints: Qt.ImhDigitsOnly
-                validator: QtRegExpValidator { regExp: /\d+/ }
+                validator: RegularExpressionValidator { regularExpression: /\d+/ }
             }
 
             BaseLabel {

@@ -1,15 +1,15 @@
-import QtQuick 2.10
-import QtQuick.Controls 2.3
-import QtQuick.Layouts 1.3
-import Qt.labs.platform 1.1
-import Qt.labs.settings 1.0
-import "../../qt5compat"
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import QtQuick.Effects
+import QtQuick.Dialogs
+import Qt.labs.settings
 import "../../common"
-import org.freedownloadmanager.fdm 1.0
-import org.freedownloadmanager.fdm.dmcoresettings 1.0
-import org.freedownloadmanager.fdm.appsettings 1.0
-import org.freedownloadmanager.fdm.appfeatures 1.0
-import org.freedownloadmanager.fdm.abstractdownloadsui 1.0
+import org.freedownloadmanager.fdm
+import org.freedownloadmanager.fdm.dmcoresettings
+import org.freedownloadmanager.fdm.appsettings
+import org.freedownloadmanager.fdm.appfeatures
+import org.freedownloadmanager.fdm.abstractdownloadsui 
 import "../BaseElements"
 import "../Dialogs"
 
@@ -112,8 +112,11 @@ Column
                     source: Qt.resolvedUrl("../../images/desktop/edit_list.svg")
                     opacity: useSounds.checked ? 1 : 0.5
                     layer {
-                        effect: ColorOverlay {
-                            color: appWindow.theme.foreground
+                        effect: MultiEffect {
+                            colorization: 1.0
+                            colorizationColor: appWindow.uiver === 1 ?
+                                                   appWindow.theme.foreground :
+                                                   appWindow.theme_v2.textColor
                         }
                         enabled: true
                     }

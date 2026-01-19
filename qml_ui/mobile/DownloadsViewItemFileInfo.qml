@@ -1,10 +1,10 @@
-import QtQuick 2.10
-import QtQuick.Controls 2.3
-import QtQuick.Layouts 1.3
-import QtQuick.Controls.Material 2.4
-import "../qt5compat"
-import org.freedownloadmanager.fdm 1.0
-import org.freedownloadmanager.fdm.appfeatures 1.0
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import QtQuick.Controls.Material
+import QtQuick.Effects
+import org.freedownloadmanager.fdm
+import org.freedownloadmanager.fdm.appfeatures
 import "../common/Tools"
 
 import "../common"
@@ -152,8 +152,9 @@ Rectangle {
                     sourceSize.width: 10
                     sourceSize.height: 10
                     layer {
-                        effect: ColorOverlay {
-                            color: appWindow.theme.foreground
+                        effect: MultiEffect {
+                            colorization: 1.0
+                            colorizationColor: appWindow.theme.foreground
                         }
                         enabled: true
                     }
@@ -192,8 +193,9 @@ Rectangle {
                     sourceSize.width: 10
                     sourceSize.height: 10
                     layer {
-                        effect: ColorOverlay {
-                            color: appWindow.theme.foreground
+                        effect: MultiEffect {
+                            colorization: 1.0
+                            colorizationColor: appWindow.theme.foreground
                         }
                         enabled: true
                     }
@@ -226,8 +228,9 @@ Rectangle {
                 sourceSize.height: 12
                 source: Qt.resolvedUrl("../images/mobile/checkbox.svg")
                 layer {
-                    effect: ColorOverlay {
-                        color: appWindow.theme.foreground
+                    effect: MultiEffect {
+                        colorization: 1.0
+                        colorizationColor: appWindow.theme.foreground
                     }
                     enabled: true
                 }

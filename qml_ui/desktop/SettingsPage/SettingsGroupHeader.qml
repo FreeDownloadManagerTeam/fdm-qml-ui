@@ -1,6 +1,6 @@
-import QtQuick 2.12
-import QtQuick.Layouts 1.12
-import "../../qt5compat"
+import QtQuick
+import QtQuick.Layouts
+import QtQuick.Effects
 import "../BaseElements"
 import "../../common"
 
@@ -67,8 +67,9 @@ Item
                     zoom: appWindow.zoom
                     anchors.centerIn: parent
                     layer {
-                        effect: ColorOverlay {
-                            color: appWindow.uiver === 1 ? appWindow.theme.settingsSubgroupHeader : appWindow.theme_v2.settingsSubgroupHeader
+                        effect: MultiEffect {
+                            colorization: 1.0
+                            colorizationColor: appWindow.uiver === 1 ? appWindow.theme.settingsSubgroupHeader : appWindow.theme_v2.settingsSubgroupHeader
                         }
                         enabled: true
                     }

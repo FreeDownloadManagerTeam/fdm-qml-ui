@@ -1,10 +1,9 @@
-import QtQuick 2.0
-import QtQuick.Controls 2.3
-import QtQuick.Layouts 1.3
-import "../../qt5compat"
-import org.freedownloadmanager.fdm 1.0
-
-import Qt.labs.platform 1.0 as QtLabs
+import QtQuick
+import QtCore
+import QtQuick.Controls
+import QtQuick.Layouts
+import QtQuick.Dialogs
+import org.freedownloadmanager.fdm
 
 import "../../common/Tools"
 import "../BaseElements"
@@ -65,13 +64,13 @@ BaseDialog {
 
                     onClicked: browseDlg.open()
 
-                    QtLabs.FolderDialog {
+                    FolderDialog {
                         id: browseDlg
-                        folder: QtLabs.StandardPaths.writableLocation(QtLabs.StandardPaths.DownloadLocation)
+                        currentFolder: StandardPaths.writableLocation(StandardPaths.DownloadLocation)
                         acceptLabel: qsTr("Open") + App.loc.emptyString
                         rejectLabel: qsTr("Cancel") + App.loc.emptyString
-                        onAccepted: destinationDir.text = App.toNativeSeparators(App.tools.url(folder).toLocalFile())
-                        Component.onCompleted: { destinationDir.text = App.toNativeSeparators(App.tools.url(folder).toLocalFile()) }
+                        onAccepted: destinationDir.text = App.toNativeSeparators(App.tools.url(currentFolder).toLocalFile())
+                        Component.onCompleted: { destinationDir.text = App.toNativeSeparators(App.tools.url(currentFolder).toLocalFile()) }
                     }
                 }
             }

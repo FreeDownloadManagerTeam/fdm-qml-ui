@@ -1,9 +1,9 @@
-import QtQuick 2.12
-import QtQuick.Layouts 1.12
-import QtQuick.Controls 2.12
-import org.freedownloadmanager.fdm 1.0
+import QtQuick
+import QtQuick.Layouts
+import QtQuick.Controls
+import QtQuick.Effects
+import org.freedownloadmanager.fdm
 import "../../common"
-import "../../qt5compat"
 
 BaseBaseErrorLabel
 {
@@ -18,8 +18,9 @@ BaseBaseErrorLabel
         sourceSize.height: 16
         source: Qt.resolvedUrl("../../images/mobile/error.svg")
         layer {
-            effect: ColorOverlay {
-                color: appWindow.theme.errorMessage
+            effect: MultiEffect {
+                colorization: 1.0
+                colorizationColor: appWindow.theme.errorMessage
             }
             enabled: true
         }

@@ -1,10 +1,9 @@
-import QtQuick 2.0
-import QtQuick.Controls 2.3
-import QtQuick.Layouts 1.11
-import QtQuick.Window 2.12
-import Qt.labs.platform 1.1
-import "../../qt5compat"
-import org.freedownloadmanager.fdm 1.0
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import QtQuick.Window
+import QtQuick.Dialogs
+import org.freedownloadmanager.fdm
 import "../BaseElements"
 import "../../common"
 import "../../common/Tools"

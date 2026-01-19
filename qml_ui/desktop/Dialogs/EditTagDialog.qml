@@ -1,13 +1,12 @@
-import QtQuick 2.10
-import QtQuick.Controls 2.3
-import QtQuick.Layouts 1.3
-import "../../qt5compat"
-import org.freedownloadmanager.fdm 1.0
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import QtQuick.Effects
+import QtQuick.Dialogs
+import org.freedownloadmanager.fdm
 import "../BaseElements"
 import "../SettingsPage"
 import "../../common"
-
-import Qt.labs.platform 1.0 as QtLabs
 
 BaseDialog {
     id: root
@@ -64,12 +63,6 @@ BaseDialog {
                         source: appWindow.theme.elementsIconsRoot + "/triangle_down3.svg"
                         zoom: appWindow.zoom
                         anchors.centerIn: parent
-                        layer {
-                            effect: ColorOverlay {
-                                color: "#fff"
-                            }
-                            enabled: true
-                        }
                     }
 
                     MouseArea {
@@ -165,12 +158,12 @@ BaseDialog {
                     visible: !App.rc.client.active                  
                     height: downloadFolder.height
                     onClicked: browseDlg.open()
-                    QtLabs.FolderDialog {
+                    FolderDialog {
                         id: browseDlg
-                        folder: App.tools.urlFromLocalFile(downloadFolder.editText).url
+                        currentFolder: App.tools.urlFromLocalFile(downloadFolder.editText).url
                         acceptLabel: qsTr("Open") + App.loc.emptyString
                         rejectLabel: qsTr("Cancel") + App.loc.emptyString
-                        onAccepted: { downloadFolder.editText = App.tools.url(folder).toLocalFile() }
+                        onAccepted: { downloadFolder.editText = App.tools.url(currentFolder).toLocalFile() }
                     }
                 }
 

@@ -1,10 +1,10 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
-import Qt5Compat.GraphicalEffects
+import QtQuick.Effects
 import "../../common"
 import "../BaseElements/V2"
-import org.freedownloadmanager.fdm 1.0
+import org.freedownloadmanager.fdm
 
 Rectangle
 {
@@ -25,8 +25,8 @@ Rectangle
         {
             source: Qt.resolvedUrl("search_icon.svg")
             zoom: appWindow.zoom
-            layer.effect: ColorOverlay { color: appWindow.theme_v2.bg800 }
             layer.enabled: true
+            layer.effect: MultiEffect {colorization: 1.0; colorizationColor: appWindow.theme_v2.bg800}
         }
 
         TextField

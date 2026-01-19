@@ -1,5 +1,5 @@
-import QtQuick 2.10
-import QtQuick.Controls 2.3
+import QtQuick
+import QtQuick.Controls
 
 Column {
     spacing: (appWindow.uiver === 1 ? 8 : 16)*appWindow.zoom

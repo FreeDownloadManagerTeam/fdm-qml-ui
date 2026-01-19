@@ -1,7 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import Qt5Compat.GraphicalEffects
+import QtQuick.Effects
 import org.freedownloadmanager.fdm
 import "../../../common"
 import "../../BaseElements"
@@ -94,13 +94,29 @@ Flickable
                     readonly property bool isHorizontal: ratio > 1
                     source: imageHolder.hasPreview ? imageHolder.previewUrl : ""
                     anchors.fill: parent
+                    visible: false
+                }
+
+                MultiEffect {
+                    source: previewImg
+                    anchors.fill: previewImg
+                    maskEnabled: true
+                    maskSource: previewImgMask
+                    maskThresholdMin: 0.5
+                    maskSpreadAtMin: 1.0
+                }
+
+                Item {
+                    id: previewImgMask
+                    width: previewImg.width
+                    height: previewImg.height
                     layer.enabled: true
-                    layer.effect: OpacityMask {
-                        maskSource: Rectangle {
-                            width: previewImg.width
-                            height: previewImg.height
-                            radius: 4*appWindow.zoom
-                        }
+                    layer.smooth: true
+                    visible: false
+                    Rectangle {
+                        anchors.fill: parent
+                        radius: 4*appWindow.zoom
+                        color: "black"
                     }
                 }
             }
@@ -149,7 +165,7 @@ Flickable
                     source: Qt.resolvedUrl("content_copy.svg")
                     layer {
                         enabled: true
-                        effect: ColorOverlay {color: dstPathText.color}
+                        effect: MultiEffect {colorization: 1.0; colorizationColor: dstPathText.color}
                     }
                     Layout.alignment: Qt.AlignLeft
                     MouseAreaWithHand_V2 {

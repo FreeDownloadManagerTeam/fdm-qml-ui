@@ -1,7 +1,7 @@
-import QtQuick 2.12
-import QtQuick.Controls 2.12
-import org.freedownloadmanager.fdm 1.0
-import org.freedownloadmanager.fdm.knownwebbrowsers 1.0
+import QtQuick
+import QtQuick.Controls
+import org.freedownloadmanager.fdm
+import org.freedownloadmanager.fdm.knownwebbrowsers
 import "../BaseElements"
 import "../BaseElements/V2"
 import "../../common"

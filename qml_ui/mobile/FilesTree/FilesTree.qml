@@ -1,10 +1,10 @@
-import QtQuick 2.0
-import QtQuick.Controls 2.4
-import QtQuick.Layouts 1.3
-import QtQuick.Controls.Material 2.4
-import "../../qt5compat"
-import org.freedownloadmanager.fdm 1.0
-import org.freedownloadmanager.fdm.abstractdownloadsui 1.0
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import QtQuick.Controls.Material
+import QtQuick.Effects
+import org.freedownloadmanager.fdm
+import org.freedownloadmanager.fdm.abstractdownloadsui 
 import "../../common/Tools"
 import "../BaseElements"
 import "../../common"
@@ -189,8 +189,9 @@ Item {
                                         sourceSize.height: 10
                                         anchors.centerIn: parent
                                         layer {
-                                            effect: ColorOverlay {
-                                                color: appWindow.theme.foreground
+                                            effect: MultiEffect {
+                                                colorization: 1.0
+                                                colorizationColor: appWindow.theme.foreground
                                             }
                                             enabled: true
                                         }

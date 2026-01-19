@@ -1,5 +1,5 @@
-import QtQuick 2.10
-import org.freedownloadmanager.fdm 1.0
+import QtQuick
+import org.freedownloadmanager.fdm
 import "./BaseElements"
 
 Item {

@@ -1,8 +1,8 @@
-import QtQuick 2.12
-import QtQuick.Controls 2.12
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Effects
 import "../BaseElements"
 import "../../common"
-import "../../qt5compat"
 import "V2"
 
 ComboBox {
@@ -148,6 +148,13 @@ ComboBox {
             source: visible ? appWindow.theme.elementsIconsRoot + "/triangle_down3.svg" : ""
             zoom: appWindow.zoom
             anchors.centerIn: parent
+            layer {
+                effect: MultiEffect {
+                    colorization: 1.0
+                    colorizationColor: "#868486"
+                }
+                enabled: true
+            }
         }
         SvgImage_V2 {
             visible: appWindow.uiver !== 1
@@ -180,13 +187,13 @@ ComboBox {
         padding: (appWindow.uiver === 1 ? 1 : 2)*appWindow.zoom
 
         background: Item {
-            RectangularGlow {
+            MultiEffect {
                 visible: appWindow.uiver !== 1 && appWindow.theme_v2.useGlow
                 anchors.fill: popupBackground
-                color: appWindow.theme_v2.glowColor
-                glowRadius: 0
-                spread: 0
-                cornerRadius: popupBackground.radius
+                source: popupBackground
+                shadowEnabled: true
+                shadowBlur: 0.3
+                shadowColor: appWindow.theme_v2.glowColor
             }
             Rectangle {
                 id: popupBackground

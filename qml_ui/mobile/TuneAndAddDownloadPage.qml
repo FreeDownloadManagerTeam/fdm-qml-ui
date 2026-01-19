@@ -1,11 +1,10 @@
-import QtQuick 2.10
-import QtQuick.Controls 2.3
-import QtQuick.Layouts 1.3
-import Qt.labs.platform 1.0 as QtLabs
-import org.freedownloadmanager.fdm 1.0
-import org.freedownloadmanager.fdm.abstractdownloadsui 1.0
-import QtQuick.Controls.Material 2.4
-import "../qt5compat"
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import QtQuick.Effects
+import org.freedownloadmanager.fdm
+import org.freedownloadmanager.fdm.abstractdownloadsui 
+import QtQuick.Controls.Material
 import "../common"
 import "../common/Tools"
 import "./BaseElements"
@@ -99,8 +98,9 @@ Page {
                                 Layout.alignment: Qt.AlignVCenter
                                 source: Qt.resolvedUrl("../images/desktop/clean.svg")
                                 layer {
-                                    effect: ColorOverlay {
-                                        color: appWindow.theme.foreground
+                                    effect: MultiEffect {
+                                        colorization: 1.0
+                                        colorizationColor: appWindow.theme.foreground
                                     }
                                     enabled: true
                                 }

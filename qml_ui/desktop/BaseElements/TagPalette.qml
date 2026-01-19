@@ -1,14 +1,14 @@
-import QtQuick 2.6
-import QtQuick.Controls 2.1
-import QtQuick.Layouts 1.2
-import "../../qt5compat"
-import org.freedownloadmanager.fdm 1.0
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import QtQuick.Dialogs
+import org.freedownloadmanager.fdm
 
 Item {
     implicitWidth: core.implicitWidth
     implicitHeight: core.implicitHeight
 
-    property color selectedColor
+    property alias selectedColor: colorDialog.selectedColor
 
     signal closeTagColorDialog()
     signal colorSelected(color selectedColor)
@@ -69,9 +69,7 @@ Item {
 
     ColorDialog {
         id: colorDialog
-        color: selectedColor
-        showAlphaChannel: false
-        onAccepted: changeSelectedColor(colorDialog.color)
+        onAccepted: changeSelectedColor(colorDialog.selectedColor)
     }
 
     function changeSelectedColor(color) {

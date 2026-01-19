@@ -5,14 +5,13 @@
   CreatePortableDialog.qml:10:1: QML CreatePortableDialog: Binding loop detected for property "implicitHeight"
   This is caused by the workaround below.
 */
-import QtQuick 2.0
-import QtQuick.Controls 2.3
-import QtQuick.Layouts 1.3
+import QtQuick
+import QtCore
+import QtQuick.Controls
+import QtQuick.Layouts
+import QtQuick.Dialogs
 import "../BaseElements"
-import org.freedownloadmanager.fdm 1.0
-import "../../qt5compat"
-
-import Qt.labs.platform 1.0 as QtLabs
+import org.freedownloadmanager.fdm
 
 BaseDialog {
     id: root
@@ -70,12 +69,12 @@ BaseDialog {
                     Layout.alignment: Qt.AlignRight
                     Layout.preferredHeight: pathField.implicitHeight
                     onClicked: browseDlg.open()
-                    QtLabs.FolderDialog {
+                    FolderDialog {
                         id: browseDlg
-                        folder: QtLabs.StandardPaths.writableLocation(QtLabs.StandardPaths.HomeLocation)
+                        currentFolder: StandardPaths.writableLocation(StandardPaths.HomeLocation)
                         acceptLabel: qsTr("Open") + App.loc.emptyString
                         rejectLabel: qsTr("Cancel") + App.loc.emptyString
-                        onAccepted: pathField.text = App.toNativeSeparators(App.tools.url(folder).toLocalFile())
+                        onAccepted: pathField.text = App.toNativeSeparators(App.tools.url(currentFolder).toLocalFile())
                     }
                 }
             }

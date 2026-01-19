@@ -1,8 +1,8 @@
-import QtQuick 2.10
-import QtQuick.Controls 2.3
-import QtQuick.Layouts 1.3
-import "../../qt5compat"
-import org.freedownloadmanager.fdm 1.0
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import QtQuick.Effects
+import org.freedownloadmanager.fdm
 
 Rectangle {
     id: root
@@ -32,8 +32,9 @@ Rectangle {
                 source: Qt.resolvedUrl("../../images/mobile/scheduler.svg")
                 Layout.alignment: Qt.AlignVCenter
                 layer {
-                    effect: ColorOverlay {
-                        color: root.highlighted ? appWindow.theme.schedulerLabelText : appWindow.theme.schedulerLabelSelectedText
+                    effect: MultiEffect {
+                        colorization: 1.0
+                        colorizationColor: root.highlighted ? appWindow.theme.schedulerLabelText : appWindow.theme.schedulerLabelSelectedText
                     }
                     enabled: true
                 }

@@ -1,12 +1,11 @@
-import QtQuick 2.12
-import QtQuick.Controls 2.12
-import QtQuick.Layouts 1.12
-import "../../qt5compat"
-import org.freedownloadmanager.fdm 1.0
-import org.freedownloadmanager.fdm.dmcoresettings 1.0
-import org.freedownloadmanager.fdm.appsettings 1.0
-import org.freedownloadmanager.fdm.appfeatures 1.0
-import org.freedownloadmanager.fdm.remotecontrol 1.0
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import org.freedownloadmanager.fdm
+import org.freedownloadmanager.fdm.dmcoresettings
+import org.freedownloadmanager.fdm.appsettings
+import org.freedownloadmanager.fdm.appfeatures
+import org.freedownloadmanager.fdm.remotecontrol
 import "../BaseElements"
 import "../../common"
 

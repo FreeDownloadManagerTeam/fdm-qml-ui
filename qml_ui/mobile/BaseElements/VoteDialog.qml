@@ -1,8 +1,8 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Material
-import "../../qt5compat"
-import org.freedownloadmanager.fdm 1.0
+import QtQuick.Effects
+import org.freedownloadmanager.fdm
 
 Item {
     id: root
@@ -22,6 +22,15 @@ Item {
 
     visible: opened
 
+    MultiEffect {
+        visible: root.opened
+        anchors.fill: actionElement
+        source: actionElement
+        shadowEnabled: true
+        shadowBlur: 0.5
+        shadowColor: appWindow.theme.voteDialogGlow
+    }
+
     Item {
         id: actionElement
         width: Math.max(btnWrapper.width + (laterBtnText.length > 0 ? 40 : 30 + 30 + 20),
@@ -37,16 +46,6 @@ Item {
             enabled: true
             anchors.fill: parent
             propagateComposedEvents: false
-        }
-
-        RectangularGlow {
-            id: glow
-            visible: root.opened
-            anchors.fill: parent
-            color: appWindow.theme.voteDialogGlow
-            glowRadius: 2
-            spread: 0
-            cornerRadius: 10
         }
 
         Rectangle {

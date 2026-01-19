@@ -2,16 +2,15 @@ import QtQuick
 import QtQuick.Window
 import QtQuick.Controls
 import QtQuick.Controls.Material
-import "../qt5compat"
 import "../common"
 import "../common/Tools"
 import "./Tools"
 //import "../common/Tests"
 import "FilePicker"
-import org.freedownloadmanager.fdm 1.0
-import org.freedownloadmanager.fdm.appfeatures 1.0
-import org.freedownloadmanager.fdm.qtsystemtheme 1.0
-import org.freedownloadmanager.fdm.dmcoresettings 1.0
+import org.freedownloadmanager.fdm
+import org.freedownloadmanager.fdm.appfeatures
+import org.freedownloadmanager.fdm.qtsystemtheme
+import org.freedownloadmanager.fdm.dmcoresettings
 import "./Themes"
 import "./BaseElements"
 import "./Dialogs"
@@ -61,6 +60,8 @@ ApplicationWindow
     title: App.displayName
 
     flags: flags | Qt.ExpandedClientAreaHint
+
+    readonly property double fontZoom: 1.0
 
     SystemPalette {id: sp; colorGroup: SystemPalette.Active}
     readonly property bool isSystemPaletteLight: sp.text.r < 0.2 && sp.text.g < 0.2 && sp.text.b < 0.2
@@ -189,7 +190,7 @@ ApplicationWindow
         }
     }
 
-    MessageDialog
+    AppMessageDialog
     {
         id: reportSentDlg
         property string errorMessage

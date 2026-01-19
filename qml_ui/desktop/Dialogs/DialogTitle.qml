@@ -1,8 +1,8 @@
-import QtQuick 2.0
-import QtQuick.Layouts 1.12
+import QtQuick
+import QtQuick.Layouts
+import QtQuick.Effects
 import '../BaseElements'
 import "../../common"
-import "../../qt5compat"
 
 Rectangle {
 
@@ -81,7 +81,7 @@ Rectangle {
                             Qt.resolvedUrl("V2/close.svg")
                 zoom: appWindow.zoom
                 anchors.centerIn: parent
-                layer.effect: ColorOverlay { color: appWindow.theme_v2.bg600 }
+                layer.effect: MultiEffect { colorization: 1.0; colorizationColor: appWindow.theme_v2.bg600 }
                 layer.enabled: appWindow.uiver !== 1
             }
 

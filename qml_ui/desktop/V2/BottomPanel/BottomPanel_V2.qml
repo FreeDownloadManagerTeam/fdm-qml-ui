@@ -1,8 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
-import Qt5Compat.GraphicalEffects
-import org.freedownloadmanager.fdm 1.0
-
+import QtQuick.Effects
+import org.freedownloadmanager.fdm
 import "../../../common"
 import "../../../common/Tools"
 import "../../BaseElements/V2"
@@ -80,7 +79,7 @@ Item
                     source: Qt.resolvedUrl("close.svg")
                     layer {
                         enabled: true
-                        effect: ColorOverlay {color: appWindow.theme_v2.bg800}
+                        effect: MultiEffect {colorization: 1.0; colorizationColor: appWindow.theme_v2.bg800}
                     }
                     Layout.leftMargin: 8*appWindow.zoom
                     Layout.rightMargin: 8*appWindow.zoom

@@ -1,6 +1,6 @@
-import QtQuick 2.10
-import QtQuick.Controls 2.3
-import "../../qt5compat"
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Effects
 
 Rectangle {
     id: root
@@ -45,8 +45,9 @@ Rectangle {
             sourceSize.height: 7
             anchors.centerIn: parent
             layer {
-                effect: ColorOverlay {
-                    color: appWindow.theme.foreground
+                effect: MultiEffect {
+                    colorization: 1.0
+                    colorizationColor: appWindow.theme.foreground
                 }
                 enabled: true
             }

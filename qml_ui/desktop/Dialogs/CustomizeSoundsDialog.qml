@@ -1,11 +1,10 @@
-import QtQuick 2.10
-import QtQuick.Controls 2.4
-import QtQuick.Layouts 1.3
-import Qt.labs.platform 1.1
-import "../../qt5compat"
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import QtQuick.Dialogs
 import "../BaseElements"
-import org.freedownloadmanager.fdm 1.0
-import org.freedownloadmanager.fdm.appnotificationevent 1.0
+import org.freedownloadmanager.fdm
+import org.freedownloadmanager.fdm.appnotificationevent
 
 BaseDialog {
     id: root

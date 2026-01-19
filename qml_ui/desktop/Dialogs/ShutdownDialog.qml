@@ -1,8 +1,8 @@
-import QtQuick 2.0
-import QtQuick.Layouts 1.3
-import QtQuick.Controls 2.3
-import org.freedownloadmanager.fdm 1.0
-import org.freedownloadmanager.vmsqt 1.0
+import QtQuick
+import QtQuick.Layouts
+import QtQuick.Controls
+import org.freedownloadmanager.fdm
+import org.freedownloadmanager.vmsqt
 import "../BaseElements"
 
 BaseDialog {

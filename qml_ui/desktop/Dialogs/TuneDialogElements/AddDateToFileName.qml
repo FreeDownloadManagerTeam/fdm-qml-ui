@@ -1,6 +1,6 @@
-import QtQuick 2.0
-import org.freedownloadmanager.fdm 1.0
-import org.freedownloadmanager.fdm.abstractdownloadoption 1.0
+import QtQuick
+import org.freedownloadmanager.fdm
+import org.freedownloadmanager.fdm.abstractdownloadoption
 import "../../BaseElements"
 
 BaseCheckBox {

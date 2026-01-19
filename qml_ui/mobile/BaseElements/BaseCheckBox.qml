@@ -1,6 +1,6 @@
-import QtQuick 2.6
-import QtQuick.Controls 2.1
-import "../../qt5compat"
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Effects
 
 CheckBox {
     id: root
@@ -34,12 +34,6 @@ CheckBox {
             sourceSize.height: 12
             source: Qt.resolvedUrl("../../images/mobile/checkbox.svg")
             anchors.centerIn: parent
-            layer {
-                effect: ColorOverlay {
-                    color: "#fff"
-                }
-                enabled: true
-            }
         }
 
         Rectangle {

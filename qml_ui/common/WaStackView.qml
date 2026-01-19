@@ -3,8 +3,8 @@
  * Queue the page in this case and push it a bit later.
 */
 
-import QtQuick 2.0
-import QtQuick.Controls 2.12
+import QtQuick
+import QtQuick.Controls
 
 StackView
 {

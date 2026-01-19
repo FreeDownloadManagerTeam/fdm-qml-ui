@@ -1,7 +1,7 @@
-import QtQuick 2.6
-import QtQuick.Controls 2.1
-import QtQuick.Window 2.12
-import "../../qt5compat"
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Window
+import QtQuick.Effects
 import "../../common"
 
 CheckBox {
@@ -66,8 +66,9 @@ CheckBox {
             opacity: root.isEnabled ? 1.0 : 0.4
 
             layer {
-                effect: ColorOverlay {
-                    color: appWindow.uiver === 1 ?
+                effect: MultiEffect {
+                    colorization: 1.0
+                    colorizationColor: appWindow.uiver === 1 ?
                                appWindow.theme.inactiveControl :
                                (root.isEnabled ? appWindow.theme_v2.bg200 : appWindow.theme_v2.bg1000)
                 }

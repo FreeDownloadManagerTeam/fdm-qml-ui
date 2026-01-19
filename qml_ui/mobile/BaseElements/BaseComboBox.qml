@@ -1,6 +1,6 @@
 import QtQuick
 import QtQuick.Controls
-import "../../qt5compat"
+import QtQuick.Effects
 
 ComboBox
 {
@@ -35,8 +35,9 @@ ComboBox
         sourceSize.width: 24
         sourceSize.height: 24
         layer {
-            effect: ColorOverlay {
-                color: appWindow.theme.foreground
+            effect: MultiEffect {
+                colorization: 1.0
+                colorizationColor: appWindow.theme.foreground
             }
             enabled: true
         }

@@ -1,13 +1,10 @@
-import QtQuick 2.10
-import QtQuick.Controls 2.3
-import QtQuick.Controls.impl 2.4
-import QtQuick.Layouts 1.3
-import QtQuick.Controls.Material 2.4
-import "../../qt5compat"
-import org.freedownloadmanager.fdm 1.0
-import org.freedownloadmanager.fdm.appfeatures 1.0
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import QtQuick.Effects
+import org.freedownloadmanager.fdm
+import org.freedownloadmanager.fdm.appfeatures
 import "../../common/Tools"
-
 import "../"
 import "../BaseElements"
 import "../../common"
@@ -238,8 +235,9 @@ Flickable {
                     source: (App.features.hasFeature(AppFeatures.OpenFolder) && !App.rc.client.active) ? "../../images/mobile/open_folder.svg" :
                                                                               "../../images/mobile/folder.svg"
                     layer {
-                        effect: ColorOverlay {
-                            color: appWindow.theme.foreground
+                        effect: MultiEffect {
+                            colorization: 1.0
+                            colorizationColor: appWindow.theme.foreground
                         }
                         enabled: true
                     }

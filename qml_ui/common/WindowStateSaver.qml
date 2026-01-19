@@ -1,8 +1,8 @@
-import QtQuick 2.10
-import QtQuick.Window 2.10
-import QtQuick.Controls 2.3
-import Qt.labs.settings 1.0
-import org.freedownloadmanager.fdm 1.0
+import QtQuick
+import QtCore
+import QtQuick.Window
+import QtQuick.Controls
+import org.freedownloadmanager.fdm
 
 Item
 {
@@ -14,7 +14,7 @@ Item
     Settings
     {
         id: s
-        fileName: App.appqSettingsIniFilePath()
+        location: App.tools.urlFromLocalFile(App.appqSettingsIniFilePath()).url
         category: windowName
         property int x
         property int y

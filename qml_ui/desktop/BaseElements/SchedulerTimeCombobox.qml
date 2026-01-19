@@ -1,6 +1,5 @@
-import QtQuick 2.0
-import QtQuick.Controls 2.3
-import "../../qt5compat"
+import QtQuick
+import QtQuick.Controls
 import "../../common"
 
 BaseComboBox {
@@ -30,7 +29,7 @@ BaseComboBox {
         background: Item {}
 
         inputMethodHints: Qt.ImhTime
-        validator: QtRegExpValidator { regExp: /^(\d{0,2})([:]\d{0,2})?$/ }
+        validator: RegularExpressionValidator { regularExpression: /^(\d{0,2})([:]\d{0,2})?$/ }
         placeholderText: "00:00"
         onActiveFocusChanged: {
             if (!activeFocus) {

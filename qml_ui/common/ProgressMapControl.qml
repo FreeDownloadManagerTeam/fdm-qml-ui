@@ -1,4 +1,4 @@
-import QtQuick 2.12
+import QtQuick
 import CppControls 1.0 as CppControls
 
 CppControls.ProgressMap

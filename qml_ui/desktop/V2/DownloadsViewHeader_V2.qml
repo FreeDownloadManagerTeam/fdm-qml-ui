@@ -1,6 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
-import org.freedownloadmanager.fdm 1.0
+import org.freedownloadmanager.fdm
 import "../BaseElements"
 import "../BaseElements/V2"
 

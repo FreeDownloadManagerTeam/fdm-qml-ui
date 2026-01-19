@@ -1,15 +1,15 @@
-import QtQml 2.12
-import QtQuick 2.12
-import QtQuick.Controls 2.12
-import QtQuick.Layouts 1.12
-import QtQuick.Window 2.12
+import QtQml
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import QtQuick.Window
 import "../common"
 import "../common/Tools"
 import "./BaseElements"
 import CppControls 1.0 as CppControls
-import org.freedownloadmanager.fdm 1.0
-import org.freedownloadmanager.fdm.abstractdownloadsui 1.0
-import org.freedownloadmanager.fdm.appfeatures 1.0
+import org.freedownloadmanager.fdm
+import org.freedownloadmanager.fdm.abstractdownloadsui 
+import org.freedownloadmanager.fdm.appfeatures
 
 ApplicationWindow
 {

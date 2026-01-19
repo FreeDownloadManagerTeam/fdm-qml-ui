@@ -1,13 +1,13 @@
-import QtQuick 2.12
-import QtQuick.Controls 2.12
-import QtQuick.Layouts 1.3
-import org.freedownloadmanager.fdm 1.0
-import org.freedownloadmanager.fdm.appsettings 1.0
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import QtQuick.Dialogs
+import org.freedownloadmanager.fdm
+import org.freedownloadmanager.fdm.appsettings
 import "../"
 import "../BaseElements"
 import "../Dialogs"
 import "../../common"
-import "../../qt5compat"
 
 Page {
     id: root

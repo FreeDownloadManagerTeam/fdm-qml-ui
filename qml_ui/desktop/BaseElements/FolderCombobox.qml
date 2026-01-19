@@ -1,9 +1,9 @@
-import QtQuick 2.10
-import QtQuick.Controls 2.3
-import QtQuick.Layouts 1.3
-import org.freedownloadmanager.fdm 1.0
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import QtQuick.Effects
+import org.freedownloadmanager.fdm
 import "../../common"
-import "../../qt5compat"
 
 BaseComboBox {
     id: root
@@ -75,8 +75,11 @@ BaseComboBox {
                                                Qt.resolvedUrl("../../images/desktop/clean.svg")
 
                 layer {
-                    effect: ColorOverlay {
-                        color: appWindow.theme.foreground
+                    effect: MultiEffect {
+                        colorization: 1.0
+                        colorizationColor: appWindow.uiver === 1 ?
+                                               appWindow.theme.foreground :
+                                               appWindow.theme_v2.textColor
                     }
                     enabled: true
                 }

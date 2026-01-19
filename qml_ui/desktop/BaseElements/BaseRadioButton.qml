@@ -1,6 +1,6 @@
-import QtQuick 2.11
-import QtQuick.Controls 2.4
-import "../../qt5compat"
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Effects
 import "../../common"
 
 RadioButton {
@@ -18,8 +18,9 @@ RadioButton {
                     (appWindow.theme.checkboxIconsRoot + "/blue/radio/" + (control.checked ? "checked" : "unchecked") + ".svg") :
                     Qt.resolvedUrl("V2/radio_" + (control.checked ? "checked" : "unchecked") + ".svg")
         layer {
-            effect: ColorOverlay {
-                color: appWindow.uiver === 1 ?
+            effect: MultiEffect {
+                colorization: 1.0
+                colorizationColor: appWindow.uiver === 1 ?
                            appWindow.theme.inactiveControl :
                            (control.enabled && control.checked ? appWindow.theme_v2.primary : appWindow.theme_v2.bg600)
             }

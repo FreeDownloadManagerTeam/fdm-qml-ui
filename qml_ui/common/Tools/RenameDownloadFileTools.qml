@@ -1,6 +1,6 @@
-import QtQuick 2.12
-import QtQml 2.12
-import org.freedownloadmanager.fdm 1.0
+import QtQuick
+import QtQml
+import org.freedownloadmanager.fdm
 
 Item
 {

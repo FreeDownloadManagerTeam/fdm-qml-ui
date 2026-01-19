@@ -1,11 +1,9 @@
-import QtQuick 2.0
-import QtQuick.Layouts 1.3
-import org.freedownloadmanager.fdm 1.0
+import QtQuick
+import QtQuick.Layouts
+import QtQuick.Dialogs
+import org.freedownloadmanager.fdm
 import "../../BaseElements"
-import "../../../qt5compat"
 import "../../../common"
-
-import Qt.labs.platform 1.0 as QtLabs
 
 FocusScope
 {
@@ -55,12 +53,12 @@ FocusScope
                 Layout.alignment: Qt.AlignRight
                 Layout.preferredHeight: combo.height
                 onClicked: browseDlg.open()
-                QtLabs.FolderDialog {
+                FolderDialog {
                     id: browseDlg
-                    folder: App.tools.urlFromLocalFile(downloadTools.filePath).url
+                    currentFolder: App.tools.urlFromLocalFile(downloadTools.filePath).url
                     acceptLabel: qsTr("Open") + App.loc.emptyString
                     rejectLabel: qsTr("Cancel") + App.loc.emptyString
-                    onAccepted: setPath(App.tools.url(folder).toLocalFile())
+                    onAccepted: setPath(App.tools.url(currentFolder).toLocalFile())
                 }
             }
         }

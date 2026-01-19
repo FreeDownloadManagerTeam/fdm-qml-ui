@@ -1,7 +1,7 @@
-import QtQuick 2.10
-import QtQuick.Controls 2.3
-import "../../qt5compat"
-import org.freedownloadmanager.fdm 1.0
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Effects
+import org.freedownloadmanager.fdm
 import "../BaseElements"
 import "../Dialogs"
 import "../../common"
@@ -36,12 +36,6 @@ Item {
                 source: appWindow.theme.elementsIconsRoot + "/triangle_down3.svg"
                 zoom: appWindow.zoom
                 anchors.centerIn: parent
-                layer {
-                    effect: ColorOverlay {
-                        color: "#fff"
-                    }
-                    enabled: true
-                }
             }
 
             MouseArea {

@@ -2,8 +2,8 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Controls.Material
-import org.freedownloadmanager.fdm 1.0
-import "../../qt5compat"
+import QtQuick.Effects
+import org.freedownloadmanager.fdm
 import "../../common"
 import "../BaseElements"
 
@@ -82,9 +82,10 @@ Dialog
                         source: Qt.resolvedUrl("../../images/flags/" + modelData + ".svg")
                         opacity: 0.3
                         layer{
-                            effect: FastBlur {
-                                radius: 16
-                                transparentBorder: true
+                            effect: MultiEffect {
+                                blurEnabled: true
+                                blur: 1.0
+                                blurMax: 16
                             }
                             enabled: true
                         }

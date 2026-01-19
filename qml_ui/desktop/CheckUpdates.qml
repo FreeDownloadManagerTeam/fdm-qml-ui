@@ -1,4 +1,4 @@
-import QtQuick 2.11
+import QtQuick
 import QtQuick.Layouts
 import "./BaseElements"
 import "./BaseElements/V2"

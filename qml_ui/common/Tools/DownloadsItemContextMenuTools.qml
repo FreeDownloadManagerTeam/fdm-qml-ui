@@ -1,7 +1,7 @@
-import QtQuick 2.0
-import org.freedownloadmanager.fdm 1.0
-import org.freedownloadmanager.fdm.appfeatures 1.0
-import org.freedownloadmanager.fdm.abstractdownloadsui 1.0
+import QtQuick
+import org.freedownloadmanager.fdm
+import org.freedownloadmanager.fdm.appfeatures
+import org.freedownloadmanager.fdm.abstractdownloadsui 
 
 
 Item {

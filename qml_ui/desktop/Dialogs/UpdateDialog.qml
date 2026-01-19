@@ -1,9 +1,9 @@
-import QtQuick 2.0
-import QtQuick.Layouts 1.3
-import QtQuick.Controls 2.3
-import "../../qt5compat"
-import org.freedownloadmanager.fdm 1.0
-import org.freedownloadmanager.fdm.qtupdate 1.0
+import QtQuick
+import QtQuick.Layouts
+import QtQuick.Controls
+import QtQuick.Effects
+import org.freedownloadmanager.fdm
+import org.freedownloadmanager.fdm.qtupdate
 import "../BaseElements"
 import "../BaseElements/V2"
 
@@ -30,14 +30,13 @@ Item {
         anchors.fill: parent
     }
 
-    RectangularGlow {
+    MultiEffect {
         visible: appWindow.uiver !== 1 && appWindow.theme_v2.useGlow
         anchors.fill: dlg
-        anchors.margins: 3*appWindow.zoom
-        color: appWindow.theme_v2.glowColor
-        glowRadius: 0
-        spread: 0
-        cornerRadius: dlg.radius
+        source: dlg
+        shadowEnabled: true
+        shadowBlur: 0.1
+        shadowColor: appWindow.theme_v2.glowColor
     }
 
     Rectangle {
@@ -471,14 +470,12 @@ Item {
         }
     }
 
-    DropShadow {
+    MultiEffect {
         visible: appWindow.uiver === 1
-        anchors.fill: dlg
-        horizontalOffset: 0
-        verticalOffset: 0
-        radius: 8.0*appWindow.zoom
-        samples: 17
-        color: appWindow.theme.shadow
         source: dlg
+        anchors.fill: dlg
+        shadowBlur: 0.5
+        shadowEnabled: true
+        shadowColor: appWindow.theme.shadow
     }
 }

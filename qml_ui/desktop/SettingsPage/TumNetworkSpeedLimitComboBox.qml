@@ -1,7 +1,7 @@
-import QtQuick 2.12
-import org.freedownloadmanager.fdm 1.0
-import org.freedownloadmanager.fdm.dmcoresettings 1.0
-import org.freedownloadmanager.fdm.tum 1.0
+import QtQuick
+import org.freedownloadmanager.fdm
+import org.freedownloadmanager.fdm.dmcoresettings
+import org.freedownloadmanager.fdm.tum
 
 NetworkSpeedLimitComboBox {
     property int mode: TrafficUsageMode.Low

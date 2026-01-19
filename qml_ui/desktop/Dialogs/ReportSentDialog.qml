@@ -1,6 +1,6 @@
-import QtQuick 2.0
-import QtQuick.Layouts 1.11
-import org.freedownloadmanager.fdm 1.0
+import QtQuick
+import QtQuick.Layouts
+import org.freedownloadmanager.fdm
 import "../BaseElements"
 
 BaseDialog {

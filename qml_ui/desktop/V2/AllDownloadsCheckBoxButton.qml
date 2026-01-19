@@ -1,7 +1,7 @@
 import QtQuick
 import "../BaseElements/V2"
-import org.freedownloadmanager.fdm 1.0
-import org.freedownloadmanager.fdm.abstractdownloadsui 1.0
+import org.freedownloadmanager.fdm
+import org.freedownloadmanager.fdm.abstractdownloadsui 
 
 ToolbarFlatButton_V2
 {

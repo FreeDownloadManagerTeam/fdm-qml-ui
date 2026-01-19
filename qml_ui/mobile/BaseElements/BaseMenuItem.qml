@@ -1,6 +1,6 @@
-import QtQuick 2.0
-import QtQuick.Controls 2.3
-import "../../qt5compat"
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Effects
 
 MenuItem {
     id: menuItem
@@ -22,8 +22,9 @@ MenuItem {
             anchors.bottomMargin: 7
             source: Qt.resolvedUrl("../../images/mobile/check.svg")
             layer {
-                effect: ColorOverlay {
-                    color: appWindow.theme.sortCheck
+                effect: MultiEffect {
+                    colorization: 1.0
+                    colorizationColor: appWindow.theme.sortCheck
                 }
                 enabled: true
             }

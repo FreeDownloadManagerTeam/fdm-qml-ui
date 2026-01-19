@@ -1,7 +1,7 @@
-import QtQuick 2.0
-import QtQuick.Layouts 1.3
-import org.freedownloadmanager.fdm 1.0
-import "../../../qt5compat"
+import QtQuick
+import QtQuick.Layouts
+import QtQuick.Effects
+import org.freedownloadmanager.fdm
 import "../../BaseElements"
 import "../../../common"
 
@@ -27,8 +27,11 @@ RowLayout {
         Layout.preferredWidth: preferredWidth
         zoom: appWindow.zoom
         layer {
-            effect: ColorOverlay {
-                color: appWindow.theme.foreground
+            effect: MultiEffect {
+                colorization: 1.0
+                colorizationColor: appWindow.uiver === 1 ?
+                                       appWindow.theme.foreground :
+                                       appWindow.theme_v2.textColor
             }
             enabled: true
         }

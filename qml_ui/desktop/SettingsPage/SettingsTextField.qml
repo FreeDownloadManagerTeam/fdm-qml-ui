@@ -1,5 +1,5 @@
-import QtQuick 2.11
-import QtQuick.Controls 2.3
+import QtQuick
+import QtQuick.Controls
 import '../BaseElements'
 
 BaseTextField {

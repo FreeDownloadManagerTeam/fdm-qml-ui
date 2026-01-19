@@ -1,6 +1,6 @@
 import QtQuick
 import "../BaseElements/V2"
-import org.freedownloadmanager.fdm 1.0
+import org.freedownloadmanager.fdm
 
 BaseMenuItem_V2
 {

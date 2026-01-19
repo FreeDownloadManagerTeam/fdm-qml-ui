@@ -1,9 +1,9 @@
-import QtQuick 2.0
-import QtQuick.Layouts 1.3
-import QtQuick.Controls 2.4
-import "../../qt5compat"
+import QtQuick
+import QtQuick.Layouts
+import QtQuick.Controls
+import QtQuick.Effects
 import "../../common"
-import org.freedownloadmanager.fdm 1.0
+import org.freedownloadmanager.fdm
 import "../BaseElements"
 import "../BaseElements/V2"
 
@@ -98,8 +98,9 @@ Item {
                             source: clear_btn_img
 
                             layer {
-                                effect: ColorOverlay {
-                                    color: appWindow.theme.foreground
+                                effect: MultiEffect {
+                                    colorization: 1.0
+                                    colorizationColor: appWindow.uiver === 1 ? appWindow.theme.foreground : appWindow.theme_v2.textColor
                                 }
                                 enabled: true
                             }
@@ -199,8 +200,9 @@ Item {
                         source: Qt.resolvedUrl("../../images/desktop/ok_white.svg")
                         zoom: appWindow.zoom
                         layer {
-                            effect: ColorOverlay {
-                                color: appWindow.uiver === 1 ?
+                            effect: MultiEffect {
+                                colorization: 1.0
+                                colorizationColor: appWindow.uiver === 1 ?
                                            (okBtn1.alternateBtnPressed ? okBtn1.secondaryTextColor : okBtn1.primaryTextColor) :
                                            appWindow.theme_v2.bg100
                             }
@@ -221,8 +223,9 @@ Item {
                         source: Qt.resolvedUrl("../../images/desktop/clean.svg")
                         zoom: appWindow.zoom
                         layer {
-                            effect: ColorOverlay {
-                                color: appWindow.uiver === 1 ?
+                            effect: MultiEffect {
+                                colorization: 1.0
+                                colorizationColor: appWindow.uiver === 1 ?
                                            (cnclBtn1.isPressed ? cnclBtn1.secondaryTextColor : cnclBtn1.primaryTextColor) :
                                            appWindow.theme_v2.bg1000
                             }

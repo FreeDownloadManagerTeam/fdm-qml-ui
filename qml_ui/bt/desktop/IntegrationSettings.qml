@@ -1,6 +1,6 @@
-import QtQuick 2.10
-import org.freedownloadmanager.fdm 1.0
-import org.freedownloadmanager.fdm.appfeatures 1.0
+import QtQuick
+import org.freedownloadmanager.fdm
+import org.freedownloadmanager.fdm.appfeatures
 import "../../desktop/BaseElements"
 import "../../desktop/SettingsPage"
 

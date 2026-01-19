@@ -1,5 +1,5 @@
 import QtQuick
-import Qt5Compat.GraphicalEffects
+import QtQuick.Effects
 import org.freedownloadmanager.fdm
 import "../../common"
 import "../BaseElements/V2"
@@ -25,8 +25,9 @@ WaSvgImage
                 "")
 
     layer.enabled: true
-    layer.effect: ColorOverlay {
-        color: buttonType === "showInFolder" ? appWindow.theme_v2.primary :
+    layer.effect: MultiEffect {
+        colorization: 1.0
+        colorizationColor: buttonType === "showInFolder" ? appWindow.theme_v2.primary :
                buttonType === "restart" ? appWindow.theme_v2.danger :
                appWindow.theme_v2.textColor
     }

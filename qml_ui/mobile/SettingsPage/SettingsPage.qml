@@ -1,12 +1,12 @@
-import QtQuick 2.10
-import QtQuick.Controls 2.3
-import QtQuick.Layouts 1.3
-import QtQuick.Controls.Material 2.4
-import "../../qt5compat"
-import org.freedownloadmanager.fdm 1.0
-import org.freedownloadmanager.fdm.dmcoresettings 1.0
-import org.freedownloadmanager.fdm.appsettings 1.0
-import org.freedownloadmanager.fdm.tum 1.0
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import QtQuick.Controls.Material
+import "../Dialogs"
+import org.freedownloadmanager.fdm
+import org.freedownloadmanager.fdm.dmcoresettings
+import org.freedownloadmanager.fdm.appsettings
+import org.freedownloadmanager.fdm.tum
 import "../BaseElements/"
 import "../../common"
 
@@ -166,7 +166,7 @@ Rectangle {
                     enabled: App.settings.hasNonDefaultValues || uiSettingsTools.hasNonDefaultValues
                     text: qsTr("Reset settings") + App.loc.emptyString
                     onClicked: okToResetMsg.open()
-                    MessageDialog
+                    AppMessageDialog
                     {
                         id: okToResetMsg
                         title: qsTr("Default settings") + App.loc.emptyString

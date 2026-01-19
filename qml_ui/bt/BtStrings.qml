@@ -1,6 +1,6 @@
-import QtQuick 2.12
-import org.freedownloadmanager.fdm 1.0
-import org.freedownloadmanager.fdm.appconstants 1.0
+import QtQuick
+import org.freedownloadmanager.fdm
+import org.freedownloadmanager.fdm.appconstants
 import "../common/Tools"
 
 Item {

@@ -1,5 +1,5 @@
-import QtQuick 2.0
-import QtQuick.Layouts 1.11
+import QtQuick
+import QtQuick.Layouts
 
 ColumnLayout {
     spacing: 0

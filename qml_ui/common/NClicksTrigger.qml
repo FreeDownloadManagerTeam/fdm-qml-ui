@@ -5,7 +5,7 @@
     Uses |pressAndHold| event instead.
 */
 
-import QtQuick 2.12
+import QtQuick
 
 MouseArea
 {

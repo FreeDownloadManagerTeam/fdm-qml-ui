@@ -1,6 +1,5 @@
 import QtQuick
 import QtQuick.Layouts
-import Qt5Compat.GraphicalEffects
 import org.freedownloadmanager.fdm
 import org.freedownloadmanager.fdm.abstractdownloadsui
 import "../BaseElements/V2"

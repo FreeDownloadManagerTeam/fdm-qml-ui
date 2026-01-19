@@ -1,11 +1,12 @@
 /* Displays "status" column content */
 
-import QtQuick 2.10
-import QtQuick.Controls 2.3
-import QtQuick.Layouts 1.3
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import QtQuick.Effects
 import "../common"
 import "../common/Tools"
-import org.freedownloadmanager.fdm 1.0
+import org.freedownloadmanager.fdm
 import "./BaseElements"
 
 Row {
@@ -41,6 +42,13 @@ Row {
             source: appWindow.theme.elementsIconsRoot + "/triangle_down3.svg"
             zoom: appWindow.zoom
             anchors.centerIn: parent
+            layer {
+                effect: MultiEffect {
+                    colorization: 1.0
+                    colorizationColor: "#868486"
+                }
+                enabled: true
+            }
         }
     }
 }
